@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,18 +24,18 @@ package baby.mumu.extension.fd;
  */
 public interface FaceDetectionProcessor {
 
-  /**
-   * 检测图片中人脸个数
-   *
-   * @param faceDetection 人脸检测
-   * @return 人脸个数
-   */
-  Long numberOfFaces(FaceDetection faceDetection);
+    /**
+     * 检测图片中人脸个数
+     *
+     * @param faceDetection 人脸检测
+     * @return 人脸个数
+     */
+    Long numberOfFaces(FaceDetection faceDetection);
 
-  /**
-   * 图片中人脸绘制边框
-   *
-   * @param faceDetection 人脸检测
-   */
-  void drawBorder(FaceDetection faceDetection);
+    /**
+     * 图片中人脸绘制边框
+     *
+     * @param faceDetection 人脸检测
+     */
+    void drawBorder(FaceDetection faceDetection);
 }

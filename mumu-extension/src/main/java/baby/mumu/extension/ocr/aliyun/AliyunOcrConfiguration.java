@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,23 +41,23 @@ import org.springframework.context.annotation.Configuration;
 public class AliyunOcrConfiguration {
 
 
-  @Bean
-  @ConditionalOnMissingBean(Client.class)
-  public Client client(ExtensionProperties extensionProperties) throws Exception {
-    AliyunOcrProperties aliyun = extensionProperties.getOcr().getAliyun();
-    Config config = new Config();
-    config.setAccessKeyId(
-      StringUtils.isBlank(aliyun.getAccessKeyId()) ? System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
-        : aliyun.getAccessKeyId());
-    config.setAccessKeySecret(StringUtils.isBlank(aliyun.getAccessKeySecret()) ? System.getenv(
-      "ALIBABA_CLOUD_ACCESS_KEY_SECRET") : aliyun.getAccessKeySecret());
-    config.setEndpoint(aliyun.getEndpoint());
-    return new Client(config);
-  }
+    @Bean
+    @ConditionalOnMissingBean(Client.class)
+    public Client client(ExtensionProperties extensionProperties) throws Exception {
+        AliyunOcrProperties aliyun = extensionProperties.getOcr().getAliyun();
+        Config config = new Config();
+        config.setAccessKeyId(
+            StringUtils.isBlank(aliyun.getAccessKeyId()) ? System.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID")
+                : aliyun.getAccessKeyId());
+        config.setAccessKeySecret(StringUtils.isBlank(aliyun.getAccessKeySecret()) ? System.getenv(
+            "ALIBABA_CLOUD_ACCESS_KEY_SECRET") : aliyun.getAccessKeySecret());
+        config.setEndpoint(aliyun.getEndpoint());
+        return new Client(config);
+    }
 
-  @Bean
-  @ConditionalOnMissingBean(OcrProcessor.class)
-  public OcrProcessor ocrProcessor(Client client) {
-    return new AliyunOcrProcessor(client);
-  }
+    @Bean
+    @ConditionalOnMissingBean(OcrProcessor.class)
+    public OcrProcessor ocrProcessor(Client client) {
+        return new AliyunOcrProcessor(client);
+    }
 }

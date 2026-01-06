@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,6 @@ import baby.mumu.iam.client.api.AccountGrpcService;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -37,6 +34,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * AccountGrpcService单元测试
@@ -50,50 +51,50 @@ import org.springframework.test.context.TestPropertySource;
 @AutoConfigureMockMvc
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 @TestPropertySource(properties = {
-  SpringBootConstants.APPLICATION_TITLE + "=" + IAMApplicationMetamodel.PROJECT_NAME,
-  SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
-    + IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
+    SpringBootConstants.APPLICATION_TITLE + "=" + IAMApplicationMetamodel.PROJECT_NAME,
+    SpringBootConstants.APPLICATION_FORMATTED_VERSION + "="
+        + IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION,
 })
 public class AccountGrpcServiceTest extends AuthenticationRequired {
 
-  private final AccountGrpcService accountGrpcService;
-  private static final Logger log = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
+    private final AccountGrpcService accountGrpcService;
+    private static final Logger log = LoggerFactory.getLogger(AccountGrpcServiceTest.class);
 
-  @Autowired
-  public AccountGrpcServiceTest(AccountGrpcService accountGrpcService) {
-    this.accountGrpcService = accountGrpcService;
-  }
-
-  @Test
-  public void queryCurrentLoginAccount() {
-    AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount();
-    Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
-    AccountGrpcServiceTest.log.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
-  }
-
-  @Test
-  public void syncQueryCurrentLoginAccount() {
-    CountDownLatch countDownLatch = new CountDownLatch(1);
-    ListenableFuture<AccountCurrentLoginGrpcDTO> accountCurrentLoginGrpcDTOListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
-    );
-    accountCurrentLoginGrpcDTOListenableFuture.addListener(() -> {
-      try {
-        AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountCurrentLoginGrpcDTOListenableFuture.get();
-        Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
-        AccountGrpcServiceTest.log.info("Sync AccountCurrentLoginGrpcDTO:{}",
-          accountCurrentLoginGrpcDTO);
-        countDownLatch.countDown();
-      } catch (InterruptedException | ExecutionException e) {
-        throw new RuntimeException(e);
-      }
-    }, MoreExecutors.directExecutor());
-    boolean completed;
-    try {
-      completed = countDownLatch.await(3, TimeUnit.SECONDS);
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+    @Autowired
+    public AccountGrpcServiceTest(AccountGrpcService accountGrpcService) {
+        this.accountGrpcService = accountGrpcService;
     }
-    Assertions.assertTrue(completed);
-  }
+
+    @Test
+    public void queryCurrentLoginAccount() {
+        AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountGrpcService.queryCurrentLoginAccount();
+        Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
+        AccountGrpcServiceTest.log.info("AccountCurrentLoginGrpcDTO:{}", accountCurrentLoginGrpcDTO);
+    }
+
+    @Test
+    public void syncQueryCurrentLoginAccount() {
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        ListenableFuture<AccountCurrentLoginGrpcDTO> accountCurrentLoginGrpcDTOListenableFuture = accountGrpcService.syncQueryCurrentLoginAccount(
+        );
+        accountCurrentLoginGrpcDTOListenableFuture.addListener(() -> {
+            try {
+                AccountCurrentLoginGrpcDTO accountCurrentLoginGrpcDTO = accountCurrentLoginGrpcDTOListenableFuture.get();
+                Assertions.assertNotNull(accountCurrentLoginGrpcDTO);
+                AccountGrpcServiceTest.log.info("Sync AccountCurrentLoginGrpcDTO:{}",
+                    accountCurrentLoginGrpcDTO);
+                countDownLatch.countDown();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }, MoreExecutors.directExecutor());
+        boolean completed;
+        try {
+            completed = countDownLatch.await(3, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertTrue(completed);
+    }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,18 +32,18 @@ import org.springframework.util.Assert;
 @Component
 public class BarCodeGenerateCmdExe {
 
-  private final BarCodeGateway barCodeGateway;
-  private final BarCodeConvertor barCodeConvertor;
+    private final BarCodeGateway barCodeGateway;
+    private final BarCodeConvertor barCodeConvertor;
 
-  @Autowired
-  public BarCodeGenerateCmdExe(BarCodeGateway barCodeGateway, BarCodeConvertor barCodeConvertor) {
-    this.barCodeGateway = barCodeGateway;
-    this.barCodeConvertor = barCodeConvertor;
-  }
+    @Autowired
+    public BarCodeGenerateCmdExe(BarCodeGateway barCodeGateway, BarCodeConvertor barCodeConvertor) {
+        this.barCodeGateway = barCodeGateway;
+        this.barCodeConvertor = barCodeConvertor;
+    }
 
-  public byte[] execute(BarCodeGenerateCmd barCodeGenerateCmd) {
-    Assert.notNull(barCodeGenerateCmd, "BarCodeGenerateCmd must not be null");
-    return barCodeConvertor.toEntity(barCodeGenerateCmd)
-      .map(barCodeGateway::generate).orElse(new byte[0]);
-  }
+    public byte[] execute(BarCodeGenerateCmd barCodeGenerateCmd) {
+        Assert.notNull(barCodeGenerateCmd, "BarCodeGenerateCmd must not be null");
+        return barCodeConvertor.toEntity(barCodeGenerateCmd)
+            .map(barCodeGateway::generate).orElse(new byte[0]);
+    }
 }

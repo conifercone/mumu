@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@
 package baby.mumu.genix.domain.captcha;
 
 import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 
 /**
  * 验证码领域模型
@@ -33,31 +34,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CaptchaCode extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 5903194159824109581L;
+    @Serial
+    private static final long serialVersionUID = 5903194159824109581L;
 
-  /**
-   * 验证码id
-   */
-  private Long id;
+    /**
+     * 验证码id
+     */
+    private Long id;
 
-  /**
-   * 验证码来源值
-   */
-  private String source;
+    /**
+     * 验证码来源值
+     */
+    private String source;
 
-  /**
-   * 验证码目标值
-   */
-  private String target;
+    /**
+     * 验证码目标值
+     */
+    private String target;
 
-  /**
-   * 有效期
-   */
-  private Long ttl;
+    /**
+     * 有效期
+     */
+    private Long ttl;
 
-  /**
-   * 验证码长度
-   */
-  private Integer length;
+    /**
+     * 验证码长度
+     */
+    private Integer length;
 }

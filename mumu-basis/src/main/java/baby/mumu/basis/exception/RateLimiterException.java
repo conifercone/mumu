@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.basis.exception;
 
 import baby.mumu.basis.response.ResponseCode;
-import java.io.Serial;
 import lombok.Getter;
+
+import java.io.Serial;
 
 /**
  * 限流异常
@@ -29,10 +30,10 @@ import lombok.Getter;
 @Getter
 public class RateLimiterException extends ApplicationException {
 
-  @Serial
-  private static final long serialVersionUID = 6238973755219029059L;
+    @Serial
+    private static final long serialVersionUID = 6238973755219029059L;
 
-  public RateLimiterException(long remainingWaitingTime) {
-    super(ResponseCode.TOO_MANY_REQUESTS, remainingWaitingTime);
-  }
+    public RateLimiterException(long remainingWaitingTime) {
+        super(ResponseCode.TOO_MANY_REQUESTS, remainingWaitingTime);
+    }
 }

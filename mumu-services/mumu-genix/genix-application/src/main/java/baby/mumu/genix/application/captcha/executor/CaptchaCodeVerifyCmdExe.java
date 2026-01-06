@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package baby.mumu.genix.application.captcha.executor;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
 import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 简单验证码验证指令执行器
@@ -32,20 +33,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class CaptchaCodeVerifyCmdExe {
 
-  private final CaptchaCodeGateway captchaCodeGateway;
-  private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeGateway captchaCodeGateway;
+    private final CaptchaCodeConvertor captchaCodeConvertor;
 
-  @Autowired
-  public CaptchaCodeVerifyCmdExe(
-    CaptchaCodeGateway captchaCodeGateway,
-    CaptchaCodeConvertor captchaCodeConvertor) {
-    this.captchaCodeGateway = captchaCodeGateway;
-    this.captchaCodeConvertor = captchaCodeConvertor;
-  }
+    @Autowired
+    public CaptchaCodeVerifyCmdExe(
+        CaptchaCodeGateway captchaCodeGateway,
+        CaptchaCodeConvertor captchaCodeConvertor) {
+        this.captchaCodeGateway = captchaCodeGateway;
+        this.captchaCodeConvertor = captchaCodeConvertor;
+    }
 
-  public boolean execute(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
-    return Optional.ofNullable(captchaCodeVerifyCmd).flatMap(captchaCodeConvertor::toEntity)
-      .map(captchaCodeGateway::verify)
-      .orElse(false);
-  }
+    public boolean execute(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
+        return Optional.ofNullable(captchaCodeVerifyCmd).flatMap(captchaCodeConvertor::toEntity)
+            .map(captchaCodeGateway::verify)
+            .orElse(false);
+    }
 }

@@ -17,8 +17,8 @@
 
 -->
 <Configuration status="WARN" name="prod">
-  <Properties>
-    <!-- @formatter:off -->
+    <Properties>
+        <!-- @formatter:off -->
     <!-- 日志目录：${mumu.log.path}/logs/${spring.application.name} -->
     <Property name="LOG_PATH">${spring:mumu.log.path}/logs/${spring:spring.application.name:-mumu}</Property>
     <!-- 日志文件名前缀：应用名 -->
@@ -30,10 +30,10 @@
     <!-- 日期格式 -->
     <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
     <!-- @formatter:on -->
-  </Properties>
+    </Properties>
 
-  <Appenders>
-    <!-- @formatter:off -->
+    <Appenders>
+        <!-- @formatter:off -->
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
       <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -73,17 +73,17 @@
       </DefaultRolloverStrategy>
     </RollingFile>
     <!-- @formatter:on -->
-  </Appenders>
+    </Appenders>
 
-  <Loggers>
-    <!--Root level logger to control overall logging-->
-    <AsyncRoot level="INFO" includeLocation="true">
-      <AppenderRef ref="Console"/>
-      <AppenderRef ref="RollingInfoFile"/>
-      <AppenderRef ref="RollingErrorFile"/>
-    </AsyncRoot>
+    <Loggers>
+        <!--Root level logger to control overall logging-->
+        <AsyncRoot level="INFO" includeLocation="true">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingInfoFile"/>
+            <AppenderRef ref="RollingErrorFile"/>
+        </AsyncRoot>
 
-    <!-- 降低 Kafka 客户端日志噪音 -->
-    <logger name="org.apache.kafka" level="warn" additivity="false"/>
-  </Loggers>
+        <!-- 降低 Kafka 客户端日志噪音 -->
+        <logger name="org.apache.kafka" level="warn" additivity="false"/>
+    </Loggers>
 </Configuration>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import org.javamoney.moneta.Money;
+
 import java.lang.reflect.Type;
 import java.util.Optional;
-import org.javamoney.moneta.Money;
 
 /**
  * Money 序列化
@@ -32,13 +33,13 @@ import org.javamoney.moneta.Money;
  */
 public class MoneySerializer implements JsonSerializer<Money> {
 
-  @Override
-  public JsonElement serialize(Money money, Type typeOfSrc, JsonSerializationContext context) {
-    return Optional.ofNullable(money).map(moneyNotNull -> {
-      JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("currency", moneyNotNull.getCurrency().getCurrencyCode());  // 币种
-      jsonObject.addProperty("amount", moneyNotNull.getNumberStripped().toPlainString());  // 金额
-      return jsonObject;
-    }).orElse(null);
-  }
+    @Override
+    public JsonElement serialize(Money money, Type typeOfSrc, JsonSerializationContext context) {
+        return Optional.ofNullable(money).map(moneyNotNull -> {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("currency", moneyNotNull.getCurrency().getCurrencyCode());  // 币种
+            jsonObject.addProperty("amount", moneyNotNull.getNumberStripped().toPlainString());  // 金额
+            return jsonObject;
+        }).orElse(null);
+    }
 }

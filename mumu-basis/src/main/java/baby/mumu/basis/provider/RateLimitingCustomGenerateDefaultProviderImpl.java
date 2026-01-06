@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.basis.provider;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,10 +27,10 @@ import java.util.concurrent.TimeUnit;
  * @since 2.1.0
  */
 public class RateLimitingCustomGenerateDefaultProviderImpl implements
-  RateLimitingCustomGenerateProvider {
+    RateLimitingCustomGenerateProvider {
 
-  @Override
-  public @NotNull RateLimitingCustomGenerate generate() {
-    return new RateLimitingCustomGenerate(5, 1, TimeUnit.SECONDS);
-  }
+    @Override
+    public @NotNull RateLimitingCustomGenerate generate() {
+        return new RateLimitingCustomGenerate(5, 1, TimeUnit.SECONDS);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,42 +37,42 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Configuration
 public class AuthenticationClientConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
-    DiscoveryClient discoveryClient) {
-    DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
-      discoveryClient);
-    NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
-    return discoveryClientNameResolverProvider;
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
+        DiscoveryClient discoveryClient) {
+        DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+            discoveryClient);
+        NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
+        return discoveryClientNameResolverProvider;
+    }
 
-  @Bean
-  public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new TokenGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public TokenGrpcService tokenGrpcService(DiscoveryClient discoveryClient,
+                                             GrpcChannelFactory grpcChannelFactory) {
+        return new TokenGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new AccountGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public AccountGrpcService accountGrpcService(DiscoveryClient discoveryClient,
+                                                 GrpcChannelFactory grpcChannelFactory) {
+        return new AccountGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public PermissionGrpcService permissionGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new PermissionGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public PermissionGrpcService permissionGrpcService(DiscoveryClient discoveryClient,
+                                                       GrpcChannelFactory grpcChannelFactory) {
+        return new PermissionGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new RoleGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public RoleGrpcService roleGrpcService(DiscoveryClient discoveryClient,
+                                           GrpcChannelFactory grpcChannelFactory) {
+        return new RoleGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public ProjectInformationPrint authenticationClientProjectInformationPrint() {
-    return new ProjectInformationPrint();
-  }
+    @Bean
+    public ProjectInformationPrint authenticationClientProjectInformationPrint() {
+        return new ProjectInformationPrint();
+    }
 }

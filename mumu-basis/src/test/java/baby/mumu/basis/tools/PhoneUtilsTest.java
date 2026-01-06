@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
  */
 public class PhoneUtilsTest {
 
-  @Test
-  public void isValidPhoneNumber() {
-    boolean validPhoneNumber = PhoneUtils.isValidPhoneNumber("13031723736", "+86");
-    Assertions.assertTrue(validPhoneNumber);
-    boolean validPhoneNumber2 = PhoneUtils.isValidPhoneNumber("5486560", "+86");
-    Assertions.assertFalse(validPhoneNumber2);
-    boolean validPhoneNumber3 = PhoneUtils.isValidPhoneNumber("2132901064", "+1");
-    Assertions.assertTrue(validPhoneNumber3);
-  }
+    @Test
+    public void isValidPhoneNumber() {
+        boolean validPhoneNumber = PhoneUtils.isValidPhoneNumber("13031723736", "+86");
+        Assertions.assertTrue(validPhoneNumber);
+        boolean validPhoneNumber2 = PhoneUtils.isValidPhoneNumber("5486560", "+86");
+        Assertions.assertFalse(validPhoneNumber2);
+        boolean validPhoneNumber3 = PhoneUtils.isValidPhoneNumber("2132901064", "+1");
+        Assertions.assertTrue(validPhoneNumber3);
+    }
 }

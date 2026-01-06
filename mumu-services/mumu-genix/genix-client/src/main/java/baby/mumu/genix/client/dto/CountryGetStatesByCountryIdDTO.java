@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,23 +27,23 @@ import lombok.Data;
 @Data
 public class CountryGetStatesByCountryIdDTO {
 
-  /**
-   * 唯一标识
-   */
-  private Long id;
+    /**
+     * 唯一标识
+     */
+    private Long id;
 
-  /**
-   * 名称
-   */
-  private String name;
+    /**
+     * 名称
+     */
+    private String name;
 
-  /**
-   * 纬度
-   */
-  private String latitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
 
-  /**
-   * 精度
-   */
-  private String longitude;
+    /**
+     * 精度
+     */
+    private String longitude;
 }

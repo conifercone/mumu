@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.genix.client.config;
 
 import baby.mumu.basis.annotations.Metamodel;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 项目信息打印
@@ -30,11 +31,11 @@ import org.slf4j.LoggerFactory;
 @Metamodel(projectVersion = true, projectName = true)
 public class ProjectInformationPrint {
 
-  private final Logger log = LoggerFactory.getLogger(ProjectInformationPrint.class);
+    private final Logger log = LoggerFactory.getLogger(ProjectInformationPrint.class);
 
-  @PostConstruct
-  public void run() {
-    log.info(":: {} :: {}", ProjectInformationPrintMetamodel.PROJECT_NAME,
-      ProjectInformationPrintMetamodel.PROJECT_VERSION);
-  }
+    @PostConstruct
+    public void run() {
+        log.info(":: {} :: {}", ProjectInformationPrintMetamodel.PROJECT_NAME,
+            ProjectInformationPrintMetamodel.PROJECT_VERSION);
+    }
 }

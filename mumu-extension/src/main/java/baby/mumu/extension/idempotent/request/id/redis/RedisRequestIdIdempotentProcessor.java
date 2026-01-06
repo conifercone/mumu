@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,36 +33,36 @@ import org.springframework.util.Assert;
  */
 public class RedisRequestIdIdempotentProcessor implements RequestIdIdempotentProcessor {
 
-  private final String REQUEST_ID_PREFIX = "mumu:request:id:";
-  private final ExtensionProperties extensionProperties;
-  private final RedisTemplate<String, String> redisTemplate;
+    private final String REQUEST_ID_PREFIX = "mumu:request:id:";
+    private final ExtensionProperties extensionProperties;
+    private final RedisTemplate<String, String> redisTemplate;
 
-  public RedisRequestIdIdempotentProcessor(RedisConnectionFactory redisConnectionFactory,
-    ExtensionProperties extensionProperties) {
-    Assert.notNull(redisConnectionFactory, "RedisConnectionFactory must not be null");
-    this.extensionProperties = extensionProperties;
-    redisTemplate = new RedisTemplate<>();
-    redisTemplate.setConnectionFactory(redisConnectionFactory);
-    redisTemplate.setValueSerializer(new StringRedisSerializer());
-    redisTemplate.setKeySerializer(new StringRedisSerializer());
-    redisTemplate.afterPropertiesSet();
-  }
-
-  @Override
-  public boolean processed(String requestId) {
-    if (StringUtils.isBlank(requestId)) {
-      return false;
+    public RedisRequestIdIdempotentProcessor(RedisConnectionFactory redisConnectionFactory,
+                                             ExtensionProperties extensionProperties) {
+        Assert.notNull(redisConnectionFactory, "RedisConnectionFactory must not be null");
+        this.extensionProperties = extensionProperties;
+        redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.afterPropertiesSet();
     }
-    return redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId));
-  }
 
-  @Override
-  public void process(String requestId) {
-    if (StringUtils.isNotBlank(requestId)) {
-      RedisRequestIdIdempotentProperties redis = extensionProperties.getIdempotent().getRequestId()
-        .getRedis();
-      redisTemplate.opsForValue()
-        .set(REQUEST_ID_PREFIX.concat(requestId), requestId, redis.getTimeout(), redis.getUnit());
+    @Override
+    public boolean processed(String requestId) {
+        if (StringUtils.isBlank(requestId)) {
+            return false;
+        }
+        return redisTemplate.hasKey(REQUEST_ID_PREFIX.concat(requestId));
     }
-  }
+
+    @Override
+    public void process(String requestId) {
+        if (StringUtils.isNotBlank(requestId)) {
+            RedisRequestIdIdempotentProperties redis = extensionProperties.getIdempotent().getRequestId()
+                .getRedis();
+            redisTemplate.opsForValue()
+                .set(REQUEST_ID_PREFIX.concat(requestId), requestId, redis.getTimeout(), redis.getUnit());
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,12 @@
 
 package baby.mumu.iam.configuration.gson;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
+import org.javamoney.moneta.Money;
+
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.Optional;
-import org.javamoney.moneta.Money;
 
 /**
  * Money 反序列化
@@ -34,14 +31,14 @@ import org.javamoney.moneta.Money;
  */
 public class MoneyDeserializer implements JsonDeserializer<Money> {
 
-  @Override
-  public Money deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-    throws JsonParseException {
-    return Optional.ofNullable(json).map(_ -> {
-      JsonObject jsonObject = json.getAsJsonObject();
-      String currency = jsonObject.get("currency").getAsString();
-      String amountString = jsonObject.get("amount").getAsString();
-      return Money.of(new BigDecimal(amountString), currency);  // 使用币种和金额创建 Money 对象
-    }).orElse(null);
-  }
+    @Override
+    public Money deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+        throws JsonParseException {
+        return Optional.ofNullable(json).map(_ -> {
+            JsonObject jsonObject = json.getAsJsonObject();
+            String currency = jsonObject.get("currency").getAsString();
+            String amountString = jsonObject.get("amount").getAsString();
+            return Money.of(new BigDecimal(amountString), currency);  // 使用币种和金额创建 Money 对象
+        }).orElse(null);
+    }
 }

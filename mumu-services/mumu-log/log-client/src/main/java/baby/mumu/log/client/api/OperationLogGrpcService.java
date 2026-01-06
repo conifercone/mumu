@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ import baby.mumu.log.client.api.grpc.OperationLogServiceGrpc.OperationLogService
 import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
 
 /**
  * 操作日志对外提供grpc调用实例
@@ -35,33 +36,33 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Observed(name = "OperationLogGrpcService")
 public class OperationLogGrpcService extends LogGrpcService implements DisposableBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public OperationLogGrpcService(
-    DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public OperationLogGrpcService(
+        DiscoveryClient discoveryClient,
+        GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
-  public void syncSubmit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
-    Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .ifPresent(ch -> {
-        channel = ch;
-        syncSubmitFromGrpc(operationLogSubmitGrpcCmd);
-      });
-  }
+    public void syncSubmit(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+        Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .ifPresent(ch -> {
+                channel = ch;
+                syncSubmitFromGrpc(operationLogSubmitGrpcCmd);
+            });
+    }
 
-  private void syncSubmitFromGrpc(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
-    OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
-      channel);
-    // noinspection ResultOfMethodCallIgnored
-    operationLogServiceFutureStub.submit(operationLogSubmitGrpcCmd);
-  }
+    private void syncSubmitFromGrpc(OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+        OperationLogServiceFutureStub operationLogServiceFutureStub = OperationLogServiceGrpc.newFutureStub(
+            channel);
+        // noinspection ResultOfMethodCallIgnored
+        operationLogServiceFutureStub.submit(operationLogSubmitGrpcCmd);
+    }
 
 }

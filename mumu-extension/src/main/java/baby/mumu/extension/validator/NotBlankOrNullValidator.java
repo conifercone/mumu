@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,9 @@ import jakarta.validation.ConstraintValidatorContext;
  */
 public class NotBlankOrNullValidator implements ConstraintValidator<NotBlankOrNull, String> {
 
-  @Override
-  public boolean isValid(String value, ConstraintValidatorContext context) {
-    // Return true if value is null, or if value is not null and not blank
-    return value == null || !value.trim().isEmpty();
-  }
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        // Return true if value is null, or if value is not null and not blank
+        return value == null || !value.trim().isEmpty();
+    }
 }

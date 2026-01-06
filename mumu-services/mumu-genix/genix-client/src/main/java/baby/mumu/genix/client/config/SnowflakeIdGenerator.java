@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package baby.mumu.genix.client.config;
 
-import static java.lang.annotation.ElementType.FIELD;
+import org.hibernate.annotations.IdGeneratorType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.hibernate.annotations.IdGeneratorType;
+
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * 雪花算法ID生成器注解

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.genix.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 验证码生成数据传输对象
@@ -29,26 +30,26 @@ import lombok.Data;
 @Data
 public class CaptchaCodeGeneratedDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = 8360137456255142667L;
+    @Serial
+    private static final long serialVersionUID = 8360137456255142667L;
 
-  /**
-   * 验证码id
-   */
-  private Long id;
+    /**
+     * 验证码id
+     */
+    private Long id;
 
-  /**
-   * 验证码目标值
-   */
-  private String target;
+    /**
+     * 验证码目标值
+     */
+    private String target;
 
-  /**
-   * 有效期
-   */
-  private Long ttl;
+    /**
+     * 有效期
+     */
+    private Long ttl;
 
-  /**
-   * 验证码长度
-   */
-  private Integer length;
+    /**
+     * 验证码长度
+     */
+    private Integer length;
 }

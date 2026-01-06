@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package baby.mumu.iam.configuration;
 
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -27,6 +26,8 @@ import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 /**
  * 登出事件
  *
@@ -36,23 +37,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationLogoutSuccessListener {
 
-  private final OAuth2AuthorizationService oAuth2AuthorizationService;
+    private final OAuth2AuthorizationService oAuth2AuthorizationService;
 
-  @Autowired
-  public ApplicationLogoutSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
-    this.oAuth2AuthorizationService = oAuth2AuthorizationService;
-  }
-
-  @EventListener
-  public void onLogoutSuccess(@NonNull LogoutSuccessEvent event) {
-    Authentication authentication = event.getAuthentication();
-    if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-        jwtAuthenticationToken.getToken().getTokenValue(),
-        OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(
-        jwtAuthenticationToken.getToken().getTokenValue(),
-        OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+    @Autowired
+    public ApplicationLogoutSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
+        this.oAuth2AuthorizationService = oAuth2AuthorizationService;
     }
-  }
+
+    @EventListener
+    public void onLogoutSuccess(@NonNull LogoutSuccessEvent event) {
+        Authentication authentication = event.getAuthentication();
+        if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+            Optional.ofNullable(oAuth2AuthorizationService.findByToken(
+                jwtAuthenticationToken.getToken().getTokenValue(),
+                OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+            Optional.ofNullable(oAuth2AuthorizationService.findByToken(
+                jwtAuthenticationToken.getToken().getTokenValue(),
+                OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,22 +26,22 @@ import lombok.Getter;
  */
 @Getter
 public enum ImageFormatEnum {
-  JPEG("jpeg", "image/jpeg"),
-  PNG("png", "image/png"),
-  GIF("gif", "image/gif"),
-  BMP("bmp", "image/bmp"),
-  TIFF("tiff", "image/tiff");
+    JPEG("jpeg", "image/jpeg"),
+    PNG("png", "image/png"),
+    GIF("gif", "image/gif"),
+    BMP("bmp", "image/bmp"),
+    TIFF("tiff", "image/tiff");
 
-  private final String extension;
-  private final String mimeType;
+    private final String extension;
+    private final String mimeType;
 
-  ImageFormatEnum(String extension, String mimeType) {
-    this.extension = extension;
-    this.mimeType = mimeType;
-  }
+    ImageFormatEnum(String extension, String mimeType) {
+        this.extension = extension;
+        this.mimeType = mimeType;
+    }
 
-  @Override
-  public String toString() {
-    return extension;
-  }
+    @Override
+    public String toString() {
+        return extension;
+    }
 }

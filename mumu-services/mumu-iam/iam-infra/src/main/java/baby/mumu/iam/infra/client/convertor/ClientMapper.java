@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,14 +35,14 @@ import org.mapstruct.factory.Mappers;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ClientMapper {
 
-  ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
+    ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-  @API(status = Status.STABLE, since = "2.5.0")
-  Client toEntity(ClientPO clientPO);
+    @API(status = Status.STABLE, since = "2.5.0")
+    Client toEntity(ClientPO clientPO);
 
-  @API(status = Status.STABLE, since = "2.5.0")
-  ClientPO toClientPO(Client client);
+    @API(status = Status.STABLE, since = "2.5.0")
+    ClientPO toClientPO(Client client);
 
-  @API(status = Status.STABLE, since = "2.5.0")
-  void toEntity(Client clientSource, @MappingTarget Client clientTarget);
+    @API(status = Status.STABLE, since = "2.5.0")
+    void toEntity(Client clientSource, @MappingTarget Client clientTarget);
 }

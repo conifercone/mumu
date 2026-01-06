@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,15 @@
 package baby.mumu.iam.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
-import baby.mumu.basis.enums.AccountAvatarSourceEnum;
-import baby.mumu.basis.enums.DigitalPreferenceEnum;
-import baby.mumu.basis.enums.GenderEnum;
-import baby.mumu.basis.enums.LanguageEnum;
-import baby.mumu.basis.enums.SystemThemeEnum;
-import baby.mumu.basis.enums.SystemThemeModeEnum;
+import baby.mumu.basis.enums.*;
 import jakarta.validation.constraints.Size;
-import java.io.Serial;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Data;
 import org.javamoney.moneta.Money;
 import org.springframework.data.geo.Point;
+
+import java.io.Serial;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 查询当前登录账号信息数据传输对象
@@ -40,271 +36,271 @@ import org.springframework.data.geo.Point;
 @Data
 public class AccountCurrentLoginDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = -1195373340664104308L;
+    @Serial
+    private static final long serialVersionUID = -1195373340664104308L;
 
-  private Long id;
-
-  /**
-   * 用户名
-   */
-  private String username;
-
-  /**
-   * 头像
-   */
-  private AccountAvatarDTO avatar;
-
-  /**
-   * 国际电话区号
-   */
-  private String phoneCountryCode;
-
-  /**
-   * 手机号
-   */
-  private String phone;
-
-  /**
-   * 性别
-   */
-  private GenderEnum gender;
-
-  /**
-   * 邮箱
-   */
-  private String email;
-
-  /**
-   * 时区
-   */
-  private String timezone;
-
-  /**
-   * 语言偏好
-   */
-  private LanguageEnum language;
-
-  /**
-   * 出生日期
-   */
-  private LocalDate birthday;
-
-  /**
-   * 个性签名
-   */
-  private String bio;
-
-  /**
-   * 昵称
-   */
-  private String nickName;
-
-  /**
-   * 年龄
-   */
-  private int age;
-
-  /**
-   * 余额
-   */
-  private Money balance;
-
-  /**
-   * 手机号已验证
-   */
-  private boolean phoneVerified;
-
-  /**
-   * 电子邮件已验证
-   */
-  private boolean emailVerified;
-
-  /**
-   * 数字偏好
-   */
-  private DigitalPreferenceEnum digitalPreference;
-
-  /**
-   * 账号所属角色
-   */
-  private List<AccountRoleDTO> roles;
-
-  /**
-   * 账号地址
-   */
-  private List<AccountAddressDTO> addresses;
-
-  /**
-   * 账号系统设置
-   */
-  private List<AccountSystemSettingDTO> systemSettings;
-
-  @Data
-  public static class AccountAddressDTO {
-
-    /**
-     * 唯一主键
-     */
-    private String id;
-
-    /**
-     * 街道地址，包含门牌号和街道信息
-     */
-    @Size(max = 255)
-    private String street;
-
-    /**
-     * 城市信息
-     */
-    @Size(max = 100)
-    private String city;
-
-    /**
-     * 州或省的信息
-     */
-    @Size(max = 100)
-    private String state;
-
-    /**
-     * 邮政编码
-     */
-    @Size(max = 20)
-    private String postalCode;
-
-    /**
-     * 国家信息
-     */
-    @Size(max = 100)
-    private String country;
-
-    /**
-     * 定位
-     */
-    private Point location;
-
-    /**
-     * 是否为默认地址
-     */
-    private boolean defaultAddress;
-  }
-
-  @Data
-  public static class AccountRoleDTO {
-
-    /**
-     * 角色id
-     */
     private Long id;
 
     /**
-     * 角色编码
+     * 用户名
      */
-    private String code;
+    private String username;
 
     /**
-     * 角色名称
+     * 头像
      */
-    private String name;
+    private AccountAvatarDTO avatar;
 
     /**
-     * 角色描述
+     * 国际电话区号
      */
-    private String description;
+    private String phoneCountryCode;
 
     /**
-     * 角色权限
+     * 手机号
      */
-    private List<AccountPermissionDTO> permissions;
-  }
-
-  @Data
-  public static class AccountPermissionDTO {
+    private String phone;
 
     /**
-     * 权限id
+     * 性别
      */
-    private Long id;
+    private GenderEnum gender;
 
     /**
-     * 权限编码
+     * 邮箱
      */
-    private String code;
+    private String email;
 
     /**
-     * 权限名称
+     * 时区
      */
-    private String name;
+    private String timezone;
 
     /**
-     * 权限描述
+     * 语言偏好
      */
-    private String description;
-  }
-
-  @Data
-  public static class AccountSystemSettingDTO {
+    private LanguageEnum language;
 
     /**
-     * 唯一主键
+     * 出生日期
      */
-    private String id;
+    private LocalDate birthday;
 
     /**
-     * 系统设置标识
+     * 个性签名
      */
-    private String profile;
+    private String bio;
 
     /**
-     * 系统设置名称
+     * 昵称
      */
-    private String name;
+    private String nickName;
 
     /**
-     * 系统主题
+     * 年龄
      */
-    private SystemThemeEnum systemTheme;
+    private int age;
 
     /**
-     * 系统主题模式
+     * 余额
      */
-    private SystemThemeModeEnum systemThemeMode;
+    private Money balance;
 
     /**
-     * 默认系统设置
+     * 手机号已验证
      */
-    private boolean defaultSystemSettings;
+    private boolean phoneVerified;
 
     /**
-     * 版本号
+     * 电子邮件已验证
      */
-    private Long version;
-  }
-
-
-  @Data
-  public static class AccountAvatarDTO {
+    private boolean emailVerified;
 
     /**
-     * 唯一主键
+     * 数字偏好
      */
-    private String id;
+    private DigitalPreferenceEnum digitalPreference;
 
     /**
-     * 头像来源
+     * 账号所属角色
      */
-    private AccountAvatarSourceEnum source;
+    private List<AccountRoleDTO> roles;
 
     /**
-     * 上传头像时的文件ID，填写URL或第三方时可为空
+     * 账号地址
      */
-    private String fileId;
+    private List<AccountAddressDTO> addresses;
 
     /**
-     * 账号上传的URL地址
+     * 账号系统设置
      */
-    private String url;
+    private List<AccountSystemSettingDTO> systemSettings;
 
-    private Long version;
-  }
+    @Data
+    public static class AccountAddressDTO {
+
+        /**
+         * 唯一主键
+         */
+        private String id;
+
+        /**
+         * 街道地址，包含门牌号和街道信息
+         */
+        @Size(max = 255)
+        private String street;
+
+        /**
+         * 城市信息
+         */
+        @Size(max = 100)
+        private String city;
+
+        /**
+         * 州或省的信息
+         */
+        @Size(max = 100)
+        private String state;
+
+        /**
+         * 邮政编码
+         */
+        @Size(max = 20)
+        private String postalCode;
+
+        /**
+         * 国家信息
+         */
+        @Size(max = 100)
+        private String country;
+
+        /**
+         * 定位
+         */
+        private Point location;
+
+        /**
+         * 是否为默认地址
+         */
+        private boolean defaultAddress;
+    }
+
+    @Data
+    public static class AccountRoleDTO {
+
+        /**
+         * 角色id
+         */
+        private Long id;
+
+        /**
+         * 角色编码
+         */
+        private String code;
+
+        /**
+         * 角色名称
+         */
+        private String name;
+
+        /**
+         * 角色描述
+         */
+        private String description;
+
+        /**
+         * 角色权限
+         */
+        private List<AccountPermissionDTO> permissions;
+    }
+
+    @Data
+    public static class AccountPermissionDTO {
+
+        /**
+         * 权限id
+         */
+        private Long id;
+
+        /**
+         * 权限编码
+         */
+        private String code;
+
+        /**
+         * 权限名称
+         */
+        private String name;
+
+        /**
+         * 权限描述
+         */
+        private String description;
+    }
+
+    @Data
+    public static class AccountSystemSettingDTO {
+
+        /**
+         * 唯一主键
+         */
+        private String id;
+
+        /**
+         * 系统设置标识
+         */
+        private String profile;
+
+        /**
+         * 系统设置名称
+         */
+        private String name;
+
+        /**
+         * 系统主题
+         */
+        private SystemThemeEnum systemTheme;
+
+        /**
+         * 系统主题模式
+         */
+        private SystemThemeModeEnum systemThemeMode;
+
+        /**
+         * 默认系统设置
+         */
+        private boolean defaultSystemSettings;
+
+        /**
+         * 版本号
+         */
+        private Long version;
+    }
+
+
+    @Data
+    public static class AccountAvatarDTO {
+
+        /**
+         * 唯一主键
+         */
+        private String id;
+
+        /**
+         * 头像来源
+         */
+        private AccountAvatarSourceEnum source;
+
+        /**
+         * 上传头像时的文件ID，填写URL或第三方时可为空
+         */
+        private String fileId;
+
+        /**
+         * 账号上传的URL地址
+         */
+        private String url;
+
+        private Long version;
+    }
 }

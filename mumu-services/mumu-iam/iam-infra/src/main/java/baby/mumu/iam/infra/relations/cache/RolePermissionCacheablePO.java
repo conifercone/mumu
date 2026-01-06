@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.po.jpa.JpaCacheableBasisDefaultPersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import java.io.Serial;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
+
+import java.io.Serial;
+import java.util.List;
 
 /**
  * 角色权限关系缓存
@@ -40,25 +41,25 @@ import org.springframework.data.redis.core.TimeToLive;
 @NoArgsConstructor
 public class RolePermissionCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = 4744706662530961684L;
+    @Serial
+    private static final long serialVersionUID = 4744706662530961684L;
 
-  public RolePermissionCacheablePO(Long roleId, List<Long> permissionIds) {
-    this.roleId = roleId;
-    this.permissionIds = permissionIds;
-  }
+    public RolePermissionCacheablePO(Long roleId, List<Long> permissionIds) {
+        this.roleId = roleId;
+        this.permissionIds = permissionIds;
+    }
 
-  @Id
-  @Indexed
-  private Long roleId;
+    @Id
+    @Indexed
+    private Long roleId;
 
-  @Indexed
-  private List<Long> permissionIds;
+    @Indexed
+    private List<Long> permissionIds;
 
-  /**
-   * 存活时间
-   * <p>低等级别变化数据：默认缓存时间为6小时</p>
-   */
-  @TimeToLive
-  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
+    /**
+     * 存活时间
+     * <p>低等级别变化数据：默认缓存时间为6小时</p>
+     */
+    @TimeToLive
+    private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
 }

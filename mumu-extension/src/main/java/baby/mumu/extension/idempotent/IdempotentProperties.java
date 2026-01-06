@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@
 package baby.mumu.extension.idempotent;
 
 import baby.mumu.extension.idempotent.request.id.RequestIdIdempotentProperties;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 幂等配置属性
@@ -31,26 +32,26 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 public class IdempotentProperties {
 
-  /**
-   * 白名单
-   */
-  @NestedConfigurationProperty
-  private List<RequestMethod> allowlist = new ArrayList<>();
-
-  @Data
-  public static class RequestMethod {
-
     /**
-     * 请求方法 eg: PUT POST GET DELETE
+     * 白名单
      */
-    private String method;
+    @NestedConfigurationProperty
+    private List<RequestMethod> allowlist = new ArrayList<>();
 
-    /**
-     * 请求地址，支持模式匹配 eg: /test/**
-     */
-    private String url;
-  }
+    @Data
+    public static class RequestMethod {
 
-  @NestedConfigurationProperty
-  private RequestIdIdempotentProperties requestId = new RequestIdIdempotentProperties();
+        /**
+         * 请求方法 eg: PUT POST GET DELETE
+         */
+        private String method;
+
+        /**
+         * 请求地址，支持模式匹配 eg: /test/**
+         */
+        private String url;
+    }
+
+    @NestedConfigurationProperty
+    private RequestIdIdempotentProperties requestId = new RequestIdIdempotentProperties();
 }

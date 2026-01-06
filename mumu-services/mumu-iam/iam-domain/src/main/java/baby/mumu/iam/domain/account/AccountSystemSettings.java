@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@ import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serial;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serial;
 
 /**
  * 账号系统设置
@@ -38,45 +39,45 @@ import lombok.experimental.SuperBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountSystemSettings extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 3580954151681556830L;
+    @Serial
+    private static final long serialVersionUID = 3580954151681556830L;
 
-  /**
-   * 唯一主键
-   */
-  private String id;
+    /**
+     * 唯一主键
+     */
+    private String id;
 
-  /**
-   * 系统设置标识
-   */
-  private String profile;
+    /**
+     * 系统设置标识
+     */
+    private String profile;
 
-  /**
-   * 系统设置名称
-   */
-  private String name;
+    /**
+     * 系统设置名称
+     */
+    private String name;
 
-  /**
-   * 账号 ID
-   */
-  private Long accountId;
+    /**
+     * 账号 ID
+     */
+    private Long accountId;
 
-  /**
-   * 系统主题
-   */
-  @Builder.Default
-  private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
+    /**
+     * 系统主题
+     */
+    @Builder.Default
+    private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
 
-  /**
-   * 系统主题模式
-   */
-  @Builder.Default
-  private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
+    /**
+     * 系统主题模式
+     */
+    @Builder.Default
+    private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 
-  /**
-   * 默认系统设置
-   */
-  private boolean defaultSystemSettings;
+    /**
+     * 默认系统设置
+     */
+    private boolean defaultSystemSettings;
 
-  private Long version;
+    private Long version;
 }

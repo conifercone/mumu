@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,7 @@
 
 package baby.mumu.genix.infra.country.convertor;
 
-import baby.mumu.genix.client.dto.CountryGetAllDTO;
-import baby.mumu.genix.client.dto.CountryGetCitiesByStateIdDTO;
-import baby.mumu.genix.client.dto.CountryGetCityByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateCitiesByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStatesByCountryIdDTO;
-import baby.mumu.genix.client.dto.CountryStateCityGetAllDTO;
+import baby.mumu.genix.client.dto.*;
 import baby.mumu.genix.domain.country.City;
 import baby.mumu.genix.domain.country.Country;
 import baby.mumu.genix.domain.country.State;
@@ -42,26 +36,26 @@ import org.mapstruct.factory.Mappers;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CountryMapper {
 
-  CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
+    CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryStateCityGetAllDTO toCountryStateCityGetAllDTO(Country country);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryStateCityGetAllDTO toCountryStateCityGetAllDTO(Country country);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStatesByCountryIdDTO toCountryGetStatesByCountryIdDTO(State state);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetStatesByCountryIdDTO toCountryGetStatesByCountryIdDTO(State state);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetCitiesByStateIdDTO toCountryGetCitiesByStateIdDTO(City city);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetCitiesByStateIdDTO toCountryGetCitiesByStateIdDTO(City city);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStateByIdDTO toCountryGetStateByIdDTO(State state);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetStateByIdDTO toCountryGetStateByIdDTO(State state);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetStateCitiesByIdDTO toCountryGetStateCitiesByIdDTO(State state);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetStateCitiesByIdDTO toCountryGetStateCitiesByIdDTO(State state);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetCityByIdDTO toCountryGetCityByIdDTO(City city);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetCityByIdDTO toCountryGetCityByIdDTO(City city);
 
-  @API(status = Status.STABLE, since = "2.0.0")
-  CountryGetAllDTO toCountryGetAllDTO(Country country);
+    @API(status = Status.STABLE, since = "2.0.0")
+    CountryGetAllDTO toCountryGetAllDTO(Country country);
 }

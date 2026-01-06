@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.basis.tools;
 
 import baby.mumu.basis.condition.ConditionalExecutor;
-import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
+
+import java.util.function.Predicate;
 
 /**
  * ConditionalExecutor单元测试
@@ -28,75 +29,75 @@ import org.junit.jupiter.api.Test;
  */
 public class ConditionalExecutorTest {
 
-  @Test
-  public void test() {
-    ConditionalExecutor.of(true).ifTrue(System.out::println, () -> "生成的消息").condition(true)
-      .ifTrue(() -> System.out.println("测试消息"))
-      .condition(false).ifFalse(() -> System.out.println("测试消息（条件不成立）"))
-      .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
-  }
+    @Test
+    public void test() {
+        ConditionalExecutor.of(true).ifTrue(System.out::println, () -> "生成的消息").condition(true)
+            .ifTrue(() -> System.out.println("测试消息"))
+            .condition(false).ifFalse(() -> System.out.println("测试消息（条件不成立）"))
+            .ifTrue(() -> System.out.println("测试消息（条件不成立）"));
+    }
 
-  @Test
-  public void test2() {
-    ConditionalExecutor.of(false).ifTrue(System.out::println, () -> "生成的消息");
-  }
+    @Test
+    public void test2() {
+        ConditionalExecutor.of(false).ifTrue(System.out::println, () -> "生成的消息");
+    }
 
-  @Test
-  public void test3() {
-    System.out.println(ConditionalExecutor.of(true).orElseGet(() -> {
-        System.out.println("代码被执行，生成的消息。");
-        return "这是执行的消息。"; // 返回消息
-      },
-      () -> "这是备用消息。"));
-  }
+    @Test
+    public void test3() {
+        System.out.println(ConditionalExecutor.of(true).orElseGet(() -> {
+                System.out.println("代码被执行，生成的消息。");
+                return "这是执行的消息。"; // 返回消息
+            },
+            () -> "这是备用消息。"));
+    }
 
-  @Test
-  public void test4() {
-    System.out.println(ConditionalExecutor.of(false).orElseGet(() -> {
-        System.out.println("代码被执行，生成的消息。");
-        return "这是执行的消息。"; // 返回消息
-      },
-      () -> "这是备用消息。"));
-  }
+    @Test
+    public void test4() {
+        System.out.println(ConditionalExecutor.of(false).orElseGet(() -> {
+                System.out.println("代码被执行，生成的消息。");
+                return "这是执行的消息。"; // 返回消息
+            },
+            () -> "这是备用消息。"));
+    }
 
-  @Test
-  public void test5() {
-    String test = "测试消息";
-    ConditionalExecutor.of(true).ifTrue(() -> System.out.println(test));
-  }
+    @Test
+    public void test5() {
+        String test = "测试消息";
+        ConditionalExecutor.of(true).ifTrue(() -> System.out.println(test));
+    }
 
-  @Test
-  public void test6() {
-    String test = "测试消息";
-    ConditionalExecutor.of(false).ifTrue(() -> System.out.println(test));
-  }
+    @Test
+    public void test6() {
+        String test = "测试消息";
+        ConditionalExecutor.of(false).ifTrue(() -> System.out.println(test));
+    }
 
-  @Test
-  public void test7() {
-    String successTest = "条件成立测试消息";
-    String failTest = "条件不成立测试消息";
-    Runnable successAction = () -> System.out.println(successTest);
-    Runnable failAction = () -> System.out.println(failTest);
-    ConditionalExecutor.of(true).ifTrueElse(successAction, failAction).condition(false)
-      .ifTrueElse(successAction, failAction);
-  }
+    @Test
+    public void test7() {
+        String successTest = "条件成立测试消息";
+        String failTest = "条件不成立测试消息";
+        Runnable successAction = () -> System.out.println(successTest);
+        Runnable failAction = () -> System.out.println(failTest);
+        ConditionalExecutor.of(true).ifTrueElse(successAction, failAction).condition(false)
+            .ifTrueElse(successAction, failAction);
+    }
 
-  @Test
-  public void test8() {
-    String test = "测试消息";
-    ConditionalExecutor.of(this::booleanSupplier).ifTrue(() -> System.out.println(test));
-  }
+    @Test
+    public void test8() {
+        String test = "测试消息";
+        ConditionalExecutor.of(this::booleanSupplier).ifTrue(() -> System.out.println(test));
+    }
 
-  @Test
-  public void test9() {
-    String test = "测试消息";
-    Predicate<String> predicate1 = (res) -> res.contains("测试");
-    Predicate<String> predicate2 = (res) -> res.contains("11");
-    ConditionalExecutor.of(predicate1.or(predicate2), () -> "11")
-      .ifTrue(() -> System.out.println(test));
-  }
+    @Test
+    public void test9() {
+        String test = "测试消息";
+        Predicate<String> predicate1 = (res) -> res.contains("测试");
+        Predicate<String> predicate2 = (res) -> res.contains("11");
+        ConditionalExecutor.of(predicate1.or(predicate2), () -> "11")
+            .ifTrue(() -> System.out.println(test));
+    }
 
-  public boolean booleanSupplier() {
-    return true;
-  }
+    public boolean booleanSupplier() {
+        return true;
+    }
 }

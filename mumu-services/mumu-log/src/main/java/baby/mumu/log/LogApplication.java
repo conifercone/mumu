@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package baby.mumu.log;
 
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 日志服务，收集、存储、查询和分析系统运行日志数据，让系统的“行为数据”变得可观测、可追踪、可理解
@@ -33,15 +34,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class LogApplication {
 
-  static void main(String[] args) {
-    SpringApplication springApplication = new SpringApplication(
-      LogApplication.class);
-    Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      LogApplicationMetamodel.PROJECT_NAME);
-    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      LogApplicationMetamodel.FORMATTED_PROJECT_VERSION);
-    springApplication.setDefaultProperties(defaultProperties);
-    springApplication.run(args);
-  }
+    static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(
+            LogApplication.class);
+        Map<String, Object> defaultProperties = new HashMap<>();
+        defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+            LogApplicationMetamodel.PROJECT_NAME);
+        defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+            LogApplicationMetamodel.FORMATTED_PROJECT_VERSION);
+        springApplication.setDefaultProperties(defaultProperties);
+        springApplication.run(args);
+    }
 }

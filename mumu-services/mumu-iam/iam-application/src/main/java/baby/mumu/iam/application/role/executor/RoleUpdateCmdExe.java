@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,19 +37,19 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleUpdateCmdExe")
 public class RoleUpdateCmdExe {
 
-  private final RoleGateway roleGateway;
-  private final RoleConvertor roleConvertor;
+    private final RoleGateway roleGateway;
+    private final RoleConvertor roleConvertor;
 
-  @Autowired
-  public RoleUpdateCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
-    this.roleGateway = roleGateway;
-    this.roleConvertor = roleConvertor;
-  }
+    @Autowired
+    public RoleUpdateCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+        this.roleGateway = roleGateway;
+        this.roleConvertor = roleConvertor;
+    }
 
-  public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
-    Role role = roleConvertor.toEntity(roleUpdateCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
-    return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
-  }
+    public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
+        Role role = roleConvertor.toEntity(roleUpdateCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
+        return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
+    }
 }

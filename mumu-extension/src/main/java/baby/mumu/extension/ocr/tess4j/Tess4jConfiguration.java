@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package baby.mumu.extension.ocr.tess4j;
 
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.ocr.OcrProcessor;
-import java.util.Optional;
 import net.sourceforge.tess4j.Tesseract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -28,6 +27,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Optional;
 
 /**
  * tess4j配置类
@@ -41,21 +42,21 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(Tesseract.class)
 public class Tess4jConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean(Tesseract.class)
-  public Tesseract tesseract(ExtensionProperties extensionProperties) {
-    Tesseract tesseract = new Tesseract();
-    Optional.ofNullable(extensionProperties.getOcr().getTess4j().getDataPath())
-      .filter(StringUtils::isNotBlank)
-      .ifPresentOrElse(tesseract::setDatapath,
-        () -> tesseract.setDatapath(System.getenv("TESSDATA_PREFIX")));
-    return tesseract;
-  }
+    @Bean
+    @ConditionalOnMissingBean(Tesseract.class)
+    public Tesseract tesseract(ExtensionProperties extensionProperties) {
+        Tesseract tesseract = new Tesseract();
+        Optional.ofNullable(extensionProperties.getOcr().getTess4j().getDataPath())
+            .filter(StringUtils::isNotBlank)
+            .ifPresentOrElse(tesseract::setDatapath,
+                () -> tesseract.setDatapath(System.getenv("TESSDATA_PREFIX")));
+        return tesseract;
+    }
 
-  @Bean
-  @ConditionalOnBean(Tesseract.class)
-  @ConditionalOnMissingBean(OcrProcessor.class)
-  public OcrProcessor ocrProcessor(Tesseract tesseract) {
-    return new Tess4jOcrProcessor(tesseract);
-  }
+    @Bean
+    @ConditionalOnBean(Tesseract.class)
+    @ConditionalOnMissingBean(OcrProcessor.class)
+    public OcrProcessor ocrProcessor(Tesseract tesseract) {
+        return new Tess4jOcrProcessor(tesseract);
+    }
 }

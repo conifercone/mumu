@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,17 +32,17 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountOnlineStatisticsCmdExe")
 public class AccountOnlineStatisticsCmdExe {
 
-  private final AccountGateway accountGateway;
+    private final AccountGateway accountGateway;
 
-  @Autowired
-  public AccountOnlineStatisticsCmdExe(AccountGateway accountGateway) {
-    this.accountGateway = accountGateway;
-  }
+    @Autowired
+    public AccountOnlineStatisticsCmdExe(AccountGateway accountGateway) {
+        this.accountGateway = accountGateway;
+    }
 
-  public AccountOnlineStatisticsDTO execute() {
-    long onlineAccounts = accountGateway.onlineAccounts();
-    AccountOnlineStatisticsDTO accountOnlineStatisticsDTO = new AccountOnlineStatisticsDTO();
-    accountOnlineStatisticsDTO.setOnlineCapacity(onlineAccounts);
-    return accountOnlineStatisticsDTO;
-  }
+    public AccountOnlineStatisticsDTO execute() {
+        long onlineAccounts = accountGateway.onlineAccounts();
+        AccountOnlineStatisticsDTO accountOnlineStatisticsDTO = new AccountOnlineStatisticsDTO();
+        accountOnlineStatisticsDTO.setOnlineCapacity(onlineAccounts);
+        return accountOnlineStatisticsDTO;
+    }
 }

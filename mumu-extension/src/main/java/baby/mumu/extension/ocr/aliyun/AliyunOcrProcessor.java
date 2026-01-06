@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import com.aliyun.ocr_api20210707.Client;
 import com.aliyun.ocr_api20210707.models.RecognizeBasicRequest;
 import com.aliyun.ocr_api20210707.models.RecognizeBasicResponse;
 import com.aliyun.teautil.models.RuntimeOptions;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.FileInputStream;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 阿里云ocr处理器
@@ -36,26 +37,26 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class AliyunOcrProcessor implements OcrProcessor {
 
-  private final Client client;
+    private final Client client;
 
-  public AliyunOcrProcessor(Client client) {
-    this.client = client;
-  }
+    public AliyunOcrProcessor(Client client) {
+        this.client = client;
+    }
 
-  @Override
-  public String doOcr(Ocr ocr) {
-    return Optional.ofNullable(ocr).filter(ocrNotNull -> ocrNotNull.getSourceFile() != null)
-      .map(ocrNotNull -> {
-        try {
-          RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
-            .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
-            .setNeedRotate(false);
-          RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
-            recognizeBasicRequest, new RuntimeOptions());
-          return recognizeBasicResponse.getBody().getData();
-        } catch (Exception e) {
-          throw new ApplicationException(ResponseCode.OCR_RECOGNITION_FAILED);
-        }
-      }).orElse(StringUtils.EMPTY);
-  }
+    @Override
+    public String doOcr(Ocr ocr) {
+        return Optional.ofNullable(ocr).filter(ocrNotNull -> ocrNotNull.getSourceFile() != null)
+            .map(ocrNotNull -> {
+                try {
+                    RecognizeBasicRequest recognizeBasicRequest = new RecognizeBasicRequest()
+                        .setBody(new FileInputStream(ocrNotNull.getSourceFile()))
+                        .setNeedRotate(false);
+                    RecognizeBasicResponse recognizeBasicResponse = client.recognizeBasicWithOptions(
+                        recognizeBasicRequest, new RuntimeOptions());
+                    return recognizeBasicResponse.getBody().getData();
+                } catch (Exception e) {
+                    throw new ApplicationException(ResponseCode.OCR_RECOGNITION_FAILED);
+                }
+            }).orElse(StringUtils.EMPTY);
+    }
 }

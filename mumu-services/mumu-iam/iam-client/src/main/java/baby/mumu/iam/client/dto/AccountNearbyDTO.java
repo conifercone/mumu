@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ package baby.mumu.iam.client.dto;
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.enums.LanguageEnum;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 附近的账号数据传输对象
@@ -31,61 +32,61 @@ import lombok.Data;
 @Data
 public class AccountNearbyDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = -5128372525687244372L;
-
-  /**
-   * 账号名
-   */
-  private String username;
-
-  /**
-   * 头像地址
-   */
-  private AccountAvatarDTO avatar;
-
-  /**
-   * 时区
-   */
-  private String timezone;
-
-  /**
-   * 语言偏好
-   */
-  private LanguageEnum language;
-
-  /**
-   * 个性签名
-   */
-  private String bio;
-
-  /**
-   * 昵称
-   */
-  private String nickName;
-
-  @Data
-  public static class AccountAvatarDTO {
+    @Serial
+    private static final long serialVersionUID = -5128372525687244372L;
 
     /**
-     * 唯一主键
+     * 账号名
      */
-    private String id;
+    private String username;
 
     /**
-     * 头像来源
+     * 头像地址
      */
-    private AccountAvatarSourceEnum source;
+    private AccountAvatarDTO avatar;
 
     /**
-     * 上传头像时的文件ID，填写URL或第三方时可为空
+     * 时区
      */
-    private String fileId;
+    private String timezone;
 
     /**
-     * 账号上传的URL地址
+     * 语言偏好
      */
-    private String url;
+    private LanguageEnum language;
 
-  }
+    /**
+     * 个性签名
+     */
+    private String bio;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
+
+    @Data
+    public static class AccountAvatarDTO {
+
+        /**
+         * 唯一主键
+         */
+        private String id;
+
+        /**
+         * 头像来源
+         */
+        private AccountAvatarSourceEnum source;
+
+        /**
+         * 上传头像时的文件ID，填写URL或第三方时可为空
+         */
+        private String fileId;
+
+        /**
+         * 账号上传的URL地址
+         */
+        private String url;
+
+    }
 }

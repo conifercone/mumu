@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package baby.mumu.iam.configuration;
 import baby.mumu.basis.enums.OAuth2Enum;
 import baby.mumu.basis.response.ResponseCode;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -33,6 +31,9 @@ import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 密码模式转换器
  *
@@ -41,70 +42,70 @@ import org.springframework.util.MultiValueMap;
  */
 public class PasswordGrantAuthenticationConverter implements AuthenticationConverter {
 
-  public static final String USERNAME = "username";
-  public static final String PASSWORD = "password";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
 
-  @Nullable
-  @Override
-  public Authentication convert(@NonNull HttpServletRequest request) {
-    // grant_type (REQUIRED)
-    String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
-    if (!OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(grantType)) {
-      return null;
-    }
-    Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
-    // 从request中提取请求参数，然后存入MultiValueMap<String, String>
-    MultiValueMap<String, String> parameters = PasswordGrantAuthenticationConverter.getParameters(
-      request);
-    // username (REQUIRED)
-    String username = parameters.getFirst(PasswordGrantAuthenticationConverter.USERNAME);
-    if (StringUtils.isBlank(username) ||
-      parameters.get(PasswordGrantAuthenticationConverter.USERNAME).size() != 1) {
-      ResponseCode accountNameCannotBeEmpty = ResponseCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountNameCannotBeEmpty.getCode(),
-          accountNameCannotBeEmpty.getMessage(), StringUtils.EMPTY));
-    }
-    String password = parameters.getFirst(PasswordGrantAuthenticationConverter.PASSWORD);
-    if (StringUtils.isBlank(password) ||
-      parameters.get(PasswordGrantAuthenticationConverter.PASSWORD).size() != 1) {
-      ResponseCode accountPasswordCannotBeEmpty = ResponseCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
-      throw new OAuth2AuthenticationException(
-        new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
-          accountPasswordCannotBeEmpty.getMessage(), StringUtils.EMPTY));
-    }
-    // 收集要传入PasswordGrantAuthenticationToken构造方法的参数，
-    // 该参数接下来在PasswordGrantAuthenticationProvider中使用
-    Map<String, Object> additionalParameters = new HashMap<>();
-    // 遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
-    parameters.forEach((key, value) -> {
-      if (!OAuth2ParameterNames.GRANT_TYPE.equals(key) &&
-        !OAuth2ParameterNames.CLIENT_ID.equals(key) &&
-        !OAuth2ParameterNames.CODE.equals(key)) {
-        additionalParameters.put(key, value.getFirst());
-      }
-    });
+    @Nullable
+    @Override
+    public Authentication convert(@NonNull HttpServletRequest request) {
+        // grant_type (REQUIRED)
+        String grantType = request.getParameter(OAuth2ParameterNames.GRANT_TYPE);
+        if (!OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(grantType)) {
+            return null;
+        }
+        Authentication clientPrincipal = SecurityContextHolder.getContext().getAuthentication();
+        // 从request中提取请求参数，然后存入MultiValueMap<String, String>
+        MultiValueMap<String, String> parameters = PasswordGrantAuthenticationConverter.getParameters(
+            request);
+        // username (REQUIRED)
+        String username = parameters.getFirst(PasswordGrantAuthenticationConverter.USERNAME);
+        if (StringUtils.isBlank(username) ||
+            parameters.get(PasswordGrantAuthenticationConverter.USERNAME).size() != 1) {
+            ResponseCode accountNameCannotBeEmpty = ResponseCode.ACCOUNT_NAME_CANNOT_BE_EMPTY;
+            throw new OAuth2AuthenticationException(
+                new OAuth2Error(accountNameCannotBeEmpty.getCode(),
+                    accountNameCannotBeEmpty.getMessage(), StringUtils.EMPTY));
+        }
+        String password = parameters.getFirst(PasswordGrantAuthenticationConverter.PASSWORD);
+        if (StringUtils.isBlank(password) ||
+            parameters.get(PasswordGrantAuthenticationConverter.PASSWORD).size() != 1) {
+            ResponseCode accountPasswordCannotBeEmpty = ResponseCode.ACCOUNT_PASSWORD_CANNOT_BE_EMPTY;
+            throw new OAuth2AuthenticationException(
+                new OAuth2Error(accountPasswordCannotBeEmpty.getCode(),
+                    accountPasswordCannotBeEmpty.getMessage(), StringUtils.EMPTY));
+        }
+        // 收集要传入PasswordGrantAuthenticationToken构造方法的参数，
+        // 该参数接下来在PasswordGrantAuthenticationProvider中使用
+        Map<String, Object> additionalParameters = new HashMap<>();
+        // 遍历从request中提取的参数，排除掉grant_type、client_id、code等字段参数，其他参数收集到additionalParameters中
+        parameters.forEach((key, value) -> {
+            if (!OAuth2ParameterNames.GRANT_TYPE.equals(key) &&
+                !OAuth2ParameterNames.CLIENT_ID.equals(key) &&
+                !OAuth2ParameterNames.CODE.equals(key)) {
+                additionalParameters.put(key, value.getFirst());
+            }
+        });
 
-    // 返回自定义的PasswordGrantAuthenticationToken对象
-    return new PasswordGrantAuthenticationToken(clientPrincipal, additionalParameters);
-  }
+        // 返回自定义的PasswordGrantAuthenticationToken对象
+        return new PasswordGrantAuthenticationToken(clientPrincipal, additionalParameters);
+    }
 
-  /**
-   * 从request中提取请求参数，然后存入MultiValueMap<String, String>
-   *
-   * @param request 请求
-   * @return 请求参数
-   */
-  private static @NonNull MultiValueMap<String, String> getParameters(
-    @NonNull HttpServletRequest request) {
-    Map<String, String[]> parameterMap = request.getParameterMap();
-    MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>(parameterMap.size());
-    parameterMap.forEach((key, values) -> {
-      for (String value : values) {
-        parameters.add(key, value);
-      }
-    });
-    return parameters;
-  }
+    /**
+     * 从request中提取请求参数，然后存入MultiValueMap<String, String>
+     *
+     * @param request 请求
+     * @return 请求参数
+     */
+    private static @NonNull MultiValueMap<String, String> getParameters(
+        @NonNull HttpServletRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>(parameterMap.size());
+        parameterMap.forEach((key, values) -> {
+            for (String value : values) {
+                parameters.add(key, value);
+            }
+        });
+        return parameters;
+    }
 
 }

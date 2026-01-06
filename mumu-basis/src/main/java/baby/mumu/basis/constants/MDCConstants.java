@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ package baby.mumu.basis.constants;
  */
 public final class MDCConstants {
 
-  private MDCConstants() {
-  }
+    private MDCConstants() {
+    }
 
-  public static final String TRACE_ID = "traceId";
+    public static final String TRACE_ID = "traceId";
 }

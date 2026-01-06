@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,20 @@ import lombok.Data;
 @Data
 public class PermissionFindAllSliceCmd {
 
-  private Long id;
+    private Long id;
 
-  @Size(max = 50, message = "{permission.code.validation.size}")
-  private String code;
+    @Size(max = 50, message = "{permission.code.validation.size}")
+    private String code;
 
-  @Size(max = 200, message = "{permission.name.validation.size}")
-  private String name;
+    @Size(max = 200, message = "{permission.name.validation.size}")
+    private String name;
 
-  @Size(max = 500)
-  private String description;
+    @Size(max = 500)
+    private String description;
 
-  @Min(value = 1, message = "{current.validation.min.size}")
-  private Integer current = 1;
+    @Min(value = 1, message = "{current.validation.min.size}")
+    private Integer current = 1;
 
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private Integer pageSize = 10;
+    @Min(value = 1, message = "{page.size.validation.min.size}")
+    private Integer pageSize = 10;
 }

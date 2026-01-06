@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,42 +28,42 @@ import javax.crypto.spec.SecretKeySpec
  */
 object SignatureUtils {
 
-  private val log = LoggerFactory.getLogger(SignatureUtils::class.java)
+    private val log = LoggerFactory.getLogger(SignatureUtils::class.java)
 
-  @JvmStatic
-  fun generateSignature(
-    data: String,
-    secretKey: String,
-    algorithm: String = "HmacSHA256"
-  ): ByteArray {
-    val mac = Mac.getInstance(algorithm)
-    val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), algorithm)
-    mac.init(secretKeySpec)
-    return mac.doFinal(data.toByteArray())
-  }
-
-  @JvmStatic
-  fun validateSignature(
-    data: String,
-    signature: String,
-    secretKey: String,
-    algorithm: String = "HmacSHA256"
-  ): Boolean {
-    try {
-      // 使用相同的数据和密钥生成签名
-      val generatedSignature = generateSignature(data, secretKey, algorithm)
-      // 将生成的签名转换为十六进制字符串
-      val generatedSignatureHex = generatedSignature.toHexString()
-      // 比较生成的签名和传入的签名
-      return generatedSignatureHex == signature
-    } catch (e: Exception) {
-      log.error(e.message, e)
-      return false
+    @JvmStatic
+    fun generateSignature(
+        data: String,
+        secretKey: String,
+        algorithm: String = "HmacSHA256"
+    ): ByteArray {
+        val mac = Mac.getInstance(algorithm)
+        val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), algorithm)
+        mac.init(secretKeySpec)
+        return mac.doFinal(data.toByteArray())
     }
-  }
 
-  // 扩展函数，将字节数组转换为十六进制字符串
-  private fun ByteArray.toHexString(): String {
-    return joinToString("") { "%02x".format(it) }
-  }
+    @JvmStatic
+    fun validateSignature(
+        data: String,
+        signature: String,
+        secretKey: String,
+        algorithm: String = "HmacSHA256"
+    ): Boolean {
+        try {
+            // 使用相同的数据和密钥生成签名
+            val generatedSignature = generateSignature(data, secretKey, algorithm)
+            // 将生成的签名转换为十六进制字符串
+            val generatedSignatureHex = generatedSignature.toHexString()
+            // 比较生成的签名和传入的签名
+            return generatedSignatureHex == signature
+        } catch (e: Exception) {
+            log.error(e.message, e)
+            return false
+        }
+    }
+
+    // 扩展函数，将字节数组转换为十六进制字符串
+    private fun ByteArray.toHexString(): String {
+        return joinToString("") { "%02x".format(it) }
+    }
 }

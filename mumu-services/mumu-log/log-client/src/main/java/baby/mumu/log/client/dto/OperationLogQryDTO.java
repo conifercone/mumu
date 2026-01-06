@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.log.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
+import lombok.Data;
+
 import java.io.Serial;
 import java.time.LocalDateTime;
-import lombok.Data;
 
 /**
  * 操作日志查询数据传输对象
@@ -30,51 +31,51 @@ import lombok.Data;
 @Data
 public class OperationLogQryDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = -8505038435590613073L;
+    @Serial
+    private static final long serialVersionUID = -8505038435590613073L;
 
-  /**
-   * 唯一标识
-   */
-  private String id;
+    /**
+     * 唯一标识
+     */
+    private String id;
 
-  /**
-   * 日志内容
-   */
-  private String content;
+    /**
+     * 日志内容
+     */
+    private String content;
 
-  /**
-   * 操作日志的执行人
-   */
-  private String operator;
+    /**
+     * 操作日志的执行人
+     */
+    private String operator;
 
-  /**
-   * 操作日志绑定的业务对象标识
-   */
-  private String bizNo;
+    /**
+     * 操作日志绑定的业务对象标识
+     */
+    private String bizNo;
 
-  /**
-   * 操作日志的种类
-   */
-  private String category;
+    /**
+     * 操作日志的种类
+     */
+    private String category;
 
-  /**
-   * 扩展参数，记录操作日志的修改详情
-   */
-  private String detail;
+    /**
+     * 扩展参数，记录操作日志的修改详情
+     */
+    private String detail;
 
-  /**
-   * 操作日志成功的文本模板
-   */
-  private String success;
+    /**
+     * 操作日志成功的文本模板
+     */
+    private String success;
 
-  /**
-   * 操作日志失败的文本模板
-   */
-  private String fail;
+    /**
+     * 操作日志失败的文本模板
+     */
+    private String fail;
 
-  /**
-   * 操作日志的操作时间
-   */
-  private LocalDateTime operatingTime;
+    /**
+     * 操作日志的操作时间
+     */
+    private LocalDateTime operatingTime;
 }

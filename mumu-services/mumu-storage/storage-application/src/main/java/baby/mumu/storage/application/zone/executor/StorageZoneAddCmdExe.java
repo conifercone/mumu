@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,18 +36,18 @@ import org.springframework.stereotype.Component;
 public class StorageZoneAddCmdExe {
 
 
-  private final StorageZoneConvertor storageZoneConvertor;
-  private final StorageZoneGateway storageZoneGateway;
+    private final StorageZoneConvertor storageZoneConvertor;
+    private final StorageZoneGateway storageZoneGateway;
 
-  public StorageZoneAddCmdExe(StorageZoneConvertor storageZoneConvertor,
-    StorageZoneGateway storageZoneGateway) {
-    this.storageZoneConvertor = storageZoneConvertor;
-    this.storageZoneGateway = storageZoneGateway;
-  }
+    public StorageZoneAddCmdExe(StorageZoneConvertor storageZoneConvertor,
+                                StorageZoneGateway storageZoneGateway) {
+        this.storageZoneConvertor = storageZoneConvertor;
+        this.storageZoneGateway = storageZoneGateway;
+    }
 
-  public Long execute(StorageZoneAddCmd storageZoneAddCmd) {
-    StorageZone storageZone = storageZoneConvertor.toEntity(storageZoneAddCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
-    return storageZoneGateway.add(storageZone);
-  }
+    public Long execute(StorageZoneAddCmd storageZoneAddCmd) {
+        StorageZone storageZone = storageZoneConvertor.toEntity(storageZoneAddCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
+        return storageZoneGateway.add(storageZone);
+    }
 }

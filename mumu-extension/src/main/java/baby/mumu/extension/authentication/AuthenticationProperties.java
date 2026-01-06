@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,35 +28,35 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 public class AuthenticationProperties {
 
-  /**
-   * 初始密码
-   */
-  private String initialPassword = "3c38019#0e5c34f@3Bc97cae24aC6062";
-
-  @NestedConfigurationProperty
-  private Rsa rsa = new Rsa();
-
-
-  @Data
-  public static class Rsa {
-
     /**
-     * 自动生成
+     * 初始密码
      */
-    private boolean automaticGenerated = true;
+    private String initialPassword = "3c38019#0e5c34f@3Bc97cae24aC6062";
 
-    /**
-     * 密钥地址
-     */
-    private String jksKeyPath;
-    /**
-     * 密钥密码
-     */
-    private String jksKeyPassword;
+    @NestedConfigurationProperty
+    private Rsa rsa = new Rsa();
 
-    /**
-     * 密钥对
-     */
-    private String jksKeyPair = "mumu";
-  }
+
+    @Data
+    public static class Rsa {
+
+        /**
+         * 自动生成
+         */
+        private boolean automaticGenerated = true;
+
+        /**
+         * 密钥地址
+         */
+        private String jksKeyPath;
+        /**
+         * 密钥密码
+         */
+        private String jksKeyPassword;
+
+        /**
+         * 密钥对
+         */
+        private String jksKeyPair = "mumu";
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,25 +30,25 @@ import org.springframework.data.domain.Page;
  */
 public interface SystemLogService {
 
-  /**
-   * 系统日志提交
-   *
-   * @param systemLogSubmitCmd 系统日志提交指令
-   */
-  void submit(SystemLogSubmitCmd systemLogSubmitCmd);
+    /**
+     * 系统日志提交
+     *
+     * @param systemLogSubmitCmd 系统日志提交指令
+     */
+    void submit(SystemLogSubmitCmd systemLogSubmitCmd);
 
-  /**
-   * 系统日志保存
-   *
-   * @param systemLogSaveCmd 系统日志保存指令
-   */
-  void save(SystemLogSaveCmd systemLogSaveCmd);
+    /**
+     * 系统日志保存
+     *
+     * @param systemLogSaveCmd 系统日志保存指令
+     */
+    void save(SystemLogSaveCmd systemLogSaveCmd);
 
-  /**
-   * 分页查询系统日志
-   *
-   * @param systemLogFindAllCmd 分页查询系统日志指令
-   * @return 查询结果
-   */
-  Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd);
+    /**
+     * 分页查询系统日志
+     *
+     * @param systemLogFindAllCmd 分页查询系统日志指令
+     * @return 查询结果
+     */
+    Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd);
 }

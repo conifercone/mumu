@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,13 @@ package baby.mumu.iam.infra.relations.database;
 
 import baby.mumu.basis.po.jpa.JpaBasisDefaultPersistentObject;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.Table;
-import java.io.Serial;
-import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.io.Serial;
+import java.util.Objects;
 
 /**
  * 权限路径
@@ -51,47 +42,47 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 public class PermissionPathPO extends JpaBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = 5664371470283158730L;
+    @Serial
+    private static final long serialVersionUID = 5664371470283158730L;
 
-  @EmbeddedId
-  private PermissionPathPOId id;
+    @EmbeddedId
+    private PermissionPathPOId id;
 
-  @MapsId("ancestorId")
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "ancestor_id", nullable = false)
-  @ToString.Exclude
-  private PermissionPO ancestor;
+    @MapsId("ancestorId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ancestor_id", nullable = false)
+    @ToString.Exclude
+    private PermissionPO ancestor;
 
-  @MapsId("descendantId")
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "descendant_id", nullable = false)
-  @ToString.Exclude
-  private PermissionPO descendant;
+    @MapsId("descendantId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "descendant_id", nullable = false)
+    @ToString.Exclude
+    private PermissionPO descendant;
 
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+        PermissionPathPO that = (PermissionPathPO) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
-    if (o == null) {
-      return false;
-    }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy
-      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-      : o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy
-      ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass() : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) {
-      return false;
-    }
-    PermissionPathPO that = (PermissionPathPO) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
-  }
 
-  @Override
-  public final int hashCode() {
-    return Objects.hash(id);
-  }
+    @Override
+    public final int hashCode() {
+        return Objects.hash(id);
+    }
 }

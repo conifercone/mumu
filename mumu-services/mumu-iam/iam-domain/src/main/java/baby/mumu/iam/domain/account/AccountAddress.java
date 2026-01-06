@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,12 @@ package baby.mumu.iam.domain.account;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
-import java.io.Serial;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.geo.Point;
+
+import java.io.Serial;
 
 /**
  * 账号地址领域模型
@@ -37,59 +38,59 @@ import org.springframework.data.geo.Point;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AccountAddress extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 1106704309433693382L;
+    @Serial
+    private static final long serialVersionUID = 1106704309433693382L;
 
-  /**
-   * 唯一主键
-   */
-  private String id;
+    /**
+     * 唯一主键
+     */
+    private String id;
 
-  /**
-   * 账号 ID
-   */
-  private Long accountId;
+    /**
+     * 账号 ID
+     */
+    private Long accountId;
 
-  /**
-   * 街道地址，包含门牌号和街道信息
-   */
-  @Size(max = 255)
-  private String street;
+    /**
+     * 街道地址，包含门牌号和街道信息
+     */
+    @Size(max = 255)
+    private String street;
 
-  /**
-   * 城市信息
-   */
-  @Size(max = 100)
-  private String city;
+    /**
+     * 城市信息
+     */
+    @Size(max = 100)
+    private String city;
 
-  /**
-   * 州或省的信息
-   */
-  @Size(max = 100)
-  private String state;
+    /**
+     * 州或省的信息
+     */
+    @Size(max = 100)
+    private String state;
 
-  /**
-   * 邮政编码
-   */
-  @Size(max = 20)
-  private String postalCode;
+    /**
+     * 邮政编码
+     */
+    @Size(max = 20)
+    private String postalCode;
 
-  /**
-   * 国家信息
-   */
-  @Size(max = 100)
-  private String country;
+    /**
+     * 国家信息
+     */
+    @Size(max = 100)
+    private String country;
 
-  /**
-   * 定位
-   */
-  private Point location;
+    /**
+     * 定位
+     */
+    private Point location;
 
-  /**
-   * 是否为默认地址
-   */
-  private boolean defaultAddress;
+    /**
+     * 是否为默认地址
+     */
+    private boolean defaultAddress;
 
-  private Long version;
+    private Long version;
 }
 

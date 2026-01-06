@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package baby.mumu.genix.client.dto;
 
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 根据省或州ID获取省或州（包含下级城市）数据传输对象
@@ -28,38 +29,11 @@ import lombok.Data;
 @Data
 public class CountryGetStateCitiesByIdDTO {
 
-  /**
-   * 唯一标识
-   */
-  private Long id;
-
-  /**
-   * 名称
-   */
-  private String name;
-
-  /**
-   * 纬度
-   */
-  private String latitude;
-
-  /**
-   * 精度
-   */
-  private String longitude;
-
-  /**
-   * 下级城市
-   */
-  private List<CountryGetStateCitiesByIdCityCo> cities;
-
-  @Data
-  public static class CountryGetStateCitiesByIdCityCo {
-
     /**
      * 唯一标识
      */
     private Long id;
+
     /**
      * 名称
      */
@@ -74,5 +48,32 @@ public class CountryGetStateCitiesByIdDTO {
      * 精度
      */
     private String longitude;
-  }
+
+    /**
+     * 下级城市
+     */
+    private List<CountryGetStateCitiesByIdCityCo> cities;
+
+    @Data
+    public static class CountryGetStateCitiesByIdCityCo {
+
+        /**
+         * 唯一标识
+         */
+        private Long id;
+        /**
+         * 名称
+         */
+        private String name;
+
+        /**
+         * 纬度
+         */
+        private String latitude;
+
+        /**
+         * 精度
+         */
+        private String longitude;
+    }
 }

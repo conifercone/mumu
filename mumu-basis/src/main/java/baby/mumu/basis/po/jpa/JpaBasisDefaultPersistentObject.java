@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import baby.mumu.basis.po.PersistentObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import java.io.Serial;
-import java.time.OffsetDateTime;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.io.Serial;
+import java.time.OffsetDateTime;
 
 /**
  * jpa基础默认数据对象
@@ -40,42 +41,42 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 public class JpaBasisDefaultPersistentObject implements PersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -6208186991995932595L;
+    @Serial
+    private static final long serialVersionUID = -6208186991995932595L;
 
-  @CreationTimestamp
-  @Column(name = "creation_time", updatable = false, nullable = false)
-  private OffsetDateTime creationTime;
+    @CreationTimestamp
+    @Column(name = "creation_time", updatable = false, nullable = false)
+    private OffsetDateTime creationTime;
 
-  @CreatedBy
-  @Column(name = "founder", updatable = false, nullable = false)
-  private Long founder;
+    @CreatedBy
+    @Column(name = "founder", updatable = false, nullable = false)
+    private Long founder;
 
-  @LastModifiedBy
-  @Column(name = "modifier", nullable = false)
-  private Long modifier;
+    @LastModifiedBy
+    @Column(name = "modifier", nullable = false)
+    private Long modifier;
 
-  @UpdateTimestamp
-  @Column(name = "modification_time", nullable = false)
-  private OffsetDateTime modificationTime;
+    @UpdateTimestamp
+    @Column(name = "modification_time", nullable = false)
+    private OffsetDateTime modificationTime;
 
-  @Override
-  public Long getFounder() {
-    return founder;
-  }
+    @Override
+    public Long getFounder() {
+        return founder;
+    }
 
-  @Override
-  public Long getModifier() {
-    return modifier;
-  }
+    @Override
+    public Long getModifier() {
+        return modifier;
+    }
 
-  @Override
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
+    @Override
+    public OffsetDateTime getCreationTime() {
+        return creationTime;
+    }
 
-  @Override
-  public OffsetDateTime getModificationTime() {
-    return modificationTime;
-  }
+    @Override
+    public OffsetDateTime getModificationTime() {
+        return modificationTime;
+    }
 }

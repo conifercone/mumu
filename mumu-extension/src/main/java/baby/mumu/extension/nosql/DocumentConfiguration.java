@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 
 package baby.mumu.extension.nosql;
 
-import static baby.mumu.basis.constants.BeanNameConstants.APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE;
-
 import baby.mumu.basis.po.jpa.ApplicationJpaDocumentAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import static baby.mumu.basis.constants.BeanNameConstants.APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE;
 
 /**
  * document相关配置类
@@ -31,8 +31,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DocumentConfiguration {
 
-  @Bean(name = APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE)
-  public ApplicationJpaDocumentAuditorAware applicationJpaDocumentAuditorAware() {
-    return new ApplicationJpaDocumentAuditorAware();
-  }
+    @Bean(name = APPLICATION_JPA_DOCUMENT_AUDITOR_AWARE)
+    public ApplicationJpaDocumentAuditorAware applicationJpaDocumentAuditorAware() {
+        return new ApplicationJpaDocumentAuditorAware();
+    }
 }

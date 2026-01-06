@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 验证码相关接口
@@ -48,30 +42,30 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "验证码管理")
 public class CaptchaCodeController {
 
-  private final CaptchaCodeService captchaCodeService;
+    private final CaptchaCodeService captchaCodeService;
 
-  @Autowired
-  public CaptchaCodeController(CaptchaCodeService captchaCodeService) {
-    this.captchaCodeService = captchaCodeService;
-  }
+    @Autowired
+    public CaptchaCodeController(CaptchaCodeService captchaCodeService) {
+        this.captchaCodeService = captchaCodeService;
+    }
 
-  @Operation(summary = "获取简单验证码")
-  @GetMapping("/generate")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public CaptchaCodeGeneratedDTO generate(
-    @ModelAttribute @Validated CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
-    return captchaCodeService.generate(captchaCodeGeneratedCmd);
-  }
+    @Operation(summary = "获取简单验证码")
+    @GetMapping("/generate")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.1")
+    public CaptchaCodeGeneratedDTO generate(
+        @ModelAttribute @Validated CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+        return captchaCodeService.generate(captchaCodeGeneratedCmd);
+    }
 
-  @Operation(summary = "验证简单验证码")
-  @PostMapping("/verify")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.1")
-  public ResponseWrapper<Boolean> verify(
-    @RequestBody CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
-    return ResponseWrapper.success(captchaCodeService.verify(captchaCodeVerifyCmd));
-  }
+    @Operation(summary = "验证简单验证码")
+    @PostMapping("/verify")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.1")
+    public ResponseWrapper<Boolean> verify(
+        @RequestBody CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
+        return ResponseWrapper.success(captchaCodeService.verify(captchaCodeVerifyCmd));
+    }
 }

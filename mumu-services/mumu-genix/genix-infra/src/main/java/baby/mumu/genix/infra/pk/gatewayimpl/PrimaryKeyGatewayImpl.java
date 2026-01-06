@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,16 +32,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryKeyGatewayImpl implements PrimaryKeyGateway {
 
-  private final SnowflakeId snowflakeId;
+    private final SnowflakeId snowflakeId;
 
-  @Autowired
-  public PrimaryKeyGatewayImpl(
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") @Qualifier("__share__SnowflakeId") @Lazy SnowflakeId snowflakeId) {
-    this.snowflakeId = snowflakeId;
-  }
+    @Autowired
+    public PrimaryKeyGatewayImpl(
+        @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection") @Qualifier("__share__SnowflakeId") @Lazy SnowflakeId snowflakeId) {
+        this.snowflakeId = snowflakeId;
+    }
 
-  @Override
-  public long snowflake() {
-    return snowflakeId.generate();
-  }
+    @Override
+    public long snowflake() {
+        return snowflakeId.generate();
+    }
 }

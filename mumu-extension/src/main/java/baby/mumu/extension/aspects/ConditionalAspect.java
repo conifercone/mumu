@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package baby.mumu.extension.aspects;
 
 import baby.mumu.basis.annotations.Conditional;
 import baby.mumu.basis.condition.ConditionalExecutor;
-import java.util.Optional;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Optional;
 
 /**
  * 条件注解切面
@@ -35,28 +36,28 @@ import org.springframework.context.ApplicationContext;
 @Aspect
 public class ConditionalAspect extends AbstractAspect {
 
-  private final ApplicationContext applicationContext;
-  private static final Logger log = LoggerFactory.getLogger(ConditionalAspect.class);
+    private final ApplicationContext applicationContext;
+    private static final Logger log = LoggerFactory.getLogger(ConditionalAspect.class);
 
-  public ConditionalAspect(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+    public ConditionalAspect(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
-  @Around("@annotation(baby.mumu.basis.annotations.Conditional)")
-  public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
-    return Optional.ofNullable(getMethodAnnotation(joinPoint, Conditional.class))
-      .map(conditional -> ConditionalExecutor.of(
-          applicationContext.getBean(conditional.value()).matches())
-        .orElseGet(() -> {
-          try {
-            return joinPoint.proceed();
-          } catch (Throwable e) {
-            throw new RuntimeException(e);
-          }
-        }, () -> {
-          ConditionalAspect.log.warn("{} method execution conditions are not met",
-            joinPoint.getSignature().getName());
-          return null;
-        })).orElse(joinPoint.proceed());
-  }
+    @Around("@annotation(baby.mumu.basis.annotations.Conditional)")
+    public Object rounding(ProceedingJoinPoint joinPoint) throws Throwable {
+        return Optional.ofNullable(getMethodAnnotation(joinPoint, Conditional.class))
+            .map(conditional -> ConditionalExecutor.of(
+                    applicationContext.getBean(conditional.value()).matches())
+                .orElseGet(() -> {
+                    try {
+                        return joinPoint.proceed();
+                    } catch (Throwable e) {
+                        throw new RuntimeException(e);
+                    }
+                }, () -> {
+                    ConditionalAspect.log.warn("{} method execution conditions are not met",
+                        joinPoint.getSignature().getName());
+                    return null;
+                })).orElse(joinPoint.proceed());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package baby.mumu.genix.infra.barcode.convertor;
 
 import baby.mumu.genix.client.cmds.BarCodeGenerateCmd;
 import baby.mumu.genix.domain.barcode.BarCode;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 条形码对象转换类
@@ -32,9 +33,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BarCodeConvertor {
 
-  @API(status = Status.STABLE, since = "1.0.4")
-  public Optional<BarCode> toEntity(
-    BarCodeGenerateCmd barCodeGenerateCmd) {
-    return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeMapper.INSTANCE::toEntity);
-  }
+    @API(status = Status.STABLE, since = "1.0.4")
+    public Optional<BarCode> toEntity(
+        BarCodeGenerateCmd barCodeGenerateCmd) {
+        return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeMapper.INSTANCE::toEntity);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import jakarta.validation.constraints.Size;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 获取所有根权限数据传输对象
@@ -30,17 +31,17 @@ import lombok.Data;
 @Data
 public class PermissionFindRootDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = -3550924228550529768L;
+    @Serial
+    private static final long serialVersionUID = -3550924228550529768L;
 
-  private Long id;
+    private Long id;
 
-  private String code;
+    private String code;
 
-  private String name;
+    private String name;
 
-  @Size(max = 500)
-  private String description;
+    @Size(max = 500)
+    private String description;
 
-  private boolean hasDescendant;
+    private boolean hasDescendant;
 }

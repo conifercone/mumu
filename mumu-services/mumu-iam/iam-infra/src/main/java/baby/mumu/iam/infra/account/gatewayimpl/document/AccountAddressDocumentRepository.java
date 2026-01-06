@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.iam.infra.account.gatewayimpl.document;
 
 import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAddressDocumentPO;
-import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 /**
  * 账号地址
@@ -28,15 +29,15 @@ import org.springframework.data.mongodb.repository.Query;
  * @since 2.0.0
  */
 public interface AccountAddressDocumentRepository extends
-  MongoRepository<AccountAddressDocumentPO, String> {
+    MongoRepository<AccountAddressDocumentPO, String> {
 
-  void deleteByAccountId(Long accountId);
+    void deleteByAccountId(Long accountId);
 
-  List<AccountAddressDocumentPO> findByAccountId(Long accountId);
+    List<AccountAddressDocumentPO> findByAccountId(Long accountId);
 
-  @Query("""
-    { 'location': { $geoWithin: { $centerSphere: [ [ ?0, ?1 ], ?2 ] } } }
-    """)
-  List<AccountAddressDocumentPO> findByLocationWithin(double longitude, double latitude,
-    double radiusInRadians);
+    @Query("""
+        { 'location': { $geoWithin: { $centerSphere: [ [ ?0, ?1 ], ?2 ] } } }
+        """)
+    List<AccountAddressDocumentPO> findByLocationWithin(double longitude, double latitude,
+                                                        double radiusInRadians);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,18 +37,18 @@ import org.springframework.test.context.ActiveProfiles;
 @AutoConfigureMockMvc
 public class PrimaryKeyGrpcServiceTest {
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
-  private static final Logger log = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
+    private final PrimaryKeyGrpcService primaryKeyGrpcService;
+    private static final Logger log = LoggerFactory.getLogger(PrimaryKeyGrpcServiceTest.class);
 
-  @Autowired
-  public PrimaryKeyGrpcServiceTest(PrimaryKeyGrpcService primaryKeyGrpcService) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
-  }
+    @Autowired
+    public PrimaryKeyGrpcServiceTest(PrimaryKeyGrpcService primaryKeyGrpcService) {
+        this.primaryKeyGrpcService = primaryKeyGrpcService;
+    }
 
-  @Test
-  public void snowflake() {
-    Long snowflake = primaryKeyGrpcService.snowflake();
-    PrimaryKeyGrpcServiceTest.log.info("snowflake : {}", snowflake);
-    Assertions.assertNotNull(snowflake);
-  }
+    @Test
+    public void snowflake() {
+        Long snowflake = primaryKeyGrpcService.snowflake();
+        PrimaryKeyGrpcServiceTest.log.info("snowflake : {}", snowflake);
+        Assertions.assertNotNull(snowflake);
+    }
 }

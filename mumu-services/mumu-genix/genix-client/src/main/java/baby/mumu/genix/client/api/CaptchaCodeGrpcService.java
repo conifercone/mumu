@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package baby.mumu.genix.client.api;
 
-import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
-
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcCmd;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
@@ -30,11 +28,14 @@ import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
+
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 /**
  * 验证码生成对外提供grpc调用实例
@@ -45,128 +46,128 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Observed(name = "CaptchaCodeGrpcService")
 public class CaptchaCodeGrpcService extends GenixGrpcService implements DisposableBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public CaptchaCodeGrpcService(
-    DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public CaptchaCodeGrpcService(
+        DiscoveryClient discoveryClient,
+        GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
-  public CaptchaCodeGeneratedGrpcDTO generate(
-    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return generateFromGrpc(captchaCodeGeneratedGrpcCmd);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    public CaptchaCodeGeneratedGrpcDTO generate(
+        CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return generateFromGrpc(captchaCodeGeneratedGrpcCmd);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  public ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerate(
-    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return syncGenerateFromGrpc(captchaCodeGeneratedGrpcCmd);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    public ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerate(
+        CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return syncGenerateFromGrpc(captchaCodeGeneratedGrpcCmd);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  public BoolValue verify(
-    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return verifyFromGrpc(captchaCodeVerifyGrpcCmd);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    public BoolValue verify(
+        CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return verifyFromGrpc(captchaCodeVerifyGrpcCmd);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  @SuppressWarnings("unused")
-  public ListenableFuture<BoolValue> syncVerify(
-    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return syncVerifyFromGrpc(captchaCodeVerifyGrpcCmd);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    @SuppressWarnings("unused")
+    public ListenableFuture<BoolValue> syncVerify(
+        CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return syncVerifyFromGrpc(captchaCodeVerifyGrpcCmd);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  public void delete(Int64Value captchaCodeId) {
-    Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .ifPresentOrElse(ch -> {
-        channel = ch;
-        deleteFromGrpc(captchaCodeId);
-      }, () -> {
-        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
-      });
-  }
+    public void delete(Int64Value captchaCodeId) {
+        Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .ifPresentOrElse(ch -> {
+                channel = ch;
+                deleteFromGrpc(captchaCodeId);
+            }, () -> {
+                throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
+            });
+    }
 
-  @SuppressWarnings("unused")
-  public void syncDelete(Int64Value captchaCodeId) {
-    Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .ifPresentOrElse(ch -> {
-        channel = ch;
-        syncDeleteFromGrpc(captchaCodeId);
-      }, () -> {
-        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
-      });
-  }
+    @SuppressWarnings("unused")
+    public void syncDelete(Int64Value captchaCodeId) {
+        Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .ifPresentOrElse(ch -> {
+                channel = ch;
+                syncDeleteFromGrpc(captchaCodeId);
+            }, () -> {
+                throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
+            });
+    }
 
-  private CaptchaCodeGeneratedGrpcDTO generateFromGrpc(
-    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
-    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
-      channel);
-    return captchaCodeServiceBlockingStub.generate(captchaCodeGeneratedGrpcCmd);
-  }
+    private CaptchaCodeGeneratedGrpcDTO generateFromGrpc(
+        CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+        CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
+            channel);
+        return captchaCodeServiceBlockingStub.generate(captchaCodeGeneratedGrpcCmd);
+    }
 
-  private @NonNull ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerateFromGrpc(
-    CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
-    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
-      channel);
-    return captchaCodeServiceFutureStub.generate(
-      captchaCodeGeneratedGrpcCmd);
-  }
+    private @NonNull ListenableFuture<CaptchaCodeGeneratedGrpcDTO> syncGenerateFromGrpc(
+        CaptchaCodeGeneratedGrpcCmd captchaCodeGeneratedGrpcCmd) {
+        CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
+            channel);
+        return captchaCodeServiceFutureStub.generate(
+            captchaCodeGeneratedGrpcCmd);
+    }
 
-  private BoolValue verifyFromGrpc(
-    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
-    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
-      channel);
-    return captchaCodeServiceBlockingStub.verify(captchaCodeVerifyGrpcCmd);
-  }
+    private BoolValue verifyFromGrpc(
+        CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+        CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
+            channel);
+        return captchaCodeServiceBlockingStub.verify(captchaCodeVerifyGrpcCmd);
+    }
 
-  private @NonNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
-    CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
-    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
-      channel);
-    return captchaCodeServiceFutureStub.verify(
-      captchaCodeVerifyGrpcCmd);
-  }
+    private @NonNull ListenableFuture<BoolValue> syncVerifyFromGrpc(
+        CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
+        CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
+            channel);
+        return captchaCodeServiceFutureStub.verify(
+            captchaCodeVerifyGrpcCmd);
+    }
 
-  private void deleteFromGrpc(Int64Value captchaCodeId) {
-    CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
-      channel);
-    // noinspection ResultOfMethodCallIgnored
-    captchaCodeServiceBlockingStub.delete(captchaCodeId);
-  }
+    private void deleteFromGrpc(Int64Value captchaCodeId) {
+        CaptchaCodeServiceBlockingStub captchaCodeServiceBlockingStub = CaptchaCodeServiceGrpc.newBlockingStub(
+            channel);
+        // noinspection ResultOfMethodCallIgnored
+        captchaCodeServiceBlockingStub.delete(captchaCodeId);
+    }
 
-  private void syncDeleteFromGrpc(Int64Value captchaCodeId) {
-    CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
-      channel);
-    // noinspection ResultOfMethodCallIgnored
-    captchaCodeServiceFutureStub.delete(captchaCodeId);
-  }
+    private void syncDeleteFromGrpc(Int64Value captchaCodeId) {
+        CaptchaCodeServiceFutureStub captchaCodeServiceFutureStub = CaptchaCodeServiceGrpc.newFutureStub(
+            channel);
+        // noinspection ResultOfMethodCallIgnored
+        captchaCodeServiceFutureStub.delete(captchaCodeId);
+    }
 }

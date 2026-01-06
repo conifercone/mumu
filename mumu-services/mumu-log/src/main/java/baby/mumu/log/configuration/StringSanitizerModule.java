@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 package baby.mumu.log.configuration;
 
 import com.google.common.base.Strings;
-import java.io.Serial;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdScalarDeserializer;
 import tools.jackson.databind.module.SimpleModule;
+
+import java.io.Serial;
 
 /**
  * jackson空字符串转NULL模块
@@ -33,16 +34,16 @@ import tools.jackson.databind.module.SimpleModule;
 @Component
 public class StringSanitizerModule extends SimpleModule {
 
-  @Serial
-  private static final long serialVersionUID = -8746350422998765852L;
+    @Serial
+    private static final long serialVersionUID = -8746350422998765852L;
 
-  public StringSanitizerModule() {
-    addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
+    public StringSanitizerModule() {
+        addDeserializer(String.class, new StdScalarDeserializer<>(String.class) {
 
-      @Override
-      public String deserialize(JsonParser jsonParser, DeserializationContext ctx) {
-        return Strings.emptyToNull(jsonParser.getValueAsString().trim());
-      }
-    });
-  }
+            @Override
+            public String deserialize(JsonParser jsonParser, DeserializationContext ctx) {
+                return Strings.emptyToNull(jsonParser.getValueAsString().trim());
+            }
+        });
+    }
 }

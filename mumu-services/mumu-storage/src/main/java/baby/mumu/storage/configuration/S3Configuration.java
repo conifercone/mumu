@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package baby.mumu.storage.configuration;
 
 import baby.mumu.storage.client.config.StorageProperties;
 import baby.mumu.storage.client.config.StorageProperties.S3;
-import java.net.URI;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,6 +34,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClientBuilder;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 
+import java.net.URI;
+
 /**
  * S3配置类
  *
@@ -46,57 +47,57 @@ import software.amazon.awssdk.services.s3.S3ClientBuilder;
 @ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "S3", matchIfMissing = true)
 public class S3Configuration {
 
-  private final StorageProperties storageProperties;
+    private final StorageProperties storageProperties;
 
-  @Autowired
-  public S3Configuration(StorageProperties storageProperties) {
-    this.storageProperties = storageProperties;
-  }
-
-  @Bean
-  public S3Client s3Client() {
-    S3 s3 = storageProperties.getS3();
-    AwsCredentialsProvider credentialsProvider;
-
-    if (StringUtils.isNotBlank(s3.getAccessKeyId())) {
-      credentialsProvider = StaticCredentialsProvider.create(
-        AwsBasicCredentials.create(s3.getAccessKeyId(), s3.getSecretAccessKey())
-      );
-    } else {
-      // 默认从环境变量 / 配置文件 / IAM Role 自动获取
-      credentialsProvider = DefaultCredentialsProvider.builder().build();
+    @Autowired
+    public S3Configuration(StorageProperties storageProperties) {
+        this.storageProperties = storageProperties;
     }
 
-    S3ClientBuilder s3ClientBuilder = S3Client.builder()
-      .region(Region.of(s3.getRegion()))
-      .credentialsProvider(credentialsProvider)
-      .serviceConfiguration(software.amazon.awssdk.services.s3.S3Configuration.builder()
-        .pathStyleAccessEnabled(s3.isPathStyleAccessEnabled())
-        .build());
+    @Bean
+    public S3Client s3Client() {
+        S3 s3 = storageProperties.getS3();
+        AwsCredentialsProvider credentialsProvider;
 
-    if (StringUtils.isNotBlank(s3.getEndpoint())) {
-      s3ClientBuilder.endpointOverride(URI.create(s3.getEndpoint()));
+        if (StringUtils.isNotBlank(s3.getAccessKeyId())) {
+            credentialsProvider = StaticCredentialsProvider.create(
+                AwsBasicCredentials.create(s3.getAccessKeyId(), s3.getSecretAccessKey())
+            );
+        } else {
+            // 默认从环境变量 / 配置文件 / IAM Role 自动获取
+            credentialsProvider = DefaultCredentialsProvider.builder().build();
+        }
+
+        S3ClientBuilder s3ClientBuilder = S3Client.builder()
+            .region(Region.of(s3.getRegion()))
+            .credentialsProvider(credentialsProvider)
+            .serviceConfiguration(software.amazon.awssdk.services.s3.S3Configuration.builder()
+                .pathStyleAccessEnabled(s3.isPathStyleAccessEnabled())
+                .build());
+
+        if (StringUtils.isNotBlank(s3.getEndpoint())) {
+            s3ClientBuilder.endpointOverride(URI.create(s3.getEndpoint()));
+        }
+
+        return s3ClientBuilder.build();
     }
 
-    return s3ClientBuilder.build();
-  }
+    @Bean
+    public S3AsyncClient s3AsyncClient() {
+        S3 s3 = storageProperties.getS3();
+        S3AsyncClientBuilder builder = S3AsyncClient.builder()
+            .multipartEnabled(true)
+            .region(Region.of(s3.getRegion()))
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(s3.getAccessKeyId(), s3.getSecretAccessKey())
+                )
+            );
 
-  @Bean
-  public S3AsyncClient s3AsyncClient() {
-    S3 s3 = storageProperties.getS3();
-    S3AsyncClientBuilder builder = S3AsyncClient.builder()
-      .multipartEnabled(true)
-      .region(Region.of(s3.getRegion()))
-      .credentialsProvider(
-        StaticCredentialsProvider.create(
-          AwsBasicCredentials.create(s3.getAccessKeyId(), s3.getSecretAccessKey())
-        )
-      );
+        if (StringUtils.isNotBlank(s3.getEndpoint())) {
+            builder = builder.endpointOverride(URI.create(s3.getEndpoint()));
+        }
 
-    if (StringUtils.isNotBlank(s3.getEndpoint())) {
-      builder = builder.endpointOverride(URI.create(s3.getEndpoint()));
+        return builder.build();
     }
-
-    return builder.build();
-  }
 }

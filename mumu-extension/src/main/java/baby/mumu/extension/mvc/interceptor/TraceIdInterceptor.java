@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@ import baby.mumu.basis.constants.MDCConstants;
 import io.micrometer.tracing.Tracer;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Objects;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.util.Objects;
 
 /**
  * 全局链路追踪ID拦截器
@@ -33,43 +34,43 @@ import org.springframework.web.servlet.HandlerInterceptor;
  */
 public class TraceIdInterceptor implements HandlerInterceptor {
 
-  private static final String TRACE_ID_ATTRIBUTE_NAME = "TRACE_ID";
-  private final ObjectProvider<Tracer> tracerProvider;
-  private static final String TRACE_ID_HEADER_NAME = "X-Trace-Id";
+    private static final String TRACE_ID_ATTRIBUTE_NAME = "TRACE_ID";
+    private final ObjectProvider<Tracer> tracerProvider;
+    private static final String TRACE_ID_HEADER_NAME = "X-Trace-Id";
 
-  public TraceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
-    this.tracerProvider = tracerProvider;
-  }
-
-  @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-    Object handler) {
-    String traceId = null;
-    try {
-      Tracer tracer = tracerProvider.getIfAvailable();
-      if (tracer != null && tracer.currentSpan() != null) {
-        traceId = Objects.requireNonNull(tracer.currentSpan()).context().traceId();
-      }
-    } catch (Exception ignored) {
+    public TraceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
+        this.tracerProvider = tracerProvider;
     }
 
-    if (traceId == null || traceId.isBlank()) {
-      String fromHeader = request.getHeader(TraceIdInterceptor.TRACE_ID_HEADER_NAME);
-      if (fromHeader != null && !fromHeader.isBlank()) {
-        traceId = fromHeader;
-      }
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                             Object handler) {
+        String traceId = null;
+        try {
+            Tracer tracer = tracerProvider.getIfAvailable();
+            if (tracer != null && tracer.currentSpan() != null) {
+                traceId = Objects.requireNonNull(tracer.currentSpan()).context().traceId();
+            }
+        } catch (Exception ignored) {
+        }
+
+        if (traceId == null || traceId.isBlank()) {
+            String fromHeader = request.getHeader(TraceIdInterceptor.TRACE_ID_HEADER_NAME);
+            if (fromHeader != null && !fromHeader.isBlank()) {
+                traceId = fromHeader;
+            }
+        }
+
+        if (traceId != null) {
+            MDC.put(MDCConstants.TRACE_ID, traceId);
+            request.setAttribute(TraceIdInterceptor.TRACE_ID_ATTRIBUTE_NAME, traceId);
+        }
+        return true;
     }
 
-    if (traceId != null) {
-      MDC.put(MDCConstants.TRACE_ID, traceId);
-      request.setAttribute(TraceIdInterceptor.TRACE_ID_ATTRIBUTE_NAME, traceId);
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                                Object handler, Exception ex) {
+        MDC.remove(MDCConstants.TRACE_ID);
     }
-    return true;
-  }
-
-  @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
-    Object handler, Exception ex) {
-    MDC.remove(MDCConstants.TRACE_ID);
-  }
 }

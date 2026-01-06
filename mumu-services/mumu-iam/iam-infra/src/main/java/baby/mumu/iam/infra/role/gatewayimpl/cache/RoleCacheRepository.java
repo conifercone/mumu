@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package baby.mumu.iam.infra.role.gatewayimpl.cache;
 
 import baby.mumu.iam.infra.role.gatewayimpl.cache.po.RoleCacheablePO;
 import com.redis.om.spring.repository.RedisDocumentRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +29,9 @@ import java.util.Optional;
  * @since 2.2.0
  */
 public interface RoleCacheRepository extends
-  RedisDocumentRepository<RoleCacheablePO, Long> {
+    RedisDocumentRepository<RoleCacheablePO, Long> {
 
-  List<RoleCacheablePO> findByCodeIn(List<String> codes);
+    List<RoleCacheablePO> findByCodeIn(List<String> codes);
 
-  Optional<RoleCacheablePO> findByCode(String code);
+    Optional<RoleCacheablePO> findByCode(String code);
 }

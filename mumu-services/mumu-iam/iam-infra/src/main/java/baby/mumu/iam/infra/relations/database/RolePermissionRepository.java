@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.infra.relations.database;
 
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
 
 /**
  * 角色权限关系管理
@@ -28,29 +29,29 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.1.0
  */
 public interface RolePermissionRepository extends
-  BaseJpaRepository<RolePermissionPO, RolePermissionPOId>,
-  JpaSpecificationExecutor<RolePermissionPO> {
+    BaseJpaRepository<RolePermissionPO, RolePermissionPOId>,
+    JpaSpecificationExecutor<RolePermissionPO> {
 
-  /**
-   * 根据权限ID查询角色权限关联关系
-   *
-   * @param permissionId 权限ID
-   * @return 角色权限关联关系列表
-   */
-  List<RolePermissionPO> findByPermissionId(@NotNull final Long permissionId);
+    /**
+     * 根据权限ID查询角色权限关联关系
+     *
+     * @param permissionId 权限ID
+     * @return 角色权限关联关系列表
+     */
+    List<RolePermissionPO> findByPermissionId(@NotNull final Long permissionId);
 
-  /**
-   * 根据角色ID删除角色权限关联关系
-   *
-   * @param roleId 角色ID
-   */
-  void deleteByRoleId(@NotNull final Long roleId);
+    /**
+     * 根据角色ID删除角色权限关联关系
+     *
+     * @param roleId 角色ID
+     */
+    void deleteByRoleId(@NotNull final Long roleId);
 
-  /**
-   * 根据角色ID查询角色权限关联关系
-   *
-   * @param roleId 角色ID
-   * @return 角色权限关联关系列表
-   */
-  List<RolePermissionPO> findByRoleId(@NotNull final Long roleId);
+    /**
+     * 根据角色ID查询角色权限关联关系
+     *
+     * @param roleId 角色ID
+     * @return 角色权限关联关系列表
+     */
+    List<RolePermissionPO> findByRoleId(@NotNull final Long roleId);
 }

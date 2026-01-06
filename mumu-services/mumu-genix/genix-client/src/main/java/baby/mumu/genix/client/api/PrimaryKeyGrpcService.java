@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ import com.github.yitter.idgen.YitIdHelper;
 import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
 
 /**
  * 主键生成对外提供grpc调用实例
@@ -38,41 +39,41 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  */
 @Observed(name = "PrimaryKeyGrpcService")
 public class PrimaryKeyGrpcService extends GenixGrpcService implements DisposableBean,
-  InitializingBean {
+    InitializingBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public PrimaryKeyGrpcService(
-    DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public PrimaryKeyGrpcService(
+        DiscoveryClient discoveryClient,
+        GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void afterPropertiesSet() {
-    IdGeneratorOptions options = new IdGeneratorOptions();
-    YitIdHelper.setIdGenerator(options);
-  }
+    @Override
+    public void afterPropertiesSet() {
+        IdGeneratorOptions options = new IdGeneratorOptions();
+        YitIdHelper.setIdGenerator(options);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
-  public Long snowflake() {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return snowflakeFromGrpc();
-      })
-      .orElseGet(YitIdHelper::nextId);
-  }
+    public Long snowflake() {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return snowflakeFromGrpc();
+            })
+            .orElseGet(YitIdHelper::nextId);
+    }
 
-  private @NonNull Long snowflakeFromGrpc() {
-    PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
-      channel);
-    return primaryKeyServiceBlockingStub.snowflake(
-      Empty.newBuilder().build()).getId();
-  }
+    private @NonNull Long snowflakeFromGrpc() {
+        PrimaryKeyServiceBlockingStub primaryKeyServiceBlockingStub = PrimaryKeyServiceGrpc.newBlockingStub(
+            channel);
+        return primaryKeyServiceBlockingStub.snowflake(
+            Empty.newBuilder().build()).getId();
+    }
 }

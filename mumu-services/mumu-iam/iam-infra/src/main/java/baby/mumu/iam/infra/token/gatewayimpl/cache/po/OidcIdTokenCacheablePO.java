@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,19 +34,19 @@ import org.springframework.data.redis.core.TimeToLive;
 @Document(value = "mumu:iam:oidc-id-token")
 public class OidcIdTokenCacheablePO {
 
-  @Id
-  @Indexed
-  private Long id;
+    @Id
+    @Indexed
+    private Long id;
 
-  /**
-   * token值
-   */
-  @TextIndexed
-  private String tokenValue;
+    /**
+     * token值
+     */
+    @TextIndexed
+    private String tokenValue;
 
-  /**
-   * 存活时间
-   */
-  @TimeToLive
-  private Long ttl = CacheLevelEnum.HIGH.getSecondTtl();
+    /**
+     * 存活时间
+     */
+    @TimeToLive
+    private Long ttl = CacheLevelEnum.HIGH.getSecondTtl();
 }

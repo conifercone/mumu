@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import lombok.Getter;
 @Getter
 public enum ServiceEnum {
 
-  IAM("iam"),
+    IAM("iam"),
 
-  LOG("log"),
+    LOG("log"),
 
-  STORAGE("storage"),
+    STORAGE("storage"),
 
-  GENIX("genix");
+    GENIX("genix");
 
-  private final String name;
+    private final String name;
 
-  ServiceEnum(String name) {
-    this.name = name;
-  }
+    ServiceEnum(String name) {
+        this.name = name;
+    }
 }

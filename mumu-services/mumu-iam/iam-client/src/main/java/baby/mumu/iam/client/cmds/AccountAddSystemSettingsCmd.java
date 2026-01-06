@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,27 +31,27 @@ import lombok.Data;
 @Data
 public class AccountAddSystemSettingsCmd {
 
-  /**
-   * 系统设置标识
-   */
-  @NotBlank
-  private String profile;
+    /**
+     * 系统设置标识
+     */
+    @NotBlank
+    private String profile;
 
-  /**
-   * 系统设置名称
-   */
-  @NotBlank
-  private String name;
+    /**
+     * 系统设置名称
+     */
+    @NotBlank
+    private String name;
 
-  /**
-   * 系统主题
-   */
-  @NotNull
-  private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
+    /**
+     * 系统主题
+     */
+    @NotNull
+    private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
 
-  /**
-   * 系统主题模式
-   */
-  @NotNull
-  private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
+    /**
+     * 系统主题模式
+     */
+    @NotNull
+    private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 }

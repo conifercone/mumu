@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,19 +33,19 @@ import org.jspecify.annotations.NonNull;
  */
 public class DeeplSimpleTextTranslation implements SimpleTextTranslation {
 
-  private final Translator deeplTranslator;
+    private final Translator deeplTranslator;
 
-  public DeeplSimpleTextTranslation(Translator deeplTranslator) {
-    this.deeplTranslator = deeplTranslator;
-  }
-
-  @Override
-  @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
-    try {
-      return deeplTranslator.translateText(text, null, targetLanguage).getText();
-    } catch (DeepLException | InterruptedException e) {
-      throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
+    public DeeplSimpleTextTranslation(Translator deeplTranslator) {
+        this.deeplTranslator = deeplTranslator;
     }
-  }
+
+    @Override
+    @API(status = Status.STABLE, since = "1.0.3")
+    public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
+        try {
+            return deeplTranslator.translateText(text, null, targetLanguage).getText();
+        } catch (DeepLException | InterruptedException e) {
+            throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
+        }
+    }
 }

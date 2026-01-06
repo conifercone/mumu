@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,16 @@ import jakarta.servlet.http.HttpServletRequest
  */
 object IpUtils {
 
-  /**
-   * 从request对象中获取客户端真实的ip地址
-   *
-   * @param request request对象
-   * @return 客户端的IP地址
-   */
-  @JvmStatic
-  fun getIpAddr(request: HttpServletRequest): String? {
-    val ip = request.remoteAddr ?: return ""
-    return if (ip.startsWith("[") && ip.endsWith("]")) ip.substring(1, ip.length - 1) else ip
-  }
+    /**
+     * 从request对象中获取客户端真实的ip地址
+     *
+     * @param request request对象
+     * @return 客户端的IP地址
+     */
+    @JvmStatic
+    fun getIpAddr(request: HttpServletRequest): String? {
+        val ip = request.remoteAddr ?: return ""
+        return if (ip.startsWith("[") && ip.endsWith("]")) ip.substring(1, ip.length - 1) else ip
+    }
 
 }

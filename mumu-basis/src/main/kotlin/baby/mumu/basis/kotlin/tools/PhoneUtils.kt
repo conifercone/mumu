@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,29 +29,29 @@ import org.apiguardian.api.API
  */
 object PhoneUtils {
 
-  private val phoneNumberUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
+    private val phoneNumberUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
 
-  /**
-   * 验证手机号格式
-   * @param phoneNumber 手机号
-   * @param countryCode 国家区号（如 "+86"）
-   * @return Boolean 是否有效
-   */
-  @API(status = API.Status.STABLE, since = "2.7.0")
-  @JvmStatic
-  fun isValidPhoneNumber(phoneNumber: String?, countryCode: String?): Boolean {
-    if (phoneNumber.isNullOrBlank() || countryCode.isNullOrBlank()) return false
-    return try {
-      val countryCodeInt = countryCode.replace("+", "").toInt()
-      val regionCode =
-        phoneNumberUtil.getRegionCodeForCountryCode(countryCodeInt) ?: return false
-      val parsedNumber: PhoneNumber =
-        phoneNumberUtil.parse(phoneNumber, regionCode)
-      phoneNumberUtil.isValidNumber(parsedNumber)
-    } catch (_: NumberParseException) {
-      false
-    } catch (_: NumberFormatException) {
-      false
+    /**
+     * 验证手机号格式
+     * @param phoneNumber 手机号
+     * @param countryCode 国家区号（如 "+86"）
+     * @return Boolean 是否有效
+     */
+    @API(status = API.Status.STABLE, since = "2.7.0")
+    @JvmStatic
+    fun isValidPhoneNumber(phoneNumber: String?, countryCode: String?): Boolean {
+        if (phoneNumber.isNullOrBlank() || countryCode.isNullOrBlank()) return false
+        return try {
+            val countryCodeInt = countryCode.replace("+", "").toInt()
+            val regionCode =
+                phoneNumberUtil.getRegionCodeForCountryCode(countryCodeInt) ?: return false
+            val parsedNumber: PhoneNumber =
+                phoneNumberUtil.parse(phoneNumber, regionCode)
+            phoneNumberUtil.isValidNumber(parsedNumber)
+        } catch (_: NumberParseException) {
+            false
+        } catch (_: NumberFormatException) {
+            false
+        }
     }
-  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,27 +42,27 @@ import org.springframework.stereotype.Service;
 @Observed(name = "PrimaryKeyServiceImpl")
 public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
 
-  private final PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe;
+    private final PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe;
 
-  @Autowired
-  public PrimaryKeyServiceImpl(PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe) {
-    this.primaryKeySnowflakeGenerateExe = primaryKeySnowflakeGenerateExe;
-  }
+    @Autowired
+    public PrimaryKeyServiceImpl(PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe) {
+        this.primaryKeySnowflakeGenerateExe = primaryKeySnowflakeGenerateExe;
+    }
 
-  @Override
-  public PrimaryKeySnowflakeDTO snowflake() {
-    PrimaryKeySnowflakeDTO primaryKeySnowflakeDTO = new PrimaryKeySnowflakeDTO();
-    primaryKeySnowflakeDTO.setId(primaryKeySnowflakeGenerateExe.execute());
-    return primaryKeySnowflakeDTO;
-  }
+    @Override
+    public PrimaryKeySnowflakeDTO snowflake() {
+        PrimaryKeySnowflakeDTO primaryKeySnowflakeDTO = new PrimaryKeySnowflakeDTO();
+        primaryKeySnowflakeDTO.setId(primaryKeySnowflakeGenerateExe.execute());
+        return primaryKeySnowflakeDTO;
+    }
 
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void snowflake(Empty request, @NonNull StreamObserver<SnowflakeResult> responseObserver) {
-    SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
-      .setId(primaryKeySnowflakeGenerateExe.execute())
-      .build();
-    responseObserver.onNext(snowflakeResult);
-    responseObserver.onCompleted();
-  }
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void snowflake(Empty request, @NonNull StreamObserver<SnowflakeResult> responseObserver) {
+        SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
+            .setId(primaryKeySnowflakeGenerateExe.execute())
+            .build();
+        responseObserver.onNext(snowflakeResult);
+        responseObserver.onCompleted();
+    }
 }

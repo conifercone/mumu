@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import baby.mumu.basis.enums.SystemThemeModeEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +28,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serial;
 
 /**
  * 账号系统设置
@@ -42,59 +43,59 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("mumu-account-system-settings")
 public class AccountSystemSettingsDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = 6286174255794150761L;
+    @Serial
+    private static final long serialVersionUID = 6286174255794150761L;
 
-  public AccountSystemSettingsDocumentPO(String id, Long accountId, String profile, String name,
-    boolean defaultSystemSettings, Long version) {
-    this.id = id;
-    this.accountId = accountId;
-    this.profile = profile;
-    this.name = name;
-    this.defaultSystemSettings = defaultSystemSettings;
-    this.version = version;
-  }
+    public AccountSystemSettingsDocumentPO(String id, Long accountId, String profile, String name,
+                                           boolean defaultSystemSettings, Long version) {
+        this.id = id;
+        this.accountId = accountId;
+        this.profile = profile;
+        this.name = name;
+        this.defaultSystemSettings = defaultSystemSettings;
+        this.version = version;
+    }
 
-  @Id
-  @NotBlank
-  private String id;
+    @Id
+    @NotBlank
+    private String id;
 
-  /**
-   * 账号ID
-   */
-  @NotNull
-  @Indexed
-  private Long accountId;
+    /**
+     * 账号ID
+     */
+    @NotNull
+    @Indexed
+    private Long accountId;
 
-  /**
-   * 系统设置标识
-   */
-  @NotBlank
-  @Indexed
-  private String profile;
+    /**
+     * 系统设置标识
+     */
+    @NotBlank
+    @Indexed
+    private String profile;
 
-  /**
-   * 系统设置名称
-   */
-  @NotBlank
-  private String name;
+    /**
+     * 系统设置名称
+     */
+    @NotBlank
+    private String name;
 
-  /**
-   * 系统主题
-   */
-  private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
+    /**
+     * 系统主题
+     */
+    private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
 
-  /**
-   * 系统主题模式
-   */
-  private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
+    /**
+     * 系统主题模式
+     */
+    private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 
-  /**
-   * 是否是默认系统设置
-   */
-  @Indexed
-  private boolean defaultSystemSettings;
+    /**
+     * 是否是默认系统设置
+     */
+    @Indexed
+    private boolean defaultSystemSettings;
 
-  @Version
-  private Long version;
+    @Version
+    private Long version;
 }

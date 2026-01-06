@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,19 +35,19 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO")
 public class MinioConfiguration {
 
-  private final StorageProperties storageProperties;
+    private final StorageProperties storageProperties;
 
-  @Autowired
-  public MinioConfiguration(StorageProperties storageProperties) {
-    this.storageProperties = storageProperties;
-  }
+    @Autowired
+    public MinioConfiguration(StorageProperties storageProperties) {
+        this.storageProperties = storageProperties;
+    }
 
-  @Bean
-  public MinioClient minioClient() {
-    return MinioClient.builder()
-      .endpoint(storageProperties.getMinio().getEndpoint())
-      .credentials(storageProperties.getMinio().getAccessKey(),
-        storageProperties.getMinio().getSecretKey())
-      .build();
-  }
+    @Bean
+    public MinioClient minioClient() {
+        return MinioClient.builder()
+            .endpoint(storageProperties.getMinio().getEndpoint())
+            .credentials(storageProperties.getMinio().getAccessKey(),
+                storageProperties.getMinio().getSecretKey())
+            .build();
+    }
 }

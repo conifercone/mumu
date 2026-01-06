@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import baby.mumu.iam.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 更新账号地址指令执行器
@@ -34,20 +35,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountModifyAddressByAddressIdCmdExe")
 public class AccountModifyAddressByAddressIdCmdExe {
 
-  private final AccountGateway accountGateway;
-  private final AccountConvertor accountConvertor;
+    private final AccountGateway accountGateway;
+    private final AccountConvertor accountConvertor;
 
-  @Autowired
-  public AccountModifyAddressByAddressIdCmdExe(AccountGateway accountGateway,
-    AccountConvertor accountConvertor) {
-    this.accountGateway = accountGateway;
-    this.accountConvertor = accountConvertor;
-  }
+    @Autowired
+    public AccountModifyAddressByAddressIdCmdExe(AccountGateway accountGateway,
+                                                 AccountConvertor accountConvertor) {
+        this.accountGateway = accountGateway;
+        this.accountConvertor = accountConvertor;
+    }
 
-  public void execute(
-    AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
-    Optional.ofNullable(accountModifyAddressByAddressIdCmd)
-      .flatMap(accountConvertor::toAccountAddress)
-      .ifPresent(accountGateway::modifyAddress);
-  }
+    public void execute(
+        AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
+        Optional.ofNullable(accountModifyAddressByAddressIdCmd)
+            .flatMap(accountConvertor::toAccountAddress)
+            .ifPresent(accountGateway::modifyAddress);
+    }
 }

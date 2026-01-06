@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,14 @@
 
 package baby.mumu.genix.application.service;
 
-import baby.mumu.genix.application.country.executor.CountryGetAllExe;
-import baby.mumu.genix.application.country.executor.CountryGetCitiesByStateIdCmdExe;
-import baby.mumu.genix.application.country.executor.CountryGetCityByIdCmdExe;
-import baby.mumu.genix.application.country.executor.CountryGetStateByIdCmdExe;
-import baby.mumu.genix.application.country.executor.CountryGetStateCitiesByIdCmdExe;
-import baby.mumu.genix.application.country.executor.CountryGetStatesByCountryIdCmdExe;
-import baby.mumu.genix.application.country.executor.CountryStateCityGetAllExe;
+import baby.mumu.genix.application.country.executor.*;
 import baby.mumu.genix.client.api.CountryService;
-import baby.mumu.genix.client.dto.CountryGetAllDTO;
-import baby.mumu.genix.client.dto.CountryGetCitiesByStateIdDTO;
-import baby.mumu.genix.client.dto.CountryGetCityByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateCitiesByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStatesByCountryIdDTO;
-import baby.mumu.genix.client.dto.CountryStateCityGetAllDTO;
+import baby.mumu.genix.client.dto.*;
 import io.micrometer.observation.annotation.Observed;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 国家
@@ -46,66 +35,66 @@ import org.springframework.stereotype.Service;
 @Observed(name = "CountryServiceImpl")
 public class CountryServiceImpl implements CountryService {
 
-  private final CountryStateCityGetAllExe countryStateCityGetAllExe;
-  private final CountryGetAllExe countryGetAllExe;
-  private final CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe;
-  private final CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe;
-  private final CountryGetStateByIdCmdExe countryGetStateByIdCmdExe;
-  private final CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe;
-  private final CountryGetCityByIdCmdExe countryGetCityByIdCmdExe;
+    private final CountryStateCityGetAllExe countryStateCityGetAllExe;
+    private final CountryGetAllExe countryGetAllExe;
+    private final CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe;
+    private final CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe;
+    private final CountryGetStateByIdCmdExe countryGetStateByIdCmdExe;
+    private final CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe;
+    private final CountryGetCityByIdCmdExe countryGetCityByIdCmdExe;
 
-  @Autowired
-  public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
-    CountryGetAllExe countryGetAllExe,
-    CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
-    CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe,
-    CountryGetStateByIdCmdExe countryGetStateByIdCmdExe,
-    CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe,
-    CountryGetCityByIdCmdExe countryGetCityByIdCmdExe) {
-    this.countryStateCityGetAllExe = countryStateCityGetAllExe;
-    this.countryGetAllExe = countryGetAllExe;
-    this.countryGetStatesByCountryIdCmdExe = countryGetStatesByCountryIdCmdExe;
-    this.countryGetCitiesByStateIdCmdExe = countryGetCitiesByStateIdCmdExe;
-    this.countryGetStateByIdCmdExe = countryGetStateByIdCmdExe;
-    this.countryGetStateCitiesByIdCmdExe = countryGetStateCitiesByIdCmdExe;
-    this.countryGetCityByIdCmdExe = countryGetCityByIdCmdExe;
-  }
+    @Autowired
+    public CountryServiceImpl(CountryStateCityGetAllExe countryStateCityGetAllExe,
+                              CountryGetAllExe countryGetAllExe,
+                              CountryGetStatesByCountryIdCmdExe countryGetStatesByCountryIdCmdExe,
+                              CountryGetCitiesByStateIdCmdExe countryGetCitiesByStateIdCmdExe,
+                              CountryGetStateByIdCmdExe countryGetStateByIdCmdExe,
+                              CountryGetStateCitiesByIdCmdExe countryGetStateCitiesByIdCmdExe,
+                              CountryGetCityByIdCmdExe countryGetCityByIdCmdExe) {
+        this.countryStateCityGetAllExe = countryStateCityGetAllExe;
+        this.countryGetAllExe = countryGetAllExe;
+        this.countryGetStatesByCountryIdCmdExe = countryGetStatesByCountryIdCmdExe;
+        this.countryGetCitiesByStateIdCmdExe = countryGetCitiesByStateIdCmdExe;
+        this.countryGetStateByIdCmdExe = countryGetStateByIdCmdExe;
+        this.countryGetStateCitiesByIdCmdExe = countryGetStateCitiesByIdCmdExe;
+        this.countryGetCityByIdCmdExe = countryGetCityByIdCmdExe;
+    }
 
-  @Override
-  public List<CountryStateCityGetAllDTO> getCountryStateCity() {
-    return countryStateCityGetAllExe.execute();
-  }
+    @Override
+    public List<CountryStateCityGetAllDTO> getCountryStateCity() {
+        return countryStateCityGetAllExe.execute();
+    }
 
-  @Override
-  public List<CountryGetAllDTO> getCountries() {
-    return countryGetAllExe.execute();
-  }
+    @Override
+    public List<CountryGetAllDTO> getCountries() {
+        return countryGetAllExe.execute();
+    }
 
-  @Override
-  public List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(
-    Long id) {
-    return countryGetStatesByCountryIdCmdExe.execute(id);
-  }
+    @Override
+    public List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(
+        Long id) {
+        return countryGetStatesByCountryIdCmdExe.execute(id);
+    }
 
-  @Override
-  public List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(
-    Long id) {
-    return countryGetCitiesByStateIdCmdExe.execute(id);
-  }
+    @Override
+    public List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(
+        Long id) {
+        return countryGetCitiesByStateIdCmdExe.execute(id);
+    }
 
-  @Override
-  public CountryGetStateByIdDTO getStateById(Long id) {
-    return countryGetStateByIdCmdExe.execute(id);
-  }
+    @Override
+    public CountryGetStateByIdDTO getStateById(Long id) {
+        return countryGetStateByIdCmdExe.execute(id);
+    }
 
-  @Override
-  public CountryGetStateCitiesByIdDTO getStateCitiesById(
-    Long id) {
-    return countryGetStateCitiesByIdCmdExe.execute(id);
-  }
+    @Override
+    public CountryGetStateCitiesByIdDTO getStateCitiesById(
+        Long id) {
+        return countryGetStateCitiesByIdCmdExe.execute(id);
+    }
 
-  @Override
-  public CountryGetCityByIdDTO getCityById(Long id) {
-    return countryGetCityByIdCmdExe.execute(id);
-  }
+    @Override
+    public CountryGetCityByIdDTO getCityById(Long id) {
+        return countryGetCityByIdCmdExe.execute(id);
+    }
 }

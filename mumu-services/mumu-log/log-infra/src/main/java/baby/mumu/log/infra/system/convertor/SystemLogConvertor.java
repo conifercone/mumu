@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,15 @@ import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
 
 /**
  * 系统日志转换器
@@ -45,79 +46,79 @@ import org.springframework.stereotype.Component;
 public class SystemLogConvertor {
 
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+    private final PrimaryKeyGrpcService primaryKeyGrpcService;
 
-  @Autowired
-  public SystemLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
-  }
+    @Autowired
+    public SystemLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+        this.primaryKeyGrpcService = primaryKeyGrpcService;
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogKafkaPO> toSystemLogKafkaPO(SystemLog systemLog) {
-    return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toSystemLogKafkaPO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLogKafkaPO> toSystemLogKafkaPO(SystemLog systemLog) {
+        return Optional.ofNullable(systemLog)
+            .map(SystemLogMapper.INSTANCE::toSystemLogKafkaPO);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogEsPO> toSystemLogEsPO(SystemLog systemLog) {
-    return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toSystemLogEsPO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLogEsPO> toSystemLogEsPO(SystemLog systemLog) {
+        return Optional.ofNullable(systemLog)
+            .map(SystemLogMapper.INSTANCE::toSystemLogEsPO);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogSubmitCmd systemLogSubmitCmd) {
-    return Optional.ofNullable(systemLogSubmitCmd).map(res -> {
-      SystemLog systemLog = SystemLogMapper.INSTANCE.toEntity(res);
-      String traceId = TraceIdUtils.getTraceId();
-      systemLog.setId(StringUtils.isNotBlank(traceId) ? traceId
-        : String.valueOf(primaryKeyGrpcService.snowflake()));
-      systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
-      return systemLog;
-    });
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLog> toEntity(SystemLogSubmitCmd systemLogSubmitCmd) {
+        return Optional.ofNullable(systemLogSubmitCmd).map(res -> {
+            SystemLog systemLog = SystemLogMapper.INSTANCE.toEntity(res);
+            String traceId = TraceIdUtils.getTraceId();
+            systemLog.setId(StringUtils.isNotBlank(traceId) ? traceId
+                : String.valueOf(primaryKeyGrpcService.snowflake()));
+            systemLog.setRecordTime(LocalDateTime.now(ZoneId.of("UTC")));
+            return systemLog;
+        });
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogSaveCmd systemLogSaveCmd) {
-    return Optional.ofNullable(systemLogSaveCmd)
-      .map(SystemLogMapper.INSTANCE::toEntity);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLog> toEntity(SystemLogSaveCmd systemLogSaveCmd) {
+        return Optional.ofNullable(systemLogSaveCmd)
+            .map(SystemLogMapper.INSTANCE::toEntity);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(SystemLogEsPO systemLogEsPO) {
-    return Optional.ofNullable(systemLogEsPO)
-      .map(SystemLogMapper.INSTANCE::toEntity);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLog> toEntity(SystemLogEsPO systemLogEsPO) {
+        return Optional.ofNullable(systemLogEsPO)
+            .map(SystemLogMapper.INSTANCE::toEntity);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLog> toEntity(
-    SystemLogFindAllCmd systemLogFindAllCmd) {
-    return Optional.ofNullable(systemLogFindAllCmd)
-      .map(SystemLogMapper.INSTANCE::toEntity).map(systemLog -> {
-        Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
-          .ifPresent(systemLog::setRecordStartTime);
-        Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
-          .ifPresent(systemLog::setRecordEndTime);
-        return systemLog;
-      });
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLog> toEntity(
+        SystemLogFindAllCmd systemLogFindAllCmd) {
+        return Optional.ofNullable(systemLogFindAllCmd)
+            .map(SystemLogMapper.INSTANCE::toEntity).map(systemLog -> {
+                Optional.ofNullable(systemLogFindAllCmd.getRecordStartTime())
+                    .ifPresent(systemLog::setRecordStartTime);
+                Optional.ofNullable(systemLogFindAllCmd.getRecordEndTime())
+                    .ifPresent(systemLog::setRecordEndTime);
+                return systemLog;
+            });
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<SystemLogFindAllDTO> toSystemLogFindAllDTO(SystemLog systemLog) {
-    return Optional.ofNullable(systemLog)
-      .map(SystemLogMapper.INSTANCE::toSystemLogFindAllDTO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<SystemLogFindAllDTO> toSystemLogFindAllDTO(SystemLog systemLog) {
+        return Optional.ofNullable(systemLog)
+            .map(SystemLogMapper.INSTANCE::toSystemLogFindAllDTO);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<SystemLogSubmitCmd> toSystemLogSubmitCmd(
-    SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
-    return Optional.ofNullable(systemLogSubmitGrpcCmd)
-      .map(SystemLogMapper.INSTANCE::toSystemLogSubmitCmd);
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public Optional<SystemLogSubmitCmd> toSystemLogSubmitCmd(
+        SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd) {
+        return Optional.ofNullable(systemLogSubmitGrpcCmd)
+            .map(SystemLogMapper.INSTANCE::toSystemLogSubmitCmd);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<SystemLogSaveCmd> toSystemLogSaveCmd(
-    SystemLogKafkaPO systemLogKafkaPO) {
-    return Optional.ofNullable(systemLogKafkaPO)
-      .map(SystemLogMapper.INSTANCE::toSystemLogSaveCmd);
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public Optional<SystemLogSaveCmd> toSystemLogSaveCmd(
+        SystemLogKafkaPO systemLogKafkaPO) {
+        return Optional.ofNullable(systemLogKafkaPO)
+            .map(SystemLogMapper.INSTANCE::toSystemLogSaveCmd);
+    }
 }

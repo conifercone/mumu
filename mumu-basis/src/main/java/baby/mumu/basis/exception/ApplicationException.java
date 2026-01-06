@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.basis.exception;
 
 import baby.mumu.basis.response.ResponseCode;
-import java.io.Serial;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
+
+import java.io.Serial;
 
 /**
  * 顶级异常
@@ -30,33 +31,33 @@ import org.jspecify.annotations.NonNull;
 @Data
 public class ApplicationException extends RuntimeException {
 
-  @Serial
-  private static final long serialVersionUID = 5646742276995362775L;
+    @Serial
+    private static final long serialVersionUID = 5646742276995362775L;
 
-  private final ResponseCode responseCode;
+    private final ResponseCode responseCode;
 
-  private final transient Object data;
+    private final transient Object data;
 
-  private final transient Throwable throwable;
+    private final transient Throwable throwable;
 
-  public ApplicationException(@NonNull ResponseCode responseCode) {
-    super(responseCode.getMessage());
-    this.responseCode = responseCode;
-    this.data = null;
-    this.throwable = null;
-  }
+    public ApplicationException(@NonNull ResponseCode responseCode) {
+        super(responseCode.getMessage());
+        this.responseCode = responseCode;
+        this.data = null;
+        this.throwable = null;
+    }
 
-  public ApplicationException(@NonNull ResponseCode responseCode, Throwable throwable) {
-    super(throwable);
-    this.responseCode = responseCode;
-    this.data = null;
-    this.throwable = throwable;
-  }
+    public ApplicationException(@NonNull ResponseCode responseCode, Throwable throwable) {
+        super(throwable);
+        this.responseCode = responseCode;
+        this.data = null;
+        this.throwable = throwable;
+    }
 
-  public ApplicationException(@NonNull ResponseCode responseCode, Object data) {
-    super(responseCode.getMessage());
-    this.responseCode = responseCode;
-    this.data = data;
-    this.throwable = null;
-  }
+    public ApplicationException(@NonNull ResponseCode responseCode, Object data) {
+        super(responseCode.getMessage());
+        this.responseCode = responseCode;
+        this.data = data;
+        this.throwable = null;
+    }
 }

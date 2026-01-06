@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package baby.mumu.genix.domain.barcode;
 
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.basis.enums.ImageFormatEnum;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 
 /**
  * 条形码领域模型
@@ -34,16 +35,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BarCode extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 8993866178601864656L;
+    @Serial
+    private static final long serialVersionUID = 8993866178601864656L;
 
-  private String content;
+    private String content;
 
-  private int width;
+    private int width;
 
-  private int height;
+    private int height;
 
-  private ImageFormatEnum imageFormat;
+    private ImageFormatEnum imageFormat;
 
-  private String footContent;
+    private String footContent;
 }

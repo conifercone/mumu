@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,19 +36,19 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionAddCmdExe")
 public class PermissionAddCmdExe {
 
-  private final PermissionGateway permissionGateway;
-  private final PermissionConvertor permissionConvertor;
+    private final PermissionGateway permissionGateway;
+    private final PermissionConvertor permissionConvertor;
 
-  @Autowired
-  public PermissionAddCmdExe(PermissionGateway permissionGateway,
-    PermissionConvertor permissionConvertor) {
-    this.permissionGateway = permissionGateway;
-    this.permissionConvertor = permissionConvertor;
-  }
+    @Autowired
+    public PermissionAddCmdExe(PermissionGateway permissionGateway,
+                               PermissionConvertor permissionConvertor) {
+        this.permissionGateway = permissionGateway;
+        this.permissionConvertor = permissionConvertor;
+    }
 
-  public Long execute(PermissionAddCmd permissionAddCmd) {
-    Permission permission = permissionConvertor.toEntity(permissionAddCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
-    return permissionGateway.add(permission);
-  }
+    public Long execute(PermissionAddCmd permissionAddCmd) {
+        Permission permission = permissionConvertor.toEntity(permissionAddCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
+        return permissionGateway.add(permission);
+    }
 }

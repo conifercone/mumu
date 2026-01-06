@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,24 +38,24 @@ import tools.jackson.databind.json.JsonMapper;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class OperationLogKafkaConsumer {
 
-  private final JsonMapper jsonMapper;
-  private final OperationLogService operationLogService;
-  private final OperationLogConvertor operationLogConvertor;
+    private final JsonMapper jsonMapper;
+    private final OperationLogService operationLogService;
+    private final OperationLogConvertor operationLogConvertor;
 
-  @Autowired
-  public OperationLogKafkaConsumer(JsonMapper jsonMapper,
-    OperationLogService operationLogService,
-    OperationLogConvertor operationLogConvertor) {
-    this.jsonMapper = jsonMapper;
-    this.operationLogService = operationLogService;
-    this.operationLogConvertor = operationLogConvertor;
-  }
+    @Autowired
+    public OperationLogKafkaConsumer(JsonMapper jsonMapper,
+                                     OperationLogService operationLogService,
+                                     OperationLogConvertor operationLogConvertor) {
+        this.jsonMapper = jsonMapper;
+        this.operationLogService = operationLogService;
+        this.operationLogConvertor = operationLogConvertor;
+    }
 
-  @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
-  public void handle(String operationLog) {
-    OperationLogKafkaPO operationLogKafkaPO = jsonMapper.readValue(operationLog,
-      OperationLogKafkaPO.class);
-    operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
-      .ifPresent(operationLogService::save);
-  }
+    @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
+    public void handle(String operationLog) {
+        OperationLogKafkaPO operationLogKafkaPO = jsonMapper.readValue(operationLog,
+            OperationLogKafkaPO.class);
+        operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
+            .ifPresent(operationLogService::save);
+    }
 }

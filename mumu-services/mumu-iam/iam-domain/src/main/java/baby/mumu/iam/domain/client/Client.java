@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@
 package baby.mumu.iam.domain.client;
 
 import baby.mumu.basis.domain.BasisDomainModel;
-import java.io.Serial;
-import java.time.Instant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serial;
+import java.time.Instant;
 
 /**
  * 客户端信息领域模型
@@ -34,32 +35,32 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class Client extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = -4079516683868649111L;
+    @Serial
+    private static final long serialVersionUID = -4079516683868649111L;
 
-  private String id;
+    private String id;
 
-  private String clientId;
+    private String clientId;
 
-  private Instant clientIdIssuedAt;
+    private Instant clientIdIssuedAt;
 
-  private String clientSecret;
+    private String clientSecret;
 
-  private Instant clientSecretExpiresAt;
+    private Instant clientSecretExpiresAt;
 
-  private String clientName;
+    private String clientName;
 
-  private String clientAuthenticationMethods;
+    private String clientAuthenticationMethods;
 
-  private String authorizationGrantTypes;
+    private String authorizationGrantTypes;
 
-  private String redirectUris;
+    private String redirectUris;
 
-  private String postLogoutRedirectUris;
+    private String postLogoutRedirectUris;
 
-  private String scopes;
+    private String scopes;
 
-  private String clientSettings;
+    private String clientSettings;
 
-  private String tokenSettings;
+    private String tokenSettings;
 }

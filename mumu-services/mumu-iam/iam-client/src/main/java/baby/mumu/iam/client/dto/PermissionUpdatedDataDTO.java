@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.iam.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 权限更新后数据数据传输对象
@@ -29,14 +30,14 @@ import lombok.Data;
 @Data
 public class PermissionUpdatedDataDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = 4100875305117270300L;
+    @Serial
+    private static final long serialVersionUID = 4100875305117270300L;
 
-  private Long id;
+    private Long id;
 
-  private String code;
+    private String code;
 
-  private String name;
+    private String name;
 
-  private String description;
+    private String description;
 }

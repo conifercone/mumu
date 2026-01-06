@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,14 @@ import com.p6spy.engine.spy.option.P6OptionsRepository;
  */
 public class ApplicationSqlLogFactory implements P6Factory {
 
-  @Override
-  public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
-    return new P6LogOptions(optionsRepository);
-  }
+    @Override
+    public P6LoadableOptions getOptions(P6OptionsRepository optionsRepository) {
+        return new P6LogOptions(optionsRepository);
+    }
 
-  @Override
-  public JdbcEventListener getJdbcEventListener() {
-    return ApplicationSqlLoggingEventListener.getInstance();
-  }
+    @Override
+    public JdbcEventListener getJdbcEventListener() {
+        return ApplicationSqlLoggingEventListener.getInstance();
+    }
 }
 

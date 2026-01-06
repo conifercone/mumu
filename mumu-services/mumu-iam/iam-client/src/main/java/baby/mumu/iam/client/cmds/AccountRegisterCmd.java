@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
-import java.util.List;
 import lombok.Data;
 import org.springframework.data.geo.Point;
+
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 账号注册指令
@@ -41,131 +42,131 @@ import org.springframework.data.geo.Point;
 @Schema(description = "账号注册指令")
 public class AccountRegisterCmd {
 
-  @Schema(description = "用户名", requiredMode = RequiredMode.REQUIRED)
-  @NotBlank(message = "{account.username.validation.not.blank}")
-  private String username;
+    @Schema(description = "用户名", requiredMode = RequiredMode.REQUIRED)
+    @NotBlank(message = "{account.username.validation.not.blank}")
+    private String username;
 
-  @Schema(description = "密码", requiredMode = RequiredMode.REQUIRED)
-  @NotBlank(message = "{account.password.validation.not.blank}")
-  @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
-  private String password;
+    @Schema(description = "密码", requiredMode = RequiredMode.REQUIRED)
+    @NotBlank(message = "{account.password.validation.not.blank}")
+    @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
+    private String password;
 
-  @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<String> roleCodes;
+    @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
+    private List<String> roleCodes;
 
-  @Schema(description = "头像", requiredMode = RequiredMode.NOT_REQUIRED)
-  private AccountAvatarRegisterCmd avatar;
+    @Schema(description = "头像", requiredMode = RequiredMode.NOT_REQUIRED)
+    private AccountAvatarRegisterCmd avatar;
 
-  @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String phoneCountryCode;
+    @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String phoneCountryCode;
 
-  @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String phone;
+    @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String phone;
 
-  @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
-  private GenderEnum gender;
+    @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
+    private GenderEnum gender;
 
-  @Schema(description = "邮箱地址", requiredMode = RequiredMode.REQUIRED)
-  @NotBlank(message = "{account.email.validation.not.blank}")
-  private String email;
+    @Schema(description = "邮箱地址", requiredMode = RequiredMode.REQUIRED)
+    @NotBlank(message = "{account.email.validation.not.blank}")
+    private String email;
 
-  @Schema(description = "时区", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String timezone;
+    @Schema(description = "时区", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String timezone;
 
-  @Schema(description = "语言偏好", requiredMode = RequiredMode.NOT_REQUIRED)
-  private LanguageEnum language;
+    @Schema(description = "语言偏好", requiredMode = RequiredMode.NOT_REQUIRED)
+    private LanguageEnum language;
 
-  @Schema(description = "出生日期", requiredMode = RequiredMode.REQUIRED)
-  @NotNull(message = "{account.birthday.validation.not.null}")
-  private LocalDate birthday;
+    @Schema(description = "出生日期", requiredMode = RequiredMode.REQUIRED)
+    @NotNull(message = "{account.birthday.validation.not.null}")
+    private LocalDate birthday;
 
-  @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String bio;
+    @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String bio;
 
-  @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String nickName;
+    @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String nickName;
 
-  @Schema(description = "地址集合", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<AccountAddressRegisterCmd> addresses;
+    @Schema(description = "地址集合", requiredMode = RequiredMode.NOT_REQUIRED)
+    private List<AccountAddressRegisterCmd> addresses;
 
-  @Data
-  public static class AccountAddressRegisterCmd {
+    @Data
+    public static class AccountAddressRegisterCmd {
+
+        /**
+         * 街道地址，包含门牌号和街道信息
+         */
+        @Size(max = 255)
+        @Schema(description = "街道地址，包含门牌号和街道信息", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String street;
+
+        /**
+         * 城市信息
+         */
+        @Size(max = 100)
+        @Schema(description = "城市信息", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String city;
+
+        /**
+         * 州或省的信息
+         */
+        @Size(max = 100)
+        @Schema(description = "州或省的信息", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String state;
+
+        /**
+         * 邮政编码
+         */
+        @Size(max = 20)
+        @Schema(description = "邮政编码", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String postalCode;
+
+        /**
+         * 国家信息
+         */
+        @Size(max = 100)
+        @Schema(description = "国家信息", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String country;
+
+        /**
+         * 定位
+         */
+        @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
+        private Point location;
+    }
+
+    @Data
+    public static class AccountAvatarRegisterCmd {
+
+        /**
+         * 头像来源
+         */
+        @Schema(description = "头像来源", requiredMode = RequiredMode.NOT_REQUIRED)
+        private AccountAvatarSourceEnum source;
+
+        /**
+         * 上传头像时的文件ID，填写URL或第三方时可为空
+         */
+        @Schema(description = "上传头像时的文件ID，填写URL或第三方时可为空", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String fileId;
+
+        /**
+         * 用户上传的URL地址
+         */
+        @Schema(description = "用户上传的URL地址", requiredMode = RequiredMode.NOT_REQUIRED)
+        private String url;
+    }
 
     /**
-     * 街道地址，包含门牌号和街道信息
+     * 验证码ID
      */
-    @Size(max = 255)
-    @Schema(description = "街道地址，包含门牌号和街道信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String street;
+    @Schema(description = "验证码ID", requiredMode = RequiredMode.REQUIRED)
+    @NotNull(message = "{captcha.code.id.validation.not.null}")
+    private Long captchaCodeId;
 
     /**
-     * 城市信息
+     * 验证码内容
      */
-    @Size(max = 100)
-    @Schema(description = "城市信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String city;
-
-    /**
-     * 州或省的信息
-     */
-    @Size(max = 100)
-    @Schema(description = "州或省的信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String state;
-
-    /**
-     * 邮政编码
-     */
-    @Size(max = 20)
-    @Schema(description = "邮政编码", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String postalCode;
-
-    /**
-     * 国家信息
-     */
-    @Size(max = 100)
-    @Schema(description = "国家信息", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String country;
-
-    /**
-     * 定位
-     */
-    @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
-    private Point location;
-  }
-
-  @Data
-  public static class AccountAvatarRegisterCmd {
-
-    /**
-     * 头像来源
-     */
-    @Schema(description = "头像来源", requiredMode = RequiredMode.NOT_REQUIRED)
-    private AccountAvatarSourceEnum source;
-
-    /**
-     * 上传头像时的文件ID，填写URL或第三方时可为空
-     */
-    @Schema(description = "上传头像时的文件ID，填写URL或第三方时可为空", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String fileId;
-
-    /**
-     * 用户上传的URL地址
-     */
-    @Schema(description = "用户上传的URL地址", requiredMode = RequiredMode.NOT_REQUIRED)
-    private String url;
-  }
-
-  /**
-   * 验证码ID
-   */
-  @Schema(description = "验证码ID", requiredMode = RequiredMode.REQUIRED)
-  @NotNull(message = "{captcha.code.id.validation.not.null}")
-  private Long captchaCodeId;
-
-  /**
-   * 验证码内容
-   */
-  @Schema(description = "验证码内容", requiredMode = RequiredMode.REQUIRED)
-  @NotBlank(message = "{captcha.code.validation.not.blank}")
-  private String captchaCode;
+    @Schema(description = "验证码内容", requiredMode = RequiredMode.REQUIRED)
+    @NotBlank(message = "{captcha.code.validation.not.blank}")
+    private String captchaCode;
 }

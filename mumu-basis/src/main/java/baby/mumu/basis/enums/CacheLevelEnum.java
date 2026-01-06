@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package baby.mumu.basis.enums;
 
+import org.apache.commons.lang3.time.DurationUtils;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang3.time.DurationUtils;
 
 /**
  * 缓存等级枚举
@@ -27,23 +28,23 @@ import org.apache.commons.lang3.time.DurationUtils;
  * @since 2.4.0
  */
 public enum CacheLevelEnum {
-  HIGH(5, TimeUnit.SECONDS),
-  MEDIUM(1, TimeUnit.HOURS),
-  LOW(6, TimeUnit.HOURS);
+    HIGH(5, TimeUnit.SECONDS),
+    MEDIUM(1, TimeUnit.HOURS),
+    LOW(6, TimeUnit.HOURS);
 
 
-  private final long ttl;
-  private final TimeUnit ttlUnit;
+    private final long ttl;
+    private final TimeUnit ttlUnit;
 
-  CacheLevelEnum(long ttl, TimeUnit ttlUnit) {
-    this.ttl = ttl;
-    this.ttlUnit = ttlUnit;
-  }
+    CacheLevelEnum(long ttl, TimeUnit ttlUnit) {
+        this.ttl = ttl;
+        this.ttlUnit = ttlUnit;
+    }
 
-  public long getSecondTtl() {
-    // 添加TTL抖动值防止缓存雪崩
-    int ttlJitter = new Random().nextInt(120);
-    long baseTTL = DurationUtils.toDuration(ttl, ttlUnit).getSeconds();
-    return baseTTL + ttlJitter;
-  }
+    public long getSecondTtl() {
+        // 添加TTL抖动值防止缓存雪崩
+        int ttlJitter = new Random().nextInt(120);
+        long baseTTL = DurationUtils.toDuration(ttl, ttlUnit).getSeconds();
+        return baseTTL + ttlJitter;
+    }
 }

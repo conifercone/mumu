@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,21 +38,21 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountRegisterCmdExe")
 public class AccountRegisterCmdExe extends CaptchaCodeVerify {
 
-  private final AccountGateway accountGateway;
-  private final AccountConvertor accountConvertor;
+    private final AccountGateway accountGateway;
+    private final AccountConvertor accountConvertor;
 
-  @Autowired
-  public AccountRegisterCmdExe(AccountGateway accountGateway,
-    CaptchaCodeGrpcService captchaCodeGrpcService, AccountConvertor accountConvertor) {
-    super(captchaCodeGrpcService);
-    this.accountGateway = accountGateway;
-    this.accountConvertor = accountConvertor;
-  }
+    @Autowired
+    public AccountRegisterCmdExe(AccountGateway accountGateway,
+                                 CaptchaCodeGrpcService captchaCodeGrpcService, AccountConvertor accountConvertor) {
+        super(captchaCodeGrpcService);
+        this.accountGateway = accountGateway;
+        this.accountConvertor = accountConvertor;
+    }
 
-  public Long execute(AccountRegisterCmd accountRegisterCmd) {
-    Account account = accountConvertor.toEntity(accountRegisterCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-    return verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode(),
-      () -> accountGateway.register(account));
-  }
+    public Long execute(AccountRegisterCmd accountRegisterCmd) {
+        Account account = accountConvertor.toEntity(accountRegisterCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+        return verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode(),
+            () -> accountGateway.register(account));
+    }
 }

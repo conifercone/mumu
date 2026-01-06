@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,14 @@ import org.springframework.stereotype.Service;
 @Observed(name = "BarCodeServiceImpl")
 public class BarCodeServiceImpl implements BarCodeService {
 
-  private final BarCodeGenerateCmdExe barCodeGenerateCmdExe;
+    private final BarCodeGenerateCmdExe barCodeGenerateCmdExe;
 
-  public BarCodeServiceImpl(BarCodeGenerateCmdExe barCodeGenerateCmdExe) {
-    this.barCodeGenerateCmdExe = barCodeGenerateCmdExe;
-  }
+    public BarCodeServiceImpl(BarCodeGenerateCmdExe barCodeGenerateCmdExe) {
+        this.barCodeGenerateCmdExe = barCodeGenerateCmdExe;
+    }
 
-  @Override
-  public byte[] generate(BarCodeGenerateCmd barCodeGenerateCmd) {
-    return barCodeGenerateCmdExe.execute(barCodeGenerateCmd);
-  }
+    @Override
+    public byte[] generate(BarCodeGenerateCmd barCodeGenerateCmd) {
+        return barCodeGenerateCmdExe.execute(barCodeGenerateCmd);
+    }
 }

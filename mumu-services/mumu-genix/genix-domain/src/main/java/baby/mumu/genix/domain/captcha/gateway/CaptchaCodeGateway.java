@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,28 +26,28 @@ import baby.mumu.genix.domain.captcha.CaptchaCode;
  */
 public interface CaptchaCodeGateway {
 
-  /**
-   * 生成指定长度的简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证码
-   */
-  CaptchaCode generate(CaptchaCode captchaCode);
+    /**
+     * 生成指定长度的简单验证码
+     *
+     * @param captchaCode 简单验证码
+     * @return 验证码
+     */
+    CaptchaCode generate(CaptchaCode captchaCode);
 
 
-  /**
-   * 验证简单验证码
-   *
-   * @param captchaCode 简单验证码
-   * @return 验证结果
-   */
-  boolean verify(CaptchaCode captchaCode);
+    /**
+     * 验证简单验证码
+     *
+     * @param captchaCode 简单验证码
+     * @return 验证结果
+     */
+    boolean verify(CaptchaCode captchaCode);
 
-  /**
-   * 根据ID删除验证码
-   *
-   * @param captchaCodeId 验证码ID
-   */
-  void delete(Long captchaCodeId);
+    /**
+     * 根据ID删除验证码
+     *
+     * @param captchaCodeId 验证码ID
+     */
+    void delete(Long captchaCodeId);
 
 }

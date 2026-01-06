@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.iam.infra.relations.database;
 
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.List;
 
 /**
  * 账号角色关系管理
@@ -27,12 +28,12 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.1.0
  */
 public interface AccountRoleRepository extends
-  BaseJpaRepository<AccountRolePO, AccountRolePOId>,
-  JpaSpecificationExecutor<AccountRolePO> {
+    BaseJpaRepository<AccountRolePO, AccountRolePOId>,
+    JpaSpecificationExecutor<AccountRolePO> {
 
-  List<AccountRolePO> findByAccountId(Long accountId);
+    List<AccountRolePO> findByAccountId(Long accountId);
 
-  List<AccountRolePO> findByRoleId(Long roleId);
+    List<AccountRolePO> findByRoleId(Long roleId);
 
-  void deleteByAccountId(Long accountId);
+    void deleteByAccountId(Long accountId);
 }

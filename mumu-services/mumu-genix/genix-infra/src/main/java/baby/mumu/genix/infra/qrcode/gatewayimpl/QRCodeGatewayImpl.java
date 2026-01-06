@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,13 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.springframework.stereotype.Component;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
-import org.springframework.stereotype.Component;
 
 /**
  * 二维码领域网关实现
@@ -43,23 +44,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class QRCodeGatewayImpl implements QRCodeGateway {
 
-  @Override
-  public byte[] generate(QRCode qrCode) {
-    return Optional.ofNullable(qrCode).map(qrCodeModel -> {
-      HashMap<EncodeHintType, Object> hints = new HashMap<>();
-      hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-      hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.name());
-      hints.put(EncodeHintType.MARGIN, 1);
-      QRCodeWriter qrCodeWriter = new QRCodeWriter();
-      try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-        BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeModel.getContent(), BarcodeFormat.QR_CODE,
-          qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
-        MatrixToImageWriter.writeToStream(bitMatrix, qrCodeModel.getImageFormat().getExtension(),
-          os);
-        return os.toByteArray();
-      } catch (IOException | WriterException e) {
-        throw new ApplicationException(ResponseCode.QR_CODE_GENERATION_FAILED);
-      }
-    }).orElse(new byte[0]);
-  }
+    @Override
+    public byte[] generate(QRCode qrCode) {
+        return Optional.ofNullable(qrCode).map(qrCodeModel -> {
+            HashMap<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.name());
+            hints.put(EncodeHintType.MARGIN, 1);
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+                BitMatrix bitMatrix = qrCodeWriter.encode(qrCodeModel.getContent(), BarcodeFormat.QR_CODE,
+                    qrCodeModel.getWidth(), qrCodeModel.getHeight(), hints);
+                MatrixToImageWriter.writeToStream(bitMatrix, qrCodeModel.getImageFormat().getExtension(),
+                    os);
+                return os.toByteArray();
+            } catch (IOException | WriterException e) {
+                throw new ApplicationException(ResponseCode.QR_CODE_GENERATION_FAILED);
+            }
+        }).orElse(new byte[0]);
+    }
 }

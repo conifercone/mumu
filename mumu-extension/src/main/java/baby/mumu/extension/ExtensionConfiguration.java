@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,45 +53,45 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
  */
 @Configuration
 @Import({GrpcExceptionHandlersConfiguration.class, ResponseBodyProcessor.class,
-  ApplicationMvcConfiguration.class,
-  DatasourceConfiguration.class,
-  TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
-  FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
-  FilterConfiguration.class, IdempotentConfiguration.class})
+    ApplicationMvcConfiguration.class,
+    DatasourceConfiguration.class,
+    TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
+    FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
+    FilterConfiguration.class, IdempotentConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
 
-  @Bean
-  public TraceIdInterceptor traceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
-    return new TraceIdInterceptor(tracerProvider);
-  }
+    @Bean
+    public TraceIdInterceptor traceIdInterceptor(ObjectProvider<Tracer> tracerProvider) {
+        return new TraceIdInterceptor(tracerProvider);
+    }
 
-  @Bean
-  @ConditionalOnClass(ObservationPredicate.class)
-  ObservationPredicate noActuatorServerObservations() {
-    return (name, context) -> {
-      if ("http.server.requests".equals(name)
-        && context instanceof ServerRequestObservationContext serverContext) {
-        assert serverContext.getCarrier() != null;
-        return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
-      } else {
-        return true;
-      }
-    };
-  }
+    @Bean
+    @ConditionalOnClass(ObservationPredicate.class)
+    ObservationPredicate noActuatorServerObservations() {
+        return (name, context) -> {
+            if ("http.server.requests".equals(name)
+                && context instanceof ServerRequestObservationContext serverContext) {
+                assert serverContext.getCarrier() != null;
+                return !serverContext.getCarrier().getRequestURI().startsWith("/actuator");
+            } else {
+                return true;
+            }
+        };
+    }
 
-  @Bean
-  @GlobalServerInterceptor
-  @Order(Integer.MIN_VALUE)
-  ClientIpInterceptor clientIpInterceptor() {
-    return new ClientIpInterceptor();
-  }
+    @Bean
+    @GlobalServerInterceptor
+    @Order(Integer.MIN_VALUE)
+    ClientIpInterceptor clientIpInterceptor() {
+        return new ClientIpInterceptor();
+    }
 
-  @Bean
-  @GlobalClientInterceptor
-  SafeBearerTokenInterceptor bearerTokenInterceptor() {
-    return new SafeBearerTokenInterceptor(
-      () -> SecurityContextUtils.getTokenValue().orElse(null)
-    );
-  }
+    @Bean
+    @GlobalClientInterceptor
+    SafeBearerTokenInterceptor bearerTokenInterceptor() {
+        return new SafeBearerTokenInterceptor(
+            () -> SecurityContextUtils.getTokenValue().orElse(null)
+        );
+    }
 }

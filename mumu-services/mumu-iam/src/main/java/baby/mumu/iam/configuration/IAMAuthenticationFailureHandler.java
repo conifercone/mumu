@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,6 @@
 package baby.mumu.iam.configuration;
 
 
-import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_CLIENT;
-import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_GRANT;
-import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.INVALID_SCOPE;
-import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.UNSUPPORTED_GRANT_TYPE;
-
 import baby.mumu.basis.kotlin.tools.IpUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
@@ -31,7 +26,6 @@ import baby.mumu.log.client.api.grpc.OperationLogSubmitGrpcCmd;
 import baby.mumu.log.client.api.grpc.SystemLogSubmitGrpcCmd;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -44,6 +38,10 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
+import static org.springframework.security.oauth2.core.OAuth2ErrorCodes.*;
+
 /**
  * 自定义异常处理
  *
@@ -53,119 +51,119 @@ import org.springframework.stereotype.Component;
 @Component
 public class IAMAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-  private static final Logger log = LoggerFactory.getLogger(
-    IAMAuthenticationFailureHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(
+        IAMAuthenticationFailureHandler.class);
 
-  private final OperationLogGrpcService operationLogGrpcService;
+    private final OperationLogGrpcService operationLogGrpcService;
 
-  private final SystemLogGrpcService systemLogGrpcService;
+    private final SystemLogGrpcService systemLogGrpcService;
 
-  @Autowired
-  public IAMAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
-    SystemLogGrpcService systemLogGrpcService) {
-    this.operationLogGrpcService = operationLogGrpcService;
-    this.systemLogGrpcService = systemLogGrpcService;
-  }
-
-  @Override
-  public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-    AuthenticationException exception) throws IOException {
-    if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
-      OAuth2Error error = oAuth2AuthenticationException.getError();
-      String errorCode = error.getErrorCode();
-      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-        .setContent(errorCode)
-        .setCategory("exception")
-        .setFail(ExceptionUtils.getStackTrace(exception))
-        .build());
-      IAMAuthenticationFailureHandler.log.error(errorCode);
-
-      if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
-        response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());
-        exceptionResponse(response, ResponseCode.ACCOUNT_DISABLED, request);
-      } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_LOCKED.getCode())) {
-        response.setStatus(ResponseCode.ACCOUNT_LOCKED.getStatus());
-        exceptionResponse(response, ResponseCode.ACCOUNT_LOCKED, request);
-      } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_HAS_EXPIRED.getCode())) {
-        response.setStatus(ResponseCode.ACCOUNT_HAS_EXPIRED.getStatus());
-        exceptionResponse(response, ResponseCode.ACCOUNT_HAS_EXPIRED, request);
-      } else if (error.getErrorCode().equals(ResponseCode.PASSWORD_EXPIRED.getCode())) {
-        response.setStatus(ResponseCode.PASSWORD_EXPIRED.getStatus());
-        exceptionResponse(response, ResponseCode.PASSWORD_EXPIRED, request);
-      } else if (error.getErrorCode()
-        .equals(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getCode())) {
-        response.setStatus(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getStatus());
-        exceptionResponse(response, ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT, request);
-      } else if (error.getErrorCode()
-        .equals(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getCode())) {
-        response.setStatus(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getStatus());
-        exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST, request);
-      } else if (UNSUPPORTED_GRANT_TYPE
-        .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
-      } else if (INVALID_CLIENT
-        .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
-      } else if (INVALID_GRANT
-        .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
-      } else if (INVALID_SCOPE
-        .equals(error.getErrorCode())) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
-      } else {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
-        ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
-      }
-    } else {
-      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-        .setContent(ResponseCode.UNAUTHORIZED.getCode())
-        .setCategory("exception")
-        .setFail(ExceptionUtils.getStackTrace(exception))
-        .build());
-      IAMAuthenticationFailureHandler.log.error(exception.getMessage());
-      response.setStatus(HttpStatus.UNAUTHORIZED.value());
-      operationFailLog(ResponseCode.UNAUTHORIZED.getCode(), exception.getMessage(),
-        IpUtils.getIpAddr(request));
-      ResponseWrapper.exceptionResponse(response, ResponseCode.UNAUTHORIZED.getCode(),
-        exception.getMessage());
+    @Autowired
+    public IAMAuthenticationFailureHandler(OperationLogGrpcService operationLogGrpcService,
+                                           SystemLogGrpcService systemLogGrpcService) {
+        this.operationLogGrpcService = operationLogGrpcService;
+        this.systemLogGrpcService = systemLogGrpcService;
     }
-  }
 
-  /**
-   * 统一认证异常信息响应
-   *
-   * @param response     响应
-   * @param responseCode 结果编码
-   * @param request      请求信息
-   * @throws IOException io异常
-   */
-  private void exceptionResponse(HttpServletResponse response, @NonNull ResponseCode responseCode,
-    HttpServletRequest request)
-    throws IOException {
-    operationFailLog(responseCode.getCode(),
-      responseCode.getMessage(), IpUtils.getIpAddr(request));
-    ResponseWrapper.exceptionResponse(response,
-      responseCode);
-  }
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException {
+        if (exception instanceof OAuth2AuthenticationException oAuth2AuthenticationException) {
+            OAuth2Error error = oAuth2AuthenticationException.getError();
+            String errorCode = error.getErrorCode();
+            systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+                .setContent(errorCode)
+                .setCategory("exception")
+                .setFail(ExceptionUtils.getStackTrace(exception))
+                .build());
+            IAMAuthenticationFailureHandler.log.error(errorCode);
 
-  /**
-   * 发送操作日志（失败结果）
-   *
-   * @param category 类别
-   * @param fail     失败信息
-   * @param ip       ip地址
-   */
-  private void operationFailLog(String category, String fail, String ip) {
-    operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
-      .setContent("AuthenticationFailureHandler")
-      .setBizNo(ip)
-      .setCategory(category)
-      .setFail(fail)
-      .build());
-  }
+            if (error.getErrorCode().equals(ResponseCode.ACCOUNT_DISABLED.getCode())) {
+                response.setStatus(ResponseCode.ACCOUNT_DISABLED.getStatus());
+                exceptionResponse(response, ResponseCode.ACCOUNT_DISABLED, request);
+            } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_LOCKED.getCode())) {
+                response.setStatus(ResponseCode.ACCOUNT_LOCKED.getStatus());
+                exceptionResponse(response, ResponseCode.ACCOUNT_LOCKED, request);
+            } else if (error.getErrorCode().equals(ResponseCode.ACCOUNT_HAS_EXPIRED.getCode())) {
+                response.setStatus(ResponseCode.ACCOUNT_HAS_EXPIRED.getStatus());
+                exceptionResponse(response, ResponseCode.ACCOUNT_HAS_EXPIRED, request);
+            } else if (error.getErrorCode().equals(ResponseCode.PASSWORD_EXPIRED.getCode())) {
+                response.setStatus(ResponseCode.PASSWORD_EXPIRED.getStatus());
+                exceptionResponse(response, ResponseCode.PASSWORD_EXPIRED, request);
+            } else if (error.getErrorCode()
+                .equals(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getCode())) {
+                response.setStatus(ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT.getStatus());
+                exceptionResponse(response, ResponseCode.ACCOUNT_PASSWORD_IS_INCORRECT, request);
+            } else if (error.getErrorCode()
+                .equals(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getCode())) {
+                response.setStatus(ResponseCode.ACCOUNT_DOES_NOT_EXIST.getStatus());
+                exceptionResponse(response, ResponseCode.ACCOUNT_DOES_NOT_EXIST, request);
+            } else if (UNSUPPORTED_GRANT_TYPE
+                .equals(error.getErrorCode())) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                exceptionResponse(response, ResponseCode.UNSUPPORTED_GRANT_TYPE, request);
+            } else if (INVALID_CLIENT
+                .equals(error.getErrorCode())) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                exceptionResponse(response, ResponseCode.INVALID_CLIENT, request);
+            } else if (INVALID_GRANT
+                .equals(error.getErrorCode())) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                exceptionResponse(response, ResponseCode.INVALID_GRANT, request);
+            } else if (INVALID_SCOPE
+                .equals(error.getErrorCode())) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                exceptionResponse(response, ResponseCode.INVALID_SCOPE, request);
+            } else {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                operationFailLog(errorCode, error.getDescription(), IpUtils.getIpAddr(request));
+                ResponseWrapper.exceptionResponse(response, errorCode, error.getDescription());
+            }
+        } else {
+            systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+                .setContent(ResponseCode.UNAUTHORIZED.getCode())
+                .setCategory("exception")
+                .setFail(ExceptionUtils.getStackTrace(exception))
+                .build());
+            IAMAuthenticationFailureHandler.log.error(exception.getMessage());
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            operationFailLog(ResponseCode.UNAUTHORIZED.getCode(), exception.getMessage(),
+                IpUtils.getIpAddr(request));
+            ResponseWrapper.exceptionResponse(response, ResponseCode.UNAUTHORIZED.getCode(),
+                exception.getMessage());
+        }
+    }
+
+    /**
+     * 统一认证异常信息响应
+     *
+     * @param response     响应
+     * @param responseCode 结果编码
+     * @param request      请求信息
+     * @throws IOException io异常
+     */
+    private void exceptionResponse(HttpServletResponse response, @NonNull ResponseCode responseCode,
+                                   HttpServletRequest request)
+        throws IOException {
+        operationFailLog(responseCode.getCode(),
+            responseCode.getMessage(), IpUtils.getIpAddr(request));
+        ResponseWrapper.exceptionResponse(response,
+            responseCode);
+    }
+
+    /**
+     * 发送操作日志（失败结果）
+     *
+     * @param category 类别
+     * @param fail     失败信息
+     * @param ip       ip地址
+     */
+    private void operationFailLog(String category, String fail, String ip) {
+        operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
+            .setContent("AuthenticationFailureHandler")
+            .setBizNo(ip)
+            .setCategory(category)
+            .setFail(fail)
+            .build());
+    }
 }

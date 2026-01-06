@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,14 @@ import baby.mumu.iam.infra.token.gatewayimpl.cache.AuthorizeCodeTokenCacheReposi
 import baby.mumu.iam.infra.token.gatewayimpl.cache.ClientTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.PasswordTokenCacheRepository;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * token领域网关实现类
@@ -41,44 +42,44 @@ import org.springframework.stereotype.Component;
 @Observed(name = "TokenGatewayImpl")
 public class TokenGatewayImpl implements TokenGateway {
 
-  private final PasswordTokenCacheRepository passwordTokenCacheRepository;
-  private final JwtDecoder jwtDecoder;
-  private final ClientTokenCacheRepository clientTokenCacheRepository;
-  private final AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository;
+    private final PasswordTokenCacheRepository passwordTokenCacheRepository;
+    private final JwtDecoder jwtDecoder;
+    private final ClientTokenCacheRepository clientTokenCacheRepository;
+    private final AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository;
 
-  @Autowired
-  public TokenGatewayImpl(PasswordTokenCacheRepository passwordTokenCacheRepository,
-    JwtDecoder jwtDecoder,
-    ClientTokenCacheRepository clientTokenCacheRepository,
-    AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
-    this.passwordTokenCacheRepository = passwordTokenCacheRepository;
-    this.jwtDecoder = jwtDecoder;
-    this.clientTokenCacheRepository = clientTokenCacheRepository;
-    this.authorizeCodeTokenCacheRepository = authorizeCodeTokenCacheRepository;
-  }
+    @Autowired
+    public TokenGatewayImpl(PasswordTokenCacheRepository passwordTokenCacheRepository,
+                            JwtDecoder jwtDecoder,
+                            ClientTokenCacheRepository clientTokenCacheRepository,
+                            AuthorizeCodeTokenCacheRepository authorizeCodeTokenCacheRepository) {
+        this.passwordTokenCacheRepository = passwordTokenCacheRepository;
+        this.jwtDecoder = jwtDecoder;
+        this.clientTokenCacheRepository = clientTokenCacheRepository;
+        this.authorizeCodeTokenCacheRepository = authorizeCodeTokenCacheRepository;
+    }
 
-  @Override
-  public boolean validity(String token) {
-    return Optional.ofNullable(token).map(tokenValue -> {
-        try {
-          Jwt jwt = jwtDecoder.decode(tokenValue);
-          String claimAsString = jwt.getClaimAsString(
-            TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName());
-          if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
-            return passwordTokenCacheRepository.existsById(
-              Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
-          } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
-            return clientTokenCacheRepository.existsById(jwt.getClaimAsString(JwtClaimNames.SUB));
-          } else if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(claimAsString)) {
-            return authorizeCodeTokenCacheRepository.existsById(
-              Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
+    @Override
+    public boolean validity(String token) {
+        return Optional.ofNullable(token).map(tokenValue -> {
+                try {
+                    Jwt jwt = jwtDecoder.decode(tokenValue);
+                    String claimAsString = jwt.getClaimAsString(
+                        TokenClaimsEnum.AUTHORIZATION_GRANT_TYPE.getClaimName());
+                    if (OAuth2Enum.GRANT_TYPE_PASSWORD.getName().equals(claimAsString)) {
+                        return passwordTokenCacheRepository.existsById(
+                            Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
+                    } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.getValue().equals(claimAsString)) {
+                        return clientTokenCacheRepository.existsById(jwt.getClaimAsString(JwtClaimNames.SUB));
+                    } else if (AuthorizationGrantType.AUTHORIZATION_CODE.getValue().equals(claimAsString)) {
+                        return authorizeCodeTokenCacheRepository.existsById(
+                            Long.parseLong(jwt.getClaimAsString(TokenClaimsEnum.ACCOUNT_ID.getClaimName())));
 
-          }
-          return true;
-        } catch (Exception ignore) {
-          return false;
-        }
-      })
-      .orElse(false);
-  }
+                    }
+                    return true;
+                } catch (Exception ignore) {
+                    return false;
+                }
+            })
+            .orElse(false);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@
 package baby.mumu.genix.domain.country;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import lombok.Data;
 
 /**
  * 国家
@@ -32,42 +33,42 @@ import lombok.Data;
 public class Country implements Serializable {
 
 
-  @Serial
-  private static final long serialVersionUID = 6373193269469682834L;
+    @Serial
+    private static final long serialVersionUID = 6373193269469682834L;
 
-  /**
-   * 唯一标识
-   */
-  private Long id;
+    /**
+     * 唯一标识
+     */
+    private Long id;
 
-  /**
-   * 名称
-   */
-  private String name;
+    /**
+     * 名称
+     */
+    private String name;
 
-  /**
-   * 纬度
-   */
-  private String latitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
 
-  /**
-   * 精度
-   */
-  private String longitude;
+    /**
+     * 精度
+     */
+    private String longitude;
 
-  /**
-   * emoji
-   */
-  private String emoji;
+    /**
+     * emoji
+     */
+    private String emoji;
 
-  /**
-   * 本地化名称
-   */
-  @JsonProperty("native")
-  private String nativeName;
+    /**
+     * 本地化名称
+     */
+    @JsonProperty("native")
+    private String nativeName;
 
-  /**
-   * 省份或州信息
-   */
-  private List<State> states;
+    /**
+     * 省份或州信息
+     */
+    private List<State> states;
 }

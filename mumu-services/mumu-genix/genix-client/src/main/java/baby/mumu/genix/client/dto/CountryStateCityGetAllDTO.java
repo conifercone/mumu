@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package baby.mumu.genix.client.dto;
 
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 获取所有国家数据传输对象
@@ -28,44 +29,6 @@ import lombok.Data;
 @Data
 public class CountryStateCityGetAllDTO {
 
-  /**
-   * 唯一标识
-   */
-  private Long id;
-
-  /**
-   * 名称
-   */
-  private String name;
-
-  /**
-   * 纬度
-   */
-  private String latitude;
-
-  /**
-   * 精度
-   */
-  private String longitude;
-
-  /**
-   * emoji
-   */
-  private String emoji;
-
-  /**
-   * 本地化名称
-   */
-  private String nativeName;
-
-  /**
-   * 省份或州信息
-   */
-  private List<CountryStateCityGetAllStateCo> states;
-
-  @Data
-  public static class CountryStateCityGetAllStateCo {
-
     /**
      * 唯一标识
      */
@@ -87,31 +50,69 @@ public class CountryStateCityGetAllDTO {
     private String longitude;
 
     /**
-     * 城市信息
+     * emoji
      */
-    private List<CountryStateCityGetAllCityCo> cities;
-  }
-
-  @Data
-  public static class CountryStateCityGetAllCityCo {
+    private String emoji;
 
     /**
-     * 唯一标识
+     * 本地化名称
      */
-    private Long id;
-    /**
-     * 名称
-     */
-    private String name;
+    private String nativeName;
 
     /**
-     * 纬度
+     * 省份或州信息
      */
-    private String latitude;
+    private List<CountryStateCityGetAllStateCo> states;
 
-    /**
-     * 精度
-     */
-    private String longitude;
-  }
+    @Data
+    public static class CountryStateCityGetAllStateCo {
+
+        /**
+         * 唯一标识
+         */
+        private Long id;
+
+        /**
+         * 名称
+         */
+        private String name;
+
+        /**
+         * 纬度
+         */
+        private String latitude;
+
+        /**
+         * 精度
+         */
+        private String longitude;
+
+        /**
+         * 城市信息
+         */
+        private List<CountryStateCityGetAllCityCo> cities;
+    }
+
+    @Data
+    public static class CountryStateCityGetAllCityCo {
+
+        /**
+         * 唯一标识
+         */
+        private Long id;
+        /**
+         * 名称
+         */
+        private String name;
+
+        /**
+         * 纬度
+         */
+        private String latitude;
+
+        /**
+         * 精度
+         */
+        private String longitude;
+    }
 }

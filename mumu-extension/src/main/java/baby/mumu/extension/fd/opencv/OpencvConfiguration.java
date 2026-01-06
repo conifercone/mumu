@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package baby.mumu.extension.fd.opencv;
 
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.fd.FaceDetectionProcessor;
-import java.io.IOException;
 import org.bytedeco.opencv.opencv_objdetect.CascadeClassifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -29,6 +28,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+
+import java.io.IOException;
 
 /**
  * opencv配置类
@@ -42,17 +43,17 @@ import org.springframework.core.io.ResourceLoader;
 @ConditionalOnClass(CascadeClassifier.class)
 public class OpencvConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean(CascadeClassifier.class)
-  public CascadeClassifier cascadeClassifier(ResourceLoader resourceLoader) throws IOException {
-    Resource resource = resourceLoader.getResource("classpath:haarcascade_frontalface_alt.xml");
-    return new CascadeClassifier(resource.getFile().getAbsolutePath());
-  }
+    @Bean
+    @ConditionalOnMissingBean(CascadeClassifier.class)
+    public CascadeClassifier cascadeClassifier(ResourceLoader resourceLoader) throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:haarcascade_frontalface_alt.xml");
+        return new CascadeClassifier(resource.getFile().getAbsolutePath());
+    }
 
-  @Bean
-  @ConditionalOnBean(CascadeClassifier.class)
-  @ConditionalOnMissingBean(FaceDetectionProcessor.class)
-  public FaceDetectionProcessor faceDetectionProcessor(CascadeClassifier cascadeClassifier) {
-    return new OpencvFaceDetectionProcessor(cascadeClassifier);
-  }
+    @Bean
+    @ConditionalOnBean(CascadeClassifier.class)
+    @ConditionalOnMissingBean(FaceDetectionProcessor.class)
+    public FaceDetectionProcessor faceDetectionProcessor(CascadeClassifier cascadeClassifier) {
+        return new OpencvFaceDetectionProcessor(cascadeClassifier);
+    }
 }

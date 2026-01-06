@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package baby.mumu.iam.configuration;
 
 import baby.mumu.basis.event.OfflineSuccessEvent;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 账号下线成功监听
@@ -35,21 +36,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class ApplicationOfflineSuccessListener {
 
-  private final OAuth2AuthorizationService oAuth2AuthorizationService;
+    private final OAuth2AuthorizationService oAuth2AuthorizationService;
 
-  @Autowired
-  public ApplicationOfflineSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
-    this.oAuth2AuthorizationService = oAuth2AuthorizationService;
-  }
-
-  @EventListener
-  public void onOfflineSuccess(@NonNull OfflineSuccessEvent event) {
-    String tokenValue = event.getTokenValue();
-    if (StringUtils.isNotBlank(tokenValue)) {
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
-        OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
-      Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
-        OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+    @Autowired
+    public ApplicationOfflineSuccessListener(OAuth2AuthorizationService oAuth2AuthorizationService) {
+        this.oAuth2AuthorizationService = oAuth2AuthorizationService;
     }
-  }
+
+    @EventListener
+    public void onOfflineSuccess(@NonNull OfflineSuccessEvent event) {
+        String tokenValue = event.getTokenValue();
+        if (StringUtils.isNotBlank(tokenValue)) {
+            Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
+                OAuth2TokenType.ACCESS_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+            Optional.ofNullable(oAuth2AuthorizationService.findByToken(tokenValue,
+                OAuth2TokenType.REFRESH_TOKEN)).ifPresent(oAuth2AuthorizationService::remove);
+        }
+    }
 }

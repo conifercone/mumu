@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package baby.mumu.genix;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.SpringBootConstants;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Generation + Mix 多功能生成器生成服务
@@ -35,15 +36,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class GenixApplication {
 
-  static void main(String[] args) {
-    SpringApplication springApplication = new SpringApplication(
-      GenixApplication.class);
-    Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      GenixApplicationMetamodel.PROJECT_NAME);
-    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      GenixApplicationMetamodel.FORMATTED_PROJECT_VERSION);
-    springApplication.setDefaultProperties(defaultProperties);
-    springApplication.run(args);
-  }
+    static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(
+            GenixApplication.class);
+        Map<String, Object> defaultProperties = new HashMap<>();
+        defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+            GenixApplicationMetamodel.PROJECT_NAME);
+        defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+            GenixApplicationMetamodel.FORMATTED_PROJECT_VERSION);
+        springApplication.setDefaultProperties(defaultProperties);
+        springApplication.run(args);
+    }
 }

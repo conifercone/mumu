@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,8 @@
 
 package baby.mumu.genix.client.api;
 
-import baby.mumu.genix.client.dto.CountryGetAllDTO;
-import baby.mumu.genix.client.dto.CountryGetCitiesByStateIdDTO;
-import baby.mumu.genix.client.dto.CountryGetCityByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStateCitiesByIdDTO;
-import baby.mumu.genix.client.dto.CountryGetStatesByCountryIdDTO;
-import baby.mumu.genix.client.dto.CountryStateCityGetAllDTO;
+import baby.mumu.genix.client.dto.*;
+
 import java.util.List;
 
 /**
@@ -33,17 +28,17 @@ import java.util.List;
  */
 public interface CountryService {
 
-  List<CountryStateCityGetAllDTO> getCountryStateCity();
+    List<CountryStateCityGetAllDTO> getCountryStateCity();
 
-  List<CountryGetAllDTO> getCountries();
+    List<CountryGetAllDTO> getCountries();
 
-  List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(Long id);
+    List<CountryGetStatesByCountryIdDTO> getStatesByCountryId(Long id);
 
-  List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(Long id);
+    List<CountryGetCitiesByStateIdDTO> getCitiesByStateId(Long id);
 
-  CountryGetStateByIdDTO getStateById(Long id);
+    CountryGetStateByIdDTO getStateById(Long id);
 
-  CountryGetStateCitiesByIdDTO getStateCitiesById(Long id);
+    CountryGetStateCitiesByIdDTO getStateCitiesById(Long id);
 
-  CountryGetCityByIdDTO getCityById(Long id);
+    CountryGetCityByIdDTO getCityById(Long id);
 }

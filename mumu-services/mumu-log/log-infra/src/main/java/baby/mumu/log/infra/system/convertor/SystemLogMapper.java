@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,32 +40,32 @@ import org.mapstruct.factory.Mappers;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SystemLogMapper {
 
-  SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
+    SystemLogMapper INSTANCE = Mappers.getMapper(SystemLogMapper.class);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogKafkaPO toSystemLogKafkaPO(SystemLog systemLog);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLogKafkaPO toSystemLogKafkaPO(SystemLog systemLog);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogEsPO toSystemLogEsPO(SystemLog systemLog);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLogEsPO toSystemLogEsPO(SystemLog systemLog);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogSubmitCmd systemLogSubmitCmd);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLog toEntity(SystemLogSubmitCmd systemLogSubmitCmd);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogSaveCmd systemLogSaveCmd);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLog toEntity(SystemLogSaveCmd systemLogSaveCmd);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogEsPO systemLogEsPO);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLog toEntity(SystemLogEsPO systemLogEsPO);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLog toEntity(SystemLogFindAllCmd systemLogFindAllCmd);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogFindAllDTO toSystemLogFindAllDTO(SystemLog systemLog);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLogFindAllDTO toSystemLogFindAllDTO(SystemLog systemLog);
 
-  @API(status = Status.STABLE, since = "1.0.1")
-  SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaPO systemLogKafkaPO);
+    @API(status = Status.STABLE, since = "1.0.1")
+    SystemLogSaveCmd toSystemLogSaveCmd(SystemLogKafkaPO systemLogKafkaPO);
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  SystemLogSubmitCmd toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd);
+    @API(status = Status.STABLE, since = "2.2.0")
+    SystemLogSubmitCmd toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd systemLogSubmitGrpcCmd);
 }

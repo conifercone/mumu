@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,23 +35,23 @@ import org.springframework.util.Assert;
 @Component
 public class CaptchaCodeGeneratedCmdExe {
 
-  private final CaptchaCodeGateway captchaCodeGateway;
-  private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeGateway captchaCodeGateway;
+    private final CaptchaCodeConvertor captchaCodeConvertor;
 
-  @Autowired
-  public CaptchaCodeGeneratedCmdExe(
-    CaptchaCodeGateway captchaCodeGateway,
-    CaptchaCodeConvertor captchaCodeConvertor) {
-    this.captchaCodeGateway = captchaCodeGateway;
-    this.captchaCodeConvertor = captchaCodeConvertor;
-  }
+    @Autowired
+    public CaptchaCodeGeneratedCmdExe(
+        CaptchaCodeGateway captchaCodeGateway,
+        CaptchaCodeConvertor captchaCodeConvertor) {
+        this.captchaCodeGateway = captchaCodeGateway;
+        this.captchaCodeConvertor = captchaCodeConvertor;
+    }
 
-  public CaptchaCodeGeneratedDTO execute(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
-    Assert.notNull(captchaCodeGeneratedCmd, "CaptchaCodeGeneratedCmd cannot be null");
-    return captchaCodeConvertor.toEntity(captchaCodeGeneratedCmd)
-      .map(captchaCodeGateway::generate)
-      .flatMap(captchaCodeConvertor::toCaptchaCodeGeneratedDTO)
-      .orElseThrow(() -> new ApplicationException(
-        ResponseCode.CAPTCHA_CODE_GENERATION_FAILED));
-  }
+    public CaptchaCodeGeneratedDTO execute(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+        Assert.notNull(captchaCodeGeneratedCmd, "CaptchaCodeGeneratedCmd cannot be null");
+        return captchaCodeConvertor.toEntity(captchaCodeGeneratedCmd)
+            .map(captchaCodeGateway::generate)
+            .flatMap(captchaCodeConvertor::toCaptchaCodeGeneratedDTO)
+            .orElseThrow(() -> new ApplicationException(
+                ResponseCode.CAPTCHA_CODE_GENERATION_FAILED));
+    }
 }

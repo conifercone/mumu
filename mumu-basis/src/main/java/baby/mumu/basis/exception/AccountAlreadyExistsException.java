@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.basis.exception;
 
 import baby.mumu.basis.response.ResponseCode;
+
 import java.io.Serial;
 
 /**
@@ -27,10 +28,10 @@ import java.io.Serial;
  */
 public class AccountAlreadyExistsException extends ApplicationException {
 
-  @Serial
-  private static final long serialVersionUID = 7383143329621946676L;
+    @Serial
+    private static final long serialVersionUID = 7383143329621946676L;
 
-  public AccountAlreadyExistsException(String accountName) {
-    super(ResponseCode.ACCOUNT_ALREADY_EXISTS, accountName);
-  }
+    public AccountAlreadyExistsException(String accountName) {
+        super(ResponseCode.ACCOUNT_ALREADY_EXISTS, accountName);
+    }
 }

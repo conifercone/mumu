@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,6 @@
 
 package baby.mumu.extension.ocr;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import org.apache.commons.io.FilenameUtils;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
@@ -30,6 +26,11 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 /**
  * 阿里云ocr单元测试
  *
@@ -38,45 +39,45 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig({OcrConfiguration.class, MessageSourceAutoConfiguration.class})
 @TestPropertySource(properties = {
-  "mumu.extension.ocr.aliyun.enabled=true"
+    "mumu.extension.ocr.aliyun.enabled=true"
 })
 public class AliyunOcrTest {
 
-  private final OcrProcessor ocrProcessor;
-  private final ResourceLoader resourceLoader;
+    private final OcrProcessor ocrProcessor;
+    private final ResourceLoader resourceLoader;
 
-  @Autowired
-  public AliyunOcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
-    this.ocrProcessor = ocrProcessor;
-    this.resourceLoader = resourceLoader;
-  }
-
-  @Test
-  void ocrTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_chat_interface.png");
-    Ocr ocr = new Ocr();
-    ocr.setSourceFile(fileFromResource);
-    String string = ocrProcessor.doOcr(ocr);
-    System.out.println(string);
-  }
-
-  @Test
-  void ocrCnTest() throws IOException {
-    File fileFromResource = getFileFromResource("ocr_cn.png");
-    Ocr ocr = new Ocr();
-    ocr.setSourceFile(fileFromResource);
-    String string = ocrProcessor.doOcr(ocr);
-    System.out.println(string);
-  }
-
-  private @NonNull File getFileFromResource(String fileName)
-    throws IOException {
-    Resource resource = resourceLoader.getResource("classpath:" + fileName);
-    File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));
-    try (var inputStream = resource.getInputStream()) {
-      Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    @Autowired
+    public AliyunOcrTest(OcrProcessor ocrProcessor, ResourceLoader resourceLoader) {
+        this.ocrProcessor = ocrProcessor;
+        this.resourceLoader = resourceLoader;
     }
-    tempFile.deleteOnExit();
-    return tempFile;
-  }
+
+    @Test
+    void ocrTest() throws IOException {
+        File fileFromResource = getFileFromResource("ocr_chat_interface.png");
+        Ocr ocr = new Ocr();
+        ocr.setSourceFile(fileFromResource);
+        String string = ocrProcessor.doOcr(ocr);
+        System.out.println(string);
+    }
+
+    @Test
+    void ocrCnTest() throws IOException {
+        File fileFromResource = getFileFromResource("ocr_cn.png");
+        Ocr ocr = new Ocr();
+        ocr.setSourceFile(fileFromResource);
+        String string = ocrProcessor.doOcr(ocr);
+        System.out.println(string);
+    }
+
+    private @NonNull File getFileFromResource(String fileName)
+        throws IOException {
+        Resource resource = resourceLoader.getResource("classpath:" + fileName);
+        File tempFile = File.createTempFile("temp", "." + FilenameUtils.getExtension(fileName));
+        try (var inputStream = resource.getInputStream()) {
+            Files.copy(inputStream, tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+        tempFile.deleteOnExit();
+        return tempFile;
+    }
 }

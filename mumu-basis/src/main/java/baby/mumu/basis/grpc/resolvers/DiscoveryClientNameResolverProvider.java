@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package baby.mumu.basis.grpc.resolvers;
 import io.grpc.NameResolver;
 import io.grpc.NameResolver.Args;
 import io.grpc.NameResolverProvider;
-import java.net.URI;
 import org.jspecify.annotations.NonNull;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+
+import java.net.URI;
 
 /**
  * 服务发现客户端名称解析器提供者
@@ -31,31 +32,31 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 public class DiscoveryClientNameResolverProvider extends NameResolverProvider {
 
-  private final DiscoveryClient discoveryClient;
+    private final DiscoveryClient discoveryClient;
 
-  public DiscoveryClientNameResolverProvider(final DiscoveryClient discoveryClient) {
-    this.discoveryClient = discoveryClient;
-  }
+    public DiscoveryClientNameResolverProvider(final DiscoveryClient discoveryClient) {
+        this.discoveryClient = discoveryClient;
+    }
 
-  @Override
-  public NameResolver newNameResolver(@NonNull URI targetUri, Args args) {
-    return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient,
-      targetUri.getPort());
-  }
+    @Override
+    public NameResolver newNameResolver(@NonNull URI targetUri, Args args) {
+        return new DiscoveryClientNameResolver(targetUri.getHost(), discoveryClient,
+            targetUri.getPort());
+    }
 
-  @Override
-  public String getDefaultScheme() {
-    return "discovery-client";
-  }
+    @Override
+    public String getDefaultScheme() {
+        return "discovery-client";
+    }
 
-  @Override
-  protected boolean isAvailable() {
-    return true;
-  }
+    @Override
+    protected boolean isAvailable() {
+        return true;
+    }
 
-  @Override
-  protected int priority() {
-    return 10;
-  }
+    @Override
+    protected int priority() {
+        return 10;
+    }
 
 }

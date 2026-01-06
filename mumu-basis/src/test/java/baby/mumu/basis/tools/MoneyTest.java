@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package baby.mumu.basis.tools;
 
-import java.math.BigDecimal;
-import javax.money.MonetaryContext;
-import javax.money.MonetaryContextBuilder;
 import org.javamoney.moneta.Money;
 import org.junit.jupiter.api.Test;
+
+import javax.money.MonetaryContext;
+import javax.money.MonetaryContextBuilder;
+import java.math.BigDecimal;
 
 /**
  * Money 单元测试
@@ -30,14 +31,14 @@ import org.junit.jupiter.api.Test;
  */
 public class MoneyTest {
 
-  @Test
-  public void test() {
-    MonetaryContext build = MonetaryContextBuilder.of().setMaxScale(2).build();
-    Money money = Money.of(new BigDecimal("1000.00"), "USD", build);
-    Money money2 = Money.of(new BigDecimal("2000.00"), "USD", build);
-    System.out.println(money.add(money2)); // 加法
-    System.out.println(money.subtract(money2)); // 减法
-    System.out.println(money.multiply(2)); // 乘法
-    System.out.println(money.divide(3)); // 除法
-  }
+    @Test
+    public void test() {
+        MonetaryContext build = MonetaryContextBuilder.of().setMaxScale(2).build();
+        Money money = Money.of(new BigDecimal("1000.00"), "USD", build);
+        Money money2 = Money.of(new BigDecimal("2000.00"), "USD", build);
+        System.out.println(money.add(money2)); // 加法
+        System.out.println(money.subtract(money2)); // 减法
+        System.out.println(money.multiply(2)); // 乘法
+        System.out.println(money.divide(3)); // 除法
+    }
 }

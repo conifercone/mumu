@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.log.domain.operation.gateway;
 
 import baby.mumu.log.domain.operation.OperationLog;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
+
+import java.util.Optional;
 
 /**
  * 操作日志领域网关
@@ -28,35 +29,35 @@ import org.springframework.data.domain.Page;
  */
 public interface OperationLogGateway {
 
-  /**
-   * 提交操作日志
-   *
-   * @param operationLog 操作日志领域对象
-   */
-  void submit(OperationLog operationLog);
+    /**
+     * 提交操作日志
+     *
+     * @param operationLog 操作日志领域对象
+     */
+    void submit(OperationLog operationLog);
 
-  /**
-   * 保存操作日志
-   *
-   * @param operationLog 操作日志领域对象
-   */
-  void save(OperationLog operationLog);
+    /**
+     * 保存操作日志
+     *
+     * @param operationLog 操作日志领域对象
+     */
+    void save(OperationLog operationLog);
 
-  /**
-   * 根据日志ID获取操作日志
-   *
-   * @param id 操作日志ID
-   * @return 操作日志
-   */
-  Optional<OperationLog> findOperationLogById(String id);
+    /**
+     * 根据日志ID获取操作日志
+     *
+     * @param id 操作日志ID
+     * @return 操作日志
+     */
+    Optional<OperationLog> findOperationLogById(String id);
 
-  /**
-   * 分页查询操作日志
-   *
-   * @param operationLog 查询条件
-   * @param current      当前页
-   * @param pageSize     每页数量
-   * @return 查询结果
-   */
-  Page<OperationLog> findAll(OperationLog operationLog, int current, int pageSize);
+    /**
+     * 分页查询操作日志
+     *
+     * @param operationLog 查询条件
+     * @param current      当前页
+     * @param pageSize     每页数量
+     * @return 查询结果
+     */
+    Page<OperationLog> findAll(OperationLog operationLog, int current, int pageSize);
 }

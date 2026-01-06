@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.storage.infra.file.gatewayimpl.storage;
 
 import baby.mumu.storage.domain.file.File;
+
 import java.io.InputStream;
 
 /**
@@ -27,40 +28,40 @@ import java.io.InputStream;
  */
 public interface FileStorageRepository {
 
-  /**
-   * 文件上传
-   *
-   * @param file 源文件
-   */
-  void upload(File file) throws Exception;
+    /**
+     * 文件上传
+     *
+     * @param file 源文件
+     */
+    void upload(File file) throws Exception;
 
-  /**
-   * 文件删除
-   *
-   * @param file 目标文件
-   */
-  void delete(File file) throws Exception;
+    /**
+     * 文件删除
+     *
+     * @param file 目标文件
+     */
+    void delete(File file) throws Exception;
 
-  /**
-   * 文件下载
-   *
-   * @param file 目标文件
-   */
-  InputStream download(File file) throws Exception;
-
-
-  /**
-   * 创建目标文件对应的存储区
-   *
-   * @param file 目标文件
-   */
-  void createStorageZone(File file) throws Exception;
+    /**
+     * 文件下载
+     *
+     * @param file 目标文件
+     */
+    InputStream download(File file) throws Exception;
 
 
-  /**
-   * 判断目标文件对应的存储区是否存在
-   *
-   * @param file 目标文件
-   */
-  boolean storageZoneExists(File file) throws Exception;
+    /**
+     * 创建目标文件对应的存储区
+     *
+     * @param file 目标文件
+     */
+    void createStorageZone(File file) throws Exception;
+
+
+    /**
+     * 判断目标文件对应的存储区是否存在
+     *
+     * @param file 目标文件
+     */
+    boolean storageZoneExists(File file) throws Exception;
 }

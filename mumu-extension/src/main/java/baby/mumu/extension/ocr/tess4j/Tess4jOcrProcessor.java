@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ocr.Ocr;
 import baby.mumu.extension.ocr.OcrProcessor;
-import java.util.Optional;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 /**
  * tess4j ocr处理器实现
@@ -33,23 +34,23 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Tess4jOcrProcessor implements OcrProcessor {
 
-  private final Tesseract tess4j;
+    private final Tesseract tess4j;
 
-  public Tess4jOcrProcessor(Tesseract tess4j) {
-    this.tess4j = tess4j;
-  }
+    public Tess4jOcrProcessor(Tesseract tess4j) {
+        this.tess4j = tess4j;
+    }
 
-  @Override
-  public String doOcr(Ocr ocr) {
-    return Optional.ofNullable(ocr).filter(
-      ocrNonNull -> ocrNonNull.getSourceFile() != null && StringUtils.isNotBlank(
-        ocrNonNull.getTargetLanguage())).map(ocrNonNull -> {
-      tess4j.setLanguage(ocrNonNull.getTargetLanguage());
-      try {
-        return tess4j.doOCR(ocrNonNull.getSourceFile());
-      } catch (TesseractException e) {
-        throw new ApplicationException(ResponseCode.OCR_RECOGNITION_FAILED);
-      }
-    }).orElse(StringUtils.EMPTY);
-  }
+    @Override
+    public String doOcr(Ocr ocr) {
+        return Optional.ofNullable(ocr).filter(
+            ocrNonNull -> ocrNonNull.getSourceFile() != null && StringUtils.isNotBlank(
+                ocrNonNull.getTargetLanguage())).map(ocrNonNull -> {
+            tess4j.setLanguage(ocrNonNull.getTargetLanguage());
+            try {
+                return tess4j.doOCR(ocrNonNull.getSourceFile());
+            } catch (TesseractException e) {
+                throw new ApplicationException(ResponseCode.OCR_RECOGNITION_FAILED);
+            }
+        }).orElse(StringUtils.EMPTY);
+    }
 }

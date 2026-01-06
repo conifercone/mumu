@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,16 +34,16 @@ import tools.jackson.datatype.moneta.MonetaMoneyModule;
 @Configuration
 public class JacksonConfiguration {
 
-  @Bean
-  public JsonMapper.Builder jsonMapperBuilder() {
-    return JsonMapper.builder()
-      // 反序列化时忽略未知字段
-      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-      // Money 模块，数字字符串形式
-      .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
-      // Long → String 序列化，避免 JS 丢精度
-      .addModule(new SimpleModule()
-        .addSerializer(Long.class, ToStringSerializer.instance)
-        .addSerializer(Long.TYPE, ToStringSerializer.instance));
-  }
+    @Bean
+    public JsonMapper.Builder jsonMapperBuilder() {
+        return JsonMapper.builder()
+            // 反序列化时忽略未知字段
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            // Money 模块，数字字符串形式
+            .addModule(new MonetaMoneyModule().withQuotedDecimalNumbers())
+            // Long → String 序列化，避免 JS 丢精度
+            .addModule(new SimpleModule()
+                .addSerializer(Long.class, ToStringSerializer.instance)
+                .addSerializer(Long.TYPE, ToStringSerializer.instance));
+    }
 }

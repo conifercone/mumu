@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,37 +37,37 @@ import org.jspecify.annotations.NonNull;
  */
 public class AliyunSimpleTextTranslation implements SimpleTextTranslation {
 
-  private final Client client;
+    private final Client client;
 
-  public AliyunSimpleTextTranslation(Client client) {
-    this.client = client;
-  }
-
-  @Override
-  @API(status = Status.STABLE, since = "1.0.3")
-  public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
-    try {
-      RuntimeOptions runtime = new RuntimeOptions();
-      GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
-        .setSourceText(text);
-      GetDetectLanguageResponse detectLanguageWithOptions = client.getDetectLanguageWithOptions(
-        getDetectLanguageRequest, runtime);
-      String detectedLanguage = detectLanguageWithOptions.getBody().getDetectedLanguage();
-      if (targetLanguage.equals(detectedLanguage)) {
-        return text;
-      }
-      TranslateGeneralRequest translateGeneralRequest = new TranslateGeneralRequest().setFormatType(
-          "text")
-        .setSourceLanguage(detectedLanguage)
-        .setTargetLanguage(targetLanguage)
-        .setSourceText(text)
-        .setScene("general");
-
-      TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
-        translateGeneralRequest, runtime);
-      return translateGeneralResponse.getBody().getData().getTranslated();
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
+    public AliyunSimpleTextTranslation(Client client) {
+        this.client = client;
     }
-  }
+
+    @Override
+    @API(status = Status.STABLE, since = "1.0.3")
+    public String translate(String text, @NonNull String targetLanguage) throws ApplicationException {
+        try {
+            RuntimeOptions runtime = new RuntimeOptions();
+            GetDetectLanguageRequest getDetectLanguageRequest = new GetDetectLanguageRequest()
+                .setSourceText(text);
+            GetDetectLanguageResponse detectLanguageWithOptions = client.getDetectLanguageWithOptions(
+                getDetectLanguageRequest, runtime);
+            String detectedLanguage = detectLanguageWithOptions.getBody().getDetectedLanguage();
+            if (targetLanguage.equals(detectedLanguage)) {
+                return text;
+            }
+            TranslateGeneralRequest translateGeneralRequest = new TranslateGeneralRequest().setFormatType(
+                    "text")
+                .setSourceLanguage(detectedLanguage)
+                .setTargetLanguage(targetLanguage)
+                .setSourceText(text)
+                .setScene("general");
+
+            TranslateGeneralResponse translateGeneralResponse = client.translateGeneralWithOptions(
+                translateGeneralRequest, runtime);
+            return translateGeneralResponse.getBody().getData().getTranslated();
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.TRANSLATION_FAILED);
+        }
+    }
 }

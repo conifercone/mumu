@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,27 +27,27 @@ import org.springframework.data.domain.Page;
  */
 public interface SystemLogGateway {
 
-  /**
-   * 提交系统日志
-   *
-   * @param systemLog 系统日志领域对象
-   */
-  void submit(SystemLog systemLog);
+    /**
+     * 提交系统日志
+     *
+     * @param systemLog 系统日志领域对象
+     */
+    void submit(SystemLog systemLog);
 
-  /**
-   * 保存系统日志
-   *
-   * @param systemLog 系统日志领域对象
-   */
-  void save(SystemLog systemLog);
+    /**
+     * 保存系统日志
+     *
+     * @param systemLog 系统日志领域对象
+     */
+    void save(SystemLog systemLog);
 
-  /**
-   * 分页查询系统日志
-   *
-   * @param systemLog 查询条件
-   * @param current   当前页
-   * @param pageSize  每页数量
-   * @return 查询结果
-   */
-  Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize);
+    /**
+     * 分页查询系统日志
+     *
+     * @param systemLog 查询条件
+     * @param current   当前页
+     * @param pageSize  每页数量
+     * @return 查询结果
+     */
+    Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize);
 }

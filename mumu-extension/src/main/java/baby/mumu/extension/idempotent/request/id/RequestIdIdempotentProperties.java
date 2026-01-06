@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 
 package baby.mumu.extension.idempotent.request.id;
 
-import java.util.concurrent.TimeUnit;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Request ID 幂等配置
@@ -29,18 +30,18 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 public class RequestIdIdempotentProperties {
 
-  private boolean enabled;
-
-  @NestedConfigurationProperty
-  private RedisRequestIdIdempotentProperties redis = new RedisRequestIdIdempotentProperties();
-
-  @Data
-  public static class RedisRequestIdIdempotentProperties {
-
     private boolean enabled;
 
-    private Long timeout = 5L;
+    @NestedConfigurationProperty
+    private RedisRequestIdIdempotentProperties redis = new RedisRequestIdIdempotentProperties();
 
-    private TimeUnit unit = TimeUnit.MINUTES;
-  }
+    @Data
+    public static class RedisRequestIdIdempotentProperties {
+
+        private boolean enabled;
+
+        private Long timeout = 5L;
+
+        private TimeUnit unit = TimeUnit.MINUTES;
+    }
 }

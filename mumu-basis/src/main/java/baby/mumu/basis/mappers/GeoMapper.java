@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package baby.mumu.basis.mappers;
 
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
+
+import java.util.Optional;
 
 /**
  * 地理坐标相关转换
@@ -30,13 +31,13 @@ import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
  */
 public interface GeoMapper {
 
-  @API(status = Status.STABLE, since = "2.6.0")
-  default GeoJsonPoint toGeoJsonPoint(Point point) {
-    return Optional.ofNullable(point).map(GeoJsonPoint::new).orElse(null);
-  }
+    @API(status = Status.STABLE, since = "2.6.0")
+    default GeoJsonPoint toGeoJsonPoint(Point point) {
+        return Optional.ofNullable(point).map(GeoJsonPoint::new).orElse(null);
+    }
 
-  @API(status = Status.STABLE, since = "2.6.0")
-  default Point toPoint(GeoJsonPoint geoJsonPoint) {
-    return Optional.ofNullable(geoJsonPoint).map(Point::new).orElse(null);
-  }
+    @API(status = Status.STABLE, since = "2.6.0")
+    default Point toPoint(GeoJsonPoint geoJsonPoint) {
+        return Optional.ofNullable(geoJsonPoint).map(Point::new).orElse(null);
+    }
 }

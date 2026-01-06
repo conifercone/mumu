@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,17 +36,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogKafkaRepository extends KafkaTemplate<Object, Object> {
 
-  public OperationLogKafkaRepository(
-    @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
-    @Autowired ProducerListener<Object, Object> kafkaProducerListener,
-    @Autowired @NonNull ObjectProvider<RecordMessageConverter> messageConverter,
-    @Autowired @NonNull KafkaProperties properties) {
-    super(kafkaProducerFactory);
-    PropertyMapper map = PropertyMapper.get();
-    messageConverter.ifUnique(this::setMessageConverter);
-    map.from(kafkaProducerListener).to(this::setProducerListener);
-    map.from(properties.getTemplate().getDefaultTopic()).to(this::setDefaultTopic);
-    map.from(properties.getTemplate().getTransactionIdPrefix()).to(this::setTransactionIdPrefix);
-    map.from(properties.getTemplate().isObservationEnabled()).to(this::setObservationEnabled);
-  }
+    public OperationLogKafkaRepository(
+        @Autowired ProducerFactory<Object, Object> kafkaProducerFactory,
+        @Autowired ProducerListener<Object, Object> kafkaProducerListener,
+        @Autowired @NonNull ObjectProvider<RecordMessageConverter> messageConverter,
+        @Autowired @NonNull KafkaProperties properties) {
+        super(kafkaProducerFactory);
+        PropertyMapper map = PropertyMapper.get();
+        messageConverter.ifUnique(this::setMessageConverter);
+        map.from(kafkaProducerListener).to(this::setProducerListener);
+        map.from(properties.getTemplate().getDefaultTopic()).to(this::setDefaultTopic);
+        map.from(properties.getTemplate().getTransactionIdPrefix()).to(this::setTransactionIdPrefix);
+        map.from(properties.getTemplate().isObservationEnabled()).to(this::setObservationEnabled);
+    }
 }

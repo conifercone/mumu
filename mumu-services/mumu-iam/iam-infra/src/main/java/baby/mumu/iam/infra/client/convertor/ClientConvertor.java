@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package baby.mumu.iam.infra.client.convertor;
 
 import baby.mumu.iam.domain.client.Client;
 import baby.mumu.iam.infra.client.gatewayimpl.database.po.ClientPO;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 客户端转换器
@@ -32,23 +33,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClientConvertor {
 
-  @API(status = Status.STABLE, since = "2.5.0")
-  public Optional<Client> toEntity(
-    ClientPO clientPO) {
-    return Optional.ofNullable(clientPO).map(ClientMapper.INSTANCE::toEntity);
-  }
-
-  @API(status = Status.STABLE, since = "2.5.0")
-  public Optional<ClientPO> toClientPO(
-    Client client) {
-    return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toClientPO);
-  }
-
-  @API(status = Status.STABLE, since = "2.5.0")
-  public void toEntity(
-    Client clientSource, Client clientTarget) {
-    if (clientSource != null && clientTarget != null) {
-      ClientMapper.INSTANCE.toEntity(clientSource, clientTarget);
+    @API(status = Status.STABLE, since = "2.5.0")
+    public Optional<Client> toEntity(
+        ClientPO clientPO) {
+        return Optional.ofNullable(clientPO).map(ClientMapper.INSTANCE::toEntity);
     }
-  }
+
+    @API(status = Status.STABLE, since = "2.5.0")
+    public Optional<ClientPO> toClientPO(
+        Client client) {
+        return Optional.ofNullable(client).map(ClientMapper.INSTANCE::toClientPO);
+    }
+
+    @API(status = Status.STABLE, since = "2.5.0")
+    public void toEntity(
+        Client clientSource, Client clientTarget) {
+        if (clientSource != null && clientTarget != null) {
+            ClientMapper.INSTANCE.toEntity(clientSource, clientTarget);
+        }
+    }
 }

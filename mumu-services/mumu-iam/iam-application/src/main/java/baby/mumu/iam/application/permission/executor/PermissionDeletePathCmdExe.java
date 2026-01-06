@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,14 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionDeletePathCmdExe")
 public class PermissionDeletePathCmdExe {
 
-  private final PermissionGateway permissionGateway;
+    private final PermissionGateway permissionGateway;
 
-  @Autowired
-  public PermissionDeletePathCmdExe(PermissionGateway permissionGateway) {
-    this.permissionGateway = permissionGateway;
-  }
+    @Autowired
+    public PermissionDeletePathCmdExe(PermissionGateway permissionGateway) {
+        this.permissionGateway = permissionGateway;
+    }
 
-  public void execute(Long ancestorId, Long descendantId) {
-    permissionGateway.deletePath(ancestorId, descendantId);
-  }
+    public void execute(Long ancestorId, Long descendantId) {
+        permissionGateway.deletePath(ancestorId, descendantId);
+    }
 }

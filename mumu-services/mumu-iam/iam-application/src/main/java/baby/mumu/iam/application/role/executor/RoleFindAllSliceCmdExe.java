@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.List;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 角色查询指令执行器（不查询总数）
@@ -40,23 +41,23 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleFindAllSliceCmdExe")
 public class RoleFindAllSliceCmdExe {
 
-  private final RoleGateway roleGateway;
-  private final RoleConvertor roleConvertor;
+    private final RoleGateway roleGateway;
+    private final RoleConvertor roleConvertor;
 
-  @Autowired
-  public RoleFindAllSliceCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
-    this.roleGateway = roleGateway;
-    this.roleConvertor = roleConvertor;
-  }
+    @Autowired
+    public RoleFindAllSliceCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+        this.roleGateway = roleGateway;
+        this.roleConvertor = roleConvertor;
+    }
 
-  public Slice<RoleFindAllSliceDTO> execute(@NonNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
-    Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
-    Slice<Role> roles = roleGateway.findAllSlice(role,
-      roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
-    List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
-      .map(roleConvertor::toRoleFindAllSliceDTO)
-      .filter(Optional::isPresent).map(Optional::get).toList();
-    return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
-      roles.hasNext());
-  }
+    public Slice<RoleFindAllSliceDTO> execute(@NonNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
+        Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
+        Slice<Role> roles = roleGateway.findAllSlice(role,
+            roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
+        List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
+            .map(roleConvertor::toRoleFindAllSliceDTO)
+            .filter(Optional::isPresent).map(Optional::get).toList();
+        return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
+            roles.hasNext());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,55 +31,55 @@ import java.util.*
  */
 class SpringContextUtils : ApplicationContextAware {
 
-  @Throws(BeansException::class)
-  override fun setApplicationContext(applicationContext: ApplicationContext) {
-    if (Companion.applicationContext == null) {
-      Companion.applicationContext = applicationContext
-    }
-  }
-
-  companion object {
-    /**
-     * Spring上下文
-     */
-    private var applicationContext: ApplicationContext? = null
-    private val log = LoggerFactory.getLogger(SpringContextUtils::class.java)
-
-    /**
-     * bean class -> bean LRU cache
-     */
-    private val BEAN_CLASS_CACHE =
-      ConcurrentCache<Class<*>, Any>(
-        50
-      )
-
-    @JvmStatic
-    fun getApplicationContext(): ApplicationContext? {
-      return applicationContext
-    }
-
-    /**
-     * 通过class获取Bean.
-     *
-     * @param <T>   泛型
-     * @param clazz class
-     * @return 当前bean，包装为 Optional
-     */
-    @JvmStatic
-    fun <T : Any> getBean(clazz: Class<T>): Optional<T> {
-      return try {
-        // 使用 computeIfAbsent，获取不到的情况通过异常处理
-        val bean = BEAN_CLASS_CACHE.computeIfAbsent(clazz) {
-          getApplicationContext()?.getBean(clazz) ?: throw NoSuchBeanDefinitionException(
-            clazz
-          )
+    @Throws(BeansException::class)
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        if (Companion.applicationContext == null) {
+            Companion.applicationContext = applicationContext
         }
-        @Suppress("UNCHECKED_CAST")
-        Optional.of(bean as T)
-      } catch (e: Exception) {
-        log.error(e.message, e)
-        Optional.empty()
-      }
     }
-  }
+
+    companion object {
+        /**
+         * Spring上下文
+         */
+        private var applicationContext: ApplicationContext? = null
+        private val log = LoggerFactory.getLogger(SpringContextUtils::class.java)
+
+        /**
+         * bean class -> bean LRU cache
+         */
+        private val BEAN_CLASS_CACHE =
+            ConcurrentCache<Class<*>, Any>(
+                50
+            )
+
+        @JvmStatic
+        fun getApplicationContext(): ApplicationContext? {
+            return applicationContext
+        }
+
+        /**
+         * 通过class获取Bean.
+         *
+         * @param <T>   泛型
+         * @param clazz class
+         * @return 当前bean，包装为 Optional
+         */
+        @JvmStatic
+        fun <T : Any> getBean(clazz: Class<T>): Optional<T> {
+            return try {
+                // 使用 computeIfAbsent，获取不到的情况通过异常处理
+                val bean = BEAN_CLASS_CACHE.computeIfAbsent(clazz) {
+                    getApplicationContext()?.getBean(clazz) ?: throw NoSuchBeanDefinitionException(
+                        clazz
+                    )
+                }
+                @Suppress("UNCHECKED_CAST")
+                Optional.of(bean as T)
+            } catch (e: Exception) {
+                log.error(e.message, e)
+                Optional.empty()
+            }
+        }
+    }
 }

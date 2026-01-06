@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 存储区域管理
@@ -43,18 +39,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "存储区域管理")
 public class StorageZoneController {
 
-  private final StorageZoneService storageZoneService;
+    private final StorageZoneService storageZoneService;
 
-  public StorageZoneController(StorageZoneService storageZoneService) {
-    this.storageZoneService = storageZoneService;
-  }
+    public StorageZoneController(StorageZoneService storageZoneService) {
+        this.storageZoneService = storageZoneService;
+    }
 
-  @Operation(summary = "新增存储区域")
-  @PostMapping("/add")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.13.0")
-  public ResponseWrapper<Long> add(@RequestBody StorageZoneAddCmd storageZoneAddCmd) {
-    return ResponseWrapper.success(storageZoneService.add(storageZoneAddCmd));
-  }
+    @Operation(summary = "新增存储区域")
+    @PostMapping("/add")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.13.0")
+    public ResponseWrapper<Long> add(@RequestBody StorageZoneAddCmd storageZoneAddCmd) {
+        return ResponseWrapper.success(storageZoneService.add(storageZoneAddCmd));
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,8 @@
 
 package baby.mumu.extension.grpc.interceptors;
 
-import io.grpc.CallOptions;
-import io.grpc.Channel;
-import io.grpc.ClientCall;
-import io.grpc.ClientInterceptor;
-import io.grpc.ForwardingClientCall;
-import io.grpc.Metadata;
-import io.grpc.MethodDescriptor;
+import io.grpc.*;
+
 import java.util.function.Supplier;
 
 /**
@@ -34,30 +29,30 @@ import java.util.function.Supplier;
 @SuppressWarnings("ClassCanBeRecord")
 public class SafeBearerTokenInterceptor implements ClientInterceptor {
 
-  private static final Metadata.Key<String> AUTH =
-    Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
+    private static final Metadata.Key<String> AUTH =
+        Metadata.Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
 
-  private final Supplier<String> tokenSupplier;
+    private final Supplier<String> tokenSupplier;
 
-  public SafeBearerTokenInterceptor(Supplier<String> tokenSupplier) {
-    this.tokenSupplier = tokenSupplier;
-  }
+    public SafeBearerTokenInterceptor(Supplier<String> tokenSupplier) {
+        this.tokenSupplier = tokenSupplier;
+    }
 
-  @Override
-  public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-    MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+    @Override
+    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+        MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
 
-    return new ForwardingClientCall.SimpleForwardingClientCall<>(
-      next.newCall(method, callOptions)) {
-      @Override
-      public void start(Listener<RespT> responseListener, Metadata headers) {
-        String token = tokenSupplier.get();
-        // 只有在 token 非空、非空白时才加头
-        if (token != null && !token.isBlank()) {
-          headers.put(SafeBearerTokenInterceptor.AUTH, "Bearer " + token);
-        }
-        super.start(responseListener, headers);
-      }
-    };
-  }
+        return new ForwardingClientCall.SimpleForwardingClientCall<>(
+            next.newCall(method, callOptions)) {
+            @Override
+            public void start(Listener<RespT> responseListener, Metadata headers) {
+                String token = tokenSupplier.get();
+                // 只有在 token 非空、非空白时才加头
+                if (token != null && !token.isBlank()) {
+                    headers.put(SafeBearerTokenInterceptor.AUTH, "Bearer " + token);
+                }
+                super.start(responseListener, headers);
+            }
+        };
+    }
 }

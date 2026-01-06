@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,10 @@ import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
-import java.util.Iterator;
-import javax.money.MonetaryAmount;
 import org.jspecify.annotations.NonNull;
+
+import javax.money.MonetaryAmount;
+import java.util.Iterator;
 
 /**
  * swagger转换器
@@ -36,20 +37,20 @@ import org.jspecify.annotations.NonNull;
  */
 public class MonetaryAmountConverter implements ModelConverter {
 
-  @Override
-  public Schema<?> resolve(@NonNull AnnotatedType type, ModelConverterContext context,
-    Iterator<ModelConverter> chain) {
-    if (type.isSchemaProperty()) {
-      JavaType _type = Json.mapper().constructType(type.getType());
-      if (_type != null) {
-        Class<?> cls = _type.getRawClass();
-        if (MonetaryAmount.class.isAssignableFrom(cls)) {
-          return new ObjectSchema()
-            .addProperty("amount", new StringSchema())
-            .addProperty("currency", new StringSchema());
+    @Override
+    public Schema<?> resolve(@NonNull AnnotatedType type, ModelConverterContext context,
+                             Iterator<ModelConverter> chain) {
+        if (type.isSchemaProperty()) {
+            JavaType _type = Json.mapper().constructType(type.getType());
+            if (_type != null) {
+                Class<?> cls = _type.getRawClass();
+                if (MonetaryAmount.class.isAssignableFrom(cls)) {
+                    return new ObjectSchema()
+                        .addProperty("amount", new StringSchema())
+                        .addProperty("currency", new StringSchema());
+                }
+            }
         }
-      }
+        return (chain.hasNext()) ? chain.next().resolve(type, context, chain) : null;
     }
-    return (chain.hasNext()) ? chain.next().resolve(type, context, chain) : null;
-  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.client.cmds;
 
 import baby.mumu.extension.annotations.NotBlankOrNull;
 import jakarta.validation.constraints.Size;
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 更新角色指令
@@ -30,16 +31,16 @@ import lombok.Data;
 @Data
 public class RoleUpdateCmd {
 
-  private Long id;
+    private Long id;
 
-  @NotBlankOrNull
-  private String name;
+    @NotBlankOrNull
+    private String name;
 
-  @NotBlankOrNull
-  private String code;
+    @NotBlankOrNull
+    private String code;
 
-  @Size(max = 500)
-  private String description;
+    @Size(max = 500)
+    private String description;
 
-  private List<Long> permissionIds;
+    private List<Long> permissionIds;
 }

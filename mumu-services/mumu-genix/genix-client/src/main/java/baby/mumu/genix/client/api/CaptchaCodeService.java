@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,27 +28,27 @@ import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
  */
 public interface CaptchaCodeService {
 
-  /**
-   * 验证码生成
-   *
-   * @param captchaCodeGeneratedCmd 验证码生成指令
-   * @return 验证码
-   */
-  CaptchaCodeGeneratedDTO generate(
-    CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd);
+    /**
+     * 验证码生成
+     *
+     * @param captchaCodeGeneratedCmd 验证码生成指令
+     * @return 验证码
+     */
+    CaptchaCodeGeneratedDTO generate(
+        CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd);
 
-  /**
-   * 验证码校验
-   *
-   * @param captchaCodeVerifyCmd 验证码校验指令
-   * @return 校验结果
-   */
-  boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd);
+    /**
+     * 验证码校验
+     *
+     * @param captchaCodeVerifyCmd 验证码校验指令
+     * @return 校验结果
+     */
+    boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd);
 
-  /**
-   * 根据ID删除验证码
-   *
-   * @param captchaCodeId 验证码ID
-   */
-  void delete(Long captchaCodeId);
+    /**
+     * 根据ID删除验证码
+     *
+     * @param captchaCodeId 验证码ID
+     */
+    void delete(Long captchaCodeId);
 }

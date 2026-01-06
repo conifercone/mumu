@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package baby.mumu.extension.ocr;
 import baby.mumu.extension.fd.FaceDetection;
 import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.fd.FaceDetectionProcessor;
-import java.io.File;
-import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,9 @@ import org.springframework.boot.autoconfigure.context.MessageSourceAutoConfigura
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * opencv单元测试
@@ -37,35 +38,35 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  */
 @SpringJUnitConfig({FaceDetectionConfiguration.class, MessageSourceAutoConfiguration.class})
 @TestPropertySource(properties = {
-  "mumu.extension.fd.opencv.enabled=true"
+    "mumu.extension.fd.opencv.enabled=true"
 })
 public class OpencvTest {
 
-  private final FaceDetectionProcessor faceDetectionProcessor;
-  private final ResourceLoader resourceLoader;
+    private final FaceDetectionProcessor faceDetectionProcessor;
+    private final ResourceLoader resourceLoader;
 
-  @Autowired
-  public OpencvTest(FaceDetectionProcessor faceDetectionProcessor, ResourceLoader resourceLoader) {
-    this.faceDetectionProcessor = faceDetectionProcessor;
-    this.resourceLoader = resourceLoader;
-  }
+    @Autowired
+    public OpencvTest(FaceDetectionProcessor faceDetectionProcessor, ResourceLoader resourceLoader) {
+        this.faceDetectionProcessor = faceDetectionProcessor;
+        this.resourceLoader = resourceLoader;
+    }
 
-  @Test
-  void numberOfFaces() throws IOException {
-    FaceDetection faceDetection = new FaceDetection();
-    faceDetection.setImageAbsolutePath(
-      resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
-    Long l = faceDetectionProcessor.numberOfFaces(faceDetection);
-    Assertions.assertEquals(4, l);
-  }
+    @Test
+    void numberOfFaces() throws IOException {
+        FaceDetection faceDetection = new FaceDetection();
+        faceDetection.setImageAbsolutePath(
+            resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
+        Long l = faceDetectionProcessor.numberOfFaces(faceDetection);
+        Assertions.assertEquals(4, l);
+    }
 
-  @Test
-  void drawBorder() throws IOException {
-    FaceDetection faceDetection = new FaceDetection();
-    faceDetection.setImageAbsolutePath(
-      resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
-    File faces = File.createTempFile("faces", ".jpg");
-    faceDetection.setImageOutputAbsolutePath(faces.getAbsolutePath());
-    faceDetectionProcessor.drawBorder(faceDetection);
-  }
+    @Test
+    void drawBorder() throws IOException {
+        FaceDetection faceDetection = new FaceDetection();
+        faceDetection.setImageAbsolutePath(
+            resourceLoader.getResource("classpath:faces.jpg").getFile().getAbsolutePath());
+        File faces = File.createTempFile("faces", ".jpg");
+        faceDetection.setImageOutputAbsolutePath(faces.getAbsolutePath());
+        faceDetectionProcessor.drawBorder(faceDetection);
+    }
 }

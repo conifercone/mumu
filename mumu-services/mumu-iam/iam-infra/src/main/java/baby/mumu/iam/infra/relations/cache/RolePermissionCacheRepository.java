@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.redis.om.spring.repository.RedisDocumentRepository;
  * @since 2.2.0
  */
 public interface RolePermissionCacheRepository extends
-  RedisDocumentRepository<RolePermissionCacheablePO, Long> {
+    RedisDocumentRepository<RolePermissionCacheablePO, Long> {
 
-  void deleteByPermissionIdsContaining(Long permissionId);
+    void deleteByPermissionIdsContaining(Long permissionId);
 }

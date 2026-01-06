@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package baby.mumu.iam.application.role.executor;
 
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 角色删除指令执行器
@@ -32,14 +33,14 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleDeleteByCodeCmdExe")
 public class RoleDeleteByCodeCmdExe {
 
-  private final RoleGateway roleGateway;
+    private final RoleGateway roleGateway;
 
-  @Autowired
-  public RoleDeleteByCodeCmdExe(RoleGateway roleGateway) {
-    this.roleGateway = roleGateway;
-  }
+    @Autowired
+    public RoleDeleteByCodeCmdExe(RoleGateway roleGateway) {
+        this.roleGateway = roleGateway;
+    }
 
-  public void execute(String code) {
-    Optional.ofNullable(code).ifPresent(roleGateway::deleteByCode);
-  }
+    public void execute(String code) {
+        Optional.ofNullable(code).ifPresent(roleGateway::deleteByCode);
+    }
 }

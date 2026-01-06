@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,63 +51,63 @@ import org.springframework.stereotype.Service;
 @GrpcService
 @Observed(name = "OperationLogServiceImpl")
 public class OperationLogServiceImpl extends OperationLogServiceImplBase implements
-  OperationLogService {
+    OperationLogService {
 
-  private final OperationLogSubmitCmdExe operationLogSubmitCmdExe;
+    private final OperationLogSubmitCmdExe operationLogSubmitCmdExe;
 
-  private final OperationLogSaveCmdExe operationLogSaveCmdExe;
+    private final OperationLogSaveCmdExe operationLogSaveCmdExe;
 
-  private final OperationLogQryCmdExe operationLogQryCmdExe;
+    private final OperationLogQryCmdExe operationLogQryCmdExe;
 
-  private final OperationLogFindAllCmdExe operationLogFindAllCmdExe;
-  private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogFindAllCmdExe operationLogFindAllCmdExe;
+    private final OperationLogConvertor operationLogConvertor;
 
-  @Autowired
-  public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
-    OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
-    OperationLogFindAllCmdExe operationLogFindAllCmdExe,
-    OperationLogConvertor operationLogConvertor) {
-    this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
-    this.operationLogSaveCmdExe = operationLogSaveCmdExe;
-    this.operationLogQryCmdExe = operationLogQryCmdExe;
-    this.operationLogFindAllCmdExe = operationLogFindAllCmdExe;
-    this.operationLogConvertor = operationLogConvertor;
-  }
+    @Autowired
+    public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
+                                   OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
+                                   OperationLogFindAllCmdExe operationLogFindAllCmdExe,
+                                   OperationLogConvertor operationLogConvertor) {
+        this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
+        this.operationLogSaveCmdExe = operationLogSaveCmdExe;
+        this.operationLogQryCmdExe = operationLogQryCmdExe;
+        this.operationLogFindAllCmdExe = operationLogFindAllCmdExe;
+        this.operationLogConvertor = operationLogConvertor;
+    }
 
-  @Override
-  public void submit(OperationLogSubmitCmd operationLogSubmitCmd) {
-    operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-  }
-
-  @Override
-  public void save(OperationLogSaveCmd operationLogSaveCmd) {
-    operationLogSaveCmdExe.execute(operationLogSaveCmd);
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void submit(@NonNull OperationLogSubmitGrpcCmd request,
-    @NonNull StreamObserver<Empty> responseObserver) {
-    operationLogConvertor.toOperationLogSubmitCmd(request)
-      .ifPresentOrElse((operationLogSubmitCmd) -> {
+    @Override
+    public void submit(OperationLogSubmitCmd operationLogSubmitCmd) {
         operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
-      }, () -> {
-        responseObserver.onNext(Empty.getDefaultInstance());
-        responseObserver.onCompleted();
-      });
-  }
+    }
 
-  @Override
-  public OperationLogQryDTO findOperationLogById(String id) {
-    OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
-    operationLogQryCmd.setId(id);
-    return operationLogQryCmdExe.execute(operationLogQryCmd);
-  }
+    @Override
+    public void save(OperationLogSaveCmd operationLogSaveCmd) {
+        operationLogSaveCmdExe.execute(operationLogSaveCmd);
+    }
 
-  @Override
-  public Page<OperationLogFindAllDTO> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
-    return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
-  }
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void submit(@NonNull OperationLogSubmitGrpcCmd request,
+                       @NonNull StreamObserver<Empty> responseObserver) {
+        operationLogConvertor.toOperationLogSubmitCmd(request)
+            .ifPresentOrElse((operationLogSubmitCmd) -> {
+                operationLogSubmitCmdExe.execute(operationLogSubmitCmd);
+                responseObserver.onNext(Empty.getDefaultInstance());
+                responseObserver.onCompleted();
+            }, () -> {
+                responseObserver.onNext(Empty.getDefaultInstance());
+                responseObserver.onCompleted();
+            });
+    }
+
+    @Override
+    public OperationLogQryDTO findOperationLogById(String id) {
+        OperationLogQryCmd operationLogQryCmd = new OperationLogQryCmd();
+        operationLogQryCmd.setId(id);
+        return operationLogQryCmdExe.execute(operationLogQryCmd);
+    }
+
+    @Override
+    public Page<OperationLogFindAllDTO> findAll(OperationLogFindAllCmd operationLogFindAllCmd) {
+        return operationLogFindAllCmdExe.execute(operationLogFindAllCmd);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.basis.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serial;
 import java.time.OffsetDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Base Data Transfer Object
@@ -29,75 +30,75 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public abstract class BaseDataTransferObject implements DataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = 4685385454388931324L;
+    @Serial
+    private static final long serialVersionUID = 4685385454388931324L;
 
-  /**
-   * 创建时间
-   */
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-  private OffsetDateTime creationTime;
+    /**
+     * 创建时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime creationTime;
 
-  /**
-   * 创建人
-   */
-  private Long founder;
+    /**
+     * 创建人
+     */
+    private Long founder;
 
-  /**
-   * 修改人
-   */
-  private Long modifier;
+    /**
+     * 修改人
+     */
+    private Long modifier;
 
-  /**
-   * 修改时间
-   */
-  @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-  private OffsetDateTime modificationTime;
+    /**
+     * 修改时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    private OffsetDateTime modificationTime;
 
-  /**
-   * 已归档
-   */
-  private boolean archived;
+    /**
+     * 已归档
+     */
+    private boolean archived;
 
-  public OffsetDateTime getCreationTime() {
-    return creationTime;
-  }
+    public OffsetDateTime getCreationTime() {
+        return creationTime;
+    }
 
-  public void setCreationTime(OffsetDateTime creationTime) {
-    this.creationTime = creationTime;
-  }
+    public void setCreationTime(OffsetDateTime creationTime) {
+        this.creationTime = creationTime;
+    }
 
-  public Long getFounder() {
-    return founder;
-  }
+    public Long getFounder() {
+        return founder;
+    }
 
-  public void setFounder(Long founder) {
-    this.founder = founder;
-  }
+    public void setFounder(Long founder) {
+        this.founder = founder;
+    }
 
-  public Long getModifier() {
-    return modifier;
-  }
+    public Long getModifier() {
+        return modifier;
+    }
 
-  public void setModifier(Long modifier) {
-    this.modifier = modifier;
-  }
+    public void setModifier(Long modifier) {
+        this.modifier = modifier;
+    }
 
-  public OffsetDateTime getModificationTime() {
-    return modificationTime;
-  }
+    public OffsetDateTime getModificationTime() {
+        return modificationTime;
+    }
 
-  public void setModificationTime(OffsetDateTime modificationTime) {
-    this.modificationTime = modificationTime;
-  }
+    public void setModificationTime(OffsetDateTime modificationTime) {
+        this.modificationTime = modificationTime;
+    }
 
-  public boolean isArchived() {
-    return archived;
-  }
+    public boolean isArchived() {
+        return archived;
+    }
 
-  public void setArchived(boolean archived) {
-    this.archived = archived;
-  }
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
 }

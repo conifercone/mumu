@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,13 @@ import baby.mumu.genix.client.api.BarCodeService;
 import baby.mumu.genix.client.cmds.BarCodeGenerateCmd;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Base64;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Base64;
 
 /**
  * 条形码相关接口
@@ -46,22 +43,22 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "条形码管理")
 public class BarCodeController {
 
-  private final BarCodeService barCodeService;
+    private final BarCodeService barCodeService;
 
-  @Autowired
-  public BarCodeController(BarCodeService barCodeService) {
-    this.barCodeService = barCodeService;
-  }
+    @Autowired
+    public BarCodeController(BarCodeService barCodeService) {
+        this.barCodeService = barCodeService;
+    }
 
-  @Operation(summary = "生成条形码（返回Base64格式的图片数据链接）")
-  @GetMapping("/dataUrl")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.4")
-  public ResponseWrapper<String> dataUrlGenerate(
-    @ModelAttribute @Validated BarCodeGenerateCmd barCodeGenerateCmd) {
-    return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
-      barCodeGenerateCmd.getImageFormat().getMimeType(),
-      Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
-  }
+    @Operation(summary = "生成条形码（返回Base64格式的图片数据链接）")
+    @GetMapping("/dataUrl")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.4")
+    public ResponseWrapper<String> dataUrlGenerate(
+        @ModelAttribute @Validated BarCodeGenerateCmd barCodeGenerateCmd) {
+        return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
+            barCodeGenerateCmd.getImageFormat().getMimeType(),
+            Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));
+    }
 }

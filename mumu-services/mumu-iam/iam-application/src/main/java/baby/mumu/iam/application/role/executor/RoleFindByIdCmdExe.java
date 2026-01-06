@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
 import baby.mumu.iam.infra.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 根据ID查询角色指令执行器
@@ -36,18 +37,18 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleFindByIdCmdExe")
 public class RoleFindByIdCmdExe {
 
-  private final RoleGateway roleGateway;
-  private final RoleConvertor roleConvertor;
+    private final RoleGateway roleGateway;
+    private final RoleConvertor roleConvertor;
 
-  @Autowired
-  public RoleFindByIdCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
-    this.roleGateway = roleGateway;
-    this.roleConvertor = roleConvertor;
-  }
+    @Autowired
+    public RoleFindByIdCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+        this.roleGateway = roleGateway;
+        this.roleConvertor = roleConvertor;
+    }
 
-  public RoleFindByIdDTO execute(Long roleId) {
-    return Optional.ofNullable(roleId).flatMap(roleGateway::findById)
-      .flatMap(roleConvertor::toRoleFindByIdDTO).orElseThrow(() -> new ApplicationException(
-        ResponseCode.ROLE_DOES_NOT_EXIST));
-  }
+    public RoleFindByIdDTO execute(Long roleId) {
+        return Optional.ofNullable(roleId).flatMap(roleGateway::findById)
+            .flatMap(roleConvertor::toRoleFindByIdDTO).orElseThrow(() -> new ApplicationException(
+                ResponseCode.ROLE_DOES_NOT_EXIST));
+    }
 }

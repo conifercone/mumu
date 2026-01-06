@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,7 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -51,52 +44,52 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "文件管理")
 public class FileController {
 
-  private final FileService fileService;
+    private final FileService fileService;
 
-  @Autowired
-  public FileController(FileService fileService) {
-    this.fileService = fileService;
-  }
+    @Autowired
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
 
-  @Operation(summary = "上传文件")
-  @PostMapping("/upload/{storageZoneId}")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.12.0")
-  public ResponseWrapper<Long> upload(
-    @PathVariable @Parameter(description = "存储区域ID", required = true) @NotNull Long storageZoneId,
-    @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
-    return ResponseWrapper.success(fileService.upload(storageZoneId, file));
-  }
+    @Operation(summary = "上传文件")
+    @PostMapping("/upload/{storageZoneId}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.12.0")
+    public ResponseWrapper<Long> upload(
+        @PathVariable @Parameter(description = "存储区域ID", required = true) @NotNull Long storageZoneId,
+        @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
+        return ResponseWrapper.success(fileService.upload(storageZoneId, file));
+    }
 
-  @Operation(summary = "根据元数据ID删除文件")
-  @DeleteMapping("/deleteByMetadataId/{metadataId}")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.12.0")
-  public void deleteByMetadataId(
-    @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
-    fileService.deleteByMetadataId(metadataId);
-  }
+    @Operation(summary = "根据元数据ID删除文件")
+    @DeleteMapping("/deleteByMetadataId/{metadataId}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.12.0")
+    public void deleteByMetadataId(
+        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
+        fileService.deleteByMetadataId(metadataId);
+    }
 
-  @Operation(summary = "根据元数据ID下载文件")
-  @GetMapping("/downloadByMetadataId/{metadataId}")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.12.0")
-  public void downloadByMetadataId(
-    @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId,
-    HttpServletResponse httpServletResponse) {
-    fileService.downloadByMetadataId(metadataId, httpServletResponse);
-  }
+    @Operation(summary = "根据元数据ID下载文件")
+    @GetMapping("/downloadByMetadataId/{metadataId}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.12.0")
+    public void downloadByMetadataId(
+        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId,
+        HttpServletResponse httpServletResponse) {
+        fileService.downloadByMetadataId(metadataId, httpServletResponse);
+    }
 
-  @Operation(summary = "根据元数据ID获取文件元数据信息")
-  @GetMapping("/findMetaByMetaId/{metadataId}")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.13.0")
-  public FileFindMetaByMetaIdDTO findMetaByMetaId(
-    @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
-    return fileService.findMetaByMetaId(metadataId);
-  }
+    @Operation(summary = "根据元数据ID获取文件元数据信息")
+    @GetMapping("/findMetaByMetaId/{metadataId}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.13.0")
+    public FileFindMetaByMetaIdDTO findMetaByMetaId(
+        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
+        return fileService.findMetaByMetaId(metadataId);
+    }
 }

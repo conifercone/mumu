@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,49 +46,49 @@ import org.springframework.stereotype.Service;
 @GrpcService
 public class SystemLogServiceImpl extends SystemLogServiceImplBase implements SystemLogService {
 
-  private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
+    private final SystemLogSubmitCmdExe systemLogSubmitCmdExe;
 
-  private final SystemLogSaveCmdExe systemLogSaveCmdExe;
-  private final SystemLogFindAllCmdExe systemLogFindAllCmdExe;
-  private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogSaveCmdExe systemLogSaveCmdExe;
+    private final SystemLogFindAllCmdExe systemLogFindAllCmdExe;
+    private final SystemLogConvertor systemLogConvertor;
 
-  @Autowired
-  public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
-    SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe,
-    SystemLogConvertor systemLogConvertor) {
-    this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
-    this.systemLogSaveCmdExe = systemLogSaveCmdExe;
-    this.systemLogFindAllCmdExe = systemLogFindAllCmdExe;
-    this.systemLogConvertor = systemLogConvertor;
-  }
+    @Autowired
+    public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
+                                SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe,
+                                SystemLogConvertor systemLogConvertor) {
+        this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
+        this.systemLogSaveCmdExe = systemLogSaveCmdExe;
+        this.systemLogFindAllCmdExe = systemLogFindAllCmdExe;
+        this.systemLogConvertor = systemLogConvertor;
+    }
 
-  @Override
-  public void submit(SystemLogSubmitCmd systemLogSubmitCmd) {
-    systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-  }
+    @Override
+    public void submit(SystemLogSubmitCmd systemLogSubmitCmd) {
+        systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
+    }
 
-  @Override
-  public void save(SystemLogSaveCmd systemLogSaveCmd) {
-    systemLogSaveCmdExe.execute(systemLogSaveCmd);
-  }
+    @Override
+    public void save(SystemLogSaveCmd systemLogSaveCmd) {
+        systemLogSaveCmdExe.execute(systemLogSaveCmd);
+    }
 
-  @Override
-  public Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
-    return systemLogFindAllCmdExe.execute(systemLogFindAllCmd);
-  }
+    @Override
+    public Page<SystemLogFindAllDTO> findAll(SystemLogFindAllCmd systemLogFindAllCmd) {
+        return systemLogFindAllCmdExe.execute(systemLogFindAllCmd);
+    }
 
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void submit(SystemLogSubmitGrpcCmd request,
-    StreamObserver<Empty> responseObserver) {
-    systemLogConvertor.toSystemLogSubmitCmd(request).ifPresentOrElse((systemLogSubmitCmd) -> {
-      systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
-      responseObserver.onNext(Empty.getDefaultInstance());
-      responseObserver.onCompleted();
-    }, () -> {
-      responseObserver.onNext(Empty.getDefaultInstance());
-      responseObserver.onCompleted();
-    });
-  }
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void submit(SystemLogSubmitGrpcCmd request,
+                       StreamObserver<Empty> responseObserver) {
+        systemLogConvertor.toSystemLogSubmitCmd(request).ifPresentOrElse((systemLogSubmitCmd) -> {
+            systemLogSubmitCmdExe.execute(systemLogSubmitCmd);
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        }, () -> {
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+        });
+    }
 
 }

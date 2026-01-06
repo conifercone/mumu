@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,12 @@ package baby.mumu.iam.infra.relations.database;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.Hibernate;
 
 /**
  * 角色权限关系数据对象联合主键
@@ -45,32 +41,32 @@ import org.hibernate.Hibernate;
 @ToString
 public class RolePermissionPOId implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -5205915827488500348L;
-  @NotNull
-  @Column(name = "role_id", nullable = false)
-  private Long roleId;
+    @Serial
+    private static final long serialVersionUID = -5205915827488500348L;
+    @NotNull
+    @Column(name = "role_id", nullable = false)
+    private Long roleId;
 
-  @NotNull
-  @Column(name = "permission_id", nullable = false)
-  private Long permissionId;
+    @NotNull
+    @Column(name = "permission_id", nullable = false)
+    private Long permissionId;
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
+            return false;
+        }
+        RolePermissionPOId entity = (RolePermissionPOId) o;
+        return Objects.equals(this.permissionId, entity.permissionId) &&
+            Objects.equals(this.roleId, entity.roleId);
     }
-    if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) {
-      return false;
-    }
-    RolePermissionPOId entity = (RolePermissionPOId) o;
-    return Objects.equals(this.permissionId, entity.permissionId) &&
-      Objects.equals(this.roleId, entity.roleId);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(permissionId, roleId);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(permissionId, roleId);
+    }
 
 }

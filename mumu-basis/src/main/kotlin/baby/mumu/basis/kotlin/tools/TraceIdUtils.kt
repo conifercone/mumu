@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,24 +29,24 @@ import org.springframework.beans.factory.getBeanProvider
  */
 object TraceIdUtils {
 
-  @JvmStatic
-  fun getTraceId(): String {
-    // 先取 MDC
-    val mdcId = MDC.get(MDCConstants.TRACE_ID)
-    if (!mdcId.isNullOrEmpty()) {
-      return mdcId
-    }
+    @JvmStatic
+    fun getTraceId(): String {
+        // 先取 MDC
+        val mdcId = MDC.get(MDCConstants.TRACE_ID)
+        if (!mdcId.isNullOrEmpty()) {
+            return mdcId
+        }
 
-    // 再尝试取 Tracer
-    return try {
-      val tracer = SpringContextUtils.getApplicationContext()
-        ?.getBeanProvider<Tracer>()
-        ?.getIfAvailable()
+        // 再尝试取 Tracer
+        return try {
+            val tracer = SpringContextUtils.getApplicationContext()
+                ?.getBeanProvider<Tracer>()
+                ?.getIfAvailable()
 
-      val span = tracer?.currentSpan()
-      span?.context()?.traceId() ?: ""
-    } catch (_: Exception) {
-      ""
+            val span = tracer?.currentSpan()
+            span?.context()?.traceId() ?: ""
+        } catch (_: Exception) {
+            ""
+        }
     }
-  }
 }

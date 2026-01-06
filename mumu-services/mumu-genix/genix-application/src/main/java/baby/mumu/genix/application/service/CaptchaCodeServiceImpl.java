@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,12 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * 验证码service实现类
@@ -51,84 +52,84 @@ import org.springframework.stereotype.Service;
 @GrpcService
 @Observed(name = "CaptchaCodeServiceImpl")
 public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implements
-  CaptchaCodeService {
+    CaptchaCodeService {
 
-  private final CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe;
-  private final CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe;
-  private final CaptchaCodeConvertor captchaCodeConvertor;
-  private final CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe;
+    private final CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe;
+    private final CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe;
+    private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe;
 
-  @Autowired
-  public CaptchaCodeServiceImpl(CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe,
-    CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeConvertor captchaCodeConvertor,
-    CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe) {
-    this.captchaCodeGeneratedCmdExe = captchaCodeGeneratedCmdExe;
-    this.captchaCodeVerifyCmdExe = captchaCodeVerifyCmdExe;
-    this.captchaCodeConvertor = captchaCodeConvertor;
-    this.captchaCodeDeleteCmdExe = captchaCodeDeleteCmdExe;
-  }
+    @Autowired
+    public CaptchaCodeServiceImpl(CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe,
+                                  CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeConvertor captchaCodeConvertor,
+                                  CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe) {
+        this.captchaCodeGeneratedCmdExe = captchaCodeGeneratedCmdExe;
+        this.captchaCodeVerifyCmdExe = captchaCodeVerifyCmdExe;
+        this.captchaCodeConvertor = captchaCodeConvertor;
+        this.captchaCodeDeleteCmdExe = captchaCodeDeleteCmdExe;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public CaptchaCodeGeneratedDTO generate(
-    CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
-    return captchaCodeGeneratedCmdExe.execute(captchaCodeGeneratedCmd);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CaptchaCodeGeneratedDTO generate(
+        CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
+        return captchaCodeGeneratedCmdExe.execute(captchaCodeGeneratedCmd);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
-    return captchaCodeVerifyCmdExe.execute(captchaCodeVerifyCmd);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean verify(CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
+        return captchaCodeVerifyCmdExe.execute(captchaCodeVerifyCmd);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void delete(Long captchaCodeId) {
-    Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeDeleteCmdExe::execute);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete(Long captchaCodeId) {
+        Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeDeleteCmdExe::execute);
+    }
 
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void generate(@NonNull CaptchaCodeGeneratedGrpcCmd request,
-    @NonNull StreamObserver<CaptchaCodeGeneratedGrpcDTO> responseObserver) {
-    CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd = new CaptchaCodeGeneratedCmd();
-    captchaCodeGeneratedCmd.setTtl(request.getTtl());
-    captchaCodeGeneratedCmd.setLength(request.getLength());
-    CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO = captchaCodeGeneratedCmdExe.execute(
-      captchaCodeGeneratedCmd);
-    responseObserver.onNext(
-      captchaCodeConvertor.toCaptchaCodeGeneratedGrpcDTO(captchaCodeGeneratedDTO)
-        .orElse(CaptchaCodeGeneratedGrpcDTO.getDefaultInstance()));
-    responseObserver.onCompleted();
-  }
-
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void verify(CaptchaCodeVerifyGrpcCmd request,
-    StreamObserver<BoolValue> responseObserver) {
-    captchaCodeConvertor.toCaptchaCodeVerifyCmd(request)
-      .ifPresentOrElse((captchaCodeVerifyCmd) -> {
-        responseObserver.onNext(BoolValue.of(captchaCodeVerifyCmdExe.execute(
-          captchaCodeVerifyCmd)));
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void generate(@NonNull CaptchaCodeGeneratedGrpcCmd request,
+                         @NonNull StreamObserver<CaptchaCodeGeneratedGrpcDTO> responseObserver) {
+        CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd = new CaptchaCodeGeneratedCmd();
+        captchaCodeGeneratedCmd.setTtl(request.getTtl());
+        captchaCodeGeneratedCmd.setLength(request.getLength());
+        CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO = captchaCodeGeneratedCmdExe.execute(
+            captchaCodeGeneratedCmd);
+        responseObserver.onNext(
+            captchaCodeConvertor.toCaptchaCodeGeneratedGrpcDTO(captchaCodeGeneratedDTO)
+                .orElse(CaptchaCodeGeneratedGrpcDTO.getDefaultInstance()));
         responseObserver.onCompleted();
-      }, () -> {
-        responseObserver.onNext(BoolValue.getDefaultInstance());
-        responseObserver.onCompleted();
-      });
-  }
+    }
 
-  @Override
-  @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-  public void delete(Int64Value request, StreamObserver<Empty> responseObserver) {
-    Optional.ofNullable(request).map(Int64Value::getValue).ifPresent(
-      captchaCodeDeleteCmdExe::execute);
-    responseObserver.onNext(Empty.getDefaultInstance());
-    responseObserver.onCompleted();
-  }
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void verify(CaptchaCodeVerifyGrpcCmd request,
+                       StreamObserver<BoolValue> responseObserver) {
+        captchaCodeConvertor.toCaptchaCodeVerifyCmd(request)
+            .ifPresentOrElse((captchaCodeVerifyCmd) -> {
+                responseObserver.onNext(BoolValue.of(captchaCodeVerifyCmdExe.execute(
+                    captchaCodeVerifyCmd)));
+                responseObserver.onCompleted();
+            }, () -> {
+                responseObserver.onNext(BoolValue.getDefaultInstance());
+                responseObserver.onCompleted();
+            });
+    }
+
+    @Override
+    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
+    public void delete(Int64Value request, StreamObserver<Empty> responseObserver) {
+        Optional.ofNullable(request).map(Int64Value::getValue).ifPresent(
+            captchaCodeDeleteCmdExe::execute);
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
 }

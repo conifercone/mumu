@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 获取直系后代根权限指令执行器
@@ -40,26 +41,26 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionFindDirectCmdExe")
 public class PermissionFindDirectCmdExe {
 
-  private final PermissionGateway permissionGateway;
-  private final PermissionConvertor permissionConvertor;
+    private final PermissionGateway permissionGateway;
+    private final PermissionConvertor permissionConvertor;
 
-  @Autowired
-  public PermissionFindDirectCmdExe(PermissionGateway permissionGateway,
-    PermissionConvertor permissionConvertor) {
-    this.permissionGateway = permissionGateway;
-    this.permissionConvertor = permissionConvertor;
-  }
+    @Autowired
+    public PermissionFindDirectCmdExe(PermissionGateway permissionGateway,
+                                      PermissionConvertor permissionConvertor) {
+        this.permissionGateway = permissionGateway;
+        this.permissionConvertor = permissionConvertor;
+    }
 
-  public Page<PermissionFindDirectDTO> execute(PermissionFindDirectCmd permissionFindDirectCmd) {
-    return Optional.ofNullable(permissionFindDirectCmd).map(permissionFindDirectCmdNotNull -> {
-      Page<Permission> permissions = permissionGateway.findDirectPermissions(
-        permissionFindDirectCmd.getAncestorId(),
-        permissionFindDirectCmdNotNull.getCurrent(), permissionFindDirectCmdNotNull.getPageSize());
-      List<PermissionFindDirectDTO> permissionFindDirectDTOS = permissions.getContent().stream()
-        .map(permissionConvertor::toPermissionFindDirectDTO)
-        .filter(Optional::isPresent).map(Optional::get).toList();
-      return new PageImpl<>(permissionFindDirectDTOS, permissions.getPageable(),
-        permissions.getTotalElements());
-    }).orElse(new PageImpl<>(new ArrayList<>()));
-  }
+    public Page<PermissionFindDirectDTO> execute(PermissionFindDirectCmd permissionFindDirectCmd) {
+        return Optional.ofNullable(permissionFindDirectCmd).map(permissionFindDirectCmdNotNull -> {
+            Page<Permission> permissions = permissionGateway.findDirectPermissions(
+                permissionFindDirectCmd.getAncestorId(),
+                permissionFindDirectCmdNotNull.getCurrent(), permissionFindDirectCmdNotNull.getPageSize());
+            List<PermissionFindDirectDTO> permissionFindDirectDTOS = permissions.getContent().stream()
+                .map(permissionConvertor::toPermissionFindDirectDTO)
+                .filter(Optional::isPresent).map(Optional::get).toList();
+            return new PageImpl<>(permissionFindDirectDTOS, permissions.getPageable(),
+                permissions.getTotalElements());
+        }).orElse(new PageImpl<>(new ArrayList<>()));
+    }
 }

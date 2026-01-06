@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,33 +40,33 @@ import org.springframework.transaction.annotation.Transactional;
 @Observed(name = "StorageZoneGatewayImpl")
 public class StorageZoneGatewayImpl implements StorageZoneGateway {
 
-  private final StorageZoneConvertor storageZoneConvertor;
-  private final StorageZoneRepository storageZoneRepository;
-  private final FileStorageRepository fileStorageRepository;
+    private final StorageZoneConvertor storageZoneConvertor;
+    private final StorageZoneRepository storageZoneRepository;
+    private final FileStorageRepository fileStorageRepository;
 
-  public StorageZoneGatewayImpl(StorageZoneConvertor storageZoneConvertor,
-    StorageZoneRepository storageZoneRepository, FileStorageRepository fileStorageRepository) {
-    this.storageZoneConvertor = storageZoneConvertor;
-    this.storageZoneRepository = storageZoneRepository;
-    this.fileStorageRepository = fileStorageRepository;
-  }
-
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public Long add(StorageZone storageZone) {
-    StorageZonePO storageZonePO = storageZoneConvertor.toStorageZonePO(storageZone)
-      .orElseThrow(() -> new ApplicationException(
-        ResponseCode.STORAGE_ZONE_INVALID));
-    StorageZonePO persisted = storageZoneRepository.persist(storageZonePO);
-    try {
-      File file = new File();
-      FileMetadata fileMetadata = new FileMetadata();
-      fileMetadata.setStorageZone(storageZone);
-      file.setMetadata(fileMetadata);
-      fileStorageRepository.createStorageZone(file);
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.STORAGE_ZONE_CREATION_FAILED);
+    public StorageZoneGatewayImpl(StorageZoneConvertor storageZoneConvertor,
+                                  StorageZoneRepository storageZoneRepository, FileStorageRepository fileStorageRepository) {
+        this.storageZoneConvertor = storageZoneConvertor;
+        this.storageZoneRepository = storageZoneRepository;
+        this.fileStorageRepository = fileStorageRepository;
     }
-    return persisted.getId();
-  }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long add(StorageZone storageZone) {
+        StorageZonePO storageZonePO = storageZoneConvertor.toStorageZonePO(storageZone)
+            .orElseThrow(() -> new ApplicationException(
+                ResponseCode.STORAGE_ZONE_INVALID));
+        StorageZonePO persisted = storageZoneRepository.persist(storageZonePO);
+        try {
+            File file = new File();
+            FileMetadata fileMetadata = new FileMetadata();
+            fileMetadata.setStorageZone(storageZone);
+            file.setMetadata(fileMetadata);
+            fileStorageRepository.createStorageZone(file);
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.STORAGE_ZONE_CREATION_FAILED);
+        }
+        return persisted.getId();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,25 +26,25 @@ import jakarta.annotation.Nullable;
  */
 public interface BaseResponse {
 
-  /**
-   * 响应码
-   *
-   * @return 响应码
-   */
-  String getCode();
+    /**
+     * 响应码
+     *
+     * @return 响应码
+     */
+    String getCode();
 
-  /**
-   * 错误描述
-   *
-   * @return 错误描述
-   */
-  String getMessage();
+    /**
+     * 错误描述
+     *
+     * @return 错误描述
+     */
+    String getMessage();
 
-  /**
-   * 错误描述
-   *
-   * @param args 参数
-   * @return 错误描述
-   */
-  String getMessage(@Nullable Object[] args);
+    /**
+     * 错误描述
+     *
+     * @param args 参数
+     * @return 错误描述
+     */
+    String getMessage(@Nullable Object[] args);
 }

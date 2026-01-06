@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package baby.mumu.log.application.operation.executor;
 import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 操作日志提交指令执行器
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogSubmitCmdExe {
 
-  private final OperationLogGateway operationLogGateway;
-  private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogGateway operationLogGateway;
+    private final OperationLogConvertor operationLogConvertor;
 
-  @Autowired
-  public OperationLogSubmitCmdExe(OperationLogGateway operationLogGateway,
-    OperationLogConvertor operationLogConvertor) {
-    this.operationLogGateway = operationLogGateway;
-    this.operationLogConvertor = operationLogConvertor;
-  }
+    @Autowired
+    public OperationLogSubmitCmdExe(OperationLogGateway operationLogGateway,
+                                    OperationLogConvertor operationLogConvertor) {
+        this.operationLogGateway = operationLogGateway;
+        this.operationLogConvertor = operationLogConvertor;
+    }
 
-  public void execute(OperationLogSubmitCmd operationLogSubmitCmd) {
-    Optional.ofNullable(operationLogSubmitCmd).flatMap(operationLogConvertor::toEntity)
-      .ifPresent(operationLogGateway::submit);
-  }
+    public void execute(OperationLogSubmitCmd operationLogSubmitCmd) {
+        Optional.ofNullable(operationLogSubmitCmd).flatMap(operationLogConvertor::toEntity)
+            .ifPresent(operationLogGateway::submit);
+    }
 }

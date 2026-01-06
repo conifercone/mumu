@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.client.cmds;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 查询角色指令
@@ -30,20 +31,20 @@ import lombok.Data;
 @Data
 public class RoleFindAllCmd {
 
-  private Long id;
+    private Long id;
 
-  private String name;
+    private String name;
 
-  private String code;
+    private String code;
 
-  @Size(max = 500)
-  private String description;
+    @Size(max = 500)
+    private String description;
 
-  private List<Long> permissionIds;
+    private List<Long> permissionIds;
 
-  @Min(value = 1, message = "{current.validation.min.size}")
-  private Integer current = 1;
+    @Min(value = 1, message = "{current.validation.min.size}")
+    private Integer current = 1;
 
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private Integer pageSize = 10;
+    @Min(value = 1, message = "{page.size.validation.min.size}")
+    private Integer pageSize = 10;
 }

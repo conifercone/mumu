@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,20 +37,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountUpdateByIdCmdExe")
 public class AccountUpdateByIdCmdExe {
 
-  private final AccountGateway accountGateway;
-  private final AccountConvertor accountConvertor;
+    private final AccountGateway accountGateway;
+    private final AccountConvertor accountConvertor;
 
-  @Autowired
-  public AccountUpdateByIdCmdExe(AccountGateway accountGateway, AccountConvertor accountConvertor) {
-    this.accountGateway = accountGateway;
-    this.accountConvertor = accountConvertor;
-  }
+    @Autowired
+    public AccountUpdateByIdCmdExe(AccountGateway accountGateway, AccountConvertor accountConvertor) {
+        this.accountGateway = accountGateway;
+        this.accountConvertor = accountConvertor;
+    }
 
-  public AccountUpdatedDataDTO execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
-    Account account = accountConvertor.toEntity(accountUpdateByIdCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-    return accountGateway.updateById(account)
-      .flatMap(accountConvertor::toAccountUpdatedDataDTO)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
-  }
+    public AccountUpdatedDataDTO execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
+        Account account = accountConvertor.toEntity(accountUpdateByIdCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+        return accountGateway.updateById(account)
+            .flatMap(accountConvertor::toAccountUpdatedDataDTO)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
+    }
 }

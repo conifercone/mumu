@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,11 @@ package baby.mumu.iam.domain.permission;
 import baby.mumu.basis.domain.BasisDomainModel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.Size;
-import java.io.Serial;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
+
+import java.io.Serial;
 
 /**
  * 权限领域模型
@@ -45,39 +41,39 @@ import org.springframework.security.core.GrantedAuthority;
 @SuperBuilder(toBuilder = true)
 public class Permission extends BasisDomainModel implements GrantedAuthority {
 
-  @Serial
-  private static final long serialVersionUID = -5474154746791467326L;
+    @Serial
+    private static final long serialVersionUID = -5474154746791467326L;
 
-  /**
-   * 权限 ID
-   */
-  private Long id;
+    /**
+     * 权限 ID
+     */
+    private Long id;
 
-  /**
-   * 权限编码
-   */
-  @Size(max = 50, message = "{permission.code.validation.size}")
-  private String code;
+    /**
+     * 权限编码
+     */
+    @Size(max = 50, message = "{permission.code.validation.size}")
+    private String code;
 
-  /**
-   * 权限名称
-   */
-  @Size(max = 200, message = "{permission.name.validation.size}")
-  private String name;
+    /**
+     * 权限名称
+     */
+    @Size(max = 200, message = "{permission.name.validation.size}")
+    private String name;
 
-  /**
-   * 描述
-   */
-  @Size(max = 500)
-  private String description;
+    /**
+     * 描述
+     */
+    @Size(max = 500)
+    private String description;
 
-  /**
-   * 有后代权限
-   */
-  private boolean hasDescendant;
+    /**
+     * 有后代权限
+     */
+    private boolean hasDescendant;
 
-  @Override
-  public String getAuthority() {
-    return code;
-  }
+    @Override
+    public String getAuthority() {
+        return code;
+    }
 }

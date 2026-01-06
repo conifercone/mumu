@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package baby.mumu.log.client.cmds;
 
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 系统日志保存指令
@@ -28,33 +29,33 @@ import lombok.Data;
 @Data
 public class SystemLogSaveCmd {
 
-  /**
-   * 唯一标识
-   */
-  private String id;
+    /**
+     * 唯一标识
+     */
+    private String id;
 
-  /**
-   * 日志内容
-   */
-  private String content;
+    /**
+     * 日志内容
+     */
+    private String content;
 
-  /**
-   * 系统日志的种类
-   */
-  private String category;
+    /**
+     * 系统日志的种类
+     */
+    private String category;
 
-  /**
-   * 系统日志成功的文本模板
-   */
-  private String success;
+    /**
+     * 系统日志成功的文本模板
+     */
+    private String success;
 
-  /**
-   * 系统日志失败的文本模板
-   */
-  private String fail;
+    /**
+     * 系统日志失败的文本模板
+     */
+    private String fail;
 
-  /**
-   * 系统日志的记录时间
-   */
-  private LocalDateTime recordTime;
+    /**
+     * 系统日志的记录时间
+     */
+    private LocalDateTime recordTime;
 }

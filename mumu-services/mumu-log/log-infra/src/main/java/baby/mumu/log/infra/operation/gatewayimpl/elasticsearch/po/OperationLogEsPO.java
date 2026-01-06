@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,11 @@ package baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po;
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.CommonConstants;
 import baby.mumu.log.infra.config.LogProperties;
-import java.time.LocalDateTime;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.InnerField;
-import org.springframework.data.elasticsearch.annotations.MultiField;
+import org.springframework.data.elasticsearch.annotations.*;
+
+import java.time.LocalDateTime;
 
 /**
  * 操作日志es数据对象
@@ -40,87 +36,87 @@ import org.springframework.data.elasticsearch.annotations.MultiField;
 @Metamodel
 public class OperationLogEsPO {
 
-  /**
-   * 唯一标识
-   */
-  @Id
-  private String id;
+    /**
+     * 唯一标识
+     */
+    @Id
+    private String id;
 
-  /**
-   * 日志内容
-   */
-  @MultiField(
-    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-    otherFields = {
-      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-    }
-  )
-  private String content;
+    /**
+     * 日志内容
+     */
+    @MultiField(
+        mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+        otherFields = {
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+        }
+    )
+    private String content;
 
-  /**
-   * 操作日志的执行人
-   */
-  @MultiField(
-    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-    otherFields = {
-      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-    }
-  )
-  private String operator;
+    /**
+     * 操作日志的执行人
+     */
+    @MultiField(
+        mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+        otherFields = {
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+        }
+    )
+    private String operator;
 
-  /**
-   * 操作日志绑定的业务对象标识
-   */
-  @Field(type = FieldType.Keyword)
-  private String bizNo;
+    /**
+     * 操作日志绑定的业务对象标识
+     */
+    @Field(type = FieldType.Keyword)
+    private String bizNo;
 
-  /**
-   * 操作日志的种类
-   */
-  @Field(type = FieldType.Keyword)
-  private String category;
+    /**
+     * 操作日志的种类
+     */
+    @Field(type = FieldType.Keyword)
+    private String category;
 
-  /**
-   * 扩展参数，记录操作日志的修改详情
-   */
-  @MultiField(
-    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-    otherFields = {
-      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-    }
-  )
-  private String detail;
+    /**
+     * 扩展参数，记录操作日志的修改详情
+     */
+    @MultiField(
+        mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+        otherFields = {
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+        }
+    )
+    private String detail;
 
-  /**
-   * 操作日志成功的文本模板
-   */
-  @MultiField(
-    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-    otherFields = {
-      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-    }
-  )
-  private String success;
+    /**
+     * 操作日志成功的文本模板
+     */
+    @MultiField(
+        mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+        otherFields = {
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+        }
+    )
+    private String success;
 
-  /**
-   * 操作日志失败的文本模板
-   */
-  @MultiField(
-    mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
-    otherFields = {
-      @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-      @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
-    }
-  )
-  private String fail;
+    /**
+     * 操作日志失败的文本模板
+     */
+    @MultiField(
+        mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
+        otherFields = {
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+        }
+    )
+    private String fail;
 
-  /**
-   * 操作日志的操作时间
-   */
-  @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
-  private LocalDateTime operatingTime;
+    /**
+     * 操作日志的操作时间
+     */
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
+    private LocalDateTime operatingTime;
 }

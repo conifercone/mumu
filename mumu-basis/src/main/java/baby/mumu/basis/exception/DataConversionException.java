@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.basis.exception;
 
 import baby.mumu.basis.response.ResponseCode;
+
 import java.io.Serial;
 
 /**
@@ -27,10 +28,10 @@ import java.io.Serial;
  */
 public class DataConversionException extends ApplicationException {
 
-  @Serial
-  private static final long serialVersionUID = -1039551120326053286L;
+    @Serial
+    private static final long serialVersionUID = -1039551120326053286L;
 
-  public DataConversionException() {
-    super(ResponseCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
-  }
+    public DataConversionException() {
+        super(ResponseCode.OPERATION_LOG_KAFKA_MESSAGE_CONVERSION_FAILED);
+    }
 }

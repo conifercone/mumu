@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package baby.mumu.basis.domain;
 
-import java.io.Serial;
-import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.io.Serial;
+import java.time.OffsetDateTime;
 
 /**
  * 基础领域模型
@@ -37,31 +38,31 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public abstract class BasisDomainModel implements DomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 4669900889494369438L;
+    @Serial
+    private static final long serialVersionUID = 4669900889494369438L;
 
-  /**
-   * 创建时间
-   */
-  private OffsetDateTime creationTime;
+    /**
+     * 创建时间
+     */
+    private OffsetDateTime creationTime;
 
-  /**
-   * 创建人
-   */
-  private Long founder;
+    /**
+     * 创建人
+     */
+    private Long founder;
 
-  /**
-   * 修改人
-   */
-  private Long modifier;
+    /**
+     * 修改人
+     */
+    private Long modifier;
 
-  /**
-   * 修改时间
-   */
-  private OffsetDateTime modificationTime;
+    /**
+     * 修改时间
+     */
+    private OffsetDateTime modificationTime;
 
-  /**
-   * 已归档
-   */
-  private boolean archived;
+    /**
+     * 已归档
+     */
+    private boolean archived;
 }

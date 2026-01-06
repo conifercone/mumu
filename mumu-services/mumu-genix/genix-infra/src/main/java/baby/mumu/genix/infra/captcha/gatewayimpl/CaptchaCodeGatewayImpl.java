@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,11 @@ import baby.mumu.genix.domain.pk.gateway.PrimaryKeyGateway;
 import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.CaptchaCodeCacheRepository;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
-import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 验证码领域网关实现
@@ -37,60 +38,60 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CaptchaCodeGatewayImpl implements
-  CaptchaCodeGateway {
+    CaptchaCodeGateway {
 
-  private final PrimaryKeyGateway primaryKeyGateway;
-  private final CaptchaCodeCacheRepository captchaCodeCacheRepository;
-  private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final PrimaryKeyGateway primaryKeyGateway;
+    private final CaptchaCodeCacheRepository captchaCodeCacheRepository;
+    private final CaptchaCodeConvertor captchaCodeConvertor;
 
-  @Autowired
-  public CaptchaCodeGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
-    CaptchaCodeCacheRepository captchaCodeCacheRepository,
-    CaptchaCodeConvertor captchaCodeConvertor) {
-    this.primaryKeyGateway = primaryKeyGateway;
-    this.captchaCodeCacheRepository = captchaCodeCacheRepository;
-    this.captchaCodeConvertor = captchaCodeConvertor;
-  }
+    @Autowired
+    public CaptchaCodeGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
+                                  CaptchaCodeCacheRepository captchaCodeCacheRepository,
+                                  CaptchaCodeConvertor captchaCodeConvertor) {
+        this.primaryKeyGateway = primaryKeyGateway;
+        this.captchaCodeCacheRepository = captchaCodeCacheRepository;
+        this.captchaCodeConvertor = captchaCodeConvertor;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public CaptchaCode generate(CaptchaCode captchaCode) {
-    CaptchaCodeCacheablePO captchaCodeCacheablePO = Optional.ofNullable(captchaCode)
-      .flatMap(captchaCodeNotNull -> {
-        captchaCodeNotNull.setId(primaryKeyGateway.snowflake());
-        Optional.ofNullable(captchaCodeNotNull.getLength()).filter(length -> length > 0)
-          .orElseThrow(() -> new ApplicationException(
-            ResponseCode.CAPTCHA_CODE_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
-        captchaCodeNotNull.setTarget(
-          RandomStringUtils.secure().nextAlphanumeric(captchaCodeNotNull.getLength()));
-        Optional.ofNullable(captchaCodeNotNull.getTtl()).orElseThrow(() -> new ApplicationException(
-          ResponseCode.CAPTCHA_CODE_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
-        return captchaCodeConvertor.toCaptchaCodeCacheablePO(captchaCodeNotNull);
-      }).orElseThrow(() -> new ApplicationException(ResponseCode.DATA_CONVERSION_FAILED));
-    captchaCodeCacheRepository.save(captchaCodeCacheablePO);
-    return captchaCode;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CaptchaCode generate(CaptchaCode captchaCode) {
+        CaptchaCodeCacheablePO captchaCodeCacheablePO = Optional.ofNullable(captchaCode)
+            .flatMap(captchaCodeNotNull -> {
+                captchaCodeNotNull.setId(primaryKeyGateway.snowflake());
+                Optional.ofNullable(captchaCodeNotNull.getLength()).filter(length -> length > 0)
+                    .orElseThrow(() -> new ApplicationException(
+                        ResponseCode.CAPTCHA_CODE_LENGTH_NEEDS_TO_BE_GREATER_THAN_0));
+                captchaCodeNotNull.setTarget(
+                    RandomStringUtils.secure().nextAlphanumeric(captchaCodeNotNull.getLength()));
+                Optional.ofNullable(captchaCodeNotNull.getTtl()).orElseThrow(() -> new ApplicationException(
+                    ResponseCode.CAPTCHA_CODE_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
+                return captchaCodeConvertor.toCaptchaCodeCacheablePO(captchaCodeNotNull);
+            }).orElseThrow(() -> new ApplicationException(ResponseCode.DATA_CONVERSION_FAILED));
+        captchaCodeCacheRepository.save(captchaCodeCacheablePO);
+        return captchaCode;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean verify(CaptchaCode captchaCode) {
-    return Optional.ofNullable(captchaCode).flatMap(
-        captchaCodeNotNull -> captchaCodeCacheRepository.findById(captchaCodeNotNull.getId()))
-      .map(
-        captchaCodeCacheablePO -> captchaCodeCacheablePO.getTarget()
-          .equalsIgnoreCase(captchaCode.getSource()))
-      .orElse(false);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean verify(CaptchaCode captchaCode) {
+        return Optional.ofNullable(captchaCode).flatMap(
+                captchaCodeNotNull -> captchaCodeCacheRepository.findById(captchaCodeNotNull.getId()))
+            .map(
+                captchaCodeCacheablePO -> captchaCodeCacheablePO.getTarget()
+                    .equalsIgnoreCase(captchaCode.getSource()))
+            .orElse(false);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void delete(Long captchaCodeId) {
-    Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeCacheRepository::deleteById);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void delete(Long captchaCodeId) {
+        Optional.ofNullable(captchaCodeId).ifPresent(captchaCodeCacheRepository::deleteById);
+    }
 }

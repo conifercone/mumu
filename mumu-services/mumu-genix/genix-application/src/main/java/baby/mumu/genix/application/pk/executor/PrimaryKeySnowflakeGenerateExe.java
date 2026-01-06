@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrimaryKeySnowflakeGenerateExe {
 
-  private final PrimaryKeyGateway primaryKeyGateway;
+    private final PrimaryKeyGateway primaryKeyGateway;
 
-  @Autowired
-  public PrimaryKeySnowflakeGenerateExe(PrimaryKeyGateway primaryKeyGateway) {
-    this.primaryKeyGateway = primaryKeyGateway;
-  }
+    @Autowired
+    public PrimaryKeySnowflakeGenerateExe(PrimaryKeyGateway primaryKeyGateway) {
+        this.primaryKeyGateway = primaryKeyGateway;
+    }
 
-  public long execute() {
-    return primaryKeyGateway.snowflake();
-  }
+    public long execute() {
+        return primaryKeyGateway.snowflake();
+    }
 }

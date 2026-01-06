@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,15 +38,15 @@ import org.mapstruct.factory.Mappers;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper {
 
-  FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
+    FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
 
-  @API(status = Status.STABLE, since = "2.12.0")
-  FileMetadataPO toFileMetadataPO(FileMetadata fileMetadata);
+    @API(status = Status.STABLE, since = "2.12.0")
+    FileMetadataPO toFileMetadataPO(FileMetadata fileMetadata);
 
-  @API(status = Status.STABLE, since = "2.12.0")
-  FileMetadata toEntity(FileMetadataPO fileMetadataPO);
+    @API(status = Status.STABLE, since = "2.12.0")
+    FileMetadata toEntity(FileMetadataPO fileMetadataPO);
 
-  @API(status = Status.STABLE, since = "2.13.0")
-  FileFindMetaByMetaIdDTO toFileFindMetaByMetaIdDTO(
-    FileMetadata fileMetadata);
+    @API(status = Status.STABLE, since = "2.13.0")
+    FileFindMetaByMetaIdDTO toFileFindMetaByMetaIdDTO(
+        FileMetadata fileMetadata);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package baby.mumu.storage.domain.file.gateway;
 
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
+
 import java.util.Optional;
 
 /**
@@ -28,33 +29,33 @@ import java.util.Optional;
  */
 public interface FileGateway {
 
-  /**
-   * 文件上传
-   *
-   * @param file 源文件
-   * @return 文件元数据ID
-   */
-  Long upload(File file);
+    /**
+     * 文件上传
+     *
+     * @param file 源文件
+     * @return 文件元数据ID
+     */
+    Long upload(File file);
 
-  /**
-   * 根据文件元数据ID删除文件
-   *
-   * @param fileMetadataId 目标文件元数据ID
-   */
-  void deleteByMetadataId(Long fileMetadataId);
+    /**
+     * 根据文件元数据ID删除文件
+     *
+     * @param fileMetadataId 目标文件元数据ID
+     */
+    void deleteByMetadataId(Long fileMetadataId);
 
-  /**
-   * 根据文件元数据ID下载文件
-   *
-   * @param fileMetadataId 目标文件元数据ID
-   */
-  File downloadByMetadataId(Long fileMetadataId);
+    /**
+     * 根据文件元数据ID下载文件
+     *
+     * @param fileMetadataId 目标文件元数据ID
+     */
+    File downloadByMetadataId(Long fileMetadataId);
 
-  /**
-   * 根据文件元数据ID获取文件元数据信息
-   *
-   * @param fileMetadataId 文件元数据ID
-   * @return 文件元数据
-   */
-  Optional<FileMetadata> findMetaByMetaId(Long fileMetadataId);
+    /**
+     * 根据文件元数据ID获取文件元数据信息
+     *
+     * @param fileMetadataId 文件元数据ID
+     * @return 文件元数据
+     */
+    Optional<FileMetadata> findMetaByMetaId(Long fileMetadataId);
 }

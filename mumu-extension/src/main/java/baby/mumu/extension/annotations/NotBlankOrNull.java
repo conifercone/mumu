@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,18 @@
 
 package baby.mumu.extension.annotations;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.ElementType.CONSTRUCTOR;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE_USE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import baby.mumu.extension.annotations.NotBlankOrNull.List;
 import baby.mumu.extension.validator.NotBlankOrNullValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * not blank or null
@@ -46,22 +42,22 @@ import java.lang.annotation.Target;
 @Repeatable(List.class)
 public @interface NotBlankOrNull {
 
-  String message() default "{jakarta.validation.constraints.NotBlank.message}";
+    String message() default "{jakarta.validation.constraints.NotBlank.message}";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-  /**
-   * Defines several {@code @NotBlankOrNull} constraints on the same element.
-   *
-   * @see NotBlankOrNull
-   */
-  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
-  @Retention(RUNTIME)
-  @Documented
-  @interface List {
+    /**
+     * Defines several {@code @NotBlankOrNull} constraints on the same element.
+     *
+     * @see NotBlankOrNull
+     */
+    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+    @Retention(RUNTIME)
+    @Documented
+    @interface List {
 
-    NotBlankOrNull[] value();
-  }
+        NotBlankOrNull[] value();
+    }
 }

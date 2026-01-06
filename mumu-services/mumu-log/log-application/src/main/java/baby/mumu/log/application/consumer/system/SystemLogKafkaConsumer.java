@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,22 +38,22 @@ import tools.jackson.databind.json.JsonMapper;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class SystemLogKafkaConsumer {
 
-  private final JsonMapper jsonMapper;
-  private final SystemLogService systemLogService;
-  private final SystemLogConvertor systemLogConvertor;
+    private final JsonMapper jsonMapper;
+    private final SystemLogService systemLogService;
+    private final SystemLogConvertor systemLogConvertor;
 
-  @Autowired
-  public SystemLogKafkaConsumer(JsonMapper jsonMapper, SystemLogService systemLogService,
-    SystemLogConvertor systemLogConvertor) {
-    this.jsonMapper = jsonMapper;
-    this.systemLogService = systemLogService;
-    this.systemLogConvertor = systemLogConvertor;
-  }
+    @Autowired
+    public SystemLogKafkaConsumer(JsonMapper jsonMapper, SystemLogService systemLogService,
+                                  SystemLogConvertor systemLogConvertor) {
+        this.jsonMapper = jsonMapper;
+        this.systemLogService = systemLogService;
+        this.systemLogConvertor = systemLogConvertor;
+    }
 
-  @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
-  public void handle(String systemLog) {
-    SystemLogKafkaPO systemLogKafkaPO = jsonMapper.readValue(systemLog,
-      SystemLogKafkaPO.class);
-    systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);
-  }
+    @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
+    public void handle(String systemLog) {
+        SystemLogKafkaPO systemLogKafkaPO = jsonMapper.readValue(systemLog,
+            SystemLogKafkaPO.class);
+        systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);
+    }
 }

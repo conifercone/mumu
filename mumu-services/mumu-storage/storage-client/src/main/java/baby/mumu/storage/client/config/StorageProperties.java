@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,69 +31,69 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.storage")
 public class StorageProperties {
 
-  /**
-   * minio配置属性
-   */
-  @NestedConfigurationProperty
-  private Minio minio = new Minio();
-
-  /**
-   * S3配置属性
-   */
-  @NestedConfigurationProperty
-  private S3 s3 = new S3();
-
-  /**
-   * 文件存储介质类型
-   */
-  @NestedConfigurationProperty
-  private FileStorageMediaTypeEnum storageMediaType = FileStorageMediaTypeEnum.S3;
-
-  @Data
-  public static class Minio {
+    /**
+     * minio配置属性
+     */
+    @NestedConfigurationProperty
+    private Minio minio = new Minio();
 
     /**
-     * 地址
+     * S3配置属性
      */
-    private String endpoint;
+    @NestedConfigurationProperty
+    private S3 s3 = new S3();
 
     /**
-     * 访问密钥
+     * 文件存储介质类型
      */
-    private String accessKey;
+    @NestedConfigurationProperty
+    private FileStorageMediaTypeEnum storageMediaType = FileStorageMediaTypeEnum.S3;
 
-    /**
-     * 认证密钥
-     */
-    private String secretKey;
-  }
+    @Data
+    public static class Minio {
 
-  @Data
-  public static class S3 {
+        /**
+         * 地址
+         */
+        private String endpoint;
 
-    /**
-     * 地址
-     */
-    private String endpoint;
+        /**
+         * 访问密钥
+         */
+        private String accessKey;
 
-    /**
-     * 区域
-     */
-    private String region;
+        /**
+         * 认证密钥
+         */
+        private String secretKey;
+    }
 
-    /**
-     * 访问密钥 ID
-     */
-    private String accessKeyId;
+    @Data
+    public static class S3 {
 
-    /**
-     * 认证密钥
-     */
-    private String secretAccessKey;
+        /**
+         * 地址
+         */
+        private String endpoint;
 
-    /**
-     * 启用路径样式访问
-     */
-    private boolean pathStyleAccessEnabled;
-  }
+        /**
+         * 区域
+         */
+        private String region;
+
+        /**
+         * 访问密钥 ID
+         */
+        private String accessKeyId;
+
+        /**
+         * 认证密钥
+         */
+        private String secretAccessKey;
+
+        /**
+         * 启用路径样式访问
+         */
+        private boolean pathStyleAccessEnabled;
+    }
 }

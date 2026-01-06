@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,18 +37,18 @@ import org.springframework.context.annotation.Import;
 @Import({RedisRequestIdIdempotentConfiguration.class})
 public class RequestIdIdempotentConfiguration {
 
-  /**
-   * 请求ID过滤器，防止重放攻击
-   *
-   * @param requestIdIdempotentProcessor 请求 id 幂等处理器
-   * @param extensionProperties          扩展属性
-   * @return 请求ID过滤器
-   */
-  @Bean
-  @ConditionalOnBean(RequestIdIdempotentProcessor.class)
-  public RequestIdFilter mumuRequestIdFilter(
-    RequestIdIdempotentProcessor requestIdIdempotentProcessor,
-    ExtensionProperties extensionProperties) {
-    return new RequestIdFilter(requestIdIdempotentProcessor, extensionProperties);
-  }
+    /**
+     * 请求ID过滤器，防止重放攻击
+     *
+     * @param requestIdIdempotentProcessor 请求 id 幂等处理器
+     * @param extensionProperties          扩展属性
+     * @return 请求ID过滤器
+     */
+    @Bean
+    @ConditionalOnBean(RequestIdIdempotentProcessor.class)
+    public RequestIdFilter mumuRequestIdFilter(
+        RequestIdIdempotentProcessor requestIdIdempotentProcessor,
+        ExtensionProperties extensionProperties) {
+        return new RequestIdFilter(requestIdIdempotentProcessor, extensionProperties);
+    }
 }

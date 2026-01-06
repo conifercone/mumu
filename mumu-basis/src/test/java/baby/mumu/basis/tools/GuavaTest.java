@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.basis.tools;
 
 import com.google.common.reflect.TypeToken;
-import java.util.Collection;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
 
 /**
  * guava测试
@@ -28,10 +29,10 @@ import org.junit.jupiter.api.Test;
  */
 public class GuavaTest {
 
-  @Test
-  public void typeTokenTest() {
-    TypeToken<Collection<String>> collectionTypeToken = new TypeToken<>() {
-    };
-    System.out.println(collectionTypeToken.getType());
-  }
+    @Test
+    public void typeTokenTest() {
+        TypeToken<Collection<String>> collectionTypeToken = new TypeToken<>() {
+        };
+        System.out.println(collectionTypeToken.getType());
+    }
 }

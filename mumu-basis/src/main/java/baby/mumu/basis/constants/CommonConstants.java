@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,67 +24,67 @@ package baby.mumu.basis.constants;
  */
 public final class CommonConstants {
 
-  private CommonConstants() {
-  }
+    private CommonConstants() {
+    }
 
-  /**
-   * 百分号
-   */
-  public static final String PERCENT_SIGN = "%";
+    /**
+     * 百分号
+     */
+    public static final String PERCENT_SIGN = "%";
 
-  /**
-   * string格式化占位符
-   */
-  public static final String STRING_FORMAT = "%s";
+    /**
+     * string格式化占位符
+     */
+    public static final String STRING_FORMAT = "%s";
 
-  /**
-   * es 英文映射前缀
-   */
-  public static final String ES_MAPPING_EN_SUFFIX = "en";
+    /**
+     * es 英文映射前缀
+     */
+    public static final String ES_MAPPING_EN_SUFFIX = "en";
 
-  /**
-   * es simple映射前缀
-   */
-  public static final String ES_MAPPING_SP_SUFFIX = "sp";
+    /**
+     * es simple映射前缀
+     */
+    public static final String ES_MAPPING_SP_SUFFIX = "sp";
 
-  /**
-   * dot
-   */
-  public static final String DOT = ".";
+    /**
+     * dot
+     */
+    public static final String DOT = ".";
 
-  /**
-   * es 查询英文映射
-   */
-  public static final String ES_QUERY_EN =
-    CommonConstants.DOT + CommonConstants.ES_MAPPING_EN_SUFFIX;
+    /**
+     * es 查询英文映射
+     */
+    public static final String ES_QUERY_EN =
+        CommonConstants.DOT + CommonConstants.ES_MAPPING_EN_SUFFIX;
 
-  /**
-   * es 查询simple映射
-   */
-  public static final String ES_QUERY_SP =
-    CommonConstants.DOT + CommonConstants.ES_MAPPING_SP_SUFFIX;
+    /**
+     * es 查询simple映射
+     */
+    public static final String ES_QUERY_SP =
+        CommonConstants.DOT + CommonConstants.ES_MAPPING_SP_SUFFIX;
 
-  /**
-   * sql 左右模糊查询模板
-   */
-  public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = CommonConstants.PERCENT_SIGN.concat(
-      CommonConstants.PERCENT_SIGN)
-    .concat(
-      CommonConstants.STRING_FORMAT).concat(CommonConstants.PERCENT_SIGN)
-    .concat(CommonConstants.PERCENT_SIGN);
+    /**
+     * sql 左右模糊查询模板
+     */
+    public static final String LEFT_AND_RIGHT_FUZZY_QUERY_TEMPLATE = CommonConstants.PERCENT_SIGN.concat(
+            CommonConstants.PERCENT_SIGN)
+        .concat(
+            CommonConstants.STRING_FORMAT).concat(CommonConstants.PERCENT_SIGN)
+        .concat(CommonConstants.PERCENT_SIGN);
 
-  /**
-   * 角色前缀
-   */
-  public static final String ROLE_PREFIX = "ROLE_";
+    /**
+     * 角色前缀
+     */
+    public static final String ROLE_PREFIX = "ROLE_";
 
-  /**
-   * 权限前缀
-   */
-  public static final String AUTHORITY_PREFIX = "SCOPE_";
+    /**
+     * 权限前缀
+     */
+    public static final String AUTHORITY_PREFIX = "SCOPE_";
 
-  /**
-   * data url模板
-   */
-  public static final String DATA_URL_TEMPLATE = "data:%s;base64,%s";
+    /**
+     * data url模板
+     */
+    public static final String DATA_URL_TEMPLATE = "data:%s;base64,%s";
 }

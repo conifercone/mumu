@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package baby.mumu.extension.translation;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+
+import java.util.Optional;
 
 /**
  * 简单文本翻译接口
@@ -31,18 +32,18 @@ import org.apiguardian.api.API.Status;
  */
 public interface SimpleTextTranslation {
 
-  @API(status = Status.STABLE, since = "1.0.3")
-  String translate(String text, String targetLanguage) throws ApplicationException;
+    @API(status = Status.STABLE, since = "1.0.3")
+    String translate(String text, String targetLanguage) throws ApplicationException;
 
-  @API(status = Status.STABLE, since = "1.0.3")
-  default Optional<String> translateToAccountLanguageIfPossible(String text) {
-    return Optional.ofNullable(text).filter(StringUtils::isNotBlank)
-      .flatMap(_ -> SecurityContextUtils.getLoginAccountLanguage()).map(languageEnum -> {
-        try {
-          return this.translate(text, languageEnum.getCode());
-        } catch (Exception e) {
-          return text;
-        }
-      });
-  }
+    @API(status = Status.STABLE, since = "1.0.3")
+    default Optional<String> translateToAccountLanguageIfPossible(String text) {
+        return Optional.ofNullable(text).filter(StringUtils::isNotBlank)
+            .flatMap(_ -> SecurityContextUtils.getLoginAccountLanguage()).map(languageEnum -> {
+                try {
+                    return this.translate(text, languageEnum.getCode());
+                } catch (Exception e) {
+                    return text;
+                }
+            });
+    }
 }

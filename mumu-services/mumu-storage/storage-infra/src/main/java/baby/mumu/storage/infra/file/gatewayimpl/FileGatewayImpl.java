@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,13 @@ import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * 文件领域网关实现类
@@ -43,119 +44,119 @@ import org.springframework.transaction.annotation.Transactional;
 @Observed(name = "FileGatewayImpl")
 public class FileGatewayImpl implements FileGateway {
 
-  private final FileMetadataRepository fileMetadataRepository;
-  private final FileConvertor fileConvertor;
-  private final FileStorageRepository fileStorageRepository;
+    private final FileMetadataRepository fileMetadataRepository;
+    private final FileConvertor fileConvertor;
+    private final FileStorageRepository fileStorageRepository;
 
-  @Autowired
-  public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
-    FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
-    this.fileMetadataRepository = fileMetadataRepository;
-    this.fileConvertor = fileConvertor;
-    this.fileStorageRepository = fileStorageRepository;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @return
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  @API(status = Status.STABLE, since = "2.12.0")
-  public Long upload(File file) {
-    if (file == null || file.getMetadata() == null) {
-      return null;
+    @Autowired
+    public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
+                           FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
+        this.fileMetadataRepository = fileMetadataRepository;
+        this.fileConvertor = fileConvertor;
+        this.fileStorageRepository = fileStorageRepository;
     }
 
-    FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @API(status = Status.STABLE, since = "2.12.0")
+    public Long upload(File file) {
+        if (file == null || file.getMetadata() == null) {
+            return null;
+        }
 
-    try {
-      // 上传文件
-      fileStorageRepository.upload(file);
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.FILE_UPLOAD_FAILED);
-    }
+        FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
-    try {
-      // 保存元数据（数据库操作）
-      fileMetadataRepository.persist(fileMetadataPO);
-    } catch (Exception e) {
-      // 元数据保存失败，尝试回滚上传
-      try {
-        fileStorageRepository.delete(file);
-      } catch (Exception ex) {
-        throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
-      }
-      throw new ApplicationException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
-    }
-    return fileMetadataPO.getId();
-  }
+        try {
+            // 上传文件
+            fileStorageRepository.upload(file);
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.FILE_UPLOAD_FAILED);
+        }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  @API(status = Status.STABLE, since = "2.12.0")
-  public void deleteByMetadataId(Long fileMetadataId) {
-    if (fileMetadataId == null) {
-      return;
-    }
-    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-    FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
-
-    try {
-      // 删除文件
-      File file = new File();
-      file.setMetadata(fileMetadata);
-      fileStorageRepository.delete(file);
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
+        try {
+            // 保存元数据（数据库操作）
+            fileMetadataRepository.persist(fileMetadataPO);
+        } catch (Exception e) {
+            // 元数据保存失败，尝试回滚上传
+            try {
+                fileStorageRepository.delete(file);
+            } catch (Exception ex) {
+                throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
+            }
+            throw new ApplicationException(ResponseCode.FILE_METADATA_PERSIST_FAILED);
+        }
+        return fileMetadataPO.getId();
     }
 
-    try {
-      // 删除文件元数据
-      fileMetadataRepository.deleteById(fileMetadataId);
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
-    }
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    @API(status = Status.STABLE, since = "2.12.0")
+    public void deleteByMetadataId(Long fileMetadataId) {
+        if (fileMetadataId == null) {
+            return;
+        }
+        FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
+        FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public File downloadByMetadataId(Long fileMetadataId) {
-    if (fileMetadataId == null) {
-      throw new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST);
-    }
-    FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-    FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
-    File file = new File();
-    file.setMetadata(fileMetadata);
-    try {
-      file.setContent(fileStorageRepository.download(file));
-    } catch (Exception e) {
-      throw new ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED);
-    }
-    return file;
-  }
+        try {
+            // 删除文件
+            File file = new File();
+            file.setMetadata(fileMetadata);
+            fileStorageRepository.delete(file);
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
+        }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Optional<FileMetadata> findMetaByMetaId(Long fileMetadataId) {
-    if (fileMetadataId == null) {
-      return Optional.empty();
+        try {
+            // 删除文件元数据
+            fileMetadataRepository.deleteById(fileMetadataId);
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.FILE_DELETION_FAILED);
+        }
     }
-    return fileMetadataRepository.findById(fileMetadataId).flatMap(fileConvertor::toEntity);
-  }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public File downloadByMetadataId(Long fileMetadataId) {
+        if (fileMetadataId == null) {
+            throw new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST);
+        }
+        FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
+        FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
+        File file = new File();
+        file.setMetadata(fileMetadata);
+        try {
+            file.setContent(fileStorageRepository.download(file));
+        } catch (Exception e) {
+            throw new ApplicationException(ResponseCode.FILE_DOWNLOAD_FAILED);
+        }
+        return file;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<FileMetadata> findMetaByMetaId(Long fileMetadataId) {
+        if (fileMetadataId == null) {
+            return Optional.empty();
+        }
+        return fileMetadataRepository.findById(fileMetadataId).flatMap(fileConvertor::toEntity);
+    }
 }

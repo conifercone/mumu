@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.storage.domain.file;
 
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.storage.domain.zone.StorageZone;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 文件元数据
@@ -30,21 +31,21 @@ import lombok.Data;
 @Data
 public class FileMetadata extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 3338110566710044568L;
+    @Serial
+    private static final long serialVersionUID = 3338110566710044568L;
 
-  private Long id;
+    private Long id;
 
-  private String originalFilename;
+    private String originalFilename;
 
-  private String storedFilename;
+    private String storedFilename;
 
-  private String contentType;
+    private String contentType;
 
-  private Long size;
+    private Long size;
 
-  private StorageZone storageZone;
+    private StorageZone storageZone;
 
-  private String storagePath;
+    private String storagePath;
 
 }

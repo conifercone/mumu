@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.infra.token.gatewayimpl.database;
 
 import baby.mumu.iam.infra.token.gatewayimpl.database.po.Oauth2AuthorizationDO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+import java.util.Optional;
 
 /**
  * oauth 2 授权操作类
@@ -28,8 +29,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 2.4.0
  */
 public interface Oauth2AuthenticationRepository extends
-  BaseJpaRepository<Oauth2AuthorizationDO, String>,
-  JpaSpecificationExecutor<Oauth2AuthorizationDO> {
+    BaseJpaRepository<Oauth2AuthorizationDO, String>,
+    JpaSpecificationExecutor<Oauth2AuthorizationDO> {
 
-  Optional<Oauth2AuthorizationDO> findByRefreshTokenValue(String refreshTokenValue);
+    Optional<Oauth2AuthorizationDO> findByRefreshTokenValue(String refreshTokenValue);
 }

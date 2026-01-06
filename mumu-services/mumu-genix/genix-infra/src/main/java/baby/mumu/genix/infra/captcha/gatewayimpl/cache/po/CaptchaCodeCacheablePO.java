@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@ import baby.mumu.basis.po.jpa.JpaCacheableBasisDefaultPersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
 import com.redis.om.spring.annotations.TextIndexed;
-import java.io.Serial;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
+
+import java.io.Serial;
 
 /**
  * 验证码redis数据对象
@@ -36,22 +37,22 @@ import org.springframework.data.redis.core.TimeToLive;
 @Document(value = "mumu:genix:captcha-code")
 public class CaptchaCodeCacheablePO extends JpaCacheableBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -4676000530909358286L;
+    @Serial
+    private static final long serialVersionUID = -4676000530909358286L;
 
-  @Id
-  @Indexed
-  private Long id;
+    @Id
+    @Indexed
+    private Long id;
 
-  /**
-   * 验证码内容
-   */
-  @TextIndexed
-  private String target;
+    /**
+     * 验证码内容
+     */
+    @TextIndexed
+    private String target;
 
-  /**
-   * 存活时间
-   */
-  @TimeToLive
-  private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
+    /**
+     * 存活时间
+     */
+    @TimeToLive
+    private Long ttl = CacheLevelEnum.MEDIUM.getSecondTtl();
 }

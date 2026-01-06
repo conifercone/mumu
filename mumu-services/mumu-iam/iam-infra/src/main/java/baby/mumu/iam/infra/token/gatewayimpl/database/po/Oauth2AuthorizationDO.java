@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.Instant;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.time.Instant;
+import java.util.Objects;
 
 /**
  * oauth 2 授权数据对象
@@ -43,149 +44,149 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 public class Oauth2AuthorizationDO {
 
-  @Id
-  @Size(max = 100)
-  @Column(name = "id", nullable = false, length = 100)
-  private String id;
+    @Id
+    @Size(max = 100)
+    @Column(name = "id", nullable = false, length = 100)
+    private String id;
 
-  @Size(max = 100)
-  @NotNull
-  @Column(name = "registered_client_id", nullable = false, length = 100)
-  private String registeredClientId;
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "registered_client_id", nullable = false, length = 100)
+    private String registeredClientId;
 
-  @Size(max = 200)
-  @NotNull
-  @Column(name = "principal_name", nullable = false, length = 200)
-  private String principalName;
+    @Size(max = 200)
+    @NotNull
+    @Column(name = "principal_name", nullable = false, length = 200)
+    private String principalName;
 
-  @Size(max = 100)
-  @NotNull
-  @Column(name = "authorization_grant_type", nullable = false, length = 100)
-  private String authorizationGrantType;
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "authorization_grant_type", nullable = false, length = 100)
+    private String authorizationGrantType;
 
-  @Size(max = 1000)
-  @ColumnDefault("NULL")
-  @Column(name = "authorized_scopes", length = 1000)
-  private String authorizedScopes;
+    @Size(max = 1000)
+    @ColumnDefault("NULL")
+    @Column(name = "authorized_scopes", length = 1000)
+    private String authorizedScopes;
 
-  @Column(name = "attributes", length = Integer.MAX_VALUE)
-  private String attributes;
+    @Column(name = "attributes", length = Integer.MAX_VALUE)
+    private String attributes;
 
-  @Size(max = 500)
-  @ColumnDefault("NULL")
-  @Column(name = "state", length = 500)
-  private String state;
+    @Size(max = 500)
+    @ColumnDefault("NULL")
+    @Column(name = "state", length = 500)
+    private String state;
 
-  @Column(name = "authorization_code_value", length = Integer.MAX_VALUE)
-  private String authorizationCodeValue;
+    @Column(name = "authorization_code_value", length = Integer.MAX_VALUE)
+    private String authorizationCodeValue;
 
-  @Column(name = "authorization_code_issued_at")
-  private Instant authorizationCodeIssuedAt;
+    @Column(name = "authorization_code_issued_at")
+    private Instant authorizationCodeIssuedAt;
 
-  @Column(name = "authorization_code_expires_at")
-  private Instant authorizationCodeExpiresAt;
+    @Column(name = "authorization_code_expires_at")
+    private Instant authorizationCodeExpiresAt;
 
-  @Column(name = "authorization_code_metadata", length = Integer.MAX_VALUE)
-  private String authorizationCodeMetadata;
+    @Column(name = "authorization_code_metadata", length = Integer.MAX_VALUE)
+    private String authorizationCodeMetadata;
 
-  @Column(name = "access_token_value", length = Integer.MAX_VALUE)
-  @ToString.Exclude
-  private String accessTokenValue;
+    @Column(name = "access_token_value", length = Integer.MAX_VALUE)
+    @ToString.Exclude
+    private String accessTokenValue;
 
-  @Column(name = "access_token_issued_at")
-  private Instant accessTokenIssuedAt;
+    @Column(name = "access_token_issued_at")
+    private Instant accessTokenIssuedAt;
 
-  @Column(name = "access_token_expires_at")
-  private Instant accessTokenExpiresAt;
+    @Column(name = "access_token_expires_at")
+    private Instant accessTokenExpiresAt;
 
-  @Column(name = "access_token_metadata", length = Integer.MAX_VALUE)
-  private String accessTokenMetadata;
+    @Column(name = "access_token_metadata", length = Integer.MAX_VALUE)
+    private String accessTokenMetadata;
 
-  @Size(max = 100)
-  @ColumnDefault("NULL")
-  @Column(name = "access_token_type", length = 100)
-  private String accessTokenType;
+    @Size(max = 100)
+    @ColumnDefault("NULL")
+    @Column(name = "access_token_type", length = 100)
+    private String accessTokenType;
 
-  @Size(max = 1000)
-  @ColumnDefault("NULL")
-  @Column(name = "access_token_scopes", length = 1000)
-  private String accessTokenScopes;
+    @Size(max = 1000)
+    @ColumnDefault("NULL")
+    @Column(name = "access_token_scopes", length = 1000)
+    private String accessTokenScopes;
 
-  @Column(name = "oidc_id_token_value", length = Integer.MAX_VALUE)
-  @ToString.Exclude
-  private String oidcIdTokenValue;
+    @Column(name = "oidc_id_token_value", length = Integer.MAX_VALUE)
+    @ToString.Exclude
+    private String oidcIdTokenValue;
 
-  @Column(name = "oidc_id_token_issued_at")
-  private Instant oidcIdTokenIssuedAt;
+    @Column(name = "oidc_id_token_issued_at")
+    private Instant oidcIdTokenIssuedAt;
 
-  @Column(name = "oidc_id_token_expires_at")
-  private Instant oidcIdTokenExpiresAt;
+    @Column(name = "oidc_id_token_expires_at")
+    private Instant oidcIdTokenExpiresAt;
 
-  @Column(name = "oidc_id_token_metadata", length = Integer.MAX_VALUE)
-  private String oidcIdTokenMetadata;
+    @Column(name = "oidc_id_token_metadata", length = Integer.MAX_VALUE)
+    private String oidcIdTokenMetadata;
 
-  @Column(name = "refresh_token_value", length = Integer.MAX_VALUE)
-  @ToString.Exclude
-  private String refreshTokenValue;
+    @Column(name = "refresh_token_value", length = Integer.MAX_VALUE)
+    @ToString.Exclude
+    private String refreshTokenValue;
 
-  @Column(name = "refresh_token_issued_at")
-  private Instant refreshTokenIssuedAt;
+    @Column(name = "refresh_token_issued_at")
+    private Instant refreshTokenIssuedAt;
 
-  @Column(name = "refresh_token_expires_at")
-  private Instant refreshTokenExpiresAt;
+    @Column(name = "refresh_token_expires_at")
+    private Instant refreshTokenExpiresAt;
 
-  @Column(name = "refresh_token_metadata", length = Integer.MAX_VALUE)
-  private String refreshTokenMetadata;
+    @Column(name = "refresh_token_metadata", length = Integer.MAX_VALUE)
+    private String refreshTokenMetadata;
 
-  @Column(name = "user_code_value", length = Integer.MAX_VALUE)
-  private String userCodeValue;
+    @Column(name = "user_code_value", length = Integer.MAX_VALUE)
+    private String userCodeValue;
 
-  @Column(name = "user_code_issued_at")
-  private Instant userCodeIssuedAt;
+    @Column(name = "user_code_issued_at")
+    private Instant userCodeIssuedAt;
 
-  @Column(name = "user_code_expires_at")
-  private Instant userCodeExpiresAt;
+    @Column(name = "user_code_expires_at")
+    private Instant userCodeExpiresAt;
 
-  @Column(name = "user_code_metadata", length = Integer.MAX_VALUE)
-  private String userCodeMetadata;
+    @Column(name = "user_code_metadata", length = Integer.MAX_VALUE)
+    private String userCodeMetadata;
 
-  @Column(name = "device_code_value", length = Integer.MAX_VALUE)
-  @ToString.Exclude
-  private String deviceCodeValue;
+    @Column(name = "device_code_value", length = Integer.MAX_VALUE)
+    @ToString.Exclude
+    private String deviceCodeValue;
 
-  @Column(name = "device_code_issued_at")
-  private Instant deviceCodeIssuedAt;
+    @Column(name = "device_code_issued_at")
+    private Instant deviceCodeIssuedAt;
 
-  @Column(name = "device_code_expires_at")
-  private Instant deviceCodeExpiresAt;
+    @Column(name = "device_code_expires_at")
+    private Instant deviceCodeExpiresAt;
 
-  @Column(name = "device_code_metadata", length = Integer.MAX_VALUE)
-  private String deviceCodeMetadata;
+    @Column(name = "device_code_metadata", length = Integer.MAX_VALUE)
+    private String deviceCodeMetadata;
 
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+        Oauth2AuthorizationDO that = (Oauth2AuthorizationDO) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
-    if (o == null) {
-      return false;
-    }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy
-      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-      : o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy
-      ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass() : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) {
-      return false;
-    }
-    Oauth2AuthorizationDO that = (Oauth2AuthorizationDO) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
-  }
 
-  @Override
-  public final int hashCode() {
-    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass().hashCode() : getClass().hashCode();
-  }
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

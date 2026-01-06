@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,18 +36,18 @@ import org.springframework.stereotype.Component;
 @Observed(name = "RoleAddCmdExe")
 public class RoleAddCmdExe {
 
-  private final RoleGateway roleGateway;
-  private final RoleConvertor roleConvertor;
+    private final RoleGateway roleGateway;
+    private final RoleConvertor roleConvertor;
 
-  @Autowired
-  public RoleAddCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
-    this.roleGateway = roleGateway;
-    this.roleConvertor = roleConvertor;
-  }
+    @Autowired
+    public RoleAddCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+        this.roleGateway = roleGateway;
+        this.roleConvertor = roleConvertor;
+    }
 
-  public Long execute(RoleAddCmd roleAddCmd) {
-    Role role = roleConvertor.toEntity(roleAddCmd)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
-    return roleGateway.add(role);
-  }
+    public Long execute(RoleAddCmd roleAddCmd) {
+        Role role = roleConvertor.toEntity(roleAddCmd)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
+        return roleGateway.add(role);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,7 @@
 
 package baby.mumu.extension.aspects;
 
-import baby.mumu.basis.provider.RateLimitingAccountIdKeyProviderImpl;
-import baby.mumu.basis.provider.RateLimitingCustomGenerateDefaultProviderImpl;
-import baby.mumu.basis.provider.RateLimitingCustomGenerateProvider;
-import baby.mumu.basis.provider.RateLimitingHttpIpKeyProviderImpl;
-import baby.mumu.basis.provider.RateLimitingKeyProvider;
+import baby.mumu.basis.provider.*;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.log.client.api.SystemLogGrpcService;
@@ -42,47 +38,47 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 public class AspectConfiguration {
 
-  @Bean
-  public DangerousOperationAspect dangerousOperationAspect(
-    SystemLogGrpcService systemLogGrpcService) {
-    return new DangerousOperationAspect(systemLogGrpcService);
-  }
+    @Bean
+    public DangerousOperationAspect dangerousOperationAspect(
+        SystemLogGrpcService systemLogGrpcService) {
+        return new DangerousOperationAspect(systemLogGrpcService);
+    }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  public RateLimitingAspect rateLimitingAspect(ApplicationContext applicationContext,
-    ExtensionProperties extensionProperties) {
-    return new RateLimitingAspect(applicationContext, extensionProperties);
-  }
+    @Bean
+    @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+    public RateLimitingAspect rateLimitingAspect(ApplicationContext applicationContext,
+                                                 ExtensionProperties extensionProperties) {
+        return new RateLimitingAspect(applicationContext, extensionProperties);
+    }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  public RateLimitingKeyProvider rateLimitingHttpIpKeyProviderImpl(
-    HttpServletRequest httpServletRequest) {
-    return new RateLimitingHttpIpKeyProviderImpl(httpServletRequest);
-  }
+    @Bean
+    @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+    public RateLimitingKeyProvider rateLimitingHttpIpKeyProviderImpl(
+        HttpServletRequest httpServletRequest) {
+        return new RateLimitingHttpIpKeyProviderImpl(httpServletRequest);
+    }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  public RateLimitingKeyProvider rateLimitingAccountIdKeyProviderImpl() {
-    return new RateLimitingAccountIdKeyProviderImpl();
-  }
+    @Bean
+    @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+    public RateLimitingKeyProvider rateLimitingAccountIdKeyProviderImpl() {
+        return new RateLimitingAccountIdKeyProviderImpl();
+    }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  public RateLimitingKeyProvider rateLimitingGrpcIpKeyProviderImpl() {
-    return new RateLimitingGrpcIpKeyProviderImpl();
-  }
+    @Bean
+    @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+    public RateLimitingKeyProvider rateLimitingGrpcIpKeyProviderImpl() {
+        return new RateLimitingGrpcIpKeyProviderImpl();
+    }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
-  @ConditionalOnMissingBean(RateLimitingCustomGenerateProvider.class)
-  public RateLimitingCustomGenerateProvider rateLimitingCustomGenerateDefaultProviderImpl() {
-    return new RateLimitingCustomGenerateDefaultProviderImpl();
-  }
+    @Bean
+    @ConditionalOnProperty(prefix = "mumu.extension.rl", value = "enabled", havingValue = "true")
+    @ConditionalOnMissingBean(RateLimitingCustomGenerateProvider.class)
+    public RateLimitingCustomGenerateProvider rateLimitingCustomGenerateDefaultProviderImpl() {
+        return new RateLimitingCustomGenerateDefaultProviderImpl();
+    }
 
-  @Bean
-  public ConditionalAspect conditionalAspect(ApplicationContext context) {
-    return new ConditionalAspect(context);
-  }
+    @Bean
+    public ConditionalAspect conditionalAspect(ApplicationContext context) {
+        return new ConditionalAspect(context);
+    }
 }

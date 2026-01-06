@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.iam.infra.account.gatewayimpl.document;
 
 import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
 import jakarta.validation.constraints.NotNull;
-import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.Optional;
 
 /**
  * 账号头像设置
@@ -28,9 +29,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @since 2.10.0
  */
 public interface AccountAvatarDocumentRepository extends
-  MongoRepository<AccountAvatarDocumentPO, String> {
+    MongoRepository<AccountAvatarDocumentPO, String> {
 
-  Optional<AccountAvatarDocumentPO> findByAccountId(@NotNull Long accountId);
+    Optional<AccountAvatarDocumentPO> findByAccountId(@NotNull Long accountId);
 
-  void deleteByAccountId(Long accountId);
+    void deleteByAccountId(Long accountId);
 }

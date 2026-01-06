@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package baby.mumu.extension.sql.filter.datasource.p6spy;
 
 import com.p6spy.engine.common.StatementInformation;
 import com.p6spy.engine.logging.LoggingEventListener;
+
 import java.sql.SQLException;
 
 /**
@@ -28,19 +29,19 @@ import java.sql.SQLException;
  */
 public class ApplicationSqlLoggingEventListener extends LoggingEventListener {
 
-  private static ApplicationSqlLoggingEventListener instance;
+    private static ApplicationSqlLoggingEventListener instance;
 
-  public static ApplicationSqlLoggingEventListener getInstance() {
-    if (null == ApplicationSqlLoggingEventListener.instance) {
-      ApplicationSqlLoggingEventListener.instance = new ApplicationSqlLoggingEventListener();
+    public static ApplicationSqlLoggingEventListener getInstance() {
+        if (null == ApplicationSqlLoggingEventListener.instance) {
+            ApplicationSqlLoggingEventListener.instance = new ApplicationSqlLoggingEventListener();
+        }
+        return ApplicationSqlLoggingEventListener.instance;
     }
-    return ApplicationSqlLoggingEventListener.instance;
-  }
 
-  @Override
-  public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
-    int[] updateCounts, SQLException e) {
-    // ignore batch execution results
-  }
+    @Override
+    public void onAfterExecuteBatch(StatementInformation statementInformation, long timeElapsedNanos,
+                                    int[] updateCounts, SQLException e) {
+        // ignore batch execution results
+    }
 
 }

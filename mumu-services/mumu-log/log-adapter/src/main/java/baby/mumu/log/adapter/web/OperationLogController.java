@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,7 @@ import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 操作日志相关
@@ -50,39 +43,39 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "操作日志管理")
 public class OperationLogController {
 
-  private final OperationLogService operationLogService;
+    private final OperationLogService operationLogService;
 
-  @Autowired
-  public OperationLogController(OperationLogService operationLogService) {
-    this.operationLogService = operationLogService;
-  }
+    @Autowired
+    public OperationLogController(OperationLogService operationLogService) {
+        this.operationLogService = operationLogService;
+    }
 
-  @Operation(summary = "提交日志")
-  @PostMapping("/submit")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.0")
-  public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
-    operationLogService.submit(operationLogSubmitCmd);
-  }
+    @Operation(summary = "提交日志")
+    @PostMapping("/submit")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.0")
+    public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
+        operationLogService.submit(operationLogSubmitCmd);
+    }
 
-  @Operation(summary = "根据日志ID获取操作日志")
-  @GetMapping("/findById/{id}")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.0")
-  public OperationLogQryDTO findOperationLogById(@PathVariable String id) {
-    return operationLogService.findOperationLogById(id);
-  }
+    @Operation(summary = "根据日志ID获取操作日志")
+    @GetMapping("/findById/{id}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.0")
+    public OperationLogQryDTO findOperationLogById(@PathVariable String id) {
+        return operationLogService.findOperationLogById(id);
+    }
 
-  @Operation(summary = "分页查询所有操作日志")
-  @GetMapping("/findAll")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Page<OperationLogFindAllDTO> findAll(
-    @ModelAttribute @Validated OperationLogFindAllCmd operationLogFindAllCmd) {
-    return operationLogService.findAll(operationLogFindAllCmd);
-  }
+    @Operation(summary = "分页查询所有操作日志")
+    @GetMapping("/findAll")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Page<OperationLogFindAllDTO> findAll(
+        @ModelAttribute @Validated OperationLogFindAllCmd operationLogFindAllCmd) {
+        return operationLogService.findAll(operationLogFindAllCmd);
+    }
 
 }

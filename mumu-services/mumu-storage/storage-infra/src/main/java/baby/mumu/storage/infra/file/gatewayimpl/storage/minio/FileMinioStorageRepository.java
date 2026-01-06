@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,15 @@ import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
-import io.minio.BucketExistsArgs;
-import io.minio.GetObjectArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.SetBucketPolicyArgs;
-import java.io.InputStream;
-import java.util.Optional;
+import io.minio.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * 文件minio存储
@@ -48,121 +43,121 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(prefix = "mumu.storage", value = "storage-media-type", havingValue = "MINIO")
 public class FileMinioStorageRepository implements FileStorageRepository {
 
-  private final MinioClient minioClient;
+    private final MinioClient minioClient;
 
-  @Autowired
-  public FileMinioStorageRepository(MinioClient minioClient) {
-    this.minioClient = minioClient;
-  }
-
-  @Override
-  public void upload(@NonNull File file) throws Exception {
-    // noinspection DuplicatedCode
-    FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
-    StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
-      .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_CANNOT_BE_EMPTY));
-    Long fileSize = Optional.ofNullable(fileMetadata.getSize())
-      .filter(size -> size > 0)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
-    if (StringUtils.isBlank(fileMetadata.getStoredFilename())) {
-      throw new ApplicationException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
+    @Autowired
+    public FileMinioStorageRepository(MinioClient minioClient) {
+        this.minioClient = minioClient;
     }
-    // 确保 Bucket 存在
-    String storageZoneCode = storageZone.getCode();
-    createStorageZone(file);
-    // 上传
-    minioClient.putObject(
-      PutObjectArgs.builder()
-        .bucket(storageZoneCode)
-        .object(file.getMetadata().getStoragePath())
-        // 自动计算分表大小
-        .stream(file.getContent(), fileSize, -1)
-        .contentType(file.getMetadata().getContentType())
-        .build()
-    );
-  }
 
-  @Override
-  public boolean storageZoneExists(File file) throws Exception {
-    StorageZone storageZone = file.getMetadata().getStorageZone();
-    return minioClient.bucketExists(
-      BucketExistsArgs.builder().bucket(storageZone.getCode()).build());
-  }
-
-  @Override
-  public void createStorageZone(File file)
-    throws Exception {
-    if (storageZoneExists(file)) {
-      return;
-    }
-    StorageZone storageZone = file.getMetadata().getStorageZone();
-    minioClient.makeBucket(
-      MakeBucketArgs.builder().bucket(storageZone.getCode()).build());
-    if (StorageZonePolicyEnum.PUBLIC.equals(storageZone.getPolicy())) {
-      /*
-       * s3:GetBucketLocation: 获取桶的位置
-       * s3:ListBucket: 列出桶内文件（GET /bucket?prefix=xxx）
-       * s3:ListBucketMultipartUploads: 列出分片上传记录（如用多段上传）
-       * s3:PutObject: 上传对象
-       * s3:GetObject: 下载对象
-       * s3:DeleteObject: 删除对象
-       * s3:AbortMultipartUpload: 终止未完成的分片上传
-       * s3:ListMultipartUploadParts: 列出已上传的分片
-       */
-      String policy = """
-        {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": { "AWS": "*" },
-              "Action": [
-                "s3:GetBucketLocation",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads"
-              ],
-              "Resource": ["arn:aws:s3:::%s"]
-            },
-            {
-              "Effect": "Allow",
-              "Principal": { "AWS": "*" },
-              "Action": [
-                "s3:AbortMultipartUpload",
-                "s3:DeleteObject",
-                "s3:GetObject",
-                "s3:ListMultipartUploadParts",
-                "s3:PutObject"
-              ],
-              "Resource": ["arn:aws:s3:::%s/*"]
-            }
-          ]
+    @Override
+    public void upload(@NonNull File file) throws Exception {
+        // noinspection DuplicatedCode
+        FileMetadata fileMetadata = Optional.ofNullable(file.getMetadata())
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
+        StorageZone storageZone = Optional.ofNullable(fileMetadata.getStorageZone())
+            .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_CANNOT_BE_EMPTY));
+        Long fileSize = Optional.ofNullable(fileMetadata.getSize())
+            .filter(size -> size > 0)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_CONTENT_CANNOT_BE_EMPTY));
+        if (StringUtils.isBlank(fileMetadata.getStoredFilename())) {
+            throw new ApplicationException(ResponseCode.FILE_NAME_CANNOT_BE_EMPTY);
         }
-        """.formatted(storageZone.getCode(), storageZone.getCode());
-
-      minioClient.setBucketPolicy(
-        SetBucketPolicyArgs.builder()
-          .bucket(storageZone.getCode())
-          .config(policy)
-          .build()
-      );
+        // 确保 Bucket 存在
+        String storageZoneCode = storageZone.getCode();
+        createStorageZone(file);
+        // 上传
+        minioClient.putObject(
+            PutObjectArgs.builder()
+                .bucket(storageZoneCode)
+                .object(file.getMetadata().getStoragePath())
+                // 自动计算分表大小
+                .stream(file.getContent(), fileSize, -1)
+                .contentType(file.getMetadata().getContentType())
+                .build()
+        );
     }
-  }
 
-  @Override
-  public void delete(@NonNull File file) throws Exception {
-    minioClient.removeObject(
-      RemoveObjectArgs.builder()
-        .bucket(file.getMetadata().getStorageZone().getCode())
-        .object(file.getMetadata().getStoragePath())
-        .build()
-    );
-  }
+    @Override
+    public boolean storageZoneExists(File file) throws Exception {
+        StorageZone storageZone = file.getMetadata().getStorageZone();
+        return minioClient.bucketExists(
+            BucketExistsArgs.builder().bucket(storageZone.getCode()).build());
+    }
 
-  @Override
-  public InputStream download(@NonNull File file) throws Exception {
-    return minioClient.getObject(
-      GetObjectArgs.builder().bucket(file.getMetadata().getStorageZone().getCode())
-        .object(file.getMetadata().getStoragePath()).build());
-  }
+    @Override
+    public void createStorageZone(File file)
+        throws Exception {
+        if (storageZoneExists(file)) {
+            return;
+        }
+        StorageZone storageZone = file.getMetadata().getStorageZone();
+        minioClient.makeBucket(
+            MakeBucketArgs.builder().bucket(storageZone.getCode()).build());
+        if (StorageZonePolicyEnum.PUBLIC.equals(storageZone.getPolicy())) {
+            /*
+             * s3:GetBucketLocation: 获取桶的位置
+             * s3:ListBucket: 列出桶内文件（GET /bucket?prefix=xxx）
+             * s3:ListBucketMultipartUploads: 列出分片上传记录（如用多段上传）
+             * s3:PutObject: 上传对象
+             * s3:GetObject: 下载对象
+             * s3:DeleteObject: 删除对象
+             * s3:AbortMultipartUpload: 终止未完成的分片上传
+             * s3:ListMultipartUploadParts: 列出已上传的分片
+             */
+            String policy = """
+                {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": { "AWS": "*" },
+                      "Action": [
+                        "s3:GetBucketLocation",
+                        "s3:ListBucket",
+                        "s3:ListBucketMultipartUploads"
+                      ],
+                      "Resource": ["arn:aws:s3:::%s"]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Principal": { "AWS": "*" },
+                      "Action": [
+                        "s3:AbortMultipartUpload",
+                        "s3:DeleteObject",
+                        "s3:GetObject",
+                        "s3:ListMultipartUploadParts",
+                        "s3:PutObject"
+                      ],
+                      "Resource": ["arn:aws:s3:::%s/*"]
+                    }
+                  ]
+                }
+                """.formatted(storageZone.getCode(), storageZone.getCode());
+
+            minioClient.setBucketPolicy(
+                SetBucketPolicyArgs.builder()
+                    .bucket(storageZone.getCode())
+                    .config(policy)
+                    .build()
+            );
+        }
+    }
+
+    @Override
+    public void delete(@NonNull File file) throws Exception {
+        minioClient.removeObject(
+            RemoveObjectArgs.builder()
+                .bucket(file.getMetadata().getStorageZone().getCode())
+                .object(file.getMetadata().getStoragePath())
+                .build()
+        );
+    }
+
+    @Override
+    public InputStream download(@NonNull File file) throws Exception {
+        return minioClient.getObject(
+            GetObjectArgs.builder().bucket(file.getMetadata().getStorageZone().getCode())
+                .object(file.getMetadata().getStoragePath()).build());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class RoleFindDirectCmd {
 
-  @NotNull
-  private Long ancestorId;
+    @NotNull
+    private Long ancestorId;
 
-  @Min(value = 1, message = "{current.validation.min.size}")
-  private Integer current = 1;
+    @Min(value = 1, message = "{current.validation.min.size}")
+    private Integer current = 1;
 
-  @Min(value = 1, message = "{page.size.validation.min.size}")
-  private Integer pageSize = 10;
+    @Min(value = 1, message = "{page.size.validation.min.size}")
+    private Integer pageSize = 10;
 }

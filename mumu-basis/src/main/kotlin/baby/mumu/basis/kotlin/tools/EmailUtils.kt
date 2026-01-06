@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import org.apiguardian.api.API
  */
 object EmailUtils {
 
-  /**
-   * 校验邮箱地址格式的方法
-   * @param email 邮箱地址
-   * @return 是否为合法格式的邮箱地址
-   */
-  @API(status = API.Status.STABLE, since = "2.7.0")
-  @JvmStatic
-  fun isValidEmailFormat(email: String?): Boolean {
-    if (email.isNullOrEmpty()) {
-      return false
+    /**
+     * 校验邮箱地址格式的方法
+     * @param email 邮箱地址
+     * @return 是否为合法格式的邮箱地址
+     */
+    @API(status = API.Status.STABLE, since = "2.7.0")
+    @JvmStatic
+    fun isValidEmailFormat(email: String?): Boolean {
+        if (email.isNullOrEmpty()) {
+            return false
+        }
+        return EmailValidator.getInstance().isValid(email)
     }
-    return EmailValidator.getInstance().isValid(email)
-  }
 }

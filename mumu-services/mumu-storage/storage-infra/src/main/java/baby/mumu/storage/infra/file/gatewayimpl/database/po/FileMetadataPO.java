@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.io.Serial;
+import java.util.Objects;
 
 /**
  * 文件元数据基本信息
@@ -46,64 +47,64 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 public class FileMetadataPO extends JpaBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -1394204529891009898L;
+    @Serial
+    private static final long serialVersionUID = -1394204529891009898L;
 
-  /**
-   * 文件元数据id
-   */
-  @Id
-  @Column(name = "id", nullable = false)
-  private Long id;
+    /**
+     * 文件元数据id
+     */
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
 
-  @NotNull
-  @Column(name = "original_filename", nullable = false)
-  private String originalFilename;
+    @NotNull
+    @Column(name = "original_filename", nullable = false)
+    private String originalFilename;
 
-  @NotNull
-  @Column(name = "stored_filename", nullable = false)
-  private String storedFilename;
+    @NotNull
+    @Column(name = "stored_filename", nullable = false)
+    private String storedFilename;
 
-  @NotNull
-  @Column(name = "content_type", nullable = false)
-  private String contentType;
+    @NotNull
+    @Column(name = "content_type", nullable = false)
+    private String contentType;
 
-  @NotNull
-  @Column(name = "size", nullable = false)
-  private Long size;
+    @NotNull
+    @Column(name = "size", nullable = false)
+    private Long size;
 
-  @NotNull
-  @Column(name = "storage_zone_id", nullable = false)
-  private Long storageZoneId;
+    @NotNull
+    @Column(name = "storage_zone_id", nullable = false)
+    private Long storageZoneId;
 
-  @NotNull
-  @Column(name = "storage_path", nullable = false)
-  private String storagePath;
+    @NotNull
+    @Column(name = "storage_path", nullable = false)
+    private String storagePath;
 
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+        FileMetadataPO that = (FileMetadataPO) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
-    if (o == null) {
-      return false;
-    }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy
-      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-      : o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy
-      ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass() : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) {
-      return false;
-    }
-    FileMetadataPO that = (FileMetadataPO) o;
-    return getId() != null && Objects.equals(getId(), that.getId());
-  }
 
-  @Override
-  public final int hashCode() {
-    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass().hashCode() : getClass().hashCode();
-  }
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

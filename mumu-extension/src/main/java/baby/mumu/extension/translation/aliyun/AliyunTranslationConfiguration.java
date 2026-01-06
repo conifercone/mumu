@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,27 +40,27 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class AliyunTranslationConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean(Client.class)
-  public Client alimtClient(ExtensionProperties extensionProperties) throws Exception {
-    AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
-      .getAliyun();
-    Config config = new Config()
-      .setAccessKeyId(
-        StringUtils.isBlank(aliyunTranslationProperties.getAccessKeyId()) ? System.getenv(
-          "ALIBABA_CLOUD_ACCESS_KEY_ID")
-          : aliyunTranslationProperties.getAccessKeyId())
-      .setAccessKeySecret(
-        StringUtils.isBlank(aliyunTranslationProperties.getAccessKeySecret()) ? System.getenv(
-          "ALIBABA_CLOUD_ACCESS_KEY_SECRET")
-          : aliyunTranslationProperties.getAccessKeySecret());
-    config.endpoint = aliyunTranslationProperties.getEndpoint();
-    return new Client(config);
-  }
+    @Bean
+    @ConditionalOnMissingBean(Client.class)
+    public Client alimtClient(ExtensionProperties extensionProperties) throws Exception {
+        AliyunTranslationProperties aliyunTranslationProperties = extensionProperties.getTranslation()
+            .getAliyun();
+        Config config = new Config()
+            .setAccessKeyId(
+                StringUtils.isBlank(aliyunTranslationProperties.getAccessKeyId()) ? System.getenv(
+                    "ALIBABA_CLOUD_ACCESS_KEY_ID")
+                    : aliyunTranslationProperties.getAccessKeyId())
+            .setAccessKeySecret(
+                StringUtils.isBlank(aliyunTranslationProperties.getAccessKeySecret()) ? System.getenv(
+                    "ALIBABA_CLOUD_ACCESS_KEY_SECRET")
+                    : aliyunTranslationProperties.getAccessKeySecret());
+        config.endpoint = aliyunTranslationProperties.getEndpoint();
+        return new Client(config);
+    }
 
-  @Bean
-  @ConditionalOnMissingBean(SimpleTextTranslation.class)
-  public SimpleTextTranslation simpleTextTranslation(Client alimtClient) {
-    return new AliyunSimpleTextTranslation(alimtClient);
-  }
+    @Bean
+    @ConditionalOnMissingBean(SimpleTextTranslation.class)
+    public SimpleTextTranslation simpleTextTranslation(Client alimtClient) {
+        return new AliyunSimpleTextTranslation(alimtClient);
+    }
 }

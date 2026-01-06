@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.extension.sql.filter.datasource;
 
 import baby.mumu.extension.ExtensionProperties;
+
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import javax.sql.DataSource;
 
 /**
  * 数据源过滤器链条接口实现
@@ -29,25 +30,25 @@ import javax.sql.DataSource;
  */
 public class DatasourceFilterChainImpl implements DatasourceFilterChain {
 
-  /**
-   * 数据源过滤器列表
-   */
-  private final List<DataSourceFilter> filters = new CopyOnWriteArrayList<>();
+    /**
+     * 数据源过滤器列表
+     */
+    private final List<DataSourceFilter> filters = new CopyOnWriteArrayList<>();
 
-  public DatasourceFilterChainImpl(List<DataSourceFilter> dataSourceFilters) {
-    this.filters.addAll(dataSourceFilters);
-  }
-
-
-  @Override
-  public DataSource doAfterFilter(DataSource dataSource,
-    ExtensionProperties extensionProperties) {
-    if (!filters.isEmpty()) {
-      for (DataSourceFilter filter : filters) {
-        dataSource = filter.afterCreate(dataSource, extensionProperties);
-      }
+    public DatasourceFilterChainImpl(List<DataSourceFilter> dataSourceFilters) {
+        this.filters.addAll(dataSourceFilters);
     }
 
-    return dataSource;
-  }
+
+    @Override
+    public DataSource doAfterFilter(DataSource dataSource,
+                                    ExtensionProperties extensionProperties) {
+        if (!filters.isEmpty()) {
+            for (DataSourceFilter filter : filters) {
+                dataSource = filter.afterCreate(dataSource, extensionProperties);
+            }
+        }
+
+        return dataSource;
+    }
 }

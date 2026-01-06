@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
  */
 public class EmailUtilsTest {
 
-  @Test
-  public void isValidEmailFormat() {
-    boolean validEmailFormat = EmailUtils.isValidEmailFormat("kaiyu.shan@outlook.com");
-    Assertions.assertTrue(validEmailFormat);
-    boolean validEmailFormat1 = EmailUtils.isValidEmailFormat("123456abc");
-    Assertions.assertFalse(validEmailFormat1);
-    boolean validEmailFormat2 = EmailUtils.isValidEmailFormat("kaiyu.shan.yz@gmail.com");
-    Assertions.assertTrue(validEmailFormat2);
-  }
+    @Test
+    public void isValidEmailFormat() {
+        boolean validEmailFormat = EmailUtils.isValidEmailFormat("kaiyu.shan@outlook.com");
+        Assertions.assertTrue(validEmailFormat);
+        boolean validEmailFormat1 = EmailUtils.isValidEmailFormat("123456abc");
+        Assertions.assertFalse(validEmailFormat1);
+        boolean validEmailFormat2 = EmailUtils.isValidEmailFormat("kaiyu.shan.yz@gmail.com");
+        Assertions.assertTrue(validEmailFormat2);
+    }
 }

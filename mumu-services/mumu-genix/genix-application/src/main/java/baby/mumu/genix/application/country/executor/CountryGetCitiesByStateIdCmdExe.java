@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,14 @@ package baby.mumu.genix.application.country.executor;
 import baby.mumu.genix.client.dto.CountryGetCitiesByStateIdDTO;
 import baby.mumu.genix.domain.country.gateway.CountryGateway;
 import baby.mumu.genix.infra.country.convertor.CountryConvertor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 
 /**
  * 根据省或州ID获取城市指令执行器
@@ -36,23 +37,23 @@ import org.springframework.util.Assert;
 @Component
 public class CountryGetCitiesByStateIdCmdExe {
 
-  private final CountryGateway countryGateway;
-  private final CountryConvertor countryConvertor;
+    private final CountryGateway countryGateway;
+    private final CountryConvertor countryConvertor;
 
-  @Autowired
-  public CountryGetCitiesByStateIdCmdExe(CountryGateway countryGateway,
-    CountryConvertor countryConvertor) {
-    this.countryGateway = countryGateway;
-    this.countryConvertor = countryConvertor;
-  }
+    @Autowired
+    public CountryGetCitiesByStateIdCmdExe(CountryGateway countryGateway,
+                                           CountryConvertor countryConvertor) {
+        this.countryGateway = countryGateway;
+        this.countryConvertor = countryConvertor;
+    }
 
-  public List<CountryGetCitiesByStateIdDTO> execute(
-    Long id) {
-    Assert.notNull(id, "id cannot be null");
-    return Optional.of(id)
-      .map(stateId -> countryGateway.getCitiesByStateId(stateId).stream()
-        .map(city -> countryConvertor.toCountryGetCitiesByStateIdDTO(city).orElse(null))
-        .filter(
-          Objects::nonNull).toList()).orElse(new ArrayList<>());
-  }
+    public List<CountryGetCitiesByStateIdDTO> execute(
+        Long id) {
+        Assert.notNull(id, "id cannot be null");
+        return Optional.of(id)
+            .map(stateId -> countryGateway.getCitiesByStateId(stateId).stream()
+                .map(city -> countryConvertor.toCountryGetCitiesByStateIdDTO(city).orElse(null))
+                .filter(
+                    Objects::nonNull).toList()).orElse(new ArrayList<>());
+    }
 }

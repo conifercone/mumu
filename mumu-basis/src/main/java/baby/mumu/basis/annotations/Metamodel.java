@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,9 @@
 
 package baby.mumu.basis.annotations;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.*;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * 元模型注解
@@ -36,47 +32,47 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface Metamodel {
 
-  Meta[] customs() default {};
+    Meta[] customs() default {};
 
-  /**
-   * 是否生成项目版本号
-   *
-   * @since 2.2.0
-   */
-  boolean projectVersion() default false;
+    /**
+     * 是否生成项目版本号
+     *
+     * @since 2.2.0
+     */
+    boolean projectVersion() default false;
 
-  /**
-   * 项目版本号字段名
-   *
-   * @since 2.2.0
-   */
-  String projectVersionFiledName() default "PROJECT_VERSION";
+    /**
+     * 项目版本号字段名
+     *
+     * @since 2.2.0
+     */
+    String projectVersionFiledName() default "PROJECT_VERSION";
 
-  /**
-   * 是否生成格式化后的项目版本号
-   *
-   * @since 2.3.0
-   */
-  boolean formattedProjectVersion() default false;
+    /**
+     * 是否生成格式化后的项目版本号
+     *
+     * @since 2.3.0
+     */
+    boolean formattedProjectVersion() default false;
 
-  /**
-   * 格式化后的项目版本号字段名
-   *
-   * @since 2.3.0
-   */
-  String formattedProjectVersionFiledName() default "FORMATTED_PROJECT_VERSION";
+    /**
+     * 格式化后的项目版本号字段名
+     *
+     * @since 2.3.0
+     */
+    String formattedProjectVersionFiledName() default "FORMATTED_PROJECT_VERSION";
 
-  /**
-   * 是否生成项目名
-   *
-   * @since 2.2.0
-   */
-  boolean projectName() default false;
+    /**
+     * 是否生成项目名
+     *
+     * @since 2.2.0
+     */
+    boolean projectName() default false;
 
-  /**
-   * 项目名字段名
-   *
-   * @since 2.2.0
-   */
-  String projectNameFiledName() default "PROJECT_NAME";
+    /**
+     * 项目名字段名
+     *
+     * @since 2.2.0
+     */
+    String projectNameFiledName() default "PROJECT_NAME";
 }

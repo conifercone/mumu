@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
@@ -46,6 +40,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 /**
  * jwt token认证拦截器
  *
@@ -54,66 +55,66 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-  private static final String TOKEN_START = "Bearer ";
-  JwtDecoder jwtDecoder;
-  TokenGrpcService tokenGrpcService;
-  private static final Logger log = LoggerFactory.getLogger(
-    JwtAuthenticationTokenFilter.class);
+    private static final String TOKEN_START = "Bearer ";
+    JwtDecoder jwtDecoder;
+    TokenGrpcService tokenGrpcService;
+    private static final Logger log = LoggerFactory.getLogger(
+        JwtAuthenticationTokenFilter.class);
 
-  public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
-    this.jwtDecoder = jwtDecoder;
-    this.tokenGrpcService = tokenGrpcService;
-  }
-
-  @Override
-  protected void doFilterInternal(@NonNull HttpServletRequest request,
-    @NonNull HttpServletResponse response,
-    @NonNull FilterChain filterChain) throws ServletException, IOException {
-    ApplicationHttpServletRequestWrapper applicationHttpServletRequestWrapper = new ApplicationHttpServletRequestWrapper(
-      request);
-    String authHeader = applicationHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
-    SecurityContextUtils.getLoginAccountLanguage()
-      .ifPresent(languageEnum -> applicationHttpServletRequestWrapper.setLocale(
-        Locale.of(languageEnum.getCode())));
-    // 存在token
-    if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(
-      JwtAuthenticationTokenFilter.TOKEN_START)) {
-      String authToken = authHeader.substring(JwtAuthenticationTokenFilter.TOKEN_START.length());
-      // 判断redis中是否存在token
-      if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
-        .getValidity()) {
-        JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
-        response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
-        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
-        return;
-      }
-      // 判断token是否合法
-      Jwt jwt;
-      try {
-        jwt = jwtDecoder.decode(authToken);
-      } catch (JwtException e) {
-        JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
-        response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
-        ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
-        return;
-      }
-      List<String> authorities = jwt.getClaimAsStringList(
-        TokenClaimsEnum.AUTHORITIES.getClaimName());
-      if (SecurityContextHolder.getContext().getAuthentication() == null) {
-        JwtAuthenticationToken authenticationToken =
-          new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
-              authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
-            .orElse(new HashSet<>()));
-        // 重新设置回账号对象
-        authenticationToken.setDetails(
-          new WebAuthenticationDetailsSource().buildDetails(applicationHttpServletRequestWrapper));
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        SecurityContextUtils.getLoginAccountLanguage()
-          .ifPresent(languageEnum -> applicationHttpServletRequestWrapper.setLocale(
-            Locale.of(languageEnum.getCode())));
-      }
+    public JwtAuthenticationTokenFilter(JwtDecoder jwtDecoder, TokenGrpcService tokenGrpcService) {
+        this.jwtDecoder = jwtDecoder;
+        this.tokenGrpcService = tokenGrpcService;
     }
-    // 放行
-    filterChain.doFilter(applicationHttpServletRequestWrapper, response);
-  }
+
+    @Override
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+        ApplicationHttpServletRequestWrapper applicationHttpServletRequestWrapper = new ApplicationHttpServletRequestWrapper(
+            request);
+        String authHeader = applicationHttpServletRequestWrapper.getHeader(HttpHeaders.AUTHORIZATION);
+        SecurityContextUtils.getLoginAccountLanguage()
+            .ifPresent(languageEnum -> applicationHttpServletRequestWrapper.setLocale(
+                Locale.of(languageEnum.getCode())));
+        // 存在token
+        if (StringUtils.isNotBlank(authHeader) && authHeader.startsWith(
+            JwtAuthenticationTokenFilter.TOKEN_START)) {
+            String authToken = authHeader.substring(JwtAuthenticationTokenFilter.TOKEN_START.length());
+            // 判断redis中是否存在token
+            if (!tokenGrpcService.validity(TokenValidityGrpcCmd.newBuilder().setToken(authToken).build())
+                .getValidity()) {
+                JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
+                response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
+                ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
+                return;
+            }
+            // 判断token是否合法
+            Jwt jwt;
+            try {
+                jwt = jwtDecoder.decode(authToken);
+            } catch (JwtException e) {
+                JwtAuthenticationTokenFilter.log.error(ResponseCode.INVALID_TOKEN.getMessage());
+                response.setStatus(ResponseCode.UNAUTHORIZED.getStatus());
+                ResponseWrapper.exceptionResponse(response, ResponseCode.INVALID_TOKEN);
+                return;
+            }
+            List<String> authorities = jwt.getClaimAsStringList(
+                TokenClaimsEnum.AUTHORITIES.getClaimName());
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                JwtAuthenticationToken authenticationToken =
+                    new JwtAuthenticationToken(jwt, Optional.ofNullable(authorities).map(authoritySet ->
+                            authoritySet.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
+                        .orElse(new HashSet<>()));
+                // 重新设置回账号对象
+                authenticationToken.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(applicationHttpServletRequestWrapper));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityContextUtils.getLoginAccountLanguage()
+                    .ifPresent(languageEnum -> applicationHttpServletRequestWrapper.setLocale(
+                        Locale.of(languageEnum.getCode())));
+            }
+        }
+        // 放行
+        filterChain.doFilter(applicationHttpServletRequestWrapper, response);
+    }
 }

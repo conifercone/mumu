@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 删除权限指令执行器
@@ -32,15 +33,15 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionDeleteByIdCmdExe")
 public class PermissionDeleteByIdCmdExe {
 
-  private final PermissionGateway permissionGateway;
+    private final PermissionGateway permissionGateway;
 
-  @Autowired
-  public PermissionDeleteByIdCmdExe(PermissionGateway permissionGateway) {
-    this.permissionGateway = permissionGateway;
-  }
+    @Autowired
+    public PermissionDeleteByIdCmdExe(PermissionGateway permissionGateway) {
+        this.permissionGateway = permissionGateway;
+    }
 
-  public void execute(Long id) {
-    Optional.ofNullable(id)
-      .ifPresent(permissionGateway::deleteById);
-  }
+    public void execute(Long id) {
+        Optional.ofNullable(id)
+            .ifPresent(permissionGateway::deleteById);
+    }
 }

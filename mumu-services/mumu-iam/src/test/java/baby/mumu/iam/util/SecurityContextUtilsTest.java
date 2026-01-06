@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,28 +39,28 @@ import org.springframework.test.context.ActiveProfiles;
 @WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsService")
 public class SecurityContextUtilsTest {
 
-  private static final Logger log = LoggerFactory.getLogger(
-    SecurityContextUtilsTest.class);
+    private static final Logger log = LoggerFactory.getLogger(
+        SecurityContextUtilsTest.class);
 
-  @Test
-  public void loginAccountId() {
-    Long accountId = SecurityContextUtils.getLoginAccountId().orElse(null);
-    Assertions.assertNotNull(accountId);
-    SecurityContextUtilsTest.log.info("loginAccountId: {}", accountId);
-  }
+    @Test
+    public void loginAccountId() {
+        Long accountId = SecurityContextUtils.getLoginAccountId().orElse(null);
+        Assertions.assertNotNull(accountId);
+        SecurityContextUtilsTest.log.info("loginAccountId: {}", accountId);
+    }
 
-  @Test
-  public void loginAccountName() {
-    String accountName = SecurityContextUtils.getLoginAccountName().orElse(null);
-    Assertions.assertNotNull(accountName);
-    SecurityContextUtilsTest.log.info("loginAccountName: {}", accountName);
-  }
+    @Test
+    public void loginAccountName() {
+        String accountName = SecurityContextUtils.getLoginAccountName().orElse(null);
+        Assertions.assertNotNull(accountName);
+        SecurityContextUtilsTest.log.info("loginAccountName: {}", accountName);
+    }
 
-  @Test
-  public void loginAccountLanguage() {
-    LanguageEnum languageEnum = SecurityContextUtils.getLoginAccountLanguage().orElse(null);
-    Assertions.assertNotNull(languageEnum);
-    SecurityContextUtilsTest.log.info("languageEnum: {}", languageEnum);
-  }
+    @Test
+    public void loginAccountLanguage() {
+        LanguageEnum languageEnum = SecurityContextUtils.getLoginAccountLanguage().orElse(null);
+        Assertions.assertNotNull(languageEnum);
+        SecurityContextUtilsTest.log.info("languageEnum: {}", languageEnum);
+    }
 
 }

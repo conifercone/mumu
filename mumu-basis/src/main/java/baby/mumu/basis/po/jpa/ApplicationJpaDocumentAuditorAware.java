@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,10 @@
 package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.AuditorAware;
+
+import java.util.Optional;
 
 /**
  * 创建人&修改人自动填充
@@ -29,8 +30,8 @@ import org.springframework.data.domain.AuditorAware;
  */
 public class ApplicationJpaDocumentAuditorAware implements AuditorAware<Long> {
 
-  @Override
-  public @NonNull Optional<Long> getCurrentAuditor() {
-    return SecurityContextUtils.getLoginAccountId();
-  }
+    @Override
+    public @NonNull Optional<Long> getCurrentAuditor() {
+        return SecurityContextUtils.getLoginAccountId();
+    }
 }

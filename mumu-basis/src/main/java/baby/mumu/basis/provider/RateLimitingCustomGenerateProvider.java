@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.basis.provider;
 
 import jakarta.validation.constraints.NotNull;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,15 +28,15 @@ import java.util.concurrent.TimeUnit;
  */
 public interface RateLimitingCustomGenerateProvider {
 
-  /**
-   * 生成令牌
-   *
-   * @return 生成结果
-   */
-  @NotNull
-  RateLimitingCustomGenerate generate();
+    /**
+     * 生成令牌
+     *
+     * @return 生成结果
+     */
+    @NotNull
+    RateLimitingCustomGenerate generate();
 
-  record RateLimitingCustomGenerate(int capacity, long period, TimeUnit timeUnit) {
+    record RateLimitingCustomGenerate(int capacity, long period, TimeUnit timeUnit) {
 
-  }
+    }
 }

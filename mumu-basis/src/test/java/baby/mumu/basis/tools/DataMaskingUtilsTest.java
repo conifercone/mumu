@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,38 +27,38 @@ import org.junit.jupiter.api.Test;
  */
 public class DataMaskingUtilsTest {
 
-  @Test
-  public void maskPhoneNumber() {
-    String phone = "13812345678";
-    System.out.println(DataMaskingUtils.maskPhoneNumber(phone));
-  }
+    @Test
+    public void maskPhoneNumber() {
+        String phone = "13812345678";
+        System.out.println(DataMaskingUtils.maskPhoneNumber(phone));
+    }
 
-  @Test
-  public void maskIdCard() {
-    String idCard = "123456789012345678";
-    System.out.println(DataMaskingUtils.maskIdCard(idCard));
-  }
+    @Test
+    public void maskIdCard() {
+        String idCard = "123456789012345678";
+        System.out.println(DataMaskingUtils.maskIdCard(idCard));
+    }
 
-  @Test
-  public void maskEmail() {
-    String email = "test@example.com";
-    System.out.println(DataMaskingUtils.maskEmail(email));
-  }
+    @Test
+    public void maskEmail() {
+        String email = "test@example.com";
+        System.out.println(DataMaskingUtils.maskEmail(email));
+    }
 
-  @Test
-  public void maskName() {
-    String name = "张三丰";
-    System.out.println(DataMaskingUtils.maskName(name));
-  }
+    @Test
+    public void maskName() {
+        String name = "张三丰";
+        System.out.println(DataMaskingUtils.maskName(name));
+    }
 
-  @Test
-  public void maskBankCard() {
-    String bankCard = "6222021234567890";
-    System.out.println(DataMaskingUtils.maskBankCard(bankCard));
-  }
+    @Test
+    public void maskBankCard() {
+        String bankCard = "6222021234567890";
+        System.out.println(DataMaskingUtils.maskBankCard(bankCard));
+    }
 
-  @Test
-  public void maskData() {
-    System.out.println(DataMaskingUtils.maskData("12345678901234567890", 4, 4));
-  }
+    @Test
+    public void maskData() {
+        System.out.println(DataMaskingUtils.maskData("12345678901234567890", 4, 4));
+    }
 }

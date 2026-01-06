@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 
 package baby.mumu.genix.domain.country;
 
+import lombok.Data;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import lombok.Data;
 
 /**
  * 省份或州
@@ -30,31 +31,31 @@ import lombok.Data;
 @Data
 public class State implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -8867398009221608381L;
+    @Serial
+    private static final long serialVersionUID = -8867398009221608381L;
 
-  /**
-   * 唯一标识
-   */
-  private Long id;
+    /**
+     * 唯一标识
+     */
+    private Long id;
 
-  /**
-   * 名称
-   */
-  private String name;
+    /**
+     * 名称
+     */
+    private String name;
 
-  /**
-   * 纬度
-   */
-  private String latitude;
+    /**
+     * 纬度
+     */
+    private String latitude;
 
-  /**
-   * 精度
-   */
-  private String longitude;
+    /**
+     * 精度
+     */
+    private String longitude;
 
-  /**
-   * 城市信息
-   */
-  private List<City> cities;
+    /**
+     * 城市信息
+     */
+    private List<City> cities;
 }

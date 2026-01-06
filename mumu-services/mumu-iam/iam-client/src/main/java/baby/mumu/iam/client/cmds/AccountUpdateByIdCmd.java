@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import baby.mumu.extension.annotations.NotBlankOrNull;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 /**
  * 账号根据id更新指令
@@ -34,39 +35,39 @@ import lombok.Data;
 @Data
 public class AccountUpdateByIdCmd {
 
-  @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
-  @NotNull(message = "{account.id.validation.not.null}")
-  private Long id;
+    @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
+    @NotNull(message = "{account.id.validation.not.null}")
+    private Long id;
 
-  @Schema(description = "用户名", requiredMode = RequiredMode.NOT_REQUIRED)
-  @NotBlankOrNull(message = "{account.username.validation.not.blank}")
-  private String username;
+    @Schema(description = "用户名", requiredMode = RequiredMode.NOT_REQUIRED)
+    @NotBlankOrNull(message = "{account.username.validation.not.blank}")
+    private String username;
 
-  @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String phoneCountryCode;
+    @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String phoneCountryCode;
 
-  @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String phone;
+    @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String phone;
 
-  @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
-  private GenderEnum gender;
+    @Schema(description = "性别", requiredMode = RequiredMode.NOT_REQUIRED)
+    private GenderEnum gender;
 
-  @Schema(description = "邮箱", requiredMode = RequiredMode.NOT_REQUIRED)
-  @NotBlankOrNull(message = "{account.email.validation.not.blank}")
-  private String email;
+    @Schema(description = "邮箱", requiredMode = RequiredMode.NOT_REQUIRED)
+    @NotBlankOrNull(message = "{account.email.validation.not.blank}")
+    private String email;
 
-  @Schema(description = "时区", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String timezone;
+    @Schema(description = "时区", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String timezone;
 
-  @Schema(description = "语言偏好", requiredMode = RequiredMode.NOT_REQUIRED)
-  private LanguageEnum language;
+    @Schema(description = "语言偏好", requiredMode = RequiredMode.NOT_REQUIRED)
+    private LanguageEnum language;
 
-  @Schema(description = "出生日期", requiredMode = RequiredMode.NOT_REQUIRED)
-  private LocalDate birthday;
+    @Schema(description = "出生日期", requiredMode = RequiredMode.NOT_REQUIRED)
+    private LocalDate birthday;
 
-  @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String bio;
+    @Schema(description = "个性签名", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String bio;
 
-  @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
-  private String nickName;
+    @Schema(description = "昵称", requiredMode = RequiredMode.NOT_REQUIRED)
+    private String nickName;
 }

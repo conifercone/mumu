@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,18 @@
 
 package baby.mumu.jmh;
 
-import static baby.mumu.jmh.ApplicationBenchmarkUtils.getResultFilePath;
-
 import com.github.yitter.idgen.YitIdHelper;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static baby.mumu.jmh.ApplicationBenchmarkUtils.getResultFilePath;
 
 /**
  * 常见ID生成方法基准测试
@@ -57,22 +50,22 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Measurement(iterations = 10, time = 1, timeUnit = TimeUnit.SECONDS)
 public class IdGenerateBenchmark {
 
-  @Benchmark
-  public long yitId() {
-    return YitIdHelper.nextId();
-  }
+    @Benchmark
+    public long yitId() {
+        return YitIdHelper.nextId();
+    }
 
-  @Benchmark
-  public String uuid() {
-    return UUID.randomUUID().toString();
-  }
+    @Benchmark
+    public String uuid() {
+        return UUID.randomUUID().toString();
+    }
 
-  public static void main(String[] args) throws RunnerException {
-    Options opt = new OptionsBuilder()
-      .include(IdGenerateBenchmark.class.getSimpleName())
-      .output(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.TEXT))
-      .result(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.JSON))
-      .resultFormat(ResultFormatType.JSON).build();
-    new Runner(opt).run();
-  }
+    public static void main(String[] args) throws RunnerException {
+        Options opt = new OptionsBuilder()
+            .include(IdGenerateBenchmark.class.getSimpleName())
+            .output(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.TEXT))
+            .result(getResultFilePath(IdGenerateBenchmark.class, ResultFormatType.JSON))
+            .resultFormat(ResultFormatType.JSON).build();
+        new Runner(opt).run();
+    }
 }

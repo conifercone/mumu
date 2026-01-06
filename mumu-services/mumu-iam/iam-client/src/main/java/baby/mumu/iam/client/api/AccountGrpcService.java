@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package baby.mumu.iam.client.api;
 
-import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
-
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
 import baby.mumu.iam.client.api.grpc.AccountServiceGrpc;
@@ -26,13 +24,16 @@ import baby.mumu.iam.client.api.grpc.AccountServiceGrpc.AccountServiceFutureStub
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import io.grpc.ManagedChannel;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
+
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 /**
  * 账号对外提供grpc调用实例
@@ -42,52 +43,52 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  */
 public class AccountGrpcService extends IAMGrpcService implements DisposableBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public AccountGrpcService(
-    DiscoveryClient discoveryClient, GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public AccountGrpcService(
+        DiscoveryClient discoveryClient, GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public AccountCurrentLoginGrpcDTO queryCurrentLoginAccount() {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return queryCurrentLoginAccountFromGrpc();
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public AccountCurrentLoginGrpcDTO queryCurrentLoginAccount() {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return queryCurrentLoginAccountFromGrpc();
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccount() {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return syncQueryCurrentLoginAccountFromGrpc();
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccount() {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return syncQueryCurrentLoginAccountFromGrpc();
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc() {
-    AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
-      channel);
-    return accountServiceBlockingStub
-      .queryCurrentLoginAccount(Empty.getDefaultInstance());
-  }
+    private AccountCurrentLoginGrpcDTO queryCurrentLoginAccountFromGrpc() {
+        AccountServiceBlockingStub accountServiceBlockingStub = AccountServiceGrpc.newBlockingStub(
+            channel);
+        return accountServiceBlockingStub
+            .queryCurrentLoginAccount(Empty.getDefaultInstance());
+    }
 
-  private @NonNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc() {
-    AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
-      channel);
-    return accountServiceFutureStub
-      .queryCurrentLoginAccount(Empty.getDefaultInstance());
-  }
+    private @NonNull ListenableFuture<AccountCurrentLoginGrpcDTO> syncQueryCurrentLoginAccountFromGrpc() {
+        AccountServiceFutureStub accountServiceFutureStub = AccountServiceGrpc.newFutureStub(
+            channel);
+        return accountServiceFutureStub
+            .queryCurrentLoginAccount(Empty.getDefaultInstance());
+    }
 
 }

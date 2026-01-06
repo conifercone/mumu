@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,15 @@ import lombok.Getter;
  */
 @Getter
 public enum OAuth2Enum {
-  GRANT_TYPE_PASSWORD("password", "密码模式");
+    GRANT_TYPE_PASSWORD("password", "密码模式");
 
-  private final String name;
+    private final String name;
 
-  private final String description;
+    private final String description;
 
 
-  OAuth2Enum(String name, String description) {
-    this.name = name;
-    this.description = description;
-  }
+    OAuth2Enum(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,12 +37,12 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 @ConditionalOnProperty(prefix = "mumu.extension.idempotent.request-id.redis", value = "enabled", havingValue = "true")
 public class RedisRequestIdIdempotentConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean(RequestIdIdempotentProcessor.class)
-  public RequestIdIdempotentProcessor redisRequestIdIdempotentProcessor(
-    ObjectProvider<RedisConnectionFactory> redisConnectionFactory,
-    ExtensionProperties extensionProperties) {
-    return new RedisRequestIdIdempotentProcessor(redisConnectionFactory.getIfAvailable(),
-      extensionProperties);
-  }
+    @Bean
+    @ConditionalOnMissingBean(RequestIdIdempotentProcessor.class)
+    public RequestIdIdempotentProcessor redisRequestIdIdempotentProcessor(
+        ObjectProvider<RedisConnectionFactory> redisConnectionFactory,
+        ExtensionProperties extensionProperties) {
+        return new RedisRequestIdIdempotentProcessor(redisConnectionFactory.getIfAvailable(),
+            extensionProperties);
+    }
 }

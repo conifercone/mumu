@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,16 +34,16 @@ import org.springframework.util.Assert;
 @Observed(name = "AccountChangePasswordCmdExe")
 public class AccountChangePasswordCmdExe {
 
-  private final AccountGateway accountGateway;
+    private final AccountGateway accountGateway;
 
-  @Autowired
-  public AccountChangePasswordCmdExe(AccountGateway accountGateway) {
-    this.accountGateway = accountGateway;
-  }
+    @Autowired
+    public AccountChangePasswordCmdExe(AccountGateway accountGateway) {
+        this.accountGateway = accountGateway;
+    }
 
-  public void execute(@NonNull AccountChangePasswordCmd accountChangePasswordCmd) {
-    Assert.notNull(accountChangePasswordCmd, "AccountChangePasswordCmd cannot be null");
-    accountGateway.changePassword(accountChangePasswordCmd.getOriginalPassword(),
-      accountChangePasswordCmd.getNewPassword());
-  }
+    public void execute(@NonNull AccountChangePasswordCmd accountChangePasswordCmd) {
+        Assert.notNull(accountChangePasswordCmd, "AccountChangePasswordCmd cannot be null");
+        accountGateway.changePassword(accountChangePasswordCmd.getOriginalPassword(),
+            accountChangePasswordCmd.getNewPassword());
+    }
 }

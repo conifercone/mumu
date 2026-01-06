@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,22 @@
 
 package baby.mumu.iam.client.api;
 
-import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
-
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.iam.client.api.grpc.TokenServiceGrpc;
 import baby.mumu.iam.client.api.grpc.TokenServiceGrpc.TokenServiceBlockingStub;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
 import baby.mumu.iam.client.api.grpc.TokenValidityGrpcDTO;
 import io.grpc.ManagedChannel;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
+
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 /**
  * token对外提供grpc调用实例
@@ -40,34 +41,34 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  */
 public class TokenGrpcService extends IAMGrpcService implements DisposableBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public TokenGrpcService(
-    DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public TokenGrpcService(
+        DiscoveryClient discoveryClient,
+        GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public TokenValidityGrpcDTO validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return validityFromGrpc(tokenValidityGrpcCmd);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public TokenValidityGrpcDTO validity(TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return validityFromGrpc(tokenValidityGrpcCmd);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
 
-  private @Nullable TokenValidityGrpcDTO validityFromGrpc(
-    TokenValidityGrpcCmd tokenValidityGrpcCmd) {
-    TokenServiceBlockingStub tokenServiceBlockingStub = TokenServiceGrpc.newBlockingStub(channel);
-    return tokenServiceBlockingStub.validity(tokenValidityGrpcCmd);
-  }
+    private @Nullable TokenValidityGrpcDTO validityFromGrpc(
+        TokenValidityGrpcCmd tokenValidityGrpcCmd) {
+        TokenServiceBlockingStub tokenServiceBlockingStub = TokenServiceGrpc.newBlockingStub(channel);
+        return tokenServiceBlockingStub.validity(tokenValidityGrpcCmd);
+    }
 
 }

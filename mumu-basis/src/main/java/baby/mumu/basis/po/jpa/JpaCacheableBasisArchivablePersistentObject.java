@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
 package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.po.ArchivablePersistentObject;
-import java.io.Serial;
 import lombok.Setter;
+
+import java.io.Serial;
 
 /**
  * jpa 可缓存的基础可存档数据对象
@@ -28,16 +29,16 @@ import lombok.Setter;
  */
 @Setter
 public class JpaCacheableBasisArchivablePersistentObject extends
-  JpaCacheableBasisDefaultPersistentObject implements
-  ArchivablePersistentObject {
+    JpaCacheableBasisDefaultPersistentObject implements
+    ArchivablePersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -9004328530785061008L;
+    @Serial
+    private static final long serialVersionUID = -9004328530785061008L;
 
-  private boolean archived;
+    private boolean archived;
 
-  @Override
-  public boolean isArchived() {
-    return archived;
-  }
+    @Override
+    public boolean isArchived() {
+        return archived;
+    }
 }

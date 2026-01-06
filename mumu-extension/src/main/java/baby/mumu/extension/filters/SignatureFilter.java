@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,6 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jspecify.annotations.NonNull;
@@ -44,6 +37,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * 签名过滤器
@@ -55,149 +56,149 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class SignatureFilter extends OncePerRequestFilter {
 
-  public static final String X_SIGNATURE = "X-Signature";
-  public static final String X_TIMESTAMP = "X-Timestamp";
-  public static final String X_REQUEST_ID = "X-Request-ID";
-  private final ExtensionProperties extensionProperties;
-  private static final Logger log = LoggerFactory.getLogger(
-    SignatureFilter.class);
-  private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    public static final String X_SIGNATURE = "X-Signature";
+    public static final String X_TIMESTAMP = "X-Timestamp";
+    public static final String X_REQUEST_ID = "X-Request-ID";
+    private final ExtensionProperties extensionProperties;
+    private static final Logger log = LoggerFactory.getLogger(
+        SignatureFilter.class);
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
-  public SignatureFilter(ExtensionProperties extensionProperties) {
-    this.extensionProperties = extensionProperties;
-  }
-
-  @Override
-  protected void doFilterInternal(@NonNull HttpServletRequest request,
-    @NonNull HttpServletResponse response,
-    @NonNull FilterChain filterChain) throws ServletException, IOException {
-    CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(
-      request);
-    String requestURI = request.getRequestURI();
-    DigitalSignature digitalSignature = extensionProperties.getGlobal().getDigitalSignature();
-    if (!isAllowed(requestURI, request.getMethod(), digitalSignature.getAllowlist())) {
-      String signature = request.getHeader(SignatureFilter.X_SIGNATURE);
-      String timestamp = request.getHeader(SignatureFilter.X_TIMESTAMP);
-      String requestId = request.getHeader(SignatureFilter.X_REQUEST_ID);
-      if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
-        try {
-          if (!SignatureUtils.validateSignature(
-            timestamp.concat(requestId).concat(
-                StringUtils.isNotBlank(request.getQueryString()) ? requestURI.concat("?")
-                  .concat(URLDecoder.decode(request.getQueryString(), StandardCharsets.UTF_8))
-                  : requestURI)
-              .concat(cachedBodyHttpServletRequest.getBody()), signature,
-            digitalSignature.getSecretKey(),
-            digitalSignature.getAlgorithm())) {
-            SignatureFilter.log.error(
-              ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
-            response.setStatus(HttpStatus.BAD_REQUEST.value());
-            ResponseWrapper.exceptionResponse(response,
-              ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
-            return;
-          }
-        } catch (Exception e) {
-          SignatureFilter.log.error(
-            ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
-          response.setStatus(HttpStatus.BAD_REQUEST.value());
-          ResponseWrapper.exceptionResponse(response,
-            ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
-          return;
-        }
-      } else {
-        SignatureFilter.log.error(
-          ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        ResponseWrapper.exceptionResponse(response,
-          ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
-        return;
-      }
-    }
-    // 放行
-    filterChain.doFilter(cachedBodyHttpServletRequest, response);
-  }
-
-  /**
-   * 检查请求路径和方法是否在白名单中
-   */
-  public boolean isAllowed(String requestUrl, String requestMethod,
-    @NonNull List<RequestMethod> allowlist) {
-    for (RequestMethod allowedMethod : allowlist) {
-      if (allowedMethod.getMethod().equalsIgnoreCase(requestMethod)
-        && pathMatcher.match(allowedMethod.getUrl(), requestUrl)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // 自定义 HttpServletRequestWrapper
-  @Getter
-  private static class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
-
-    private final String body;
-
-    public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
-      super(request);
-      StringBuilder jsonString = new StringBuilder();
-      String line;
-
-      try (BufferedReader reader = request.getReader()) {
-        while ((line = reader.readLine()) != null) {
-          jsonString.append(line);
-        }
-      }
-      body = jsonString.toString().replaceAll("\\s+", "");
+    public SignatureFilter(ExtensionProperties extensionProperties) {
+        this.extensionProperties = extensionProperties;
     }
 
     @Override
-    public @NonNull BufferedReader getReader() {
-      return new BufferedReader(new InputStreamReader(
-        new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8))));
-    }
-
-    @Override
-    public @NonNull ServletInputStream getInputStream() {
-      return new ServletInputStreamWrapper(
-        new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)));
-    }
-
-    // 包装 ServletInputStream
-    private static class ServletInputStreamWrapper extends ServletInputStream {
-
-      private final ByteArrayInputStream inputStream;
-
-      public ServletInputStreamWrapper(ByteArrayInputStream inputStream) {
-        this.inputStream = inputStream;
-      }
-
-      @Override
-      public boolean isFinished() {
-        return inputStream.available() == 0;
-      }
-
-      @Override
-      public boolean isReady() {
-        return true;
-      }
-
-      @Override
-      public void setReadListener(ReadListener readListener) {
-        try {
-          if (inputStream.available() > 0) {
-            readListener.onDataAvailable();
-          } else {
-            readListener.onAllDataRead();
-          }
-        } catch (IOException e) {
-          readListener.onError(e);
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+        CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(
+            request);
+        String requestURI = request.getRequestURI();
+        DigitalSignature digitalSignature = extensionProperties.getGlobal().getDigitalSignature();
+        if (!isAllowed(requestURI, request.getMethod(), digitalSignature.getAllowlist())) {
+            String signature = request.getHeader(SignatureFilter.X_SIGNATURE);
+            String timestamp = request.getHeader(SignatureFilter.X_TIMESTAMP);
+            String requestId = request.getHeader(SignatureFilter.X_REQUEST_ID);
+            if (StringUtils.isNotBlank(signature) && StringUtils.isNotBlank(timestamp)) {
+                try {
+                    if (!SignatureUtils.validateSignature(
+                        timestamp.concat(requestId).concat(
+                                StringUtils.isNotBlank(request.getQueryString()) ? requestURI.concat("?")
+                                    .concat(URLDecoder.decode(request.getQueryString(), StandardCharsets.UTF_8))
+                                    : requestURI)
+                            .concat(cachedBodyHttpServletRequest.getBody()), signature,
+                        digitalSignature.getSecretKey(),
+                        digitalSignature.getAlgorithm())) {
+                        SignatureFilter.log.error(
+                            ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+                        response.setStatus(HttpStatus.BAD_REQUEST.value());
+                        ResponseWrapper.exceptionResponse(response,
+                            ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
+                        return;
+                    }
+                } catch (Exception e) {
+                    SignatureFilter.log.error(
+                        ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+                    response.setStatus(HttpStatus.BAD_REQUEST.value());
+                    ResponseWrapper.exceptionResponse(response,
+                        ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
+                    return;
+                }
+            } else {
+                SignatureFilter.log.error(
+                    ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED.getMessage());
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                ResponseWrapper.exceptionResponse(response,
+                    ResponseCode.DIGITAL_SIGNATURE_AUTHENTICATION_FAILED);
+                return;
+            }
         }
-      }
-
-      @Override
-      public int read() {
-        return inputStream.read();
-      }
+        // 放行
+        filterChain.doFilter(cachedBodyHttpServletRequest, response);
     }
-  }
+
+    /**
+     * 检查请求路径和方法是否在白名单中
+     */
+    public boolean isAllowed(String requestUrl, String requestMethod,
+                             @NonNull List<RequestMethod> allowlist) {
+        for (RequestMethod allowedMethod : allowlist) {
+            if (allowedMethod.getMethod().equalsIgnoreCase(requestMethod)
+                && pathMatcher.match(allowedMethod.getUrl(), requestUrl)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 自定义 HttpServletRequestWrapper
+    @Getter
+    private static class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
+
+        private final String body;
+
+        public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
+            super(request);
+            StringBuilder jsonString = new StringBuilder();
+            String line;
+
+            try (BufferedReader reader = request.getReader()) {
+                while ((line = reader.readLine()) != null) {
+                    jsonString.append(line);
+                }
+            }
+            body = jsonString.toString().replaceAll("\\s+", "");
+        }
+
+        @Override
+        public @NonNull BufferedReader getReader() {
+            return new BufferedReader(new InputStreamReader(
+                new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8))));
+        }
+
+        @Override
+        public @NonNull ServletInputStream getInputStream() {
+            return new ServletInputStreamWrapper(
+                new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8)));
+        }
+
+        // 包装 ServletInputStream
+        private static class ServletInputStreamWrapper extends ServletInputStream {
+
+            private final ByteArrayInputStream inputStream;
+
+            public ServletInputStreamWrapper(ByteArrayInputStream inputStream) {
+                this.inputStream = inputStream;
+            }
+
+            @Override
+            public boolean isFinished() {
+                return inputStream.available() == 0;
+            }
+
+            @Override
+            public boolean isReady() {
+                return true;
+            }
+
+            @Override
+            public void setReadListener(ReadListener readListener) {
+                try {
+                    if (inputStream.available() > 0) {
+                        readListener.onDataAvailable();
+                    } else {
+                        readListener.onAllDataRead();
+                    }
+                } catch (IOException e) {
+                    readListener.onError(e);
+                }
+            }
+
+            @Override
+            public int read() {
+                return inputStream.read();
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,20 +36,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "FileFindMetaByMetaIdCmdExe")
 public class FileFindMetaByMetaIdCmdExe {
 
-  private final FileGateway fileGateway;
-  private final FileConvertor fileConvertor;
+    private final FileGateway fileGateway;
+    private final FileConvertor fileConvertor;
 
-  @Autowired
-  public FileFindMetaByMetaIdCmdExe(FileGateway fileGateway,
-    FileConvertor fileConvertor) {
-    this.fileGateway = fileGateway;
-    this.fileConvertor = fileConvertor;
-  }
+    @Autowired
+    public FileFindMetaByMetaIdCmdExe(FileGateway fileGateway,
+                                      FileConvertor fileConvertor) {
+        this.fileGateway = fileGateway;
+        this.fileConvertor = fileConvertor;
+    }
 
-  public FileFindMetaByMetaIdDTO execute(Long metadataId) {
-    FileMetadata fileMetadata = fileGateway.findMetaByMetaId(metadataId)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-    return fileConvertor.toFileFindMetaByMetaIdDTO(fileMetadata)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
-  }
+    public FileFindMetaByMetaIdDTO execute(Long metadataId) {
+        FileMetadata fileMetadata = fileGateway.findMetaByMetaId(metadataId)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
+        return fileConvertor.toFileFindMetaByMetaIdDTO(fileMetadata)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
+    }
 }

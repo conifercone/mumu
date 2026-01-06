@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,14 @@ package baby.mumu.genix.client.config;
 
 import baby.mumu.basis.kotlin.tools.SpringContextUtils;
 import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
-import java.io.Serial;
-import java.util.Properties;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.generator.GeneratorCreationContext;
 import org.hibernate.id.IdentifierGenerator;
 import org.jspecify.annotations.NonNull;
+
+import java.io.Serial;
+import java.util.Properties;
 
 /**
  * 雪花算法ID生成器
@@ -34,29 +35,29 @@ import org.jspecify.annotations.NonNull;
  */
 public class SnowflakeIdentifierGenerator implements IdentifierGenerator {
 
-  @Serial
-  private static final long serialVersionUID = -8395528141162825280L;
+    @Serial
+    private static final long serialVersionUID = -8395528141162825280L;
 
-  private Class<?> idType;
+    private Class<?> idType;
 
-  @Override
-  public Object generate(@NonNull SharedSessionContractImplementor session, Object object) {
-    PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtils.getBean(
-        PrimaryKeyGrpcService.class)
-      .orElseThrow(() -> new IllegalArgumentException("PrimaryKeyGrpcService bean not found"));
-    if (String.class.isAssignableFrom(idType)) {
-      return String.valueOf(primaryKeyGrpcService.snowflake());
+    @Override
+    public Object generate(@NonNull SharedSessionContractImplementor session, Object object) {
+        PrimaryKeyGrpcService primaryKeyGrpcService = SpringContextUtils.getBean(
+                PrimaryKeyGrpcService.class)
+            .orElseThrow(() -> new IllegalArgumentException("PrimaryKeyGrpcService bean not found"));
+        if (String.class.isAssignableFrom(idType)) {
+            return String.valueOf(primaryKeyGrpcService.snowflake());
+        }
+        if (Long.class.isAssignableFrom(idType)) {
+            return primaryKeyGrpcService.snowflake();
+        }
+        throw new HibernateException(
+            "Unanticipated return type [" + idType.getName() + "] for Snowflake conversion");
     }
-    if (Long.class.isAssignableFrom(idType)) {
-      return primaryKeyGrpcService.snowflake();
-    }
-    throw new HibernateException(
-      "Unanticipated return type [" + idType.getName() + "] for Snowflake conversion");
-  }
 
-  @Override
-  public void configure(@NonNull GeneratorCreationContext creationContext,
-    Properties parameters) {
-    this.idType = creationContext.getType().getReturnedClass();
-  }
+    @Override
+    public void configure(@NonNull GeneratorCreationContext creationContext,
+                          Properties parameters) {
+        this.idType = creationContext.getType().getReturnedClass();
+    }
 }

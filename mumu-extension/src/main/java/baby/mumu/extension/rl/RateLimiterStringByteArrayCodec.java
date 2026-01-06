@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.extension.rl;
 
 import io.lettuce.core.codec.RedisCodec;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
@@ -28,25 +29,25 @@ import java.nio.charset.StandardCharsets;
  */
 public class RateLimiterStringByteArrayCodec implements RedisCodec<String, byte[]> {
 
-  @Override
-  public String decodeKey(ByteBuffer bytes) {
-    return StandardCharsets.UTF_8.decode(bytes).toString();
-  }
+    @Override
+    public String decodeKey(ByteBuffer bytes) {
+        return StandardCharsets.UTF_8.decode(bytes).toString();
+    }
 
-  @Override
-  public byte[] decodeValue(ByteBuffer bytes) {
-    byte[] value = new byte[bytes.remaining()];
-    bytes.get(value);
-    return value;
-  }
+    @Override
+    public byte[] decodeValue(ByteBuffer bytes) {
+        byte[] value = new byte[bytes.remaining()];
+        bytes.get(value);
+        return value;
+    }
 
-  @Override
-  public ByteBuffer encodeKey(String key) {
-    return StandardCharsets.UTF_8.encode(key);
-  }
+    @Override
+    public ByteBuffer encodeKey(String key) {
+        return StandardCharsets.UTF_8.encode(key);
+    }
 
-  @Override
-  public ByteBuffer encodeValue(byte[] value) {
-    return ByteBuffer.wrap(value);
-  }
+    @Override
+    public ByteBuffer encodeValue(byte[] value) {
+        return ByteBuffer.wrap(value);
+    }
 }

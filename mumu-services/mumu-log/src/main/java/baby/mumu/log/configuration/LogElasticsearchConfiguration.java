@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,29 +35,29 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 @ConditionalOnProperty(prefix = "mumu.log.elasticsearch", name = "enabled", havingValue = "true")
 @EnableConfigurationProperties(LogProperties.class)
 public class LogElasticsearchConfiguration extends
-  ElasticsearchConfiguration {
+    ElasticsearchConfiguration {
 
-  private final LogProperties logProperties;
+    private final LogProperties logProperties;
 
-  @Autowired
-  public LogElasticsearchConfiguration(LogProperties logProperties) {
-    this.logProperties = logProperties;
-  }
+    @Autowired
+    public LogElasticsearchConfiguration(LogProperties logProperties) {
+        this.logProperties = logProperties;
+    }
 
-  @Override
-  public @NonNull ClientConfiguration clientConfiguration() {
-    // 使用构建器来提供集群地址
-    return ClientConfiguration.builder()
-      // 设置连接地址
-      .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
-      // 启用 ssl 并配置 CA 指纹
-      .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
-      // 设置用户名密码
-      .withBasicAuth(logProperties.getElasticsearch().getUsername(),
-        logProperties.getElasticsearch().getPassword())
-      .withSocketTimeout(60000)
-      .withConnectTimeout(60000)
-      // 创建连接信息
-      .build();
-  }
+    @Override
+    public @NonNull ClientConfiguration clientConfiguration() {
+        // 使用构建器来提供集群地址
+        return ClientConfiguration.builder()
+            // 设置连接地址
+            .connectedTo(logProperties.getElasticsearch().getHostAndPorts())
+            // 启用 ssl 并配置 CA 指纹
+            .usingSsl(logProperties.getElasticsearch().getCaFingerprint())
+            // 设置用户名密码
+            .withBasicAuth(logProperties.getElasticsearch().getUsername(),
+                logProperties.getElasticsearch().getPassword())
+            .withSocketTimeout(60000)
+            .withConnectTimeout(60000)
+            // 创建连接信息
+            .build();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,15 @@ import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
 import io.grpc.NameResolver;
 import io.grpc.StatusOr;
+import org.jspecify.annotations.NonNull;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.jspecify.annotations.NonNull;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 
 /**
  * 服务发现客户端名称解析器
@@ -37,56 +38,56 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  */
 public class DiscoveryClientNameResolver extends NameResolver {
 
-  private final String serviceName;
-  private Listener2 listener;
-  private final DiscoveryClient discoveryClient;
-  private final int port;
+    private final String serviceName;
+    private Listener2 listener;
+    private final DiscoveryClient discoveryClient;
+    private final int port;
 
-  public DiscoveryClientNameResolver(String serviceName, DiscoveryClient discoveryClient,
-    int port) {
-    this.serviceName = serviceName;
-    this.discoveryClient = discoveryClient;
-    this.port = port;
-  }
+    public DiscoveryClientNameResolver(String serviceName, DiscoveryClient discoveryClient,
+                                       int port) {
+        this.serviceName = serviceName;
+        this.discoveryClient = discoveryClient;
+        this.port = port;
+    }
 
-  @Override
-  public String getServiceAuthority() {
-    return serviceName;
-  }
+    @Override
+    public String getServiceAuthority() {
+        return serviceName;
+    }
 
-  @Override
-  public void start(Listener2 listener) {
-    this.listener = listener;
-    init();
-  }
+    @Override
+    public void start(Listener2 listener) {
+        this.listener = listener;
+        init();
+    }
 
-  @Override
-  public void refresh() {
-    init();
-  }
+    @Override
+    public void refresh() {
+        init();
+    }
 
-  private void init() {
-    listener.onResult(ResolutionResult.newBuilder()
-      .setAddressesOrError(StatusOr.fromValue(fetchAddresses()))
-      .setAttributes(Attributes.EMPTY)
-      .build());
-  }
+    private void init() {
+        listener.onResult(ResolutionResult.newBuilder()
+            .setAddressesOrError(StatusOr.fromValue(fetchAddresses()))
+            .setAttributes(Attributes.EMPTY)
+            .build());
+    }
 
-  /**
-   * This method is intentionally left blank because No operation needed for this implementation.
-   */
-  @Override
-  public void shutdown() {
-    // No operation needed for this implementation.
-  }
+    /**
+     * This method is intentionally left blank because No operation needed for this implementation.
+     */
+    @Override
+    public void shutdown() {
+        // No operation needed for this implementation.
+    }
 
-  private @NonNull List<EquivalentAddressGroup> fetchAddresses() {
-    return List.of(new EquivalentAddressGroup(Optional.ofNullable(
-        discoveryClient.getInstances(serviceName)).map(
-        serviceInstances -> serviceInstances.stream().map(
-            serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
-              port))
-          .collect(Collectors.toList()))
-      .orElse(new ArrayList<>())));
-  }
+    private @NonNull List<EquivalentAddressGroup> fetchAddresses() {
+        return List.of(new EquivalentAddressGroup(Optional.ofNullable(
+                discoveryClient.getInstances(serviceName)).map(
+                serviceInstances -> serviceInstances.stream().map(
+                        serviceInstance -> (SocketAddress) new InetSocketAddress(serviceInstance.getHost(),
+                            port))
+                    .collect(Collectors.toList()))
+            .orElse(new ArrayList<>())));
+    }
 }

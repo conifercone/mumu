@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.io.Serial;
-import java.time.Instant;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.proxy.HibernateProxy;
+
+import java.io.Serial;
+import java.time.Instant;
+import java.util.Objects;
 
 /**
  * 客户端数据对象
@@ -46,68 +47,68 @@ import org.hibernate.proxy.HibernateProxy;
 @ToString
 public class ClientPO extends JpaBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = 8276445490560814514L;
+    @Serial
+    private static final long serialVersionUID = 8276445490560814514L;
 
-  @Id
-  private String id;
+    @Id
+    private String id;
 
-  private String clientId;
+    private String clientId;
 
-  private Instant clientIdIssuedAt;
+    private Instant clientIdIssuedAt;
 
-  @ToString.Exclude
-  private String clientSecret;
+    @ToString.Exclude
+    private String clientSecret;
 
-  private Instant clientSecretExpiresAt;
+    private Instant clientSecretExpiresAt;
 
-  private String clientName;
+    private String clientName;
 
-  @Column(length = 1000)
-  private String clientAuthenticationMethods;
+    @Column(length = 1000)
+    private String clientAuthenticationMethods;
 
-  @Column(length = 1000)
-  private String authorizationGrantTypes;
+    @Column(length = 1000)
+    private String authorizationGrantTypes;
 
-  @Column(length = 1000)
-  private String redirectUris;
+    @Column(length = 1000)
+    private String redirectUris;
 
-  @Column(length = 1000)
-  private String postLogoutRedirectUris;
+    @Column(length = 1000)
+    private String postLogoutRedirectUris;
 
-  @Column(length = 1000)
-  private String scopes;
+    @Column(length = 1000)
+    private String scopes;
 
-  @Column(length = 2000)
-  private String clientSettings;
+    @Column(length = 2000)
+    private String clientSettings;
 
-  @Column(length = 2000)
-  private String tokenSettings;
+    @Column(length = 2000)
+    private String tokenSettings;
 
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null) {
+            return false;
+        }
+        Class<?> oEffectiveClass = o instanceof HibernateProxy
+            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
+            : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy
+            ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) {
+            return false;
+        }
+        ClientPO clientPO = (ClientPO) o;
+        return getId() != null && Objects.equals(getId(), clientPO.getId());
     }
-    if (o == null) {
-      return false;
-    }
-    Class<?> oEffectiveClass = o instanceof HibernateProxy
-      ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-      : o.getClass();
-    Class<?> thisEffectiveClass = this instanceof HibernateProxy
-      ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass() : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) {
-      return false;
-    }
-    ClientPO clientPO = (ClientPO) o;
-    return getId() != null && Objects.equals(getId(), clientPO.getId());
-  }
 
-  @Override
-  public final int hashCode() {
-    return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
-      .getPersistentClass().hashCode() : getClass().hashCode();
-  }
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer()
+            .getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

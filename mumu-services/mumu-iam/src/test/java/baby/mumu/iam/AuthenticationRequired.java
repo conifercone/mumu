@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@
 package baby.mumu.iam;
 
 import baby.mumu.basis.enums.OAuth2Enum;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.jspecify.annotations.NonNull;
@@ -32,6 +29,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 /**
  * 自动获取token
  *
@@ -40,45 +41,45 @@ import tools.jackson.databind.json.JsonMapper;
  */
 public class AuthenticationRequired {
 
-  public Optional<String> getToken(@NonNull MockMvc mockMvc) {
-    return getToken(mockMvc, "admin", "Admin@5211314");
-  }
+    public Optional<String> getToken(@NonNull MockMvc mockMvc) {
+        return getToken(mockMvc, "admin", "Admin@5211314");
+    }
 
-  public Optional<String> getToken(@NonNull MockMvc mockMvc, String username, String password) {
-    JsonMapper jsonMapper = JsonMapper.builder().build();
-    MvcResult mvcResult;
-    try {
-      byte[] encodedBytes = Base64.encodeBase64(
-        String.format("%s:%s", "mumu-client", "mumu").getBytes(
-          StandardCharsets.UTF_8));
-      mvcResult = mockMvc.perform(MockMvcRequestBuilders
-          .post("/oauth2/token")
-          .param("username", username)
-          .param("password", password)
-          .param("scope", "message.read message.write openid")
-          .param("grant_type", OAuth2Enum.GRANT_TYPE_PASSWORD.getName())
-          .header("Authorization",
-            "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
-          .header("X-Forwarded-For", "123.123.123.123")
-          .accept(MediaType.APPLICATION_JSON)
-          .contentType(MediaType.APPLICATION_JSON_VALUE)
-        )
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andReturn();
-    } catch (Exception e) {
-      return Optional.empty();
-    }
-    MockHttpServletResponse response = mvcResult.getResponse();
-    if (response.getStatus() == HttpStatus.SC_OK) {
-      try {
-        String contentAsString = response.getContentAsString();
-        JsonNode jsonNode = jsonMapper.readTree(contentAsString);
-        JsonNode accessToken = jsonNode.get("access_token");
-        return Optional.ofNullable(accessToken.asString());
-      } catch (UnsupportedEncodingException e) {
+    public Optional<String> getToken(@NonNull MockMvc mockMvc, String username, String password) {
+        JsonMapper jsonMapper = JsonMapper.builder().build();
+        MvcResult mvcResult;
+        try {
+            byte[] encodedBytes = Base64.encodeBase64(
+                String.format("%s:%s", "mumu-client", "mumu").getBytes(
+                    StandardCharsets.UTF_8));
+            mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                    .post("/oauth2/token")
+                    .param("username", username)
+                    .param("password", password)
+                    .param("scope", "message.read message.write openid")
+                    .param("grant_type", OAuth2Enum.GRANT_TYPE_PASSWORD.getName())
+                    .header("Authorization",
+                        "Basic ".concat(new String(encodedBytes, StandardCharsets.UTF_8)))
+                    .header("X-Forwarded-For", "123.123.123.123")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+        MockHttpServletResponse response = mvcResult.getResponse();
+        if (response.getStatus() == HttpStatus.SC_OK) {
+            try {
+                String contentAsString = response.getContentAsString();
+                JsonNode jsonNode = jsonMapper.readTree(contentAsString);
+                JsonNode accessToken = jsonNode.get("access_token");
+                return Optional.ofNullable(accessToken.asString());
+            } catch (UnsupportedEncodingException e) {
+                return Optional.empty();
+            }
+        }
         return Optional.empty();
-      }
     }
-    return Optional.empty();
-  }
 }

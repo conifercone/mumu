@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,43 +29,43 @@ import org.springframework.data.geo.Point;
 @Data
 public class AccountModifyAddressByAddressIdCmd {
 
-  /**
-   * 唯一主键
-   */
-  private String id;
+    /**
+     * 唯一主键
+     */
+    private String id;
 
-  /**
-   * 街道地址，包含门牌号和街道信息
-   */
-  @Size(max = 255)
-  private String street;
+    /**
+     * 街道地址，包含门牌号和街道信息
+     */
+    @Size(max = 255)
+    private String street;
 
-  /**
-   * 城市信息
-   */
-  @Size(max = 100)
-  private String city;
+    /**
+     * 城市信息
+     */
+    @Size(max = 100)
+    private String city;
 
-  /**
-   * 州或省的信息
-   */
-  @Size(max = 100)
-  private String state;
+    /**
+     * 州或省的信息
+     */
+    @Size(max = 100)
+    private String state;
 
-  /**
-   * 邮政编码
-   */
-  @Size(max = 20)
-  private String postalCode;
+    /**
+     * 邮政编码
+     */
+    @Size(max = 20)
+    private String postalCode;
 
-  /**
-   * 国家信息
-   */
-  @Size(max = 100)
-  private String country;
+    /**
+     * 国家信息
+     */
+    @Size(max = 100)
+    private String country;
 
-  /**
-   * 定位
-   */
-  private Point location;
+    /**
+     * 定位
+     */
+    private Point location;
 }

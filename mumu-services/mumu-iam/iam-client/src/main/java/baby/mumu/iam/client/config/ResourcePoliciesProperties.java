@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package baby.mumu.iam.client.config;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 资源服务器配置
@@ -32,71 +33,71 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.resource.policies")
 public class ResourcePoliciesProperties {
 
-  @NestedConfigurationProperty
-  private List<HttpPolicy> http = new ArrayList<>();
-
-  @NestedConfigurationProperty
-  private List<Grpc> grpc = new ArrayList<>();
-
-
-  @Data
-  public static class HttpPolicy {
-
-    private String httpMethod;
-
-    private String matcher;
-
-    private String authority;
-
-    private List<String> anyAuthority = new ArrayList<>();
-
-    private String role;
-
-    private List<String> anyRole = new ArrayList<>();
-
-    private boolean permitAll;
-
-    private boolean denyAll;
-
-    private boolean authenticated;
-  }
-
-  /**
-   * grpc方法权限
-   *
-   * @since 1.0.4
-   */
-  @Data
-  public static class Grpc {
-
-    private String serviceFullPath;
+    @NestedConfigurationProperty
+    private List<HttpPolicy> http = new ArrayList<>();
 
     @NestedConfigurationProperty
-    private List<GrpcPolicy> grpcPolicies = new ArrayList<>();
-  }
+    private List<Grpc> grpc = new ArrayList<>();
 
-  /**
-   * grpc方法权限策略
-   *
-   * @since 1.0.4
-   */
-  @Data
-  public static class GrpcPolicy {
 
-    private String method;
+    @Data
+    public static class HttpPolicy {
 
-    private String authority;
+        private String httpMethod;
 
-    private List<String> anyAuthority = new ArrayList<>();
+        private String matcher;
 
-    private String role;
+        private String authority;
 
-    private List<String> anyRole = new ArrayList<>();
+        private List<String> anyAuthority = new ArrayList<>();
 
-    private boolean permitAll;
+        private String role;
 
-    private boolean denyAll;
+        private List<String> anyRole = new ArrayList<>();
 
-    private boolean authenticated;
-  }
+        private boolean permitAll;
+
+        private boolean denyAll;
+
+        private boolean authenticated;
+    }
+
+    /**
+     * grpc方法权限
+     *
+     * @since 1.0.4
+     */
+    @Data
+    public static class Grpc {
+
+        private String serviceFullPath;
+
+        @NestedConfigurationProperty
+        private List<GrpcPolicy> grpcPolicies = new ArrayList<>();
+    }
+
+    /**
+     * grpc方法权限策略
+     *
+     * @since 1.0.4
+     */
+    @Data
+    public static class GrpcPolicy {
+
+        private String method;
+
+        private String authority;
+
+        private List<String> anyAuthority = new ArrayList<>();
+
+        private String role;
+
+        private List<String> anyRole = new ArrayList<>();
+
+        private boolean permitAll;
+
+        private boolean denyAll;
+
+        private boolean authenticated;
+    }
 }

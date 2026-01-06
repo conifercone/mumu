@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,60 +39,60 @@ import org.springframework.security.core.AuthenticationException;
 @Configuration
 public class GrpcExceptionHandlersConfiguration {
 
-  private static final Logger log = LoggerFactory.getLogger(
-    GrpcExceptionHandlersConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(
+        GrpcExceptionHandlersConfiguration.class);
 
-  @Bean
-  public GrpcExceptionHandler globalGrpcExceptionHandler(
-    SystemLogGrpcService systemLogGrpcService) {
-    return exception -> {
+    @Bean
+    public GrpcExceptionHandler globalGrpcExceptionHandler(
+        SystemLogGrpcService systemLogGrpcService) {
+        return exception -> {
 
-      switch (exception) {
-        case RateLimiterException e -> {
-          GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
-          submit(systemLogGrpcService, "RL", e.getMessage(), ExceptionUtils.getStackTrace(e));
-          return Status.RESOURCE_EXHAUSTED.withDescription(e.getMessage()).withCause(e)
-            .asException();
-        }
-        case AuthenticationException e -> {
-          GrpcExceptionHandlersConfiguration.log.error(ResponseCode.UNAUTHORIZED.getMessage(), e);
-          submit(systemLogGrpcService, "AUTHENTICATION",
-            ResponseCode.UNAUTHORIZED.getMessage(),
-            ResponseCode.UNAUTHORIZED.getMessage());
-          return Status.UNAUTHENTICATED.withDescription(e.getMessage()).withCause(e).asException();
-        }
-        case ApplicationException e -> {
-          GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
-          submit(systemLogGrpcService, "MUMU", e.getMessage(), ExceptionUtils.getStackTrace(e));
-          return Status.INTERNAL.withDescription(e.getMessage()).withCause(e).asException();
-        }
-        default -> {
-          // 兜底
-          GrpcExceptionHandlersConfiguration.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
-            exception);
-          submit(systemLogGrpcService, "EXCEPTION",
-            ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
-            ResponseCode.INTERNAL_SERVER_ERROR.getMessage());
-          return Status.INTERNAL.withDescription(exception.getMessage()).withCause(exception)
-            .asException();
-        }
-      }
-    };
-  }
-
-  private void submit(SystemLogGrpcService systemLogGrpcService,
-    String category,
-    String content,
-    String fail) {
-    try {
-      systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
-        .setContent(content)
-        .setCategory(category)
-        .setFail(fail)
-        .build());
-    } catch (Exception ex) {
-      GrpcExceptionHandlersConfiguration.log.warn("systemLogGrpcService.syncSubmit failed: {}",
-        ex.getMessage(), ex);
+            switch (exception) {
+                case RateLimiterException e -> {
+                    GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
+                    submit(systemLogGrpcService, "RL", e.getMessage(), ExceptionUtils.getStackTrace(e));
+                    return Status.RESOURCE_EXHAUSTED.withDescription(e.getMessage()).withCause(e)
+                        .asException();
+                }
+                case AuthenticationException e -> {
+                    GrpcExceptionHandlersConfiguration.log.error(ResponseCode.UNAUTHORIZED.getMessage(), e);
+                    submit(systemLogGrpcService, "AUTHENTICATION",
+                        ResponseCode.UNAUTHORIZED.getMessage(),
+                        ResponseCode.UNAUTHORIZED.getMessage());
+                    return Status.UNAUTHENTICATED.withDescription(e.getMessage()).withCause(e).asException();
+                }
+                case ApplicationException e -> {
+                    GrpcExceptionHandlersConfiguration.log.error(e.getMessage(), e);
+                    submit(systemLogGrpcService, "MUMU", e.getMessage(), ExceptionUtils.getStackTrace(e));
+                    return Status.INTERNAL.withDescription(e.getMessage()).withCause(e).asException();
+                }
+                default -> {
+                    // 兜底
+                    GrpcExceptionHandlersConfiguration.log.error(ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
+                        exception);
+                    submit(systemLogGrpcService, "EXCEPTION",
+                        ResponseCode.INTERNAL_SERVER_ERROR.getMessage(),
+                        ResponseCode.INTERNAL_SERVER_ERROR.getMessage());
+                    return Status.INTERNAL.withDescription(exception.getMessage()).withCause(exception)
+                        .asException();
+                }
+            }
+        };
     }
-  }
+
+    private void submit(SystemLogGrpcService systemLogGrpcService,
+                        String category,
+                        String content,
+                        String fail) {
+        try {
+            systemLogGrpcService.syncSubmit(SystemLogSubmitGrpcCmd.newBuilder()
+                .setContent(content)
+                .setCategory(category)
+                .setFail(fail)
+                .build());
+        } catch (Exception ex) {
+            GrpcExceptionHandlersConfiguration.log.warn("systemLogGrpcService.syncSubmit failed: {}",
+                ex.getMessage(), ex);
+        }
+    }
 }

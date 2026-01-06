@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,30 +35,30 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Configuration
 public class GenixClientConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
-    DiscoveryClient discoveryClient) {
-    DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
-      discoveryClient);
-    NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
-    return discoveryClientNameResolverProvider;
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
+        DiscoveryClient discoveryClient) {
+        DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+            discoveryClient);
+        NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
+        return discoveryClientNameResolverProvider;
+    }
 
-  @Bean
-  public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new PrimaryKeyGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public PrimaryKeyGrpcService primaryKeyGrpcService(DiscoveryClient discoveryClient,
+                                                       GrpcChannelFactory grpcChannelFactory) {
+        return new PrimaryKeyGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public CaptchaCodeGrpcService captchaCodeGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new CaptchaCodeGrpcService(discoveryClient, grpcChannelFactory);
-  }
+    @Bean
+    public CaptchaCodeGrpcService captchaCodeGrpcService(DiscoveryClient discoveryClient,
+                                                         GrpcChannelFactory grpcChannelFactory) {
+        return new CaptchaCodeGrpcService(discoveryClient, grpcChannelFactory);
+    }
 
-  @Bean
-  public ProjectInformationPrint genixClientProjectInformationPrint() {
-    return new ProjectInformationPrint();
-  }
+    @Bean
+    public ProjectInformationPrint genixClientProjectInformationPrint() {
+        return new ProjectInformationPrint();
+    }
 }

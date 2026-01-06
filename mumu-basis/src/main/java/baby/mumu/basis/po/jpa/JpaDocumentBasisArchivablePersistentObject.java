@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package baby.mumu.basis.po.jpa;
 
 import baby.mumu.basis.po.ArchivablePersistentObject;
 import jakarta.persistence.EntityListeners;
-import java.io.Serial;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.io.Serial;
 
 /**
  * jpa 文档类型基础可存档数据对象
@@ -32,16 +33,16 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Setter
 public class JpaDocumentBasisArchivablePersistentObject extends
-  JpaDocumentBasisDefaultPersistentObject implements
-  ArchivablePersistentObject {
+    JpaDocumentBasisDefaultPersistentObject implements
+    ArchivablePersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -1101323311607199590L;
+    @Serial
+    private static final long serialVersionUID = -1101323311607199590L;
 
-  private boolean archived;
+    private boolean archived;
 
-  @Override
-  public boolean isArchived() {
-    return archived;
-  }
+    @Override
+    public boolean isArchived() {
+        return archived;
+    }
 }

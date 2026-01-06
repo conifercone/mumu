@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BarCodeMapper {
 
-  BarCodeMapper INSTANCE = Mappers.getMapper(BarCodeMapper.class);
+    BarCodeMapper INSTANCE = Mappers.getMapper(BarCodeMapper.class);
 
-  @API(status = Status.STABLE, since = "1.0.4")
-  BarCode toEntity(BarCodeGenerateCmd barCodeGenerateCmd);
+    @API(status = Status.STABLE, since = "1.0.4")
+    BarCode toEntity(BarCodeGenerateCmd barCodeGenerateCmd);
 }

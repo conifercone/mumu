@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,10 @@
 
 package baby.mumu.iam;
 
-import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
-
 import baby.mumu.basis.annotations.Metamodel;
 import baby.mumu.basis.constants.BeanNameConstants;
 import baby.mumu.basis.constants.SpringBootConstants;
 import com.redis.om.spring.annotations.EnableRedisDocumentRepositories;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -33,6 +29,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO;
 
 /**
  * 统一身份与访问管理（IAM）微服务，提供身份认证、单点登录、细粒度授权与审计能力
@@ -52,15 +53,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Metamodel(projectName = true, projectVersion = true, formattedProjectVersion = true)
 public class IAMApplication {
 
-  static void main(String[] args) {
-    SpringApplication springApplication = new SpringApplication(
-      IAMApplication.class);
-    Map<String, Object> defaultProperties = new HashMap<>();
-    defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
-      IAMApplicationMetamodel.PROJECT_NAME);
-    defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
-      IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION);
-    springApplication.setDefaultProperties(defaultProperties);
-    springApplication.run(args);
-  }
+    static void main(String[] args) {
+        SpringApplication springApplication = new SpringApplication(
+            IAMApplication.class);
+        Map<String, Object> defaultProperties = new HashMap<>();
+        defaultProperties.put(SpringBootConstants.APPLICATION_TITLE,
+            IAMApplicationMetamodel.PROJECT_NAME);
+        defaultProperties.put(SpringBootConstants.APPLICATION_FORMATTED_VERSION,
+            IAMApplicationMetamodel.FORMATTED_PROJECT_VERSION);
+        springApplication.setDefaultProperties(defaultProperties);
+        springApplication.run(args);
+    }
 }

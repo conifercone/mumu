@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package baby.mumu.extension.fd;
 
-import java.io.Serial;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * 人脸检测领域模型
@@ -35,16 +36,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FaceDetection implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = -800432213501888089L;
+    @Serial
+    private static final long serialVersionUID = -800432213501888089L;
 
-  /**
-   * 需要识别的图片绝对路径
-   */
-  private String imageAbsolutePath;
+    /**
+     * 需要识别的图片绝对路径
+     */
+    private String imageAbsolutePath;
 
-  /**
-   * 输出结果图片的绝对路径
-   */
-  private String imageOutputAbsolutePath;
+    /**
+     * 输出结果图片的绝对路径
+     */
+    private String imageOutputAbsolutePath;
 }

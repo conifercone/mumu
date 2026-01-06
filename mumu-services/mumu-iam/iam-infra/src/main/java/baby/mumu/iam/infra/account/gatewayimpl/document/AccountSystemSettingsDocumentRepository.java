@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ package baby.mumu.iam.infra.account.gatewayimpl.document;
 import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
 
 /**
  * 账号系统设置
@@ -29,11 +30,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @since 2.2.0
  */
 public interface AccountSystemSettingsDocumentRepository extends
-  MongoRepository<AccountSystemSettingsDocumentPO, String> {
+    MongoRepository<AccountSystemSettingsDocumentPO, String> {
 
-  List<AccountSystemSettingsDocumentPO> findByAccountId(@NotNull Long accountId);
+    List<AccountSystemSettingsDocumentPO> findByAccountId(@NotNull Long accountId);
 
-  boolean existsByAccountIdAndProfile(@NotNull Long accountId, @NotBlank String profile);
+    boolean existsByAccountIdAndProfile(@NotNull Long accountId, @NotBlank String profile);
 
-  void deleteByAccountId(Long accountId);
+    void deleteByAccountId(Long accountId);
 }

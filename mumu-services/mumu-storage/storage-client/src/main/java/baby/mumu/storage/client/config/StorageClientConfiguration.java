@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,25 +34,25 @@ import org.springframework.grpc.client.GrpcChannelFactory;
 @Configuration
 public class StorageClientConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
-    DiscoveryClient discoveryClient) {
-    DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
-      discoveryClient);
-    NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
-    return discoveryClientNameResolverProvider;
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
+        DiscoveryClient discoveryClient) {
+        DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+            discoveryClient);
+        NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
+        return discoveryClientNameResolverProvider;
+    }
 
-  @Bean
-  public FileGrpcService fileGrpcService(DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    return new FileGrpcService(discoveryClient,
-      grpcChannelFactory);
-  }
+    @Bean
+    public FileGrpcService fileGrpcService(DiscoveryClient discoveryClient,
+                                           GrpcChannelFactory grpcChannelFactory) {
+        return new FileGrpcService(discoveryClient,
+            grpcChannelFactory);
+    }
 
-  @Bean
-  public ProjectInformationPrint storageClientProjectInformationPrint() {
-    return new ProjectInformationPrint();
-  }
+    @Bean
+    public ProjectInformationPrint storageClientProjectInformationPrint() {
+        return new ProjectInformationPrint();
+    }
 }

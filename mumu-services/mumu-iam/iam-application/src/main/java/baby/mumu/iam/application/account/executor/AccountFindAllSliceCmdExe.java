@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.List;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 分页查询所有账号指令执行器(不查询总数)
@@ -40,25 +41,25 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountFindAllSliceCmdExe")
 public class AccountFindAllSliceCmdExe {
 
-  private final AccountGateway accountGateway;
-  private final AccountConvertor accountConvertor;
+    private final AccountGateway accountGateway;
+    private final AccountConvertor accountConvertor;
 
-  @Autowired
-  public AccountFindAllSliceCmdExe(AccountGateway accountGateway,
-    AccountConvertor accountConvertor) {
-    this.accountGateway = accountGateway;
-    this.accountConvertor = accountConvertor;
-  }
+    @Autowired
+    public AccountFindAllSliceCmdExe(AccountGateway accountGateway,
+                                     AccountConvertor accountConvertor) {
+        this.accountGateway = accountGateway;
+        this.accountConvertor = accountConvertor;
+    }
 
-  public Slice<AccountFindAllSliceDTO> execute(
-    @NonNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
-    Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
-    Slice<Account> accounts = accountGateway.findAllSlice(account,
-      accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
-    List<AccountFindAllSliceDTO> accountFindAllSliceDTOS = accounts.getContent().stream()
-      .map(accountConvertor::toAccountFindAllSliceDTO)
-      .filter(Optional::isPresent).map(Optional::get).toList();
-    return new SliceImpl<>(accountFindAllSliceDTOS, accounts.getPageable(),
-      accounts.hasNext());
-  }
+    public Slice<AccountFindAllSliceDTO> execute(
+        @NonNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
+        Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
+        Slice<Account> accounts = accountGateway.findAllSlice(account,
+            accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
+        List<AccountFindAllSliceDTO> accountFindAllSliceDTOS = accounts.getContent().stream()
+            .map(accountConvertor::toAccountFindAllSliceDTO)
+            .filter(Optional::isPresent).map(Optional::get).toList();
+        return new SliceImpl<>(accountFindAllSliceDTOS, accounts.getPageable(),
+            accounts.hasNext());
+    }
 }

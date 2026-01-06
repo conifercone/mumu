@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,12 @@
 
 package baby.mumu.extension;
 
+import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * 全局配置
@@ -31,59 +32,59 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 public class GlobalProperties {
 
-  /**
-   * 归档删除期限
-   */
-  private Long archiveDeletionPeriod = 30L;
-
-  /**
-   * 归档删除期限单位
-   */
-  private ChronoUnit archiveDeletionPeriodUnit = ChronoUnit.DAYS;
-
-  /**
-   * 数字签名
-   */
-  @NestedConfigurationProperty
-  private DigitalSignature digitalSignature = new DigitalSignature();
-
-
-  @Data
-  public static class DigitalSignature {
-
     /**
-     * 是否开启
+     * 归档删除期限
      */
-    private boolean enabled;
+    private Long archiveDeletionPeriod = 30L;
 
     /**
-     * 签名密钥
+     * 归档删除期限单位
      */
-    private String secretKey = "mumu";
+    private ChronoUnit archiveDeletionPeriodUnit = ChronoUnit.DAYS;
 
     /**
-     * 白名单
+     * 数字签名
      */
     @NestedConfigurationProperty
-    private List<RequestMethod> allowlist = new ArrayList<>();
+    private DigitalSignature digitalSignature = new DigitalSignature();
 
-    /**
-     * 签名算法
-     */
-    private String algorithm = "HmacSHA256";
 
     @Data
-    public static class RequestMethod {
+    public static class DigitalSignature {
 
-      /**
-       * 请求方法 eg: PUT POST GET DELETE
-       */
-      private String method;
+        /**
+         * 是否开启
+         */
+        private boolean enabled;
 
-      /**
-       * 请求地址，支持模式匹配 eg: /test/**
-       */
-      private String url;
+        /**
+         * 签名密钥
+         */
+        private String secretKey = "mumu";
+
+        /**
+         * 白名单
+         */
+        @NestedConfigurationProperty
+        private List<RequestMethod> allowlist = new ArrayList<>();
+
+        /**
+         * 签名算法
+         */
+        private String algorithm = "HmacSHA256";
+
+        @Data
+        public static class RequestMethod {
+
+            /**
+             * 请求方法 eg: PUT POST GET DELETE
+             */
+            private String method;
+
+            /**
+             * 请求地址，支持模式匹配 eg: /test/**
+             */
+            private String url;
+        }
     }
-  }
 }

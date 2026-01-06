@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package baby.mumu.genix.application.country.executor;
 import baby.mumu.genix.client.dto.CountryStateCityGetAllDTO;
 import baby.mumu.genix.domain.country.gateway.CountryGateway;
 import baby.mumu.genix.infra.country.convertor.CountryConvertor;
-import java.util.List;
-import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 获取所有国家详细信息
@@ -33,19 +34,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class CountryStateCityGetAllExe {
 
-  private final CountryGateway countryGateway;
-  private final CountryConvertor countryConvertor;
+    private final CountryGateway countryGateway;
+    private final CountryConvertor countryConvertor;
 
-  @Autowired
-  public CountryStateCityGetAllExe(CountryGateway countryGateway,
-    CountryConvertor countryConvertor) {
-    this.countryGateway = countryGateway;
-    this.countryConvertor = countryConvertor;
-  }
+    @Autowired
+    public CountryStateCityGetAllExe(CountryGateway countryGateway,
+                                     CountryConvertor countryConvertor) {
+        this.countryGateway = countryGateway;
+        this.countryConvertor = countryConvertor;
+    }
 
-  public List<CountryStateCityGetAllDTO> execute() {
-    return countryGateway.getCountryStateCity().stream()
-      .map(country -> countryConvertor.toCountryStateCityGetAllDTO(country).orElse(null)).filter(
-        Objects::nonNull).toList();
-  }
+    public List<CountryStateCityGetAllDTO> execute() {
+        return countryGateway.getCountryStateCity().stream()
+            .map(country -> countryConvertor.toCountryStateCityGetAllDTO(country).orElse(null)).filter(
+                Objects::nonNull).toList();
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ package baby.mumu.iam.client.cmds;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 账号更新角色指令
@@ -31,10 +32,10 @@ import lombok.Data;
 @Data
 public class AccountUpdateRoleCmd {
 
-  @NotNull
-  @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
-  private Long id;
+    @NotNull
+    @Schema(description = "账号ID", requiredMode = RequiredMode.REQUIRED)
+    private Long id;
 
-  @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
-  private List<String> roleCodes;
+    @Schema(description = "角色编码集合", requiredMode = RequiredMode.NOT_REQUIRED)
+    private List<String> roleCodes;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 根据code查询权限指令执行器
@@ -36,20 +37,20 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionFindByCodeCmdExe")
 public class PermissionFindByCodeCmdExe {
 
-  private final PermissionGateway permissionGateway;
-  private final PermissionConvertor permissionConvertor;
+    private final PermissionGateway permissionGateway;
+    private final PermissionConvertor permissionConvertor;
 
-  @Autowired
-  public PermissionFindByCodeCmdExe(PermissionGateway permissionGateway,
-    PermissionConvertor permissionConvertor) {
-    this.permissionGateway = permissionGateway;
-    this.permissionConvertor = permissionConvertor;
-  }
+    @Autowired
+    public PermissionFindByCodeCmdExe(PermissionGateway permissionGateway,
+                                      PermissionConvertor permissionConvertor) {
+        this.permissionGateway = permissionGateway;
+        this.permissionConvertor = permissionConvertor;
+    }
 
-  public PermissionFindByCodeDTO execute(String code) {
-    return Optional.ofNullable(code)
-      .flatMap(permissionGateway::findByCode).flatMap(
-        permissionConvertor::toPermissionFindByCodeDTO)
-      .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
-  }
+    public PermissionFindByCodeDTO execute(String code) {
+        return Optional.ofNullable(code)
+            .flatMap(permissionGateway::findByCode).flatMap(
+                permissionConvertor::toPermissionFindByCodeDTO)
+            .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+    }
 }

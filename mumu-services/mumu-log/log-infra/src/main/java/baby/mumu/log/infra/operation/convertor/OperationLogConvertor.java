@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,15 @@ import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Optional;
 
 /**
  * 操作日志转换器
@@ -46,86 +47,86 @@ import org.springframework.stereotype.Component;
 public class OperationLogConvertor {
 
 
-  private final PrimaryKeyGrpcService primaryKeyGrpcService;
+    private final PrimaryKeyGrpcService primaryKeyGrpcService;
 
-  @Autowired
-  public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
-    this.primaryKeyGrpcService = primaryKeyGrpcService;
-  }
+    @Autowired
+    public OperationLogConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
+        this.primaryKeyGrpcService = primaryKeyGrpcService;
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogKafkaPO> toOperationLogKafkaPO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-      .map(OperationLogMapper.INSTANCE::toOperationLogKafkaPO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLogKafkaPO> toOperationLogKafkaPO(OperationLog operationLog) {
+        return Optional.ofNullable(operationLog)
+            .map(OperationLogMapper.INSTANCE::toOperationLogKafkaPO);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogEsPO> toOperationLogEsPO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toOperationLogEsPO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLogEsPO> toOperationLogEsPO(OperationLog operationLog) {
+        return Optional.ofNullable(operationLog).map(OperationLogMapper.INSTANCE::toOperationLogEsPO);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
-    return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
-      OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
-      String traceId = TraceIdUtils.getTraceId();
-      operationLog.setId(StringUtils.isNotBlank(traceId) ? traceId
-        : String.valueOf(primaryKeyGrpcService.snowflake())
-      );
-      operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
-      return operationLog;
-    });
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLog> toEntity(OperationLogSubmitCmd operationLogSubmitCmd) {
+        return Optional.ofNullable(operationLogSubmitCmd).map(res -> {
+            OperationLog operationLog = OperationLogMapper.INSTANCE.toEntity(res);
+            String traceId = TraceIdUtils.getTraceId();
+            operationLog.setId(StringUtils.isNotBlank(traceId) ? traceId
+                : String.valueOf(primaryKeyGrpcService.snowflake())
+            );
+            operationLog.setOperatingTime(LocalDateTime.now(ZoneId.of("UTC")));
+            return operationLog;
+        });
 
-  }
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogSaveCmd operationLogSaveCmd) {
-    return Optional.ofNullable(operationLogSaveCmd).map(OperationLogMapper.INSTANCE::toEntity);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLog> toEntity(OperationLogSaveCmd operationLogSaveCmd) {
+        return Optional.ofNullable(operationLogSaveCmd).map(OperationLogMapper.INSTANCE::toEntity);
+    }
 
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(OperationLogEsPO operationLogEsPO) {
-    return Optional.ofNullable(operationLogEsPO).map(OperationLogMapper.INSTANCE::toEntity);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLog> toEntity(OperationLogEsPO operationLogEsPO) {
+        return Optional.ofNullable(operationLogEsPO).map(OperationLogMapper.INSTANCE::toEntity);
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLog> toEntity(
-    OperationLogFindAllCmd operationLogFindAllCmd) {
-    return Optional.ofNullable(operationLogFindAllCmd)
-      .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
-        Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
-          .ifPresent(operationLog::setOperatingStartTime);
-        Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
-          .ifPresent(operationLog::setOperatingEndTime);
-        return operationLog;
-      });
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLog> toEntity(
+        OperationLogFindAllCmd operationLogFindAllCmd) {
+        return Optional.ofNullable(operationLogFindAllCmd)
+            .map(OperationLogMapper.INSTANCE::toEntity).map(operationLog -> {
+                Optional.ofNullable(operationLogFindAllCmd.getOperatingStartTime())
+                    .ifPresent(operationLog::setOperatingStartTime);
+                Optional.ofNullable(operationLogFindAllCmd.getOperatingEndTime())
+                    .ifPresent(operationLog::setOperatingEndTime);
+                return operationLog;
+            });
+    }
 
-  @API(status = Status.STABLE, since = "1.0.0")
-  public Optional<OperationLogFindAllDTO> toOperationLogFindAllDTO(OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-      .map(OperationLogMapper.INSTANCE::toOperationLogFindAllDTO);
-  }
+    @API(status = Status.STABLE, since = "1.0.0")
+    public Optional<OperationLogFindAllDTO> toOperationLogFindAllDTO(OperationLog operationLog) {
+        return Optional.ofNullable(operationLog)
+            .map(OperationLogMapper.INSTANCE::toOperationLogFindAllDTO);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<OperationLogSubmitCmd> toOperationLogSubmitCmd(
-    OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
-    return Optional.ofNullable(operationLogSubmitGrpcCmd)
-      .map(OperationLogMapper.INSTANCE::toOperationLogSubmitCmd);
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public Optional<OperationLogSubmitCmd> toOperationLogSubmitCmd(
+        OperationLogSubmitGrpcCmd operationLogSubmitGrpcCmd) {
+        return Optional.ofNullable(operationLogSubmitGrpcCmd)
+            .map(OperationLogMapper.INSTANCE::toOperationLogSubmitCmd);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
-    OperationLogKafkaPO operationLogKafkaPO) {
-    return Optional.ofNullable(operationLogKafkaPO)
-      .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public Optional<OperationLogSaveCmd> toOperationLogSaveCmd(
+        OperationLogKafkaPO operationLogKafkaPO) {
+        return Optional.ofNullable(operationLogKafkaPO)
+            .map(OperationLogMapper.INSTANCE::toOperationLogSaveCmd);
+    }
 
-  @API(status = Status.STABLE, since = "2.2.0")
-  public Optional<OperationLogQryDTO> toOperationLogQryDTO(
-    OperationLog operationLog) {
-    return Optional.ofNullable(operationLog)
-      .map(OperationLogMapper.INSTANCE::toOperationLogQryDTO);
-  }
+    @API(status = Status.STABLE, since = "2.2.0")
+    public Optional<OperationLogQryDTO> toOperationLogQryDTO(
+        OperationLog operationLog) {
+        return Optional.ofNullable(operationLog)
+            .map(OperationLogMapper.INSTANCE::toOperationLogQryDTO);
+    }
 }

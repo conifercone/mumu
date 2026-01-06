@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@ import baby.mumu.basis.enums.CacheLevelEnum;
 import baby.mumu.basis.po.jpa.JpaCacheableBasisArchivablePersistentObject;
 import com.redis.om.spring.annotations.Document;
 import com.redis.om.spring.annotations.Indexed;
-import java.io.Serial;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.TimeToLive;
+
+import java.io.Serial;
 
 /**
  * 角色基本信息缓存
@@ -35,33 +36,33 @@ import org.springframework.data.redis.core.TimeToLive;
 @Document(value = "mumu:iam:role")
 public class RoleCacheablePO extends JpaCacheableBasisArchivablePersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = 2814267592168109003L;
+    @Serial
+    private static final long serialVersionUID = 2814267592168109003L;
 
-  /**
-   * 角色ID
-   */
-  @Id
-  @Indexed
-  private Long id;
+    /**
+     * 角色ID
+     */
+    @Id
+    @Indexed
+    private Long id;
 
-  /**
-   * 角色编码
-   */
-  @Indexed
-  private String code;
+    /**
+     * 角色编码
+     */
+    @Indexed
+    private String code;
 
-  /**
-   * 角色名称
-   */
-  private String name;
+    /**
+     * 角色名称
+     */
+    private String name;
 
-  private String description;
+    private String description;
 
-  /**
-   * 存活时间
-   * <p>低等级别变化数据：默认缓存时间为6小时</p>
-   */
-  @TimeToLive
-  private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
+    /**
+     * 存活时间
+     * <p>低等级别变化数据：默认缓存时间为6小时</p>
+     */
+    @TimeToLive
+    private Long ttl = CacheLevelEnum.LOW.getSecondTtl();
 }

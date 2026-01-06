@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package baby.mumu.iam.infra.client.gatewayimpl.database;
 
 import baby.mumu.iam.infra.client.gatewayimpl.database.po.ClientPO;
 import io.hypersistence.utils.spring.repository.BaseJpaRepository;
+
 import java.util.Optional;
 
 /**
@@ -28,5 +29,5 @@ import java.util.Optional;
  */
 public interface ClientRepository extends BaseJpaRepository<ClientPO, String> {
 
-  Optional<ClientPO> findByClientId(String clientId);
+    Optional<ClientPO> findByClientId(String clientId);
 }

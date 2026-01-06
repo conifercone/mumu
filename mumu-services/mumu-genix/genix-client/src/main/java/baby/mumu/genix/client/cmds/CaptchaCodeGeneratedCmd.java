@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,17 +29,17 @@ import lombok.Data;
 @Data
 public class CaptchaCodeGeneratedCmd {
 
-  /**
-   * 有效期
-   */
-  @Min(1)
-  @Max(3600)
-  private Long ttl;
+    /**
+     * 有效期
+     */
+    @Min(1)
+    @Max(3600)
+    private Long ttl;
 
-  /**
-   * 验证码长度
-   */
-  @Min(1)
-  @Max(10)
-  private Integer length;
+    /**
+     * 验证码长度
+     */
+    @Min(1)
+    @Max(10)
+    private Integer length;
 }

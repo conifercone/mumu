@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.provider.RateLimitingKeyProvider;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 /**
  * grpc ip实现
@@ -31,11 +32,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class RateLimitingGrpcIpKeyProviderImpl implements RateLimitingKeyProvider {
 
-  @Override
-  public String generateUniqKey() {
-    return Optional.ofNullable(ClientIpInterceptor.getClientIp())
-      .filter(StringUtils::isNotBlank)
-      .orElseThrow(
-        () -> new ApplicationException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
-  }
+    @Override
+    public String generateUniqKey() {
+        return Optional.ofNullable(ClientIpInterceptor.getClientIp())
+            .filter(StringUtils::isNotBlank)
+            .orElseThrow(
+                () -> new ApplicationException(ResponseCode.UNABLE_TO_OBTAIN_CURRENT_REQUESTED_IP));
+    }
 }

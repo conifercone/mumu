@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package baby.mumu.storage.client.api;
 
-import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
-
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.storage.client.api.grpc.FileServiceGrpc;
 import baby.mumu.storage.client.api.grpc.FileServiceGrpc.FileServiceBlockingStub;
@@ -26,13 +24,16 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import io.grpc.ManagedChannel;
-import java.util.Optional;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.grpc.client.GrpcChannelFactory;
+
+import java.util.Optional;
+
+import static baby.mumu.basis.response.ResponseCode.GRPC_SERVICE_NOT_FOUND;
 
 /**
  * 文件对外提供grpc调用实例
@@ -42,59 +43,59 @@ import org.springframework.grpc.client.GrpcChannelFactory;
  */
 public class FileGrpcService extends StorageGrpcService implements DisposableBean {
 
-  private ManagedChannel channel;
+    private ManagedChannel channel;
 
-  public FileGrpcService(
-    DiscoveryClient discoveryClient,
-    GrpcChannelFactory grpcChannelFactory) {
-    super(discoveryClient, grpcChannelFactory);
-  }
+    public FileGrpcService(
+        DiscoveryClient discoveryClient,
+        GrpcChannelFactory grpcChannelFactory) {
+        super(discoveryClient, grpcChannelFactory);
+    }
 
-  @Override
-  public void destroy() {
-    Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
-  }
-
-
-  @SuppressWarnings("unused")
-  @API(status = Status.STABLE, since = "2.14.0")
-  public void deleteByMetadataId(Int64Value metadataId) {
-    Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .ifPresentOrElse(ch -> {
-        channel = ch;
-        deleteByMetadataIdFromGrpc(metadataId);
-      }, () -> {
-        throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
-      });
-  }
-
-  @SuppressWarnings("UnusedReturnValue")
-  @API(status = Status.STABLE, since = "2.14.0")
-  public ListenableFuture<Empty> syncDeleteByMetadataId(
-    Int64Value roleId) {
-    return Optional.ofNullable(channel)
-      .or(this::getManagedChannel)
-      .map(ch -> {
-        channel = ch;
-        return syncDeleteByMetadataIdFromGrpc(roleId);
-      })
-      .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
-  }
+    @Override
+    public void destroy() {
+        Optional.ofNullable(channel).ifPresent(ManagedChannel::shutdown);
+    }
 
 
-  private void deleteByMetadataIdFromGrpc(
-    Int64Value metadataId) {
-    FileServiceBlockingStub fileServiceBlockingStub = FileServiceGrpc.newBlockingStub(channel);
-    // noinspection ResultOfMethodCallIgnored
-    fileServiceBlockingStub.deleteByMetadataId(metadataId);
-  }
+    @SuppressWarnings("unused")
+    @API(status = Status.STABLE, since = "2.14.0")
+    public void deleteByMetadataId(Int64Value metadataId) {
+        Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .ifPresentOrElse(ch -> {
+                channel = ch;
+                deleteByMetadataIdFromGrpc(metadataId);
+            }, () -> {
+                throw new ApplicationException(GRPC_SERVICE_NOT_FOUND);
+            });
+    }
 
-  private @NonNull ListenableFuture<Empty> syncDeleteByMetadataIdFromGrpc(
-    Int64Value metadataId) {
-    FileServiceFutureStub fileServiceFutureStub = FileServiceGrpc.newFutureStub(
-      channel);
-    return fileServiceFutureStub.deleteByMetadataId(metadataId);
-  }
+    @SuppressWarnings("UnusedReturnValue")
+    @API(status = Status.STABLE, since = "2.14.0")
+    public ListenableFuture<Empty> syncDeleteByMetadataId(
+        Int64Value roleId) {
+        return Optional.ofNullable(channel)
+            .or(this::getManagedChannel)
+            .map(ch -> {
+                channel = ch;
+                return syncDeleteByMetadataIdFromGrpc(roleId);
+            })
+            .orElseThrow(() -> new ApplicationException(GRPC_SERVICE_NOT_FOUND));
+    }
+
+
+    private void deleteByMetadataIdFromGrpc(
+        Int64Value metadataId) {
+        FileServiceBlockingStub fileServiceBlockingStub = FileServiceGrpc.newBlockingStub(channel);
+        // noinspection ResultOfMethodCallIgnored
+        fileServiceBlockingStub.deleteByMetadataId(metadataId);
+    }
+
+    private @NonNull ListenableFuture<Empty> syncDeleteByMetadataIdFromGrpc(
+        Int64Value metadataId) {
+        FileServiceFutureStub fileServiceFutureStub = FileServiceGrpc.newFutureStub(
+            channel);
+        return fileServiceFutureStub.deleteByMetadataId(metadataId);
+    }
 
 }

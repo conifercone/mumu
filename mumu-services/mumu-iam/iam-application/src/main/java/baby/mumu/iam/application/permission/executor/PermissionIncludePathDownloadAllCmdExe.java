@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,21 +34,21 @@ import org.springframework.stereotype.Component;
 @Observed(name = "PermissionIncludePathDownloadAllCmdExe")
 public class PermissionIncludePathDownloadAllCmdExe {
 
-  private final PermissionGateway permissionGateway;
-  private final PermissionConvertor permissionConvertor;
+    private final PermissionGateway permissionGateway;
+    private final PermissionConvertor permissionConvertor;
 
-  @Autowired
-  public PermissionIncludePathDownloadAllCmdExe(PermissionGateway permissionGateway,
-    PermissionConvertor permissionConvertor) {
-    this.permissionGateway = permissionGateway;
-    this.permissionConvertor = permissionConvertor;
-  }
+    @Autowired
+    public PermissionIncludePathDownloadAllCmdExe(PermissionGateway permissionGateway,
+                                                  PermissionConvertor permissionConvertor) {
+        this.permissionGateway = permissionGateway;
+        this.permissionConvertor = permissionConvertor;
+    }
 
-  public void execute(HttpServletResponse response) {
-    FileDownloadUtils.downloadJson(response, "permissions",
-      permissionGateway.findAllIncludePath()
-        .flatMap(
-          permission -> permissionConvertor.toPermissionIncludePathDownloadAllDTO(permission)
-            .stream()));
-  }
+    public void execute(HttpServletResponse response) {
+        FileDownloadUtils.downloadJson(response, "permissions",
+            permissionGateway.findAllIncludePath()
+                .flatMap(
+                    permission -> permissionConvertor.toPermissionIncludePathDownloadAllDTO(permission)
+                        .stream()));
+    }
 }

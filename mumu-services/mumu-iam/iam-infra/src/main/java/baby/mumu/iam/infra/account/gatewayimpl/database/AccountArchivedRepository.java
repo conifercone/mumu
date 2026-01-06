@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,33 +29,33 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  * @since 1.0.4
  */
 public interface AccountArchivedRepository extends BaseJpaRepository<AccountArchivedPO, Long>,
-  JpaSpecificationExecutor<AccountArchivedPO> {
+    JpaSpecificationExecutor<AccountArchivedPO> {
 
-  /**
-   * 根据id或者username或者email判断账号是否存在
-   *
-   * @param id       账号id
-   * @param username 用户名
-   * @param email    账号邮箱地址
-   * @return 是否存在
-   */
-  boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
-    @Size(max = 200) String email);
+    /**
+     * 根据id或者username或者email判断账号是否存在
+     *
+     * @param id       账号id
+     * @param username 用户名
+     * @param email    账号邮箱地址
+     * @return 是否存在
+     */
+    boolean existsByIdOrUsernameOrEmail(Long id, @Size(max = 50) @NotNull String username,
+                                        @Size(max = 200) String email);
 
-  /**
-   * 邮箱地址是否存在
-   *
-   * @param email 账号邮箱地址
-   * @return true:邮箱地址已存在 false:邮箱地址不存在
-   */
-  boolean existsByEmail(String email);
+    /**
+     * 邮箱地址是否存在
+     *
+     * @param email 账号邮箱地址
+     * @return true:邮箱地址已存在 false:邮箱地址不存在
+     */
+    boolean existsByEmail(String email);
 
-  /**
-   * 账号名是否存在
-   *
-   * @param username 账号名
-   * @return true:账号名已存在 false:账号名不存在
-   */
-  boolean existsByUsername(String username);
+    /**
+     * 账号名是否存在
+     *
+     * @param username 账号名
+     * @return true:账号名已存在 false:账号名不存在
+     */
+    boolean existsByUsername(String username);
 
 }

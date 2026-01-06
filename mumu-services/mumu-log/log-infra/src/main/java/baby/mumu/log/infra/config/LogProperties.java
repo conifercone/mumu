@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,53 +30,53 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.log")
 public class LogProperties {
 
-  //  操作日志索引名称
-  public static final String OPERATION_LOG_ES_INDEX_NAME = "mumu-operation-log";
-  //  系统日志索引名称
-  public static final String SYSTEM_LOG_ES_INDEX_NAME = "mumu-system-log";
-  //  操作日志topic名称
-  public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "mumu-operation-log";
-  //  系统日志topic名称
-  public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "mumu-system-log";
+    //  操作日志索引名称
+    public static final String OPERATION_LOG_ES_INDEX_NAME = "mumu-operation-log";
+    //  系统日志索引名称
+    public static final String SYSTEM_LOG_ES_INDEX_NAME = "mumu-system-log";
+    //  操作日志topic名称
+    public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "mumu-operation-log";
+    //  系统日志topic名称
+    public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "mumu-system-log";
 
-  @NestedConfigurationProperty
-  private Elasticsearch elasticsearch = new Elasticsearch();
+    @NestedConfigurationProperty
+    private Elasticsearch elasticsearch = new Elasticsearch();
 
-  @NestedConfigurationProperty
-  private Kafka kafka = new Kafka();
+    @NestedConfigurationProperty
+    private Kafka kafka = new Kafka();
 
-  @Data
-  public static class Elasticsearch {
+    @Data
+    public static class Elasticsearch {
 
-    /**
-     * 地址
-     */
-    private String[] hostAndPorts;
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 密码
-     */
-    private String password;
-    /**
-     * CA证书指纹
-     */
-    private String caFingerprint;
+        /**
+         * 地址
+         */
+        private String[] hostAndPorts;
+        /**
+         * 用户名
+         */
+        private String username;
+        /**
+         * 密码
+         */
+        private String password;
+        /**
+         * CA证书指纹
+         */
+        private String caFingerprint;
 
-    /**
-     * 是否启用
-     */
-    private boolean enabled = true;
-  }
+        /**
+         * 是否启用
+         */
+        private boolean enabled = true;
+    }
 
-  @Data
-  public static class Kafka {
+    @Data
+    public static class Kafka {
 
-    /**
-     * 是否启用
-     */
-    private boolean enabled = true;
-  }
+        /**
+         * 是否启用
+         */
+        private boolean enabled = true;
+    }
 }

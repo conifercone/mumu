@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,17 +19,12 @@ package baby.mumu.iam.domain.role;
 import baby.mumu.basis.domain.BasisDomainModel;
 import baby.mumu.iam.domain.permission.Permission;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
 
 /**
  * 角色领域模型
@@ -47,43 +42,43 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 public class Role extends BasisDomainModel {
 
-  @Serial
-  private static final long serialVersionUID = 4390244868463637644L;
+    @Serial
+    private static final long serialVersionUID = 4390244868463637644L;
 
-  /**
-   * 角色 ID
-   */
-  private Long id;
+    /**
+     * 角色 ID
+     */
+    private Long id;
 
-  /**
-   * 角色编码
-   */
-  private String code;
+    /**
+     * 角色编码
+     */
+    private String code;
 
-  /**
-   * 角色名称
-   */
-  private String name;
+    /**
+     * 角色名称
+     */
+    private String name;
 
-  /**
-   * 描述
-   */
-  private String description;
+    /**
+     * 描述
+     */
+    private String description;
 
-  /**
-   * 角色权限
-   */
-  private List<Permission> permissions;
+    /**
+     * 角色权限
+     */
+    private List<Permission> permissions;
 
-  /**
-   * 角色权限后代
-   */
-  @Builder.Default
-  private transient List<Permission> descendantPermissions = new ArrayList<>();
+    /**
+     * 角色权限后代
+     */
+    @Builder.Default
+    private transient List<Permission> descendantPermissions = new ArrayList<>();
 
-  /**
-   * 有后代角色
-   */
-  private boolean hasDescendant;
+    /**
+     * 有后代角色
+     */
+    private boolean hasDescendant;
 
 }

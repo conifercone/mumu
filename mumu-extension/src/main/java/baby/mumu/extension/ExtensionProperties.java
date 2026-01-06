@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,51 +37,51 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties("mumu.extension")
 public class ExtensionProperties {
 
-  /**
-   * 全局配置
-   */
-  @NestedConfigurationProperty
-  private GlobalProperties global = new GlobalProperties();
+    /**
+     * 全局配置
+     */
+    @NestedConfigurationProperty
+    private GlobalProperties global = new GlobalProperties();
 
-  /**
-   * sql相关配置
-   */
-  @NestedConfigurationProperty
-  private SqlProperties sql = new SqlProperties();
+    /**
+     * sql相关配置
+     */
+    @NestedConfigurationProperty
+    private SqlProperties sql = new SqlProperties();
 
-  /**
-   * 认证相关配置
-   */
-  @NestedConfigurationProperty
-  private AuthenticationProperties authentication = new AuthenticationProperties();
+    /**
+     * 认证相关配置
+     */
+    @NestedConfigurationProperty
+    private AuthenticationProperties authentication = new AuthenticationProperties();
 
-  /**
-   * 机器翻译相关配置
-   */
-  @NestedConfigurationProperty
-  private TranslationProperties translation = new TranslationProperties();
+    /**
+     * 机器翻译相关配置
+     */
+    @NestedConfigurationProperty
+    private TranslationProperties translation = new TranslationProperties();
 
-  /**
-   * ocr
-   */
-  @NestedConfigurationProperty
-  private OcrProperties ocr = new OcrProperties();
+    /**
+     * ocr
+     */
+    @NestedConfigurationProperty
+    private OcrProperties ocr = new OcrProperties();
 
-  /**
-   * 人脸检测
-   */
-  @NestedConfigurationProperty
-  private FaceDetectionProperties fd = new FaceDetectionProperties();
+    /**
+     * 人脸检测
+     */
+    @NestedConfigurationProperty
+    private FaceDetectionProperties fd = new FaceDetectionProperties();
 
-  /**
-   * 限流配置
-   */
-  @NestedConfigurationProperty
-  private RateLimiterProperties rl = new RateLimiterProperties();
+    /**
+     * 限流配置
+     */
+    @NestedConfigurationProperty
+    private RateLimiterProperties rl = new RateLimiterProperties();
 
-  /**
-   * 幂等配置
-   */
-  @NestedConfigurationProperty
-  private IdempotentProperties idempotent = new IdempotentProperties();
+    /**
+     * 幂等配置
+     */
+    @NestedConfigurationProperty
+    private IdempotentProperties idempotent = new IdempotentProperties();
 }

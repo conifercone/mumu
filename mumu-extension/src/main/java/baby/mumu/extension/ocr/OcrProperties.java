@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @Data
 public class OcrProperties {
 
-  @NestedConfigurationProperty
-  private Tess4jProperties tess4j = new Tess4jProperties();
+    @NestedConfigurationProperty
+    private Tess4jProperties tess4j = new Tess4jProperties();
 
-  @NestedConfigurationProperty
-  private AliyunOcrProperties aliyun = new AliyunOcrProperties();
+    @NestedConfigurationProperty
+    private AliyunOcrProperties aliyun = new AliyunOcrProperties();
 }

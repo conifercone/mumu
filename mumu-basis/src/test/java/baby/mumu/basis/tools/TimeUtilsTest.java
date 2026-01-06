@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import org.junit.jupiter.api.Test;
  */
 public class TimeUtilsTest {
 
-  @Test
-  public void isValidTimeZone() {
-    boolean test = TimeUtils.isValidTimeZone("test");
-    Assertions.assertFalse(test);
-    boolean test1 = TimeUtils.isValidTimeZone("Asia/Shanghai");
-    Assertions.assertTrue(test1);
-  }
+    @Test
+    public void isValidTimeZone() {
+        boolean test = TimeUtils.isValidTimeZone("test");
+        Assertions.assertFalse(test);
+        boolean test1 = TimeUtils.isValidTimeZone("Asia/Shanghai");
+        Assertions.assertTrue(test1);
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package baby.mumu.extension.sql.filter.datasource;
 
 import baby.mumu.extension.ExtensionProperties;
+
 import javax.sql.DataSource;
 
 /**
@@ -27,13 +28,13 @@ import javax.sql.DataSource;
  */
 public interface DatasourceFilterChain {
 
-  /**
-   * 数据源创建后处理，主要处理数据源
-   *
-   * @param dataSource          处理前数据源
-   * @param extensionProperties 服务配置信息
-   * @return 处理后数据源
-   */
-  DataSource doAfterFilter(DataSource dataSource,
-    ExtensionProperties extensionProperties);
+    /**
+     * 数据源创建后处理，主要处理数据源
+     *
+     * @param dataSource          处理前数据源
+     * @param extensionProperties 服务配置信息
+     * @return 处理后数据源
+     */
+    DataSource doAfterFilter(DataSource dataSource,
+                             ExtensionProperties extensionProperties);
 }

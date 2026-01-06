@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,24 +33,24 @@ import org.springframework.web.multipart.MultipartFile;
 @Observed(name = "FileUploadCmdExe")
 public class FileUploadCmdExe {
 
-  private final FileGateway fileGateway;
-  private final FileConvertor fileConvertor;
+    private final FileGateway fileGateway;
+    private final FileConvertor fileConvertor;
 
-  @Autowired
-  public FileUploadCmdExe(FileGateway fileGateway, FileConvertor fileConvertor) {
-    this.fileGateway = fileGateway;
-    this.fileConvertor = fileConvertor;
-  }
+    @Autowired
+    public FileUploadCmdExe(FileGateway fileGateway, FileConvertor fileConvertor) {
+        this.fileGateway = fileGateway;
+        this.fileConvertor = fileConvertor;
+    }
 
-  /**
-   * 文件上传
-   *
-   * @param storageZoneId 存储区域Id
-   * @param multipartFile 源文件
-   * @return 文件元数据Id
-   */
-  public Long execute(Long storageZoneId, MultipartFile multipartFile) {
-    return fileConvertor.toEntity(storageZoneId, multipartFile).map(fileGateway::upload)
-      .orElse(null);
-  }
+    /**
+     * 文件上传
+     *
+     * @param storageZoneId 存储区域Id
+     * @param multipartFile 源文件
+     * @return 文件元数据Id
+     */
+    public Long execute(Long storageZoneId, MultipartFile multipartFile) {
+        return fileConvertor.toEntity(storageZoneId, multipartFile).map(fileGateway::upload)
+            .orElse(null);
+    }
 }

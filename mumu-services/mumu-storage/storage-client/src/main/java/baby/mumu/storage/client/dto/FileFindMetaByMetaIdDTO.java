@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ package baby.mumu.storage.client.dto;
 
 import baby.mumu.basis.dto.BaseDataTransferObject;
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
-import java.io.Serial;
 import lombok.Data;
+
+import java.io.Serial;
 
 /**
  * 根据文件元数据ID获取文件元数据信息数据传输对象
@@ -30,35 +31,35 @@ import lombok.Data;
 @Data
 public class FileFindMetaByMetaIdDTO extends BaseDataTransferObject {
 
-  @Serial
-  private static final long serialVersionUID = 3129993903612543075L;
-
-  private Long id;
-
-  private String originalFilename;
-
-  private String storedFilename;
-
-  private String contentType;
-
-  private Long size;
-
-  private FileStorageZoneDTO storageZone;
-
-  private String storagePath;
-
-  @Data
-  public static class FileStorageZoneDTO {
+    @Serial
+    private static final long serialVersionUID = 3129993903612543075L;
 
     private Long id;
 
-    private String code;
+    private String originalFilename;
 
-    private String name;
+    private String storedFilename;
 
-    private String description;
+    private String contentType;
 
-    private StorageZonePolicyEnum policy;
+    private Long size;
 
-  }
+    private FileStorageZoneDTO storageZone;
+
+    private String storagePath;
+
+    @Data
+    public static class FileStorageZoneDTO {
+
+        private Long id;
+
+        private String code;
+
+        private String name;
+
+        private String description;
+
+        private StorageZonePolicyEnum policy;
+
+    }
 }

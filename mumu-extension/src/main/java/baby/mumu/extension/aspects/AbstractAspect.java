@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 
 package baby.mumu.extension.aspects;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Optional;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.jspecify.annotations.NonNull;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
  * 切面抽象类
@@ -31,28 +32,28 @@ import org.jspecify.annotations.NonNull;
  */
 public abstract class AbstractAspect {
 
-  protected <T extends Annotation> T getMethodAnnotation(@NonNull JoinPoint joinPoint,
-    Class<T> clazz) throws NoSuchMethodException {
-    T annotation = null;
-    MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-    Class<?>[] paramTypeArray = methodSignature.getParameterTypes();
-    Method transferMoney = joinPoint.getTarget().getClass()
-      .getDeclaredMethod(methodSignature.getName(), paramTypeArray);
-    boolean annotationPresent = transferMoney.isAnnotationPresent(clazz);
-    if (annotationPresent) {
-      annotation = transferMoney.getAnnotation(clazz);
+    protected <T extends Annotation> T getMethodAnnotation(@NonNull JoinPoint joinPoint,
+                                                           Class<T> clazz) throws NoSuchMethodException {
+        T annotation = null;
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Class<?>[] paramTypeArray = methodSignature.getParameterTypes();
+        Method transferMoney = joinPoint.getTarget().getClass()
+            .getDeclaredMethod(methodSignature.getName(), paramTypeArray);
+        boolean annotationPresent = transferMoney.isAnnotationPresent(clazz);
+        if (annotationPresent) {
+            annotation = transferMoney.getAnnotation(clazz);
+        }
+        return annotation;
     }
-    return annotation;
-  }
 
-  protected Optional<Method> getCurrentMethod(@NonNull JoinPoint joinPoint) {
-    String methodName = joinPoint.getSignature().getName();
-    Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
-    try {
-      return Optional.of(joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes));
-    } catch (NoSuchMethodException e) {
-      return Optional.empty();
+    protected Optional<Method> getCurrentMethod(@NonNull JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Class<?>[] parameterTypes = ((org.aspectj.lang.reflect.MethodSignature) joinPoint.getSignature()).getParameterTypes();
+        try {
+            return Optional.of(joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes));
+        } catch (NoSuchMethodException e) {
+            return Optional.empty();
+        }
     }
-  }
 
 }

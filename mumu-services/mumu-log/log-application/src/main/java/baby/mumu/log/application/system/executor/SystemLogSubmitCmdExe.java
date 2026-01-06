@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package baby.mumu.log.application.system.executor;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 系统日志提交指令执行器
@@ -32,18 +33,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemLogSubmitCmdExe {
 
-  private final SystemLogGateway systemLogGateway;
-  private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogGateway systemLogGateway;
+    private final SystemLogConvertor systemLogConvertor;
 
-  @Autowired
-  public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway,
-    SystemLogConvertor systemLogConvertor) {
-    this.systemLogGateway = systemLogGateway;
-    this.systemLogConvertor = systemLogConvertor;
-  }
+    @Autowired
+    public SystemLogSubmitCmdExe(SystemLogGateway systemLogGateway,
+                                 SystemLogConvertor systemLogConvertor) {
+        this.systemLogGateway = systemLogGateway;
+        this.systemLogConvertor = systemLogConvertor;
+    }
 
-  public void execute(SystemLogSubmitCmd systemLogSubmitCmd) {
-    Optional.ofNullable(systemLogSubmitCmd).flatMap(systemLogConvertor::toEntity)
-      .ifPresent(systemLogGateway::submit);
-  }
+    public void execute(SystemLogSubmitCmd systemLogSubmitCmd) {
+        Optional.ofNullable(systemLogSubmitCmd).flatMap(systemLogConvertor::toEntity)
+            .ifPresent(systemLogGateway::submit);
+    }
 }

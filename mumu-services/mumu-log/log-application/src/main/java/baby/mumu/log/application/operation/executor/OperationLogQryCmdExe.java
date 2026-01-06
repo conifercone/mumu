@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import baby.mumu.log.client.cmds.OperationLogQryCmd;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * 操作日志查询指令
@@ -33,20 +34,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperationLogQryCmdExe {
 
-  private final OperationLogGateway operationLogGateway;
-  private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogGateway operationLogGateway;
+    private final OperationLogConvertor operationLogConvertor;
 
-  @Autowired
-  public OperationLogQryCmdExe(OperationLogGateway operationLogGateway,
-    OperationLogConvertor operationLogConvertor) {
-    this.operationLogGateway = operationLogGateway;
-    this.operationLogConvertor = operationLogConvertor;
-  }
+    @Autowired
+    public OperationLogQryCmdExe(OperationLogGateway operationLogGateway,
+                                 OperationLogConvertor operationLogConvertor) {
+        this.operationLogGateway = operationLogGateway;
+        this.operationLogConvertor = operationLogConvertor;
+    }
 
-  public OperationLogQryDTO execute(OperationLogQryCmd operationLogQryCmd) {
-    return Optional.ofNullable(operationLogQryCmd).map(OperationLogQryCmd::getId)
-      .flatMap(operationLogGateway::findOperationLogById)
-      .flatMap(operationLogConvertor::toOperationLogQryDTO)
-      .orElse(null);
-  }
+    public OperationLogQryDTO execute(OperationLogQryCmd operationLogQryCmd) {
+        return Optional.ofNullable(operationLogQryCmd).map(OperationLogQryCmd::getId)
+            .flatMap(operationLogGateway::findOperationLogById)
+            .flatMap(operationLogConvertor::toOperationLogQryDTO)
+            .orElse(null);
+    }
 }

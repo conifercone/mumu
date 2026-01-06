@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,62 +45,62 @@ import org.springframework.web.multipart.MultipartFile;
 @GrpcService
 public class FileServiceImpl extends FileServiceImplBase implements FileService {
 
-  private final FileUploadCmdExe fileUploadCmdExe;
-  private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
-  private final FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe;
-  private final FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe;
+    private final FileUploadCmdExe fileUploadCmdExe;
+    private final FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe;
+    private final FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe;
+    private final FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe;
 
-  public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
-    FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe,
-    FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe,
-    FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe) {
-    this.fileUploadCmdExe = fileUploadCmdExe;
-    this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
-    this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
-    this.fileFindMetaByMetaIdCmdExe = fileFindMetaByMetaIdCmdExe;
-  }
+    public FileServiceImpl(FileUploadCmdExe fileUploadCmdExe,
+                           FileDeleteByMetadataIdCmdExe fileDeleteByMetadataIdCmdExe,
+                           FileDownloadByMetadataIdCmdExe fileDownloadByMetadataIdCmdExe,
+                           FileFindMetaByMetaIdCmdExe fileFindMetaByMetaIdCmdExe) {
+        this.fileUploadCmdExe = fileUploadCmdExe;
+        this.fileDeleteByMetadataIdCmdExe = fileDeleteByMetadataIdCmdExe;
+        this.fileDownloadByMetadataIdCmdExe = fileDownloadByMetadataIdCmdExe;
+        this.fileFindMetaByMetaIdCmdExe = fileFindMetaByMetaIdCmdExe;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public Long upload(Long storageZoneId,
-    MultipartFile multipartFile) {
-    return fileUploadCmdExe.execute(storageZoneId, multipartFile);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long upload(Long storageZoneId,
+                       MultipartFile multipartFile) {
+        return fileUploadCmdExe.execute(storageZoneId, multipartFile);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public void deleteByMetadataId(Long metadataId) {
-    fileDeleteByMetadataIdCmdExe.execute(metadataId);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByMetadataId(Long metadataId) {
+        fileDeleteByMetadataIdCmdExe.execute(metadataId);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  @Transactional(rollbackFor = Exception.class)
-  public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
-    fileDownloadByMetadataIdCmdExe.execute(metadataId, httpServletResponse);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void downloadByMetadataId(Long metadataId, HttpServletResponse httpServletResponse) {
+        fileDownloadByMetadataIdCmdExe.execute(metadataId, httpServletResponse);
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public FileFindMetaByMetaIdDTO findMetaByMetaId(Long metadataId) {
-    return fileFindMetaByMetaIdCmdExe.execute(metadataId);
-  }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FileFindMetaByMetaIdDTO findMetaByMetaId(Long metadataId) {
+        return fileFindMetaByMetaIdCmdExe.execute(metadataId);
+    }
 
-  @Override
-  public void deleteByMetadataId(@NonNull Int64Value request,
-    @NonNull StreamObserver<Empty> responseObserver) {
-    fileDeleteByMetadataIdCmdExe.execute(request.getValue());
-    responseObserver.onNext(Empty.getDefaultInstance());
-    responseObserver.onCompleted();
-  }
+    @Override
+    public void deleteByMetadataId(@NonNull Int64Value request,
+                                   @NonNull StreamObserver<Empty> responseObserver) {
+        fileDeleteByMetadataIdCmdExe.execute(request.getValue());
+        responseObserver.onNext(Empty.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
 }

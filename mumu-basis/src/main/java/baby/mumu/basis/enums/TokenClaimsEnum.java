@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,44 +24,44 @@ package baby.mumu.basis.enums;
  */
 public enum TokenClaimsEnum {
 
-  /**
-   * 权限
-   */
-  AUTHORITIES("ats"),
+    /**
+     * 权限
+     */
+    AUTHORITIES("ats"),
 
-  /**
-   * 账号ID
-   */
-  ACCOUNT_ID("aid"),
+    /**
+     * 账号ID
+     */
+    ACCOUNT_ID("aid"),
 
-  /**
-   * 账号名
-   */
-  ACCOUNT_NAME("ane"),
+    /**
+     * 账号名
+     */
+    ACCOUNT_NAME("ane"),
 
-  /**
-   * 时区
-   */
-  TIMEZONE("tz"),
+    /**
+     * 时区
+     */
+    TIMEZONE("tz"),
 
-  /**
-   * 语言偏好
-   */
-  LANGUAGE("lang"),
+    /**
+     * 语言偏好
+     */
+    LANGUAGE("lang"),
 
-  /**
-   * 授权类型
-   */
-  AUTHORIZATION_GRANT_TYPE("grant");
+    /**
+     * 授权类型
+     */
+    AUTHORIZATION_GRANT_TYPE("grant");
 
 
-  private final String claimName;
+    private final String claimName;
 
-  public String getClaimName() {
-    return claimName;
-  }
+    public String getClaimName() {
+        return claimName;
+    }
 
-  TokenClaimsEnum(String claimName) {
-    this.claimName = claimName;
-  }
+    TokenClaimsEnum(String claimName) {
+        this.claimName = claimName;
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package baby.mumu.genix.domain.country.gateway;
 import baby.mumu.genix.domain.country.City;
 import baby.mumu.genix.domain.country.Country;
 import baby.mumu.genix.domain.country.State;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,17 +31,17 @@ import java.util.Optional;
  */
 public interface CountryGateway {
 
-  List<Country> getCountryStateCity();
+    List<Country> getCountryStateCity();
 
-  List<Country> getCountries();
+    List<Country> getCountries();
 
-  List<State> getStatesByCountryId(Long countryId);
+    List<State> getStatesByCountryId(Long countryId);
 
-  List<City> getCitiesByStateId(Long stateId);
+    List<City> getCitiesByStateId(Long stateId);
 
-  Optional<State> getStateById(Long stateId);
+    Optional<State> getStateById(Long stateId);
 
-  Optional<State> getStateCitiesById(Long stateId);
+    Optional<State> getStateCitiesById(Long stateId);
 
-  Optional<City> getCityById(Long cityId);
+    Optional<City> getCityById(Long cityId);
 }

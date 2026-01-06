@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,29 +33,29 @@ import org.springframework.kafka.config.TopicBuilder;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class KafkaConfiguration {
 
-  /**
-   * 操作日志主题
-   *
-   * @return topic
-   */
-  @Bean
-  public NewTopic operationLog() {
-    return TopicBuilder.name(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME)
-      .partitions(10)
-      .replicas(1)
-      .build();
-  }
+    /**
+     * 操作日志主题
+     *
+     * @return topic
+     */
+    @Bean
+    public NewTopic operationLog() {
+        return TopicBuilder.name(LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME)
+            .partitions(10)
+            .replicas(1)
+            .build();
+    }
 
-  /**
-   * 系统日志主题
-   *
-   * @return topic
-   */
-  @Bean
-  public NewTopic systemLog() {
-    return TopicBuilder.name(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME)
-      .partitions(10)
-      .replicas(1)
-      .build();
-  }
+    /**
+     * 系统日志主题
+     *
+     * @return topic
+     */
+    @Bean
+    public NewTopic systemLog() {
+        return TopicBuilder.name(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME)
+            .partitions(10)
+            .replicas(1)
+            .build();
+    }
 }

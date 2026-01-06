@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,11 @@ package baby.mumu.genix.application.country.executor;
 import baby.mumu.genix.client.dto.CountryGetStateCitiesByIdDTO;
 import baby.mumu.genix.domain.country.gateway.CountryGateway;
 import baby.mumu.genix.infra.country.convertor.CountryConvertor;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import java.util.Optional;
 
 /**
  * 根据省或州ID获取省或州（包含下级城市）指令执行器
@@ -33,22 +34,22 @@ import org.springframework.util.Assert;
 @Component
 public class CountryGetStateCitiesByIdCmdExe {
 
-  private final CountryGateway countryGateway;
-  private final CountryConvertor countryConvertor;
+    private final CountryGateway countryGateway;
+    private final CountryConvertor countryConvertor;
 
-  @Autowired
-  public CountryGetStateCitiesByIdCmdExe(CountryGateway countryGateway,
-    CountryConvertor countryConvertor) {
-    this.countryGateway = countryGateway;
-    this.countryConvertor = countryConvertor;
-  }
+    @Autowired
+    public CountryGetStateCitiesByIdCmdExe(CountryGateway countryGateway,
+                                           CountryConvertor countryConvertor) {
+        this.countryGateway = countryGateway;
+        this.countryConvertor = countryConvertor;
+    }
 
-  public CountryGetStateCitiesByIdDTO execute(
-    Long id) {
-    Assert.notNull(id, "id cannot be null");
-    return Optional.of(id)
-      .flatMap(countryGateway::getStateCitiesById)
-      .flatMap(countryConvertor::toCountryGetStateCitiesByIdDTO)
-      .orElse(null);
-  }
+    public CountryGetStateCitiesByIdDTO execute(
+        Long id) {
+        Assert.notNull(id, "id cannot be null");
+        return Optional.of(id)
+            .flatMap(countryGateway::getStateCitiesById)
+            .flatMap(countryConvertor::toCountryGetStateCitiesByIdDTO)
+            .orElse(null);
+    }
 }

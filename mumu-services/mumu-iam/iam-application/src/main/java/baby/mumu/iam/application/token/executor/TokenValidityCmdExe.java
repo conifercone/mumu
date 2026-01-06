@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ package baby.mumu.iam.application.token.executor;
 import baby.mumu.iam.client.cmds.TokenValidityCmd;
 import baby.mumu.iam.domain.token.gateway.TokenGateway;
 import io.micrometer.observation.annotation.Observed;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * token验证指令执行器
@@ -33,16 +34,16 @@ import org.springframework.stereotype.Component;
 @Observed(name = "TokenValidityCmdExe")
 public class TokenValidityCmdExe {
 
-  private final TokenGateway tokenGateway;
+    private final TokenGateway tokenGateway;
 
-  @Autowired
-  public TokenValidityCmdExe(TokenGateway tokenGateway) {
-    this.tokenGateway = tokenGateway;
-  }
+    @Autowired
+    public TokenValidityCmdExe(TokenGateway tokenGateway) {
+        this.tokenGateway = tokenGateway;
+    }
 
-  public boolean execute(TokenValidityCmd tokenValidityCmd) {
-    return Optional.ofNullable(tokenValidityCmd).map(TokenValidityCmd::getToken)
-      .map(tokenGateway::validity)
-      .orElse(false);
-  }
+    public boolean execute(TokenValidityCmd tokenValidityCmd) {
+        return Optional.ofNullable(tokenValidityCmd).map(TokenValidityCmd::getToken)
+            .map(tokenGateway::validity)
+            .orElse(false);
+    }
 }

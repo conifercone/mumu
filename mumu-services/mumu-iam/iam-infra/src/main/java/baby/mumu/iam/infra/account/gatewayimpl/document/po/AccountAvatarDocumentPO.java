@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import baby.mumu.basis.enums.AccountAvatarSourceEnum;
 import baby.mumu.basis.po.jpa.JpaDocumentBasisDefaultPersistentObject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.io.Serial;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +27,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serial;
 
 /**
  * 账号头像存储对象
@@ -41,44 +42,44 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("mumu-account-avatars")
 public class AccountAvatarDocumentPO extends JpaDocumentBasisDefaultPersistentObject {
 
-  @Serial
-  private static final long serialVersionUID = -976481457561712450L;
+    @Serial
+    private static final long serialVersionUID = -976481457561712450L;
 
-  /**
-   * 唯一主键
-   */
-  @Id
-  @NotBlank
-  private String id;
+    /**
+     * 唯一主键
+     */
+    @Id
+    @NotBlank
+    private String id;
 
-  /**
-   * 账号ID
-   */
-  @NotNull
-  @Indexed
-  private Long accountId;
+    /**
+     * 账号ID
+     */
+    @NotNull
+    @Indexed
+    private Long accountId;
 
-  /**
-   * 头像来源
-   * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatarDocumentPO#url}</p>
-   * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
-   * {@link AccountAvatarDocumentPO#fileId}</p>
-   */
-  @Indexed
-  private AccountAvatarSourceEnum source;
+    /**
+     * 头像来源
+     * <p>source为{@link AccountAvatarSourceEnum#URL}时头像取值{@link AccountAvatarDocumentPO#url}</p>
+     * <p>source为{@link AccountAvatarSourceEnum#UPLOAD}时头像取值
+     * {@link AccountAvatarDocumentPO#fileId}</p>
+     */
+    @Indexed
+    private AccountAvatarSourceEnum source;
 
-  /**
-   * 上传头像时的文件ID，填写URL或第三方时可为空
-   */
-  @Indexed
-  private String fileId;
+    /**
+     * 上传头像时的文件ID，填写URL或第三方时可为空
+     */
+    @Indexed
+    private String fileId;
 
-  /**
-   * 账号上传的URL地址
-   */
-  @Indexed
-  private String url;
+    /**
+     * 账号上传的URL地址
+     */
+    @Indexed
+    private String url;
 
-  @Version
-  private Long version;
+    @Version
+    private Long version;
 }

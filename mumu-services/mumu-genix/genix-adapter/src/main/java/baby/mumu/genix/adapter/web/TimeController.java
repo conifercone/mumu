@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,14 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.util.Set;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.util.Set;
 
 /**
  * 时间相关接口
@@ -47,25 +44,25 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "时间管理")
 public class TimeController {
 
-  @Operation(summary = "获取可用时区列表")
-  @GetMapping("/timezone/available")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.7.0")
-  public ResponseWrapper<Set<String>> available() {
-    return ResponseWrapper.success(ZoneId.getAvailableZoneIds());
-  }
-
-  @Operation(summary = "获取当前服务器时间")
-  @GetMapping("/serverTime")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "2.7.0")
-  public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {
-    if (!TimeUtils.isValidTimeZone(zoneId)) {
-      throw new ApplicationException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
-    } else {
-      return ResponseWrapper.success(OffsetDateTime.now(ZoneId.of(zoneId)));
+    @Operation(summary = "获取可用时区列表")
+    @GetMapping("/timezone/available")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.7.0")
+    public ResponseWrapper<Set<String>> available() {
+        return ResponseWrapper.success(ZoneId.getAvailableZoneIds());
     }
-  }
+
+    @Operation(summary = "获取当前服务器时间")
+    @GetMapping("/serverTime")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.7.0")
+    public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {
+        if (!TimeUtils.isValidTimeZone(zoneId)) {
+            throw new ApplicationException(ResponseCode.TIME_ZONE_IS_NOT_AVAILABLE);
+        } else {
+            return ResponseWrapper.success(OffsetDateTime.now(ZoneId.of(zoneId)));
+        }
+    }
 }

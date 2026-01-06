@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,66 +35,66 @@ import org.slf4j.LoggerFactory;
  */
 public class P6spyCustomLogger extends FormattedLogger {
 
-  private static final Logger log = LoggerFactory.getLogger(P6spyCustomLogger.class);
+    private static final Logger log = LoggerFactory.getLogger(P6spyCustomLogger.class);
 
-  @Override
-  public void logException(Exception e) {
-    P6spyCustomLogger.log.info("", e);
-  }
-
-  @Override
-  public void logText(String text) {
-    P6spyCustomLogger.log.info(text);
-  }
-
-  @Override
-  public void logSQL(int connectionId, String now, long elapsed,
-    Category category, String prepared, String sql, String url) {
-    if (!Strings.isNullOrEmpty(sql)) {
-      String lf = "\n";
-      StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(lf).append("====>");
-      stringBuilder.append("trace-id:[");
-      String traceId = TraceIdUtils.getTraceId();
-      stringBuilder.append(traceId);
-      stringBuilder.append("]");
-      String msg = strategy.formatMessage(connectionId, now, elapsed,
-        category.toString(), prepared, sql, url);
-      stringBuilder.append(msg);
-
-      P6spyCustomLogger.print(category, stringBuilder);
+    @Override
+    public void logException(Exception e) {
+        P6spyCustomLogger.log.info("", e);
     }
-  }
 
-  private static void print(Category category, StringBuilder stringBuilder) {
-    if (Category.ERROR.equals(category)) {
-      P6spyCustomLogger.log.error(stringBuilder.toString());
-    } else if (Category.WARN.equals(category)) {
-      P6spyCustomLogger.log.warn(stringBuilder.toString());
-    } else if (Category.DEBUG.equals(category)) {
-      P6spyCustomLogger.log.debug(stringBuilder.toString());
-    } else {
-      P6spyCustomLogger.log.info(stringBuilder.toString());
+    @Override
+    public void logText(String text) {
+        P6spyCustomLogger.log.info(text);
     }
-  }
 
+    @Override
+    public void logSQL(int connectionId, String now, long elapsed,
+                       Category category, String prepared, String sql, String url) {
+        if (!Strings.isNullOrEmpty(sql)) {
+            String lf = "\n";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(lf).append("====>");
+            stringBuilder.append("trace-id:[");
+            String traceId = TraceIdUtils.getTraceId();
+            stringBuilder.append(traceId);
+            stringBuilder.append("]");
+            String msg = strategy.formatMessage(connectionId, now, elapsed,
+                category.toString(), prepared, sql, url);
+            stringBuilder.append(msg);
 
-  @Override
-  public boolean isCategoryEnabled(Category category) {
-    if (Category.ERROR.equals(category)) {
-      return P6spyCustomLogger.log.isErrorEnabled();
-    } else if (Category.WARN.equals(category)) {
-      return P6spyCustomLogger.log.isWarnEnabled();
-    } else if (Category.DEBUG.equals(category)) {
-      return P6spyCustomLogger.log.isDebugEnabled();
-    } else {
-      return P6spyCustomLogger.log.isInfoEnabled();
+            P6spyCustomLogger.print(category, stringBuilder);
+        }
     }
-  }
 
-  @Override
-  public void setStrategy(MessageFormattingStrategy strategy) {
-    this.strategy = new P6spyCustomStrategy();
-  }
+    private static void print(Category category, StringBuilder stringBuilder) {
+        if (Category.ERROR.equals(category)) {
+            P6spyCustomLogger.log.error(stringBuilder.toString());
+        } else if (Category.WARN.equals(category)) {
+            P6spyCustomLogger.log.warn(stringBuilder.toString());
+        } else if (Category.DEBUG.equals(category)) {
+            P6spyCustomLogger.log.debug(stringBuilder.toString());
+        } else {
+            P6spyCustomLogger.log.info(stringBuilder.toString());
+        }
+    }
+
+
+    @Override
+    public boolean isCategoryEnabled(Category category) {
+        if (Category.ERROR.equals(category)) {
+            return P6spyCustomLogger.log.isErrorEnabled();
+        } else if (Category.WARN.equals(category)) {
+            return P6spyCustomLogger.log.isWarnEnabled();
+        } else if (Category.DEBUG.equals(category)) {
+            return P6spyCustomLogger.log.isDebugEnabled();
+        } else {
+            return P6spyCustomLogger.log.isInfoEnabled();
+        }
+    }
+
+    @Override
+    public void setStrategy(MessageFormattingStrategy strategy) {
+        this.strategy = new P6spyCustomStrategy();
+    }
 
 }

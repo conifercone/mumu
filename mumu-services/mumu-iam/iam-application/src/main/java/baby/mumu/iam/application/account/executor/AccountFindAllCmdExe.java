@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,14 @@ import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.infra.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
-import java.util.List;
-import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 分页查询所有账号指令执行器
@@ -40,25 +41,25 @@ import org.springframework.stereotype.Component;
 @Observed(name = "AccountFindAllCmdExe")
 public class AccountFindAllCmdExe {
 
-  private final AccountGateway accountGateway;
-  private final AccountConvertor accountConvertor;
+    private final AccountGateway accountGateway;
+    private final AccountConvertor accountConvertor;
 
-  @Autowired
-  public AccountFindAllCmdExe(AccountGateway accountGateway,
-    AccountConvertor accountConvertor) {
-    this.accountGateway = accountGateway;
-    this.accountConvertor = accountConvertor;
-  }
+    @Autowired
+    public AccountFindAllCmdExe(AccountGateway accountGateway,
+                                AccountConvertor accountConvertor) {
+        this.accountGateway = accountGateway;
+        this.accountConvertor = accountConvertor;
+    }
 
-  public Page<AccountFindAllDTO> execute(@NonNull AccountFindAllCmd accountFindAllCmd) {
-    Account account = accountConvertor.toEntity(accountFindAllCmd)
-      .orElseGet(Account::new);
-    Page<Account> accounts = accountGateway.findAll(account,
-      accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
-    List<AccountFindAllDTO> accountFindAllDTOS = accounts.getContent().stream()
-      .map(accountConvertor::toAccountFindAllDTO)
-      .filter(Optional::isPresent).map(Optional::get).toList();
-    return new PageImpl<>(accountFindAllDTOS, accounts.getPageable(),
-      accounts.getTotalElements());
-  }
+    public Page<AccountFindAllDTO> execute(@NonNull AccountFindAllCmd accountFindAllCmd) {
+        Account account = accountConvertor.toEntity(accountFindAllCmd)
+            .orElseGet(Account::new);
+        Page<Account> accounts = accountGateway.findAll(account,
+            accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
+        List<AccountFindAllDTO> accountFindAllDTOS = accounts.getContent().stream()
+            .map(accountConvertor::toAccountFindAllDTO)
+            .filter(Optional::isPresent).map(Optional::get).toList();
+        return new PageImpl<>(accountFindAllDTOS, accounts.getPageable(),
+            accounts.getTotalElements());
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,19 +42,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "主键")
 public class PrimaryKeyController {
 
-  private final PrimaryKeyService primaryKeyService;
+    private final PrimaryKeyService primaryKeyService;
 
-  @Autowired
-  public PrimaryKeyController(PrimaryKeyService primaryKeyService) {
-    this.primaryKeyService = primaryKeyService;
-  }
+    @Autowired
+    public PrimaryKeyController(PrimaryKeyService primaryKeyService) {
+        this.primaryKeyService = primaryKeyService;
+    }
 
-  @Operation(summary = "获取主键(雪花算法)")
-  @GetMapping("/snowflake")
-  @ResponseBody
-  @RateLimiter
-  @API(status = Status.STABLE, since = "1.0.0")
-  public PrimaryKeySnowflakeDTO snowflake() {
-    return primaryKeyService.snowflake();
-  }
+    @Operation(summary = "获取主键(雪花算法)")
+    @GetMapping("/snowflake")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "1.0.0")
+    public PrimaryKeySnowflakeDTO snowflake() {
+        return primaryKeyService.snowflake();
+    }
 }

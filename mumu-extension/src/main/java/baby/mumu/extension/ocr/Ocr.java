@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025, the original author or authors.
+ * Copyright (c) 2024-2026, the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package baby.mumu.extension.ocr;
 
-import java.io.File;
-import java.io.Serial;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.File;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * ocr领域模型
@@ -36,16 +37,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Ocr implements Serializable {
 
-  @Serial
-  private static final long serialVersionUID = 5809932349091510857L;
+    @Serial
+    private static final long serialVersionUID = 5809932349091510857L;
 
-  /**
-   * 需要识别的文件
-   */
-  private File sourceFile;
+    /**
+     * 需要识别的文件
+     */
+    private File sourceFile;
 
-  /**
-   * 目标语言
-   */
-  private String targetLanguage;
+    /**
+     * 目标语言
+     */
+    private String targetLanguage;
 }
