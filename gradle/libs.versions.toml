@@ -1,7 +1,7 @@
 [versions]
 springbootVersion = "4.0.1"
 springCloudVersion = "2025.1.0"
-springGrpcVersion = "1.0.0"
+springGrpcVersion = "1.0.1"
 # dependence version
 apiguardianVersion = '1.1.2'
 jspecifyVersion = '1.0.0'
