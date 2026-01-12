@@ -38,7 +38,7 @@ libphonenumberVersion = '9.0.21'
 commonsValidatorVersion = '1.10.1'
 jmhVersion = '1.37'
 tikaVersion = '3.2.3'
-cosidVersion = '3.0.1'
+cosidVersion = '3.0.2'
 # bom version
 grpcBomVersion = '1.78.0'
 guavaBomVersion = '33.5.0-jre'
