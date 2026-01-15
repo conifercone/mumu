@@ -23,7 +23,7 @@ import org.jspecify.annotations.NonNull;
 import java.io.Serial;
 
 /**
- * 顶级异常
+ * 应用异常
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.15.0
