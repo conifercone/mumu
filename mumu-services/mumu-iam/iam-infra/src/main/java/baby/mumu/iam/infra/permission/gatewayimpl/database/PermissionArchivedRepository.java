@@ -39,16 +39,6 @@ public interface PermissionArchivedRepository extends BaseJpaRepository<Permissi
     JpaSpecificationExecutor<PermissionArchivedPO> {
 
     /**
-     * 判断是否存在指定id和code的权限
-     *
-     * @param id   权限id
-     * @param code 权限code
-     * @return 是否存在
-     */
-    boolean existsByIdOrCode(Long id,
-                             @Size(max = 50, message = "{permission.code.validation.size}") @NotNull String code);
-
-    /**
      * 判断权限编码是否已存在
      *
      * @param code 权限code

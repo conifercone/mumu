@@ -80,7 +80,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
                                  RoleGateway roleGateway,
                                  PermissionConvertor permissionConvertor,
                                  PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
-                                 ExtensionProperties extensionProperties, PermissionCacheRepository permissionCacheRepository,
+                                 ExtensionProperties extensionProperties,
+                                 PermissionCacheRepository permissionCacheRepository,
                                  PermissionPathRepository permissionPathRepository,
                                  RolePermissionCacheRepository rolePermissionCacheRepository) {
         this.permissionRepository = permissionRepository;
@@ -100,11 +101,10 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public Long add(Permission permission) {
         PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
-        if (permissionRepository.existsByIdOrCode(permissionPO.getId(),
-            permissionPO.getCode()) || permissionArchivedRepository.existsByIdOrCode(
-            permissionPO.getId(),
+        if (permissionRepository.existsByCode(
+            permissionPO.getCode()) || permissionArchivedRepository.existsByCode(
             permissionPO.getCode())) {
-            throw new ApplicationException(ResponseCode.PERMISSION_CODE_OR_ID_ALREADY_EXISTS);
+            throw new ApplicationException(ResponseCode.PERMISSION_CODE_ALREADY_EXISTS);
         }
         PermissionPO persisted = permissionRepository.persist(permissionPO);
         permissionPathRepository.persist(
