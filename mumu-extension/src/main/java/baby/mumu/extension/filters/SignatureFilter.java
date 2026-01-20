@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -63,6 +65,8 @@ public class SignatureFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(
         SignatureFilter.class);
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private static final JsonMapper JSON_MAPPER = JsonMapper.builder()
+        .build();
 
     public SignatureFilter(ExtensionProperties extensionProperties) {
         this.extensionProperties = extensionProperties;
@@ -148,7 +152,22 @@ public class SignatureFilter extends OncePerRequestFilter {
                     jsonString.append(line);
                 }
             }
-            body = jsonString.toString().replaceAll("\\s+", "");
+            body = CachedBodyHttpServletRequest.canonicalizeJson(jsonString.toString());
+        }
+
+        public static String canonicalizeJson(String rawBody) {
+            if (rawBody == null) return "";
+            rawBody = rawBody.trim();
+            if (rawBody.isEmpty()) return "";
+
+            try {
+                JsonNode node = SignatureFilter.JSON_MAPPER.readTree(rawBody);
+                // 默认就是无缩进的紧凑输出：{"a":1,"b":"hello world"}
+                return SignatureFilter.JSON_MAPPER.writeValueAsString(node);
+            } catch (Exception e) {
+                // 不是 JSON 就原样（比如 text/plain 或签名需要兼容异常情况）
+                return rawBody;
+            }
         }
 
         @Override
