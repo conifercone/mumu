@@ -181,6 +181,7 @@ subprojects {
 
     tasks.withType<JavaCompile> {
         options.encoding = StandardCharsets.UTF_8.name()
+        options.compilerArgs.add("-parameters")
     }
 
     val projectVersionStr = project.version.toString()
