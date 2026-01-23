@@ -129,4 +129,30 @@ public interface PermissionPathRepository extends
         AND pp1.ancestor.id != pp1.descendant.id
         """)
     void deleteUnreachableData();
+
+    /**
+     * 获取指定后代节点的所有祖先路径
+     */
+    @SuppressWarnings("SqlDialectInspection")
+    @Query(value = """
+        WITH RECURSIVE edges AS (
+          SELECT ancestor_id AS parent_id, descendant_id AS child_id
+          FROM mumu_permission_paths
+          WHERE depth = 1
+        ),
+        paths AS (
+          SELECT e.parent_id, e.child_id, ARRAY[e.parent_id, e.child_id] AS path
+          FROM edges e
+          WHERE e.child_id = :descId
+          UNION ALL
+          SELECT e.parent_id, p.child_id, ARRAY_PREPEND(e.parent_id, p.path)
+          FROM paths p
+          JOIN edges e ON e.child_id = p.parent_id
+          WHERE NOT (e.parent_id = ANY(p.path))
+        )
+        SELECT array_to_string(path, '|')
+        FROM paths
+        WHERE parent_id NOT IN (SELECT child_id FROM edges)
+        """, nativeQuery = true)
+    List<String> findAllAncestorPathStrings(@Param("descId") Long descId);
 }

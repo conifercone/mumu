@@ -75,6 +75,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     private final PermissionDownloadAllCmdExe permissionDownloadAllCmdExe;
     private final PermissionFindByCodeCmdExe permissionFindByCodeCmdExe;
     private final PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe;
+    private final PermissionFindAllAncestorPathStringsCmdExe permissionFindAllAncestorPathStringsCmdExe;
 
     @Autowired
     public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -95,7 +96,8 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
                                  PermissionDeleteByCodeCmdExe permissionDeleteByCodeCmdExe,
                                  PermissionDownloadAllCmdExe permissionDownloadAllCmdExe,
                                  PermissionFindByCodeCmdExe permissionFindByCodeCmdExe,
-                                 PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe) {
+                                 PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe,
+                                 PermissionFindAllAncestorPathStringsCmdExe permissionFindAllAncestorPathStringsCmdExe) {
         this.permissionAddCmdExe = permissionAddCmdExe;
         this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
         this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -115,6 +117,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         this.permissionDownloadAllCmdExe = permissionDownloadAllCmdExe;
         this.permissionFindByCodeCmdExe = permissionFindByCodeCmdExe;
         this.permissionIncludePathDownloadAllCmdExe = permissionIncludePathDownloadAllCmdExe;
+        this.permissionFindAllAncestorPathStringsCmdExe = permissionFindAllAncestorPathStringsCmdExe;
     }
 
     @Override
@@ -262,5 +265,10 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     @Transactional(readOnly = true)
     public void downloadAllIncludePath(HttpServletResponse response) {
         permissionIncludePathDownloadAllCmdExe.execute(response);
+    }
+
+    @Override
+    public List<String> findAllAncestorPathStrings(Long descendantId) {
+        return permissionFindAllAncestorPathStringsCmdExe.execute(descendantId);
     }
 }

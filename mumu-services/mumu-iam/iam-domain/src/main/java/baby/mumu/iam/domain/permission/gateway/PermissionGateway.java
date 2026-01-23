@@ -20,6 +20,7 @@ import baby.mumu.iam.domain.permission.Permission;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -180,4 +181,12 @@ public interface PermissionGateway {
      * @return 权限
      */
     Optional<Permission> findByCode(String code);
+
+    /**
+     * 获取指定后代节点的所有祖先路径
+     *
+     * @param descendantId 后代节点ID
+     * @return 所有祖先路径
+     */
+    List<String> findAllAncestorPathStrings(Long descendantId);
 }

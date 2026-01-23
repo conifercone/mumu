@@ -22,6 +22,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 /**
  * 权限功能API
  *
@@ -170,4 +172,12 @@ public interface PermissionService {
      * @param response 响应
      */
     void downloadAllIncludePath(HttpServletResponse response);
+
+    /**
+     * 获取指定后代节点的所有祖先路径
+     *
+     * @param descendantId 后代节点ID
+     * @return 所有祖先路径
+     */
+    List<String> findAllAncestorPathStrings(Long descendantId);
 }

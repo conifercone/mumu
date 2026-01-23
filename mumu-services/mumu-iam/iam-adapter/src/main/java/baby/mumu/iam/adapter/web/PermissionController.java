@@ -32,6 +32,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 权限管理
  *
@@ -218,5 +220,13 @@ public class PermissionController {
     @API(status = Status.STABLE, since = "2.6.0")
     public void downloadAllIncludePath(HttpServletResponse response) {
         permissionService.downloadAllIncludePath(response);
+    }
+
+    @Operation(summary = "获取指定后代节点的所有祖先路径")
+    @GetMapping("/findAllAncestorPathStrings/{descendantId}")
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.16.0")
+    public ResponseWrapper<List<String>> findAllAncestorPathStrings(@PathVariable Long descendantId) {
+        return ResponseWrapper.success(permissionService.findAllAncestorPathStrings(descendantId));
     }
 }

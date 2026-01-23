@@ -48,6 +48,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -377,5 +378,10 @@ public class PermissionGatewayImpl implements PermissionGateway {
                     .ifPresent(permissionCacheRepository::save);
                 return entity;
             }));
+    }
+
+    @Override
+    public List<String> findAllAncestorPathStrings(Long descendantId) {
+        return Optional.ofNullable(descendantId).map(permissionPathRepository::findAllAncestorPathStrings).orElse(new ArrayList<>());
     }
 }
