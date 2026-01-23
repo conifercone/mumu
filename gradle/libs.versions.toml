@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "4.0.1"
+springbootVersion = "4.0.2"
 springCloudVersion = "2025.1.0"
 springGrpcVersion = "1.0.1"
 # dependence version
