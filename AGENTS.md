@@ -2,38 +2,58 @@
 
 ## Project Structure & Module Organization
 
-- Multi-module Gradle build with primary modules at the repo root: `mumu-services/` (submodules `mumu-iam`, `mumu-log`, `mumu-storage`, `mumu-genix`), `mumu-basis/`, `mumu-extension/`, `mumu-processor/`, and `mumu-benchmark/`.
-- Standard source layout per module: `src/main/java` (and `src/main/kotlin` where applicable), `src/test/java` for tests.
-- Build tooling and rules live in `build.gradle.kts`, version catalogs in `gradle/libs.versions.toml`, and static analysis config under `config/`.
-- Utility scripts and git hooks are in `scripts/` (see `scripts/git/hooks`).
+- Multi-module Gradle build; primary modules live at repo root (`mumu-services/`, `mumu-basis/`, `mumu-extension/`, `mumu-processor/`, `mumu-benchmark/`).
+- Standard layout per module: `src/main/java` (and `src/main/kotlin`), `src/test/java` for tests, `src/main/resources` for config and migrations.
+- Build rules in `build.gradle.kts`; version catalog in `gradle/libs.versions.toml`; static analysis config in `config/`.
+
+## Architecture Overview
+
+- Service-first design: each service module owns its API, application logic, domain model, and infrastructure adapters.
+- Database changes are tracked via migrations under `src/main/resources/db/migration`.
+
+## IAM Service Architecture (Example: mumu-services/mumu-iam)
+
+- Entry point: `IAMApplication` enables JPA/Mongo/Redis, auditing, method security, and transaction management.
+- Layers:
+  - `iam-adapter`: REST controllers (web adapters).
+  - `iam-client`: API interfaces, `*Cmd` and `*DTO`, gRPC stubs and `*.proto` definitions.
+  - `iam-application`: service implementations and `*CmdExe` executors.
+  - `iam-domain`: entities and gateway interfaces.
+  - `iam-infra`: gateway implementations, repositories, cache adapters, and convertors/mappers.
+- Persistence: PostgreSQL migrations under `mumu-services/mumu-iam/src/main/resources/db/migration/postgresql`.
 
 ## Build, Test, and Development Commands
 
-- `./gradlew build` — compile and package all modules.
-- `./gradlew test` — run unit tests across all modules (JUnit 5).
-- `./gradlew check` — run tests plus Checkstyle and PMD rules.
-- `./gradlew installGitHooks` — install repo git hooks (uses `scripts/git/hooks`).
+- `./gradlew build` to compile/package all modules.
+- `./gradlew test` to run unit tests.
+- `./gradlew check` to run tests plus Checkstyle and PMD.
 
 ## Coding Style & Naming Conventions
 
-- Indentation: 4 spaces for `*.java`, `*.kt`, `*.groovy`, `*.xml`; 2 spaces for `*.toml` (see `.editorconfig`).
-- Line endings: LF; UTF-8 encoding; trim trailing whitespace; final newline required.
-- Java/Kotlin style is enforced by Checkstyle and PMD configured in `build.gradle.kts` with rules in `config/`.
+- Indentation: 4 spaces for `*.java`, `*.kt`, `*.groovy`, `*.xml`; 2 spaces for `*.toml`.
+- LF line endings, UTF-8, trim trailing whitespace, and final newline required.
 
 ## Testing Guidelines
 
-- Framework: JUnit 5 (`useJUnitPlatform()` in Gradle).
-- Test classes follow the `*Test` suffix convention and live under `src/test/java`.
-- Run a focused module test with `./gradlew :mumu-basis:test` (replace module as needed).
+- JUnit 5 with `useJUnitPlatform()`; tests live under `src/test/java` with `*Test` suffix.
+- Run a focused module test with `./gradlew :mumu-iam:test` (or another module).
+
+## IAM Development Conventions (Based on PermissionController + RoleServiceImpl)
+
+- Controllers: use `@RestController`, `@Validated`, `@RequestMapping`, `@Tag`, and per-endpoint `@Operation`, `@API(since=...)`, `@RateLimiter`.
+- Requests: `@RequestBody` + `@Validated` for commands, `@ModelAttribute` for query commands, `@PathVariable` for IDs.
+- Responses: use `ResponseWrapper<T>` where established; `Page` for count-based pagination, `Slice` for no-count.
+- Application layer: implement `*ServiceImpl` that delegates to `*CmdExe` executors; annotate with `@Transactional` and `@Observed` as needed; gRPC services extend `*ImplBase` and use `@GrpcService`.
+- Domain/infra boundary: define `*Gateway` interfaces in domain; implement in infra using repositories, cache adapters, and convertors/mappers.
+- Destructive operations: use `@DangerousOperation` and invalidate related caches.
+- Schema changes: add a migration in `db/migration/postgresql` named like `Vx.y.z__short_description.sql`.
+- New feature flow: add `*Cmd`/`*DTO` in `iam-client` → implement `*CmdExe` in `iam-application` → add/extend `*Gateway` in `iam-domain` and implement in `iam-infra` → expose REST/gRPC in `iam-adapter`/`*ServiceImpl` → add tests under `mumu-services/mumu-iam/src/test/java` mirroring package names.
 
 ## Commit & Pull Request Guidelines
 
-- Commit messages follow: `<type>(<scope>): <subject>` with optional body/footer. Example: `feat(iam): Add role search endpoint`.
-- Allowed types include: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`.
-- Keep subjects <= 50 chars; wrap body lines at ~72 chars; use `BREAKING CHANGE:` in the footer when applicable.
-- PRs should include a clear description, link relevant issues, and screenshots or logs when changing UI or behavior.
+- Commit format: `<type>(<scope>): <subject>` with optional body/footer; keep subjects <= 50 chars.
+- PRs should include a clear description, linked issues, and screenshots/logs when behavior changes.
 
 ## Security & Configuration Tips
 
 - Report vulnerabilities via GitHub Security Advisories (see `SECURITY.adoc`).
-- Some builds require signing environment variables; follow `build.gradle.kts` guidance if publishing artifacts.
