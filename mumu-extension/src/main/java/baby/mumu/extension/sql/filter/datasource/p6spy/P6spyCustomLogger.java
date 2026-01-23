@@ -37,6 +37,17 @@ public class P6spyCustomLogger extends FormattedLogger {
 
     private static final Logger log = LoggerFactory.getLogger(P6spyCustomLogger.class);
 
+    /**
+     * 定义需要忽略的关键字（表名前缀或特定名称）
+     */
+    private static final String[] IGNORED_TABLES = {
+        "jobrunr_backgroundjobservers",
+        "jobrunr_jobs",
+        "jobrunr_metadata",
+        "jobrunr_migrations",
+        "jobrunr_recurring_jobs"
+    };
+
     @Override
     public void logException(Exception e) {
         P6spyCustomLogger.log.info("", e);
@@ -51,6 +62,13 @@ public class P6spyCustomLogger extends FormattedLogger {
     public void logSQL(int connectionId, String now, long elapsed,
                        Category category, String prepared, String sql, String url) {
         if (!Strings.isNullOrEmpty(sql)) {
+            // 1. 精确匹配过滤逻辑
+            String lowerSql = sql.toLowerCase();
+            for (String tableName : P6spyCustomLogger.IGNORED_TABLES) {
+                if (lowerSql.contains(tableName)) {
+                    return; // 匹配到具体表名，直接跳过打印
+                }
+            }
             String lf = "\n";
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(lf).append("====>");
