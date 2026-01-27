@@ -5,6 +5,7 @@
 - Multi-module Gradle build; primary modules live at repo root (`mumu-services/`, `mumu-basis/`, `mumu-extension/`, `mumu-processor/`, `mumu-benchmark/`).
 - Standard layout per module: `src/main/java` (and `src/main/kotlin`), `src/test/java` for tests, `src/main/resources` for config and migrations.
 - Build rules in `build.gradle.kts`; version catalog in `gradle/libs.versions.toml`; static analysis config in `config/`.
+- Dependencies are managed via Gradle Version Catalogs in `gradle/libs.versions.toml` (see `https://docs.gradle.org/current/userguide/version_catalogs.html`); add or update dependencies there first.
 
 ## Architecture Overview
 
