@@ -153,6 +153,15 @@ public interface PermissionGateway {
     void deletePath(Long ancestorId, Long descendantId);
 
     /**
+     * 移动权限路径
+     *
+     * @param originalAncestorId 原始后代权限ID
+     * @param targetAncestorId   目标后代权限ID
+     * @param descendantId       后代权限ID
+     */
+    void move(Long originalAncestorId, Long targetAncestorId, Long descendantId);
+
+    /**
      * 根据编码删除权限
      *
      * @param code 权限编码

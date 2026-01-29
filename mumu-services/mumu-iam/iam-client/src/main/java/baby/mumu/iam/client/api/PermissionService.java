@@ -160,6 +160,16 @@ public interface PermissionService {
     void deletePath(Long ancestorId, Long descendantId);
 
     /**
+     * 移动权限路径
+     *
+     * @param originalAncestorId 原始后代权限ID
+     * @param targetAncestorId   目标后代权限ID
+     * @param descendantId       后代权限ID
+     */
+    void move(Long originalAncestorId, Long targetAncestorId, Long descendantId);
+
+
+    /**
      * 下载所有权限数据
      *
      * @param response 响应

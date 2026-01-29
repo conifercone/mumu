@@ -206,6 +206,16 @@ public class PermissionController {
         permissionService.deletePath(ancestorId, descendantId);
     }
 
+    @Operation(summary = "移动权限路径")
+    @PutMapping("/move/{originalAncestorId}/{targetAncestorId}/{descendantId}")
+    @ResponseBody
+    @RateLimiter
+    @API(status = Status.STABLE, since = "2.16.0")
+    public void move(@PathVariable Long originalAncestorId, @PathVariable Long targetAncestorId,
+                     @PathVariable Long descendantId) {
+        permissionService.move(originalAncestorId, targetAncestorId, descendantId);
+    }
+
     @Operation(summary = "下载所有权限数据（不包含权限关系数据）")
     @GetMapping("/downloadAll")
     @RateLimiter

@@ -76,6 +76,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     private final PermissionFindByCodeCmdExe permissionFindByCodeCmdExe;
     private final PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe;
     private final PermissionFindAllAncestorPathStringsCmdExe permissionFindAllAncestorPathStringsCmdExe;
+    private final PermissionMovePathCmdExe permissionMovePathCmdExe;
 
     @Autowired
     public PermissionServiceImpl(PermissionAddCmdExe permissionAddCmdExe,
@@ -97,7 +98,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
                                  PermissionDownloadAllCmdExe permissionDownloadAllCmdExe,
                                  PermissionFindByCodeCmdExe permissionFindByCodeCmdExe,
                                  PermissionIncludePathDownloadAllCmdExe permissionIncludePathDownloadAllCmdExe,
-                                 PermissionFindAllAncestorPathStringsCmdExe permissionFindAllAncestorPathStringsCmdExe) {
+                                 PermissionFindAllAncestorPathStringsCmdExe permissionFindAllAncestorPathStringsCmdExe, PermissionMovePathCmdExe permissionMovePathCmdExe) {
         this.permissionAddCmdExe = permissionAddCmdExe;
         this.permissionDeleteByIdCmdExe = permissionDeleteByIdCmdExe;
         this.permissionUpdateCmdExe = permissionUpdateCmdExe;
@@ -118,6 +119,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         this.permissionFindByCodeCmdExe = permissionFindByCodeCmdExe;
         this.permissionIncludePathDownloadAllCmdExe = permissionIncludePathDownloadAllCmdExe;
         this.permissionFindAllAncestorPathStringsCmdExe = permissionFindAllAncestorPathStringsCmdExe;
+        this.permissionMovePathCmdExe = permissionMovePathCmdExe;
     }
 
     @Override
@@ -253,6 +255,12 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     @Transactional(rollbackFor = Exception.class)
     public void deletePath(Long ancestorId, Long descendantId) {
         permissionDeletePathCmdExe.execute(ancestorId, descendantId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void move(Long originalAncestorId, Long targetAncestorId, Long descendantId) {
+        permissionMovePathCmdExe.execute(originalAncestorId, targetAncestorId, descendantId);
     }
 
     @Override
