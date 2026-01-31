@@ -96,6 +96,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         this.rolePermissionCacheRepository = rolePermissionCacheRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -116,6 +119,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return persisted.getId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -139,6 +145,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -158,6 +167,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return permissionConvertor.toEntity(merged);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<Permission> findAll(Permission permission, int current, int pageSize) {
@@ -169,6 +181,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new PageImpl<>(permissions, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<Permission> findAllSlice(Permission permission, int current, int pageSize) {
@@ -179,6 +194,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new SliceImpl<>(permissions, pageRequest, permissionPOSlice.hasNext());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<Permission> findArchivedAllSlice(Permission permission, int current, int pageSize) {
@@ -191,6 +209,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new SliceImpl<>(entitiesFromArchivedPO, pageRequest, permissionArchivedPOS.hasNext());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.0.0")
     public Page<Permission> findArchivedAll(Permission permission, int current, int pageSize) {
@@ -203,6 +224,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new PageImpl<>(entitiesFromArchivedPO, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Permission> findById(Long id) {
         return Optional.ofNullable(id).flatMap(permissionCacheRepository::findById).flatMap(
@@ -217,6 +241,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @DangerousOperation("根据ID归档ID为%0的权限")
@@ -253,6 +280,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
             });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(Long id) {
@@ -265,6 +295,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
             });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addDescendant(Long ancestorId, Long descendantId) {
@@ -305,6 +338,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Permission> findRootPermissions(int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
@@ -316,6 +352,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Permission> findDirectPermissions(Long ancestorId, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
@@ -328,6 +367,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         return new PageImpl<>(authorities, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deletePath(Long ancestorId, Long descendantId) {
@@ -340,6 +382,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         permissionCacheRepository.deleteById(descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void move(Long originalAncestorId, Long targetAncestorId, Long descendantId) {
@@ -347,6 +392,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         addDescendant(targetAncestorId, descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "2.4.0")
@@ -359,6 +407,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAll() {
@@ -367,6 +418,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
                 permissionPO -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionPO).stream());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAllIncludePath() {
@@ -375,6 +429,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
                 permissionPO -> permissionConvertor.toEntity(permissionPO).stream());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Permission> findByCode(String code) {
         return Optional.ofNullable(code).flatMap(permissionCacheRepository::findByCode).flatMap(
@@ -387,6 +444,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
             }));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> findAllAncestorPathStrings(Long descendantId) {
         return Optional.ofNullable(descendantId).map(permissionPathRepository::findAllAncestorPathStrings).orElse(new ArrayList<>());
