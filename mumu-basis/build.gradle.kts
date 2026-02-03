@@ -16,5 +16,6 @@ dependencies {
     implementation(libs.protobuf.java)
     implementation(libs.opencsv)
     implementation(libs.libphonenumber)
+    implementation(libs.opentelemetry.log4j.appender)
     implementation(libs.commons.validator)
 }

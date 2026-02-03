@@ -56,6 +56,8 @@
         </Delete>
       </DefaultRolloverStrategy>
     </RollingFile>
+    <!-- OpenTelemetry -->
+    <OpenTelemetry name="OpenTelemetryAppender"/>
     <!-- @formatter:on -->
     </Appenders>
 
@@ -64,6 +66,7 @@
         <AsyncRoot level="INFO" includeLocation="true">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="OpenTelemetryAppender"/>
         </AsyncRoot>
 
         <!-- 降低 Kafka 客户端日志噪音 -->
