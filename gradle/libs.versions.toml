@@ -42,7 +42,7 @@ cosidVersion = '3.0.2'
 # bom version
 grpcBomVersion = '1.78.0'
 guavaBomVersion = '33.5.0-jre'
-protobufBomVersion = '4.33.4'
+protobufBomVersion = '4.33.5'
 awssdkBomVersion = '2.41.14'
 # plugin version
 protobufPluginVersion = '0.9.6'
