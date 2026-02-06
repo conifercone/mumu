@@ -48,7 +48,7 @@ awssdkBomVersion = '2.41.20'
 # plugin version
 protobufPluginVersion = '0.9.6'
 lombokPluginVersion = '9.2.0'
-kotlinPluginVersion = '2.3.0'
+kotlinPluginVersion = '2.3.10'
 
 [libraries]
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
