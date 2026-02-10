@@ -41,7 +41,7 @@ tikaVersion = '3.2.3'
 cosidVersion = '3.0.2'
 otelLog4j2AppenderVersion = '2.24.0-alpha'
 # bom version
-grpcBomVersion = '1.78.0'
+grpcBomVersion = '1.79.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.33.5'
 awssdkBomVersion = '2.41.20'
