@@ -22,9 +22,14 @@ import baby.mumu.iam.client.api.RoleService;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -50,7 +55,11 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @Operation(summary = "添加角色")
+    @Operation(summary = "添加角色",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "角色新增命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = RoleAddCmd.class))))
     @PostMapping("/add")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -58,7 +67,10 @@ public class RoleController {
         return ResponseWrapper.success(roleService.add(roleAddCmd));
     }
 
-    @Operation(summary = "根据id删除角色")
+    @Operation(summary = "根据id删除角色",
+        parameters = {
+            @Parameter(name = "id", description = "角色ID", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/deleteById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -66,7 +78,10 @@ public class RoleController {
         roleService.deleteById(id);
     }
 
-    @Operation(summary = "根据code删除角色")
+    @Operation(summary = "根据code删除角色",
+        parameters = {
+            @Parameter(name = "code", description = "角色编码", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/deleteByCode/{code}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
@@ -74,7 +89,11 @@ public class RoleController {
         roleService.deleteByCode(code);
     }
 
-    @Operation(summary = "更新角色")
+    @Operation(summary = "更新角色",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "角色更新命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = RoleUpdateCmd.class))))
     @PutMapping("/updateById")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -86,7 +105,8 @@ public class RoleController {
     @GetMapping("/findAll")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
-    public Page<RoleFindAllDTO> findAll(@ModelAttribute @Validated RoleFindAllCmd roleFindAllCmd) {
+    public Page<RoleFindAllDTO> findAll(
+        @ParameterObject @ModelAttribute @Validated RoleFindAllCmd roleFindAllCmd) {
         return roleService.findAll(roleFindAllCmd);
     }
 
@@ -95,7 +115,7 @@ public class RoleController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<RoleFindAllSliceDTO> findAllSlice(
-        @ModelAttribute @Validated RoleFindAllSliceCmd roleFindAllSliceCmd) {
+        @ParameterObject @ModelAttribute @Validated RoleFindAllSliceCmd roleFindAllSliceCmd) {
         return roleService.findAllSlice(roleFindAllSliceCmd);
     }
 
@@ -104,7 +124,7 @@ public class RoleController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Page<RoleArchivedFindAllDTO> findArchivedAll(
-        @ModelAttribute @Validated RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
+        @ParameterObject @ModelAttribute @Validated RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
         return roleService.findArchivedAll(roleArchivedFindAllCmd);
     }
 
@@ -113,11 +133,14 @@ public class RoleController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
-        @ModelAttribute @Validated RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
+        @ParameterObject @ModelAttribute @Validated RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
         return roleService.findArchivedAllSlice(roleArchivedFindAllSliceCmd);
     }
 
-    @Operation(summary = "根据id归档角色")
+    @Operation(summary = "根据id归档角色",
+        parameters = {
+            @Parameter(name = "id", description = "角色ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/archiveById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
@@ -125,7 +148,10 @@ public class RoleController {
         roleService.archiveById(id);
     }
 
-    @Operation(summary = "根据id从归档中恢复角色")
+    @Operation(summary = "根据id从归档中恢复角色",
+        parameters = {
+            @Parameter(name = "id", description = "角色ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/recoverFromArchiveById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
@@ -133,7 +159,11 @@ public class RoleController {
         roleService.recoverFromArchiveById(id);
     }
 
-    @Operation(summary = "添加后代角色")
+    @Operation(summary = "添加后代角色",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "角色后代关系新增命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = RoleAddDescendantCmd.class))))
     @PutMapping("/addDescendant")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
@@ -146,7 +176,7 @@ public class RoleController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public Page<RoleFindRootDTO> findRoot(
-        @ModelAttribute RoleFindRootCmd roleFindRootCmd) {
+        @ParameterObject @ModelAttribute RoleFindRootCmd roleFindRootCmd) {
         return roleService.findRootRoles(roleFindRootCmd);
     }
 
@@ -155,11 +185,15 @@ public class RoleController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public Page<RoleFindDirectDTO> findDirect(
-        @ModelAttribute RoleFindDirectCmd roleFindDirectCmd) {
+        @ParameterObject @ModelAttribute RoleFindDirectCmd roleFindDirectCmd) {
         return roleService.findDirectRoles(roleFindDirectCmd);
     }
 
-    @Operation(summary = "删除角色路径")
+    @Operation(summary = "删除角色路径",
+        parameters = {
+            @Parameter(name = "ancestorId", description = "祖先角色ID", required = true, in = ParameterIn.PATH),
+            @Parameter(name = "descendantId", description = "后代角色ID", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/deletePath/{ancestorId}/{descendantId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
@@ -168,7 +202,10 @@ public class RoleController {
         roleService.deletePath(ancestorId, descendantId);
     }
 
-    @Operation(summary = "根据id查询角色")
+    @Operation(summary = "根据id查询角色",
+        parameters = {
+            @Parameter(name = "id", description = "角色ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/findById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
@@ -176,7 +213,10 @@ public class RoleController {
         return roleService.findById(id);
     }
 
-    @Operation(summary = "根据code查询角色")
+    @Operation(summary = "根据code查询角色",
+        parameters = {
+            @Parameter(name = "code", description = "角色编码", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/findByCode/{code}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.5.0")

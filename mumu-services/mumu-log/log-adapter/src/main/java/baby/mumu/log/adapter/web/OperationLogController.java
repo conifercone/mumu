@@ -23,9 +23,14 @@ import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -50,7 +55,11 @@ public class OperationLogController {
         this.operationLogService = operationLogService;
     }
 
-    @Operation(summary = "提交日志")
+    @Operation(summary = "提交日志",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "操作日志提交命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = OperationLogSubmitCmd.class))))
     @PostMapping("/submit")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -58,7 +67,10 @@ public class OperationLogController {
         operationLogService.submit(operationLogSubmitCmd);
     }
 
-    @Operation(summary = "根据日志ID获取操作日志")
+    @Operation(summary = "根据日志ID获取操作日志",
+        parameters = {
+            @Parameter(name = "id", description = "日志ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/findById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -71,7 +83,7 @@ public class OperationLogController {
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<OperationLogFindAllDTO> findAll(
-        @ModelAttribute @Validated OperationLogFindAllCmd operationLogFindAllCmd) {
+        @ParameterObject @ModelAttribute @Validated OperationLogFindAllCmd operationLogFindAllCmd) {
         return operationLogService.findAll(operationLogFindAllCmd);
     }
 

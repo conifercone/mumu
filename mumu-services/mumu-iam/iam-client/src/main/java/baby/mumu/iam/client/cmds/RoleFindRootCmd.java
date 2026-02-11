@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,9 +32,11 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class RoleFindRootCmd {
 
+    @Schema(description = "当前页", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{current.validation.min.size}")
     private Integer current = 1;
 
+    @Schema(description = "每页数量", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{page.size.validation.min.size}")
     private Integer pageSize = 10;
 }

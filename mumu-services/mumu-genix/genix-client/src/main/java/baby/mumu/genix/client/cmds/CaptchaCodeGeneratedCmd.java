@@ -16,6 +16,8 @@
 
 package baby.mumu.genix.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class CaptchaCodeGeneratedCmd {
     /**
      * 有效期
      */
+    @Schema(description = "验证码有效期（秒）", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(1)
     @Max(3600)
     private Long ttl;
@@ -39,6 +42,7 @@ public class CaptchaCodeGeneratedCmd {
     /**
      * 验证码长度
      */
+    @Schema(description = "验证码长度", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(1)
     @Max(10)
     private Integer length;

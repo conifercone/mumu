@@ -22,9 +22,12 @@ import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +52,11 @@ public class SystemLogController {
         this.systemLogService = systemLogService;
     }
 
-    @Operation(summary = "提交日志")
+    @Operation(summary = "提交日志",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "系统日志提交命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = SystemLogSubmitCmd.class))))
     @PostMapping("/submit")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -62,7 +69,7 @@ public class SystemLogController {
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<SystemLogFindAllDTO> findAll(
-        @ModelAttribute @Validated SystemLogFindAllCmd systemLogFindAllCmd) {
+        @ParameterObject @ModelAttribute @Validated SystemLogFindAllCmd systemLogFindAllCmd) {
         return systemLogService.findAll(systemLogFindAllCmd);
     }
 }

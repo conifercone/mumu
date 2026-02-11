@@ -17,6 +17,8 @@
 package baby.mumu.log.client.cmds;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,46 +37,55 @@ public class OperationLogFindAllCmd {
     /**
      * 唯一标识
      */
+    @Schema(description = "日志ID", requiredMode = RequiredMode.NOT_REQUIRED)
     private String id;
 
     /**
      * 日志内容
      */
+    @Schema(description = "日志内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String content;
 
     /**
      * 操作日志的执行人
      */
+    @Schema(description = "执行人", requiredMode = RequiredMode.NOT_REQUIRED)
     private String operator;
 
     /**
      * 操作日志绑定的业务对象标识
      */
+    @Schema(description = "业务对象标识", requiredMode = RequiredMode.NOT_REQUIRED)
     private String bizNo;
 
     /**
      * 操作日志的种类
      */
+    @Schema(description = "操作日志种类", requiredMode = RequiredMode.NOT_REQUIRED)
     private String category;
 
     /**
      * 扩展参数，记录操作日志的修改详情
      */
+    @Schema(description = "操作详情", requiredMode = RequiredMode.NOT_REQUIRED)
     private String detail;
 
     /**
      * 操作日志成功的文本模板
      */
+    @Schema(description = "成功文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String success;
 
     /**
      * 操作日志失败的文本模板
      */
+    @Schema(description = "失败文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String fail;
 
     /**
      * 操作日志的操作时间
      */
+    @Schema(description = "操作时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime operatingTime;
@@ -82,6 +93,7 @@ public class OperationLogFindAllCmd {
     /**
      * 操作日志的开始操作时间
      */
+    @Schema(description = "操作开始时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime operatingStartTime;
@@ -89,6 +101,7 @@ public class OperationLogFindAllCmd {
     /**
      * 操作日志的结束操作时间
      */
+    @Schema(description = "操作结束时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime operatingEndTime;
@@ -96,11 +109,13 @@ public class OperationLogFindAllCmd {
     /**
      * 当前页码
      */
+    @Schema(description = "当前页", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{current.validation.min.size}")
     private Integer current = 1;
     /**
      * 每页数量
      */
+    @Schema(description = "每页数量", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{page.size.validation.min.size}")
     private Integer pageSize = 10;
 }

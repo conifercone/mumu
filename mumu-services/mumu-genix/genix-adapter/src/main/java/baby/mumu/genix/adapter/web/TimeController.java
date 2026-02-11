@@ -22,6 +22,8 @@ import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.basis.response.ResponseWrapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -55,7 +57,10 @@ public class TimeController {
         return ResponseWrapper.success(ZoneId.getAvailableZoneIds());
     }
 
-    @Operation(summary = "获取当前服务器时间")
+    @Operation(summary = "获取当前服务器时间",
+        parameters = {
+            @Parameter(name = "zoneId", description = "时区ID", required = true, in = ParameterIn.QUERY)
+        })
     @GetMapping("/serverTime")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.7.0")

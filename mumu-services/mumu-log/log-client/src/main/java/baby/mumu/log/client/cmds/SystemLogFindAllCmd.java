@@ -17,6 +17,8 @@
 package baby.mumu.log.client.cmds;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,31 +37,37 @@ public class SystemLogFindAllCmd {
     /**
      * 唯一标识
      */
+    @Schema(description = "日志ID", requiredMode = RequiredMode.NOT_REQUIRED)
     private String id;
 
     /**
      * 日志内容
      */
+    @Schema(description = "日志内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String content;
 
     /**
      * 系统日志的种类
      */
+    @Schema(description = "系统日志种类", requiredMode = RequiredMode.NOT_REQUIRED)
     private String category;
 
     /**
      * 系统日志成功的文本模板
      */
+    @Schema(description = "成功文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String success;
 
     /**
      * 系统日志失败的文本模板
      */
+    @Schema(description = "失败文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String fail;
 
     /**
      * 系统日志的记录时间
      */
+    @Schema(description = "记录时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime recordTime;
@@ -67,6 +75,7 @@ public class SystemLogFindAllCmd {
     /**
      * 系统日志的开始记录时间
      */
+    @Schema(description = "记录开始时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime recordStartTime;
@@ -74,6 +83,7 @@ public class SystemLogFindAllCmd {
     /**
      * 系统日志的结束记录时间
      */
+    @Schema(description = "记录结束时间", requiredMode = RequiredMode.NOT_REQUIRED)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime recordEndTime;
@@ -81,11 +91,13 @@ public class SystemLogFindAllCmd {
     /**
      * 当前页码
      */
+    @Schema(description = "当前页", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{current.validation.min.size}")
     private Integer current = 1;
     /**
      * 每页数量
      */
+    @Schema(description = "每页数量", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{page.size.validation.min.size}")
     private Integer pageSize = 10;
 }

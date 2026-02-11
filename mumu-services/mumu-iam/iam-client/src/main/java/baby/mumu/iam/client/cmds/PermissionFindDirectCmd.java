@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -31,12 +33,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class PermissionFindDirectCmd {
 
+    @Schema(description = "祖先权限ID", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Long ancestorId;
 
+    @Schema(description = "当前页", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{current.validation.min.size}")
     private Integer current = 1;
 
+    @Schema(description = "每页数量", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{page.size.validation.min.size}")
     private Integer pageSize = 10;
 }

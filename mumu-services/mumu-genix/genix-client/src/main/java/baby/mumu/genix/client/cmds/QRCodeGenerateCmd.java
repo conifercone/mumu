@@ -17,6 +17,8 @@
 package baby.mumu.genix.client.cmds;
 
 import baby.mumu.basis.enums.ImageFormatEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 /**
@@ -29,11 +31,15 @@ import lombok.Data;
 public class QRCodeGenerateCmd {
 
 
+    @Schema(description = "二维码内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String content;
 
+    @Schema(description = "图片宽度", requiredMode = RequiredMode.NOT_REQUIRED)
     private int width = 300;
 
+    @Schema(description = "图片高度", requiredMode = RequiredMode.NOT_REQUIRED)
     private int height = 300;
 
+    @Schema(description = "图片格式", requiredMode = RequiredMode.NOT_REQUIRED)
     private ImageFormatEnum imageFormat = ImageFormatEnum.PNG;
 }

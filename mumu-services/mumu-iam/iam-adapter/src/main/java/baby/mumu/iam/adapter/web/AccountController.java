@@ -23,11 +23,15 @@ import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
@@ -55,7 +59,11 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @Operation(summary = "账号注册")
+    @Operation(summary = "账号注册",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号注册命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountRegisterCmd.class))))
     @PostMapping("/register")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -64,7 +72,11 @@ public class AccountController {
         return ResponseWrapper.success(accountService.register(accountRegisterCmd));
     }
 
-    @Operation(summary = "账号基本信息更新")
+    @Operation(summary = "账号基本信息更新",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号基础信息更新命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountUpdateByIdCmd.class))))
     @PutMapping("/updateById")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -73,7 +85,11 @@ public class AccountController {
         return accountService.updateById(accountUpdateByIdCmd);
     }
 
-    @Operation(summary = "账号角色更新")
+    @Operation(summary = "账号角色更新",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号角色更新命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountUpdateRoleCmd.class))))
     @PutMapping("/updateRoleById")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -82,7 +98,10 @@ public class AccountController {
         accountService.updateRoleById(accountUpdateRoleCmd);
     }
 
-    @Operation(summary = "禁用账号")
+    @Operation(summary = "禁用账号",
+        parameters = {
+            @Parameter(name = "id", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/disable/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -115,7 +134,10 @@ public class AccountController {
         return accountService.onlineAccounts();
     }
 
-    @Operation(summary = "重置密码")
+    @Operation(summary = "重置密码",
+        parameters = {
+            @Parameter(name = "id", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/resetPassword/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -124,7 +146,10 @@ public class AccountController {
         accountService.resetPassword(id);
     }
 
-    @Operation(summary = "重置系统设置")
+    @Operation(summary = "重置系统设置",
+        parameters = {
+            @Parameter(name = "systemSettingsId", description = "系统设置ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/resetSystemSettingsBySettingsId/{systemSettingsId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
@@ -133,7 +158,11 @@ public class AccountController {
         accountService.resetSystemSettingsBySettingsId(systemSettingsId);
     }
 
-    @Operation(summary = "通过设置id修改系统设置")
+    @Operation(summary = "通过设置id修改系统设置",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "按系统设置ID修改系统设置命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountModifySystemSettingsBySettingsIdCmd.class))))
     @PutMapping("/modifySystemSettingsBySettingsId")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
@@ -142,7 +171,11 @@ public class AccountController {
         accountService.modifySystemSettingsBySettingsId(accountModifySystemSettingsBySettingsIdCmd);
     }
 
-    @Operation(summary = "通过地址id修改账号地址")
+    @Operation(summary = "通过地址id修改账号地址",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "按地址ID修改账号地址命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountModifyAddressByAddressIdCmd.class))))
     @PutMapping("/modifyAddressByAddressId")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
@@ -151,7 +184,11 @@ public class AccountController {
         accountService.modifyAddressByAddressId(accountModifyAddressByAddressIdCmd);
     }
 
-    @Operation(summary = "添加系统设置")
+    @Operation(summary = "添加系统设置",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号新增系统设置命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountAddSystemSettingsCmd.class))))
     @PostMapping("/addSystemSettings")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
@@ -160,7 +197,11 @@ public class AccountController {
         accountService.addSystemSettings(accountAddSystemSettingsCmd);
     }
 
-    @Operation(summary = "删除当前账号")
+    @Operation(summary = "删除当前账号",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "删除当前账号命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountDeleteCurrentCmd.class))))
     @DeleteMapping("/deleteCurrent")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -174,11 +215,15 @@ public class AccountController {
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public ResponseWrapper<Boolean> verifyPassword(
-        @ModelAttribute @Validated AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
+        @ParameterObject @ModelAttribute @Validated AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
         return ResponseWrapper.success(accountService.verifyPassword(accountPasswordVerifyCmd));
     }
 
-    @Operation(summary = "修改账号密码")
+    @Operation(summary = "修改账号密码",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号修改密码命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountChangePasswordCmd.class))))
     @PutMapping("/changePassword")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
@@ -187,7 +232,10 @@ public class AccountController {
         accountService.changePassword(accountChangePasswordCmd);
     }
 
-    @Operation(summary = "根据id归档账号")
+    @Operation(summary = "根据id归档账号",
+        parameters = {
+            @Parameter(name = "accountId", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/archiveById/{accountId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
@@ -196,7 +244,10 @@ public class AccountController {
         accountService.archiveById(accountId);
     }
 
-    @Operation(summary = "根据id从归档中恢复账号")
+    @Operation(summary = "根据id从归档中恢复账号",
+        parameters = {
+            @Parameter(name = "accountId", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/recoverFromArchiveById/{accountId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
@@ -205,7 +256,11 @@ public class AccountController {
         accountService.recoverFromArchiveById(accountId);
     }
 
-    @Operation(summary = "账号添加地址")
+    @Operation(summary = "账号添加地址",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "账号新增地址命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = AccountAddAddressCmd.class))))
     @PostMapping("/addAddress")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
@@ -214,7 +269,10 @@ public class AccountController {
         accountService.addAddress(accountAddAddressCmd);
     }
 
-    @Operation(summary = "根据id查询账号基本信息")
+    @Operation(summary = "根据id查询账号基本信息",
+        parameters = {
+            @Parameter(name = "id", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getAccountBasicInfoById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
@@ -223,7 +281,10 @@ public class AccountController {
         return accountService.getAccountBasicInfoById(id);
     }
 
-    @Operation(summary = "根据id下线账号")
+    @Operation(summary = "根据id下线账号",
+        parameters = {
+            @Parameter(name = "accountId", description = "账号ID", required = true, in = ParameterIn.PATH)
+        })
     @PostMapping("/offline/{accountId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
@@ -237,7 +298,7 @@ public class AccountController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Page<AccountFindAllDTO> findAll(
-        @ModelAttribute @Validated AccountFindAllCmd accountFindAllCmd) {
+        @ParameterObject @ModelAttribute @Validated AccountFindAllCmd accountFindAllCmd) {
         return accountService.findAll(accountFindAllCmd);
     }
 
@@ -246,11 +307,14 @@ public class AccountController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<AccountFindAllSliceDTO> findAllSlice(
-        @ModelAttribute @Validated AccountFindAllSliceCmd accountFindAllSliceCmd) {
+        @ParameterObject @ModelAttribute @Validated AccountFindAllSliceCmd accountFindAllSliceCmd) {
         return accountService.findAllSlice(accountFindAllSliceCmd);
     }
 
-    @Operation(summary = "附近的账号")
+    @Operation(summary = "附近的账号",
+        parameters = {
+            @Parameter(name = "radiusInMeters", description = "半径（米）", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/nearby/{radiusInMeters}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
@@ -259,7 +323,10 @@ public class AccountController {
         return ResponseWrapper.success(accountService.nearby(radiusInMeters));
     }
 
-    @Operation(summary = "当前账号设置默认地址")
+    @Operation(summary = "当前账号设置默认地址",
+        parameters = {
+            @Parameter(name = "addressId", description = "地址ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/setDefaultAddress/{addressId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
@@ -268,7 +335,10 @@ public class AccountController {
         accountService.setDefaultAddress(addressId);
     }
 
-    @Operation(summary = "删除指定账号地址")
+    @Operation(summary = "删除指定账号地址",
+        parameters = {
+            @Parameter(name = "addressId", description = "地址ID", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/address/{addressId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
@@ -277,7 +347,10 @@ public class AccountController {
         accountService.deleteAddress(addressId);
     }
 
-    @Operation(summary = "当前账号设置默认系统设置")
+    @Operation(summary = "当前账号设置默认系统设置",
+        parameters = {
+            @Parameter(name = "systemSettingsId", description = "系统设置ID", required = true, in = ParameterIn.PATH)
+        })
     @PutMapping("/setDefaultSystemSettings/{systemSettingsId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
@@ -286,7 +359,10 @@ public class AccountController {
         accountService.setDefaultSystemSettings(systemSettingsId);
     }
 
-    @Operation(summary = "删除指定账号系统设置")
+    @Operation(summary = "删除指定账号系统设置",
+        parameters = {
+            @Parameter(name = "systemSettingsId", description = "系统设置ID", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/systemSettings/{systemSettingsId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")

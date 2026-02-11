@@ -21,6 +21,8 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.genix.client.api.CountryService;
 import baby.mumu.genix.client.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -68,7 +70,10 @@ public class CountryController {
         return ResponseWrapper.success(countryService.getCountries());
     }
 
-    @Operation(summary = "根据国家ID获取省或州信息")
+    @Operation(summary = "根据国家ID获取省或州信息",
+        parameters = {
+            @Parameter(name = "id", description = "国家ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getStatesByCountryId/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
@@ -78,7 +83,10 @@ public class CountryController {
             countryService.getStatesByCountryId(id));
     }
 
-    @Operation(summary = "根据省或州ID获取城市")
+    @Operation(summary = "根据省或州ID获取城市",
+        parameters = {
+            @Parameter(name = "id", description = "省或州ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getCitiesByStateId/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
@@ -87,7 +95,10 @@ public class CountryController {
         return ResponseWrapper.success(countryService.getCitiesByStateId(id));
     }
 
-    @Operation(summary = "根据省或州ID获取省或州")
+    @Operation(summary = "根据省或州ID获取省或州",
+        parameters = {
+            @Parameter(name = "id", description = "省或州ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getStateById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
@@ -96,7 +107,10 @@ public class CountryController {
         return ResponseWrapper.success(countryService.getStateById(id));
     }
 
-    @Operation(summary = "根据省或州ID获取省或州(包含下级城市)")
+    @Operation(summary = "根据省或州ID获取省或州(包含下级城市)",
+        parameters = {
+            @Parameter(name = "id", description = "省或州ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getStateCitiesById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
@@ -105,7 +119,10 @@ public class CountryController {
         return ResponseWrapper.success(countryService.getStateCitiesById(id));
     }
 
-    @Operation(summary = "根据城市id获取城市指令")
+    @Operation(summary = "根据城市id获取城市指令",
+        parameters = {
+            @Parameter(name = "id", description = "城市ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/getCityById/{id}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")

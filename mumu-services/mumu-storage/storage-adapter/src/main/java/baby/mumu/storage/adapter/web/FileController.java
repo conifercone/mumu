@@ -22,6 +22,7 @@ import baby.mumu.storage.client.api.FileService;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
@@ -51,7 +52,11 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @Operation(summary = "上传文件")
+    @Operation(summary = "上传文件",
+        parameters = {
+            @Parameter(name = "storageZoneId", description = "存储区域ID", required = true, in = ParameterIn.PATH),
+            @Parameter(name = "file", description = "源文件", required = true, in = ParameterIn.QUERY)
+        })
     @PostMapping("/upload/{storageZoneId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
@@ -61,7 +66,10 @@ public class FileController {
         return ResponseWrapper.success(fileService.upload(storageZoneId, file));
     }
 
-    @Operation(summary = "根据元数据ID删除文件")
+    @Operation(summary = "根据元数据ID删除文件",
+        parameters = {
+            @Parameter(name = "metadataId", description = "文件元数据ID", required = true, in = ParameterIn.PATH)
+        })
     @DeleteMapping("/deleteByMetadataId/{metadataId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
@@ -70,7 +78,10 @@ public class FileController {
         fileService.deleteByMetadataId(metadataId);
     }
 
-    @Operation(summary = "根据元数据ID下载文件")
+    @Operation(summary = "根据元数据ID下载文件",
+        parameters = {
+            @Parameter(name = "metadataId", description = "文件元数据ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/downloadByMetadataId/{metadataId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
@@ -80,7 +91,10 @@ public class FileController {
         fileService.downloadByMetadataId(metadataId, httpServletResponse);
     }
 
-    @Operation(summary = "根据元数据ID获取文件元数据信息")
+    @Operation(summary = "根据元数据ID获取文件元数据信息",
+        parameters = {
+            @Parameter(name = "metadataId", description = "文件元数据ID", required = true, in = ParameterIn.PATH)
+        })
     @GetMapping("/findMetaByMetaId/{metadataId}")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.13.0")

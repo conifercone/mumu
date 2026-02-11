@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +59,7 @@ public class BarCodeController {
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public ResponseWrapper<String> dataUrlGenerate(
-        @ModelAttribute @Validated BarCodeGenerateCmd barCodeGenerateCmd) {
+        @ParameterObject @ModelAttribute @Validated BarCodeGenerateCmd barCodeGenerateCmd) {
         return ResponseWrapper.success(String.format(CommonConstants.DATA_URL_TEMPLATE,
             barCodeGenerateCmd.getImageFormat().getMimeType(),
             Base64.getEncoder().encodeToString(barCodeService.generate(barCodeGenerateCmd))));

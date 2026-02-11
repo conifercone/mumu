@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
 
@@ -33,36 +35,44 @@ public class AccountFindAllSliceCmd {
     /**
      * 账号id
      */
+    @Schema(description = "账号ID", requiredMode = RequiredMode.NOT_REQUIRED)
     private Long id;
 
     /**
      * 账号名
      */
+    @Schema(description = "账号名", requiredMode = RequiredMode.NOT_REQUIRED)
     private String username;
 
     /**
      * 账号角色ID集合
      */
+    @Schema(description = "账号角色ID集合", requiredMode = RequiredMode.NOT_REQUIRED)
     private List<Long> roleIds;
 
     /**
      * 国际电话区号
      */
+    @Schema(description = "国际电话区号", requiredMode = RequiredMode.NOT_REQUIRED)
     private String phoneCountryCode;
 
     /**
      * 手机号
      */
+    @Schema(description = "手机号", requiredMode = RequiredMode.NOT_REQUIRED)
     private String phone;
 
     /**
      * 电子邮件
      */
+    @Schema(description = "电子邮件", requiredMode = RequiredMode.NOT_REQUIRED)
     private String email;
 
+    @Schema(description = "当前页", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{current.validation.min.size}")
     private Integer current = 1;
 
+    @Schema(description = "每页数量", requiredMode = RequiredMode.NOT_REQUIRED)
     @Min(value = 1, message = "{page.size.validation.min.size}")
     private Integer pageSize = 10;
 }

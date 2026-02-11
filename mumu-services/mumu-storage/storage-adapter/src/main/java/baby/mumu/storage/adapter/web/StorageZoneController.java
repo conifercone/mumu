@@ -21,6 +21,8 @@ import baby.mumu.basis.response.ResponseWrapper;
 import baby.mumu.storage.client.api.StorageZoneService;
 import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -48,7 +50,11 @@ public class StorageZoneController {
         this.storageZoneService = storageZoneService;
     }
 
-    @Operation(summary = "新增存储区域")
+    @Operation(summary = "新增存储区域",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true,
+            description = "存储区域新增命令对象",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = StorageZoneAddCmd.class))))
     @PostMapping("/add")
     @RateLimiter
     @API(status = Status.STABLE, since = "2.13.0")

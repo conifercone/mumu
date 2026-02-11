@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -28,6 +30,7 @@ import lombok.Data;
 @Data
 public class AccountPasswordVerifyCmd {
 
+    @Schema(description = "账号密码", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String password;
 }
