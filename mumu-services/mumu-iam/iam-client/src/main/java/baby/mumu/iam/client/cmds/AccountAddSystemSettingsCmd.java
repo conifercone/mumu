@@ -18,6 +18,8 @@ package baby.mumu.iam.client.cmds;
 
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -34,24 +36,28 @@ public class AccountAddSystemSettingsCmd {
     /**
      * 系统设置标识
      */
+    @Schema(description = "系统设置标识", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String profile;
 
     /**
      * 系统设置名称
      */
+    @Schema(description = "系统设置名称", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String name;
 
     /**
      * 系统主题
      */
+    @Schema(description = "系统主题", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private SystemThemeEnum systemTheme = SystemThemeEnum.DEFAULT;
 
     /**
      * 系统主题模式
      */
+    @Schema(description = "系统主题模式", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private SystemThemeModeEnum systemThemeMode = SystemThemeModeEnum.SYNC_WITH_SYSTEM;
 }

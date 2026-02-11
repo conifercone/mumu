@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -32,12 +34,14 @@ public class AccountDeleteCurrentCmd {
     /**
      * 验证码ID
      */
+    @Schema(description = "验证码ID", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Long captchaCodeId;
 
     /**
      * 验证码值
      */
+    @Schema(description = "验证码值", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String captchaCode;
 }

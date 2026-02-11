@@ -16,6 +16,8 @@
 
 package baby.mumu.genix.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 /**
@@ -30,10 +32,12 @@ public class CaptchaCodeVerifyCmd {
     /**
      * 验证码id
      */
+    @Schema(description = "验证码ID", requiredMode = RequiredMode.NOT_REQUIRED)
     private Long id;
 
     /**
      * 验证码内容
      */
+    @Schema(description = "验证码内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String source;
 }

@@ -18,6 +18,8 @@ package baby.mumu.iam.client.cmds;
 
 import baby.mumu.basis.enums.SystemThemeEnum;
 import baby.mumu.basis.enums.SystemThemeModeEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -35,12 +37,14 @@ public class AccountModifySystemSettingsBySettingsIdCmd {
     /**
      * 唯一主键
      */
+    @Schema(description = "系统设置ID", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String id;
 
     /**
      * 系统设置标识
      */
+    @Schema(description = "系统设置标识", requiredMode = RequiredMode.NOT_REQUIRED)
     @Nullable
     @Size(min = 1)
     private String profile;
@@ -48,6 +52,7 @@ public class AccountModifySystemSettingsBySettingsIdCmd {
     /**
      * 系统设置名称
      */
+    @Schema(description = "系统设置名称", requiredMode = RequiredMode.NOT_REQUIRED)
     @Nullable
     @Size(min = 1)
     private String name;
@@ -55,12 +60,14 @@ public class AccountModifySystemSettingsBySettingsIdCmd {
     /**
      * 系统主题
      */
+    @Schema(description = "系统主题", requiredMode = RequiredMode.NOT_REQUIRED)
     @Nullable
     private SystemThemeEnum systemTheme;
 
     /**
      * 系统主题模式
      */
+    @Schema(description = "系统主题模式", requiredMode = RequiredMode.NOT_REQUIRED)
     @Nullable
     private SystemThemeModeEnum systemThemeMode;
 }

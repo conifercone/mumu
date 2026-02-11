@@ -17,6 +17,8 @@
 package baby.mumu.iam.client.cmds;
 
 import baby.mumu.basis.constants.RegexpConstants;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -30,9 +32,11 @@ import lombok.Data;
 @Data
 public class AccountChangePasswordCmd {
 
+    @Schema(description = "原密码", requiredMode = RequiredMode.REQUIRED)
     @NotBlank(message = "{account.password.validation.not.blank}")
     private String originalPassword;
 
+    @Schema(description = "新密码", requiredMode = RequiredMode.REQUIRED)
     @NotBlank(message = "{account.password.validation.not.blank}")
     @Pattern(regexp = RegexpConstants.PASSWORD_REGEXP, message = "{account.password.validation.pattern}")
     private String newPassword;

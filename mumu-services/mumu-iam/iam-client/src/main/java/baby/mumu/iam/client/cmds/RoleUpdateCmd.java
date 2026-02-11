@@ -17,6 +17,8 @@
 package baby.mumu.iam.client.cmds;
 
 import baby.mumu.extension.annotations.NotBlankOrNull;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -31,16 +33,21 @@ import java.util.List;
 @Data
 public class RoleUpdateCmd {
 
+    @Schema(description = "角色ID", requiredMode = RequiredMode.NOT_REQUIRED)
     private Long id;
 
+    @Schema(description = "角色名称", requiredMode = RequiredMode.NOT_REQUIRED)
     @NotBlankOrNull
     private String name;
 
+    @Schema(description = "角色编码", requiredMode = RequiredMode.NOT_REQUIRED)
     @NotBlankOrNull
     private String code;
 
+    @Schema(description = "角色描述", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 500)
     private String description;
 
+    @Schema(description = "权限ID集合", requiredMode = RequiredMode.NOT_REQUIRED)
     private List<Long> permissionIds;
 }

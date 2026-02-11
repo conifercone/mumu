@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -31,14 +33,18 @@ import java.util.List;
 @Data
 public class RoleAddCmd {
 
+    @Schema(description = "角色名称", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String name;
 
+    @Schema(description = "角色编码", requiredMode = RequiredMode.REQUIRED)
     @NotBlank
     private String code;
 
+    @Schema(description = "角色描述", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 500)
     private String description;
 
+    @Schema(description = "权限ID集合", requiredMode = RequiredMode.NOT_REQUIRED)
     private List<Long> permissionIds;
 }

@@ -17,6 +17,8 @@
 package baby.mumu.storage.client.cmds;
 
 import baby.mumu.basis.enums.StorageZonePolicyEnum;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 /**
@@ -28,11 +30,15 @@ import lombok.Data;
 @Data
 public class StorageZoneAddCmd {
 
+    @Schema(description = "存储区域编码", requiredMode = RequiredMode.NOT_REQUIRED)
     private String code;
 
+    @Schema(description = "存储区域名称", requiredMode = RequiredMode.NOT_REQUIRED)
     private String name;
 
+    @Schema(description = "存储区域描述", requiredMode = RequiredMode.NOT_REQUIRED)
     private String description;
 
+    @Schema(description = "存储区域策略", requiredMode = RequiredMode.NOT_REQUIRED)
     private StorageZonePolicyEnum policy;
 }

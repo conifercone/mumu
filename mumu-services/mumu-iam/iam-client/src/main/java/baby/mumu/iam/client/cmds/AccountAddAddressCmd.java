@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.data.geo.Point;
@@ -32,35 +34,41 @@ public class AccountAddAddressCmd {
     /**
      * 街道地址，包含门牌号和街道信息
      */
+    @Schema(description = "街道地址，包含门牌号和街道信息", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 255)
     private String street;
 
     /**
      * 城市信息
      */
+    @Schema(description = "城市信息", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 100)
     private String city;
 
     /**
      * 州或省的信息
      */
+    @Schema(description = "州或省的信息", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 100)
     private String state;
 
     /**
      * 邮政编码
      */
+    @Schema(description = "邮政编码", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 20)
     private String postalCode;
 
     /**
      * 国家信息
      */
+    @Schema(description = "国家信息", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 100)
     private String country;
 
     /**
      * 定位
      */
+    @Schema(description = "定位", requiredMode = RequiredMode.NOT_REQUIRED)
     private Point location;
 }

@@ -16,6 +16,8 @@
 
 package baby.mumu.log.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 /**
@@ -30,35 +32,42 @@ public class OperationLogSubmitCmd {
     /**
      * 日志内容
      */
+    @Schema(description = "日志内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String content;
 
     /**
      * 操作日志的执行人
      */
+    @Schema(description = "执行人", requiredMode = RequiredMode.NOT_REQUIRED)
     private String operator;
 
     /**
      * 操作日志绑定的业务对象标识
      */
+    @Schema(description = "业务对象标识", requiredMode = RequiredMode.NOT_REQUIRED)
     private String bizNo;
 
     /**
      * 操作日志的种类
      */
+    @Schema(description = "操作日志种类", requiredMode = RequiredMode.NOT_REQUIRED)
     private String category;
 
     /**
      * 扩展参数，记录操作日志的修改详情
      */
+    @Schema(description = "操作详情", requiredMode = RequiredMode.NOT_REQUIRED)
     private String detail;
 
     /**
      * 操作日志成功的文本模板
      */
+    @Schema(description = "成功文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String success;
 
     /**
      * 操作日志失败的文本模板
      */
+    @Schema(description = "失败文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String fail;
 }

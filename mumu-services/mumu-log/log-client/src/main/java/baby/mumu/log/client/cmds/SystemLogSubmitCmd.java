@@ -16,6 +16,8 @@
 
 package baby.mumu.log.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 /**
@@ -30,20 +32,24 @@ public class SystemLogSubmitCmd {
     /**
      * 日志内容
      */
+    @Schema(description = "日志内容", requiredMode = RequiredMode.NOT_REQUIRED)
     private String content;
 
     /**
      * 系统日志的种类
      */
+    @Schema(description = "系统日志种类", requiredMode = RequiredMode.NOT_REQUIRED)
     private String category;
 
     /**
      * 系统日志成功的文本模板
      */
+    @Schema(description = "成功文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String success;
 
     /**
      * 系统日志失败的文本模板
      */
+    @Schema(description = "失败文本模板", requiredMode = RequiredMode.NOT_REQUIRED)
     private String fail;
 }

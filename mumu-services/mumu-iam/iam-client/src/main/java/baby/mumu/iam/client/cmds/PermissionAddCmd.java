@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -28,12 +30,15 @@ import lombok.Data;
 @Data
 public class PermissionAddCmd {
 
+    @Schema(description = "权限编码", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 50, message = "{permission.code.validation.size}")
     private String code;
 
+    @Schema(description = "权限名称", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 200, message = "{permission.name.validation.size}")
     private String name;
 
+    @Schema(description = "权限描述", requiredMode = RequiredMode.NOT_REQUIRED)
     @Size(max = 500)
     private String description;
 }

@@ -16,6 +16,8 @@
 
 package baby.mumu.iam.client.cmds;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -31,12 +33,14 @@ public class RoleAddDescendantCmd {
     /**
      * 祖先角色ID
      */
+    @Schema(description = "祖先角色ID", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Long ancestorId;
 
     /**
      * 后代角色ID
      */
+    @Schema(description = "后代角色ID", requiredMode = RequiredMode.REQUIRED)
     @NotNull
     private Long descendantId;
 }
