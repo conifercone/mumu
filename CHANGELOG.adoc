@@ -16,6 +16,54 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.16.0] - 2026-02-11
+
+=== ⭐ Added
+
+- `log4j2` integrates `otel`
+- Add `move` interface to permission management
+- Add `codex` file
+- Permission management adds a new interface to obtain all ancestor paths of a specified descendant node
+- Add compilation parameters
+- Integrated `development`
+- Integrated `cosid`
+- Integrated `s3`
+- Added `lombok.config` file
+
+=== 🕸️ Changed
+
+- `Spring Boot` upgraded to version 4.x
+- `JDK` upgraded to 25
+- `com.palantir.javapoet:javapoet` upgraded to 0.11.0
+- `software.amazon.awssdk:bom` upgraded to 2.41.24
+- `grpc` upgraded to 1.79.0
+- `org.jobrunr:jobrunr-spring-boot-4-starter` upgraded to 8.4.2
+- `Kotlin` upgraded to 2.3.10
+- `com.bucket4j:bucket4j_jdk17-lettuce` upgraded to 8.16.1
+- `com.googlecode.libphonenumber:libphonenumber` upgraded to 9.0.23
+- `protobuf` upgraded to 4.33.5
+- `io.hypersistence:hypersistence-utils-hibernate-71` upgraded to 3.15.1
+- `io.swagger.core.v3:swagger-annotations-jakarta` upgraded to 2.2.42
+- `net.sourceforge.tess4j:tess4j` upgraded to 5.18.0
+- `me.tongfei:progressbar` upgraded to 0.10.2
+- `io.freefair.lombok` upgraded to 9.2.0
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` upgraded to 3.0.1
+- `com.deepl.api:deepl-java` upgraded to 1.14.0
+- `org.apache.commons:commons-text` upgraded to 1.15.0
+- Do not print `jobrunr` related sql to reduce log noise
+- `indent_size` modified to 4
+- Optimize pmd configuration file
+
+=== 🐞 Fixed
+
+- Fixed the problem of failure to add permissions
+- Fixed signature verification failure issue
+
+=== ⚠️ Removed
+
+- Removed `leaf`
+- Removed `jasypt`
+
 == [2.15.0] - 2025-11-20
 
 === 🕸️ Changed
