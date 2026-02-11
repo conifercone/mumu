@@ -26,7 +26,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -46,7 +49,6 @@ public class TimeController {
 
     @Operation(summary = "获取可用时区列表")
     @GetMapping("/timezone/available")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.7.0")
     public ResponseWrapper<Set<String>> available() {
@@ -55,7 +57,6 @@ public class TimeController {
 
     @Operation(summary = "获取当前服务器时间")
     @GetMapping("/serverTime")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.7.0")
     public ResponseWrapper<OffsetDateTime> serverTime(@RequestParam("zoneId") String zoneId) {

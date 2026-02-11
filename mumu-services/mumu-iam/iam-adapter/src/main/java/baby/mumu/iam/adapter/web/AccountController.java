@@ -57,7 +57,6 @@ public class AccountController {
 
     @Operation(summary = "账号注册")
     @PostMapping("/register")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public ResponseWrapper<Long> register(
@@ -67,7 +66,6 @@ public class AccountController {
 
     @Operation(summary = "账号基本信息更新")
     @PutMapping("/updateById")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public AccountUpdatedDataDTO updateById(
@@ -77,7 +75,6 @@ public class AccountController {
 
     @Operation(summary = "账号角色更新")
     @PutMapping("/updateRoleById")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void updateRoleById(
@@ -87,7 +84,6 @@ public class AccountController {
 
     @Operation(summary = "禁用账号")
     @PutMapping("/disable/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void disable(
@@ -97,7 +93,6 @@ public class AccountController {
 
     @Operation(summary = "退出登录")
     @PostMapping("/logout")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public void logout() {
@@ -106,7 +101,6 @@ public class AccountController {
 
     @Operation(summary = "获取当前登录账号信息")
     @GetMapping("/currentLoginAccount")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public AccountCurrentLoginDTO queryCurrentLoginAccount() {
@@ -115,7 +109,6 @@ public class AccountController {
 
     @Operation(summary = "获取在线账号数量等信息")
     @GetMapping("/onlineAccounts")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public AccountOnlineStatisticsDTO onlineAccounts() {
@@ -124,7 +117,6 @@ public class AccountController {
 
     @Operation(summary = "重置密码")
     @PutMapping("/resetPassword/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void resetPassword(
@@ -134,7 +126,6 @@ public class AccountController {
 
     @Operation(summary = "重置系统设置")
     @PutMapping("/resetSystemSettingsBySettingsId/{systemSettingsId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public void resetSystemSettingsBySettingsId(
@@ -144,7 +135,6 @@ public class AccountController {
 
     @Operation(summary = "通过设置id修改系统设置")
     @PutMapping("/modifySystemSettingsBySettingsId")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public void modifySystemSettingsBySettingsId(
@@ -154,7 +144,6 @@ public class AccountController {
 
     @Operation(summary = "通过地址id修改账号地址")
     @PutMapping("/modifyAddressByAddressId")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public void modifyAddressByAddressId(
@@ -164,7 +153,6 @@ public class AccountController {
 
     @Operation(summary = "添加系统设置")
     @PostMapping("/addSystemSettings")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public void addSystemSettings(
@@ -174,7 +162,6 @@ public class AccountController {
 
     @Operation(summary = "删除当前账号")
     @DeleteMapping("/deleteCurrent")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void deleteCurrent(
@@ -184,7 +171,6 @@ public class AccountController {
 
     @Operation(summary = "校验账号密码")
     @GetMapping("/verifyPassword")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public ResponseWrapper<Boolean> verifyPassword(
@@ -194,7 +180,6 @@ public class AccountController {
 
     @Operation(summary = "修改账号密码")
     @PutMapping("/changePassword")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void changePassword(
@@ -204,7 +189,6 @@ public class AccountController {
 
     @Operation(summary = "根据id归档账号")
     @PutMapping("/archiveById/{accountId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void archiveById(
@@ -214,7 +198,6 @@ public class AccountController {
 
     @Operation(summary = "根据id从归档中恢复账号")
     @PutMapping("/recoverFromArchiveById/{accountId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void recoverFromArchiveById(
@@ -224,7 +207,6 @@ public class AccountController {
 
     @Operation(summary = "账号添加地址")
     @PostMapping("/addAddress")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
     public void addAddress(
@@ -234,7 +216,6 @@ public class AccountController {
 
     @Operation(summary = "根据id查询账号基本信息")
     @GetMapping("/getAccountBasicInfoById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public AccountBasicInfoDTO getAccountBasicInfoById(
@@ -244,7 +225,6 @@ public class AccountController {
 
     @Operation(summary = "根据id下线账号")
     @PostMapping("/offline/{accountId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public void offline(
@@ -254,7 +234,6 @@ public class AccountController {
 
     @Operation(summary = "分页查询账号")
     @GetMapping("/findAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Page<AccountFindAllDTO> findAll(
@@ -264,7 +243,6 @@ public class AccountController {
 
     @Operation(summary = "分页查询账号（不查询总数）")
     @GetMapping("/findAllSlice")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<AccountFindAllSliceDTO> findAllSlice(
@@ -274,7 +252,6 @@ public class AccountController {
 
     @Operation(summary = "附近的账号")
     @GetMapping("/nearby/{radiusInMeters}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public ResponseWrapper<List<AccountNearbyDTO>> nearby(
@@ -284,7 +261,6 @@ public class AccountController {
 
     @Operation(summary = "当前账号设置默认地址")
     @PutMapping("/setDefaultAddress/{addressId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public void setDefaultAddress(
@@ -294,7 +270,6 @@ public class AccountController {
 
     @Operation(summary = "删除指定账号地址")
     @DeleteMapping("/address/{addressId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public void deleteAddress(
@@ -304,7 +279,6 @@ public class AccountController {
 
     @Operation(summary = "当前账号设置默认系统设置")
     @PutMapping("/setDefaultSystemSettings/{systemSettingsId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public void setDefaultSystemSettings(
@@ -314,7 +288,6 @@ public class AccountController {
 
     @Operation(summary = "删除指定账号系统设置")
     @DeleteMapping("/systemSettings/{systemSettingsId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.6.0")
     public void deleteSystemSettings(

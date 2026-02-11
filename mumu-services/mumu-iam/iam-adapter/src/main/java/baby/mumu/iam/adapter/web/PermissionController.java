@@ -55,7 +55,6 @@ public class PermissionController {
 
     @Operation(summary = "添加权限")
     @PostMapping("/add")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public ResponseWrapper<Long> add(@RequestBody @Validated PermissionAddCmd permissionAddCmd) {
@@ -64,7 +63,6 @@ public class PermissionController {
 
     @Operation(summary = "根据主键删除权限")
     @DeleteMapping("/deleteById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void deleteById(@PathVariable Long id) {
@@ -73,7 +71,6 @@ public class PermissionController {
 
     @Operation(summary = "根据编码删除权限")
     @DeleteMapping("/deleteByCode/{code}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public void deleteByCode(@PathVariable String code) {
@@ -82,7 +79,6 @@ public class PermissionController {
 
     @Operation(summary = "修改权限")
     @PutMapping("/updateById")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public PermissionUpdatedDataDTO updateById(
@@ -92,7 +88,6 @@ public class PermissionController {
 
     @Operation(summary = "查询权限")
     @GetMapping("/findAll")
-    @ResponseBody
     @API(status = Status.STABLE, since = "1.0.0")
     @RateLimiter
     public Page<PermissionFindAllDTO> findAll(
@@ -102,7 +97,6 @@ public class PermissionController {
 
     @Operation(summary = "查询权限（不查询总数）")
     @GetMapping("/findAllSlice")
-    @ResponseBody
     @API(status = Status.STABLE, since = "2.2.0")
     @RateLimiter
     public Slice<PermissionFindAllSliceDTO> findAllSlice(
@@ -112,7 +106,6 @@ public class PermissionController {
 
     @Operation(summary = "查询已归档权限")
     @GetMapping("/findArchivedAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.0.0")
     public Page<PermissionArchivedFindAllDTO> findArchivedAll(
@@ -122,7 +115,6 @@ public class PermissionController {
 
     @Operation(summary = "查询已归档权限（不查询总数）")
     @GetMapping("/findArchivedAllSlice")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
@@ -132,7 +124,6 @@ public class PermissionController {
 
     @Operation(summary = "根据id查询权限")
     @GetMapping("/findById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public PermissionFindByIdDTO findById(@PathVariable Long id) {
@@ -141,7 +132,6 @@ public class PermissionController {
 
     @Operation(summary = "根据code查询权限")
     @GetMapping("/findByCode/{code}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public PermissionFindByCodeDTO findByCode(@PathVariable String code) {
@@ -150,7 +140,6 @@ public class PermissionController {
 
     @Operation(summary = "根据id归档权限")
     @PutMapping("/archiveById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void archiveById(@PathVariable Long id) {
@@ -159,7 +148,6 @@ public class PermissionController {
 
     @Operation(summary = "根据id从归档恢复权限")
     @PutMapping("/recoverFromArchiveById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void recoverFromArchiveById(@PathVariable Long id) {
@@ -168,7 +156,6 @@ public class PermissionController {
 
     @Operation(summary = "添加后代权限")
     @PutMapping("/addDescendant")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.3.0")
     public void addDescendant(
@@ -178,7 +165,6 @@ public class PermissionController {
 
     @Operation(summary = "获取所有根权限")
     @GetMapping("/findRoot")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.3.0")
     public Page<PermissionFindRootDTO> findRoot(
@@ -188,7 +174,6 @@ public class PermissionController {
 
     @Operation(summary = "获取直系后代权限")
     @GetMapping("/findDirect")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.3.0")
     public Page<PermissionFindDirectDTO> findDirect(
@@ -198,7 +183,6 @@ public class PermissionController {
 
     @Operation(summary = "删除权限路径")
     @DeleteMapping("/deletePath/{ancestorId}/{descendantId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.3.0")
     public void deletePath(@PathVariable Long ancestorId,
@@ -208,7 +192,6 @@ public class PermissionController {
 
     @Operation(summary = "移动权限路径")
     @PutMapping("/move/{originalAncestorId}/{targetAncestorId}/{descendantId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.16.0")
     public void move(@PathVariable Long originalAncestorId, @PathVariable Long targetAncestorId,

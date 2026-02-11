@@ -53,7 +53,6 @@ public class FileController {
 
     @Operation(summary = "上传文件")
     @PostMapping("/upload/{storageZoneId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public ResponseWrapper<Long> upload(
@@ -64,7 +63,6 @@ public class FileController {
 
     @Operation(summary = "根据元数据ID删除文件")
     @DeleteMapping("/deleteByMetadataId/{metadataId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public void deleteByMetadataId(
@@ -74,7 +72,6 @@ public class FileController {
 
     @Operation(summary = "根据元数据ID下载文件")
     @GetMapping("/downloadByMetadataId/{metadataId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public void downloadByMetadataId(
@@ -85,7 +82,6 @@ public class FileController {
 
     @Operation(summary = "根据元数据ID获取文件元数据信息")
     @GetMapping("/findMetaByMetaId/{metadataId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.13.0")
     public FileFindMetaByMetaIdDTO findMetaByMetaId(

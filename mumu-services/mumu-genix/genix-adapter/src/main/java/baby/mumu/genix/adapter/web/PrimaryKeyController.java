@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -51,7 +50,6 @@ public class PrimaryKeyController {
 
     @Operation(summary = "获取主键(雪花算法)")
     @GetMapping("/snowflake")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public PrimaryKeySnowflakeDTO snowflake() {

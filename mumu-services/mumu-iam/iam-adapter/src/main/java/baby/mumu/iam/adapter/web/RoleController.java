@@ -52,7 +52,6 @@ public class RoleController {
 
     @Operation(summary = "添加角色")
     @PostMapping("/add")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public ResponseWrapper<Long> add(@RequestBody @Validated RoleAddCmd roleAddCmd) {
@@ -61,7 +60,6 @@ public class RoleController {
 
     @Operation(summary = "根据id删除角色")
     @DeleteMapping("/deleteById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void deleteById(@PathVariable Long id) {
@@ -70,7 +68,6 @@ public class RoleController {
 
     @Operation(summary = "根据code删除角色")
     @DeleteMapping("/deleteByCode/{code}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public void deleteByCode(@PathVariable String code) {
@@ -79,7 +76,6 @@ public class RoleController {
 
     @Operation(summary = "更新角色")
     @PutMapping("/updateById")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public RoleUpdatedDataDTO updateById(@RequestBody @Validated RoleUpdateCmd roleUpdateCmd) {
@@ -88,7 +84,6 @@ public class RoleController {
 
     @Operation(summary = "查询角色")
     @GetMapping("/findAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<RoleFindAllDTO> findAll(@ModelAttribute @Validated RoleFindAllCmd roleFindAllCmd) {
@@ -97,7 +92,6 @@ public class RoleController {
 
     @Operation(summary = "查询角色(不查询总数)")
     @GetMapping("/findAllSlice")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<RoleFindAllSliceDTO> findAllSlice(
@@ -107,7 +101,6 @@ public class RoleController {
 
     @Operation(summary = "查询已归档角色")
     @GetMapping("/findArchivedAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Page<RoleArchivedFindAllDTO> findArchivedAll(
@@ -117,7 +110,6 @@ public class RoleController {
 
     @Operation(summary = "查询已归档角色(不查询总数)")
     @GetMapping("/findArchivedAllSlice")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.2.0")
     public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
@@ -127,7 +119,6 @@ public class RoleController {
 
     @Operation(summary = "根据id归档角色")
     @PutMapping("/archiveById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void archiveById(@PathVariable Long id) {
@@ -136,7 +127,6 @@ public class RoleController {
 
     @Operation(summary = "根据id从归档中恢复角色")
     @PutMapping("/recoverFromArchiveById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public void recoverFromArchiveById(@PathVariable Long id) {
@@ -145,7 +135,6 @@ public class RoleController {
 
     @Operation(summary = "添加后代角色")
     @PutMapping("/addDescendant")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public void addDescendant(@RequestBody @Validated RoleAddDescendantCmd roleAddDescendantCmd) {
@@ -154,7 +143,6 @@ public class RoleController {
 
     @Operation(summary = "获取所有根角色")
     @GetMapping("/findRoot")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public Page<RoleFindRootDTO> findRoot(
@@ -164,7 +152,6 @@ public class RoleController {
 
     @Operation(summary = "获取直系后代角色")
     @GetMapping("/findDirect")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public Page<RoleFindDirectDTO> findDirect(
@@ -174,7 +161,6 @@ public class RoleController {
 
     @Operation(summary = "删除角色路径")
     @DeleteMapping("/deletePath/{ancestorId}/{descendantId}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public void deletePath(@PathVariable Long ancestorId,
@@ -184,7 +170,6 @@ public class RoleController {
 
     @Operation(summary = "根据id查询角色")
     @GetMapping("/findById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.4.0")
     public RoleFindByIdDTO findById(@PathVariable Long id) {
@@ -193,7 +178,6 @@ public class RoleController {
 
     @Operation(summary = "根据code查询角色")
     @GetMapping("/findByCode/{code}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.5.0")
     public RoleFindByCodeDTO findByCode(@PathVariable String code) {

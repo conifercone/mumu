@@ -52,7 +52,6 @@ public class OperationLogController {
 
     @Operation(summary = "提交日志")
     @PostMapping("/submit")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void submit(@RequestBody OperationLogSubmitCmd operationLogSubmitCmd) {
@@ -61,7 +60,6 @@ public class OperationLogController {
 
     @Operation(summary = "根据日志ID获取操作日志")
     @GetMapping("/findById/{id}")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public OperationLogQryDTO findOperationLogById(@PathVariable String id) {
@@ -70,7 +68,6 @@ public class OperationLogController {
 
     @Operation(summary = "分页查询所有操作日志")
     @GetMapping("/findAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<OperationLogFindAllDTO> findAll(

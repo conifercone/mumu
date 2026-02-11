@@ -51,7 +51,6 @@ public class SystemLogController {
 
     @Operation(summary = "提交日志")
     @PostMapping("/submit")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public void submit(@RequestBody SystemLogSubmitCmd systemLogSubmitCmd) {
@@ -60,7 +59,6 @@ public class SystemLogController {
 
     @Operation(summary = "分页查询所有系统日志")
     @GetMapping("/findAll")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.0")
     public Page<SystemLogFindAllDTO> findAll(

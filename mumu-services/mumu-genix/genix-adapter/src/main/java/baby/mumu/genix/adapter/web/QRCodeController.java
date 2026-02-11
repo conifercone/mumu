@@ -27,7 +27,10 @@ import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Base64;
 
@@ -52,7 +55,6 @@ public class QRCodeController {
 
     @Operation(summary = "生成二维码（返回Base64格式的图片数据链接）")
     @GetMapping("/dataUrl")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.4")
     public ResponseWrapper<String> dataUrlGenerate(

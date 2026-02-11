@@ -51,7 +51,6 @@ public class CaptchaCodeController {
 
     @Operation(summary = "获取简单验证码")
     @GetMapping("/generate")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.1")
     public CaptchaCodeGeneratedDTO generate(
@@ -61,7 +60,6 @@ public class CaptchaCodeController {
 
     @Operation(summary = "验证简单验证码")
     @PostMapping("/verify")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "1.0.1")
     public ResponseWrapper<Boolean> verify(

@@ -25,7 +25,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 存储区域管理
@@ -47,7 +50,6 @@ public class StorageZoneController {
 
     @Operation(summary = "新增存储区域")
     @PostMapping("/add")
-    @ResponseBody
     @RateLimiter
     @API(status = Status.STABLE, since = "2.13.0")
     public ResponseWrapper<Long> add(@RequestBody StorageZoneAddCmd storageZoneAddCmd) {
