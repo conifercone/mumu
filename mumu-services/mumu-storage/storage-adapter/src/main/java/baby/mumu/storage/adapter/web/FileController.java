@@ -61,8 +61,8 @@ public class FileController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public ResponseWrapper<Long> upload(
-        @PathVariable @Parameter(description = "存储区域ID", required = true) @NotNull Long storageZoneId,
-        @Parameter(description = "源文件", required = true) @RequestParam("file") MultipartFile file) {
+        @PathVariable @NotNull Long storageZoneId,
+        @RequestParam("file") MultipartFile file) {
         return ResponseWrapper.success(fileService.upload(storageZoneId, file));
     }
 
@@ -74,7 +74,7 @@ public class FileController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public void deleteByMetadataId(
-        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
+        @PathVariable @NotNull Long metadataId) {
         fileService.deleteByMetadataId(metadataId);
     }
 
@@ -86,7 +86,7 @@ public class FileController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.12.0")
     public void downloadByMetadataId(
-        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId,
+        @PathVariable @NotNull Long metadataId,
         HttpServletResponse httpServletResponse) {
         fileService.downloadByMetadataId(metadataId, httpServletResponse);
     }
@@ -99,7 +99,7 @@ public class FileController {
     @RateLimiter
     @API(status = Status.STABLE, since = "2.13.0")
     public FileFindMetaByMetaIdDTO findMetaByMetaId(
-        @PathVariable @Parameter(description = "文件元数据ID", required = true) @NotNull Long metadataId) {
+        @PathVariable @NotNull Long metadataId) {
         return fileService.findMetaByMetaId(metadataId);
     }
 }
