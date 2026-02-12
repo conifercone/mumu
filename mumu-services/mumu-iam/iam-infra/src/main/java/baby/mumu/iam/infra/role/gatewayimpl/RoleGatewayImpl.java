@@ -91,6 +91,9 @@ public class RoleGatewayImpl implements RoleGateway {
         this.rolePathRepository = rolePathRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -124,6 +127,9 @@ public class RoleGatewayImpl implements RoleGateway {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -144,6 +150,9 @@ public class RoleGatewayImpl implements RoleGateway {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "2.4.0")
@@ -153,6 +162,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .ifPresent(this::deleteById);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
@@ -168,6 +180,9 @@ public class RoleGatewayImpl implements RoleGateway {
         return roleConvertor.toEntity(merged);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "1.0.0")
     @Transactional(rollbackFor = Exception.class)
@@ -184,6 +199,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .toList(), pageRequest, rolePOPage.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.2.0")
     @Transactional(rollbackFor = Exception.class)
@@ -200,6 +218,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .toList(), pageRequest, rolePOSlice.hasNext());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.2.0")
     @Transactional(rollbackFor = Exception.class)
@@ -216,6 +237,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .toList(), pageRequest, roleArchivedPOS.hasNext());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "2.2.0")
     @Transactional(rollbackFor = Exception.class)
@@ -232,6 +256,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .toList(), pageRequest, roleArchivedPOPage.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @API(status = Status.STABLE, since = "1.0.0")
     @Transactional(rollbackFor = Exception.class)
@@ -241,6 +268,9 @@ public class RoleGatewayImpl implements RoleGateway {
             .toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @DangerousOperation("根据ID归档ID为%0的角色")
@@ -280,6 +310,9 @@ public class RoleGatewayImpl implements RoleGateway {
             });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(Long id) {
@@ -293,6 +326,9 @@ public class RoleGatewayImpl implements RoleGateway {
             });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addDescendant(Long ancestorId, Long descendantId) {
@@ -334,6 +370,9 @@ public class RoleGatewayImpl implements RoleGateway {
         roleCacheRepository.deleteById(descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Role> findRootRoles(int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
@@ -345,6 +384,9 @@ public class RoleGatewayImpl implements RoleGateway {
         return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<Role> findDirectRoles(Long ancestorId, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
@@ -357,6 +399,9 @@ public class RoleGatewayImpl implements RoleGateway {
         return new PageImpl<>(roles, pageRequest, repositoryAll.getTotalElements());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deletePath(Long ancestorId, Long descendantId) {
@@ -369,6 +414,9 @@ public class RoleGatewayImpl implements RoleGateway {
         roleCacheRepository.deleteById(descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Role> findById(Long id) {
         return Optional.ofNullable(id).flatMap(roleCacheRepository::findById).flatMap(
@@ -379,6 +427,9 @@ public class RoleGatewayImpl implements RoleGateway {
             }));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Role> findByCode(String code) {
         return Optional.ofNullable(code).flatMap(roleCacheRepository::findByCode).flatMap(

@@ -110,7 +110,8 @@ public class AccountGatewayImpl implements AccountGateway {
                               OperationLogGrpcService operationLogGrpcService,
                               ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
                               AccountArchivedRepository accountArchivedRepository,
-                              AccountAddressDocumentRepository accountAddressDocumentRepository, JobScheduler jobScheduler,
+                              AccountAddressDocumentRepository accountAddressDocumentRepository,
+                              JobScheduler jobScheduler,
                               AccountRoleRepository accountRoleRepository,
                               AccountCacheRepository accountCacheRepository,
                               AccountSystemSettingsDocumentRepository accountSystemSettingsDocumentRepository,
@@ -140,8 +141,6 @@ public class AccountGatewayImpl implements AccountGateway {
 
     /**
      * {@inheritDoc}
-     *
-     * @return 账号ID
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -230,8 +229,6 @@ public class AccountGatewayImpl implements AccountGateway {
 
     /**
      * {@inheritDoc}
-     *
-     * @return 账号修改后数据
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -357,6 +354,9 @@ public class AccountGatewayImpl implements AccountGateway {
         this.deleteAccount(accountId, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "2.15.0")
@@ -382,8 +382,9 @@ public class AccountGatewayImpl implements AccountGateway {
         accountSystemSettingsDocumentRepository.deleteByAccountId(accountId);
 
         // 如果账号存在上传头像则删除上传头像文件
-        Optional<AccountAvatarDocumentPO> accountAvatarDocumentPOOptional = accountAvatarDocumentRepository.findByAccountId(
-            accountId);
+        Optional<AccountAvatarDocumentPO> accountAvatarDocumentPOOptional =
+            accountAvatarDocumentRepository.findByAccountId(
+                accountId);
         if (accountAvatarDocumentPOOptional.isPresent()) {
             AccountAvatarDocumentPO accountAvatarDocumentPO = accountAvatarDocumentPOOptional.get();
             if (AccountAvatarSourceEnum.UPLOAD.equals(accountAvatarDocumentPO.getSource())) {
@@ -636,7 +637,9 @@ public class AccountGatewayImpl implements AccountGateway {
         accountRoleCacheRepository.deleteById(accountId);
         // 发布登出成功事件
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        applicationEventPublisher.publishEvent(new LogoutSuccessEvent(authentication));
+        if (authentication != null) {
+            applicationEventPublisher.publishEvent(new LogoutSuccessEvent(authentication));
+        }
         // 提交操作日志（如果有账号名）
         SecurityContextUtils.getLoginAccountName().ifPresent(accountName -> {
             OperationLogSubmitGrpcCmd cmd = OperationLogSubmitGrpcCmd.newBuilder()
