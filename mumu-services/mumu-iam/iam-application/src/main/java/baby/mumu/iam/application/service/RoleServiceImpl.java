@@ -104,54 +104,81 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         this.roleFindByCodeCmdExe = roleFindByCodeCmdExe;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long add(RoleAddCmd roleAddCmd) {
         return roleAddCmdExe.execute(roleAddCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         roleDeleteByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteByCode(String code) {
         roleDeleteByCodeCmdExe.execute(code);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RoleUpdatedDataDTO updateById(RoleUpdateCmd roleUpdateCmd) {
         return roleUpdateCmdExe.execute(roleUpdateCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Page<RoleFindAllDTO> findAll(RoleFindAllCmd roleFindAllCmd) {
         return roleFindAllCmdExe.execute(roleFindAllCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Slice<RoleFindAllSliceDTO> findAllSlice(RoleFindAllSliceCmd roleFindAllSliceCmd) {
         return roleFindAllSliceCmdExe.execute(roleFindAllSliceCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<RoleArchivedFindAllDTO> findArchivedAll(
         RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
         return roleArchivedFindAllCmdExe.execute(roleArchivedFindAllCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Slice<RoleArchivedFindAllSliceDTO> findArchivedAllSlice(
         RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
         return roleArchivedFindAllSliceCmdExe.execute(roleArchivedFindAllSliceCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
     public void findAll(RoleFindAllGrpcCmd request,
@@ -173,6 +200,9 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcDTO> responseObserver) {
         Optional.ofNullable(request).filter(Int64Value::isInitialized).map(Int64Value::getValue)
@@ -186,45 +216,69 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
             });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void archiveById(Long id) {
         roleArchiveByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(Long id) {
         roleRecoverFromArchiveByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addDescendant(RoleAddDescendantCmd roleAddDescendantCmd) {
         roleAddDescendantCmdExe.execute(roleAddDescendantCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<RoleFindRootDTO> findRootRoles(RoleFindRootCmd roleFindRootCmd) {
         return roleFindRootCmdExe.execute(roleFindRootCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<RoleFindDirectDTO> findDirectRoles(RoleFindDirectCmd roleFindDirectCmd) {
         return roleFindDirectCmdExe.execute(roleFindDirectCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deletePath(Long ancestorId, Long descendantId) {
         roleDeletePathCmdExe.execute(ancestorId, descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RoleFindByIdDTO findById(Long id) {
         return roleFindByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RoleFindByCodeDTO findByCode(String code) {
         return roleFindByCodeCmdExe.execute(code);

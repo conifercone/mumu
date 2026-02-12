@@ -122,64 +122,97 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         this.permissionMovePathCmdExe = permissionMovePathCmdExe;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long add(PermissionAddCmd permissionAddCmd) {
         return permissionAddCmdExe.execute(permissionAddCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteById(Long id) {
         permissionDeleteByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteByCode(String code) {
         permissionDeleteByCodeCmdExe.execute(code);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public PermissionUpdatedDataDTO updateById(PermissionUpdateCmd permissionUpdateCmd) {
         return permissionUpdateCmdExe.execute(permissionUpdateCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<PermissionFindAllDTO> findAll(
         PermissionFindAllCmd permissionFindAllCmd) {
         return permissionFindAllCmdExe.execute(permissionFindAllCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Slice<PermissionFindAllSliceDTO> findAllSlice(
         PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
         return permissionFindAllSliceCmdExe.execute(permissionFindAllSliceCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<PermissionArchivedFindAllDTO> findArchivedAll(
         PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
         return permissionArchivedFindAllCmdExe.execute(permissionArchivedFindAllCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Slice<PermissionArchivedFindAllSliceDTO> findArchivedAllSlice(
         PermissionArchivedFindAllSliceCmd permissionArchivedFindAllSliceCmd) {
         return permissionArchivedFindAllSliceCmdExe.execute(permissionArchivedFindAllSliceCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PermissionFindByIdDTO findById(Long id) {
         return permissionFindByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PermissionFindByCodeDTO findByCode(String code) {
         return permissionFindByCodeCmdExe.execute(code);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void findById(Int64Value request,
                          StreamObserver<PermissionFindByIdGrpcDTO> responseObserver) {
@@ -195,6 +228,9 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
                 }, runnable), runnable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
     public void findAll(PermissionFindAllGrpcCmd request,
@@ -220,12 +256,18 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void archiveById(Long id) {
         permissionArchiveByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(
@@ -233,48 +275,72 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         permissionRecoverFromArchiveByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addDescendant(PermissionAddDescendantCmd permissionAddDescendantCmd) {
         permissionAddDescendantCmdExe.execute(permissionAddDescendantCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<PermissionFindRootDTO> findRootPermissions(
         PermissionFindRootCmd permissionFindRootCmd) {
         return permissionFindRootCmdExe.execute(permissionFindRootCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<PermissionFindDirectDTO> findDirectPermissions(
         PermissionFindDirectCmd permissionFindDirectCmd) {
         return permissionFindDirectCmdExe.execute(permissionFindDirectCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deletePath(Long ancestorId, Long descendantId) {
         permissionDeletePathCmdExe.execute(ancestorId, descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void move(Long originalAncestorId, Long targetAncestorId, Long descendantId) {
         permissionMovePathCmdExe.execute(originalAncestorId, targetAncestorId, descendantId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public void downloadAll(HttpServletResponse response) {
         permissionDownloadAllCmdExe.execute(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(readOnly = true)
     public void downloadAllIncludePath(HttpServletResponse response) {
         permissionIncludePathDownloadAllCmdExe.execute(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> findAllAncestorPathStrings(Long descendantId) {
         return permissionFindAllAncestorPathStringsCmdExe.execute(descendantId);

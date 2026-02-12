@@ -80,7 +80,8 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
     @Autowired
     public AccountServiceImpl(AccountRegisterCmdExe accountRegisterCmdExe,
-                              AccountUpdateByIdCmdExe accountUpdateByIdCmdExe, AccountDisableCmdExe accountDisableCmdExe,
+                              AccountUpdateByIdCmdExe accountUpdateByIdCmdExe,
+                              AccountDisableCmdExe accountDisableCmdExe,
                               AccountCurrentLoginQueryCmdExe accountCurrentLoginQueryCmdExe,
                               AccountOnlineStatisticsCmdExe accountOnlineStatisticsCmdExe,
                               AccountResetPasswordCmdExe accountResetPasswordCmdExe,
@@ -134,12 +135,18 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         this.accountDeleteSystemSettingsByIdCmdExe = accountDeleteSystemSettingsByIdCmdExe;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long register(AccountRegisterCmd accountRegisterCmd) {
         return accountRegisterCmdExe.execute(accountRegisterCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AccountUpdatedDataDTO updateById(AccountUpdateByIdCmd accountUpdateByIdCmd) {
@@ -147,6 +154,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRoleById(AccountUpdateRoleCmd accountUpdateRoleCmd) {
@@ -154,12 +164,18 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void disable(Long id) {
         accountDisableCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void logout() {
@@ -167,23 +183,35 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AccountCurrentLoginDTO queryCurrentLoginAccount() {
         return accountCurrentLoginQueryCmdExe.execute();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AccountOnlineStatisticsDTO onlineAccounts() {
         return accountOnlineStatisticsCmdExe.execute();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void resetPassword(Long id) {
         accountResetPasswordCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void resetSystemSettingsBySettingsId(
@@ -191,6 +219,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountResetSystemSettingsBySettingsIdCmdExe.execute(systemSettingsId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void modifySystemSettingsBySettingsId(
@@ -199,6 +230,9 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
             accountModifySystemSettingsBySettingsIdCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addSystemSettings(
@@ -207,36 +241,54 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
             accountAddSystemSettingsCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteCurrentAccount(AccountDeleteCurrentCmd accountDeleteCurrentCmd) {
         accountDeleteCurrentCmdExe.execute(accountDeleteCurrentCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean verifyPassword(AccountPasswordVerifyCmd accountPasswordVerifyCmd) {
         return accountPasswordVerifyCmdExe.execute(accountPasswordVerifyCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void changePassword(AccountChangePasswordCmd accountChangePasswordCmd) {
         accountChangePasswordCmdExe.execute(accountChangePasswordCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void archiveById(Long accountId) {
         accountArchiveByIdCmdExe.execute(accountId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AccountBasicInfoDTO getAccountBasicInfoById(Long id) {
         return accountBasicInfoQueryByIdCmdExe.execute(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(
@@ -244,30 +296,45 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountRecoverFromArchiveByIdCmdExe.execute(accountId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addAddress(AccountAddAddressCmd accountAddAddressCmd) {
         accountAddAddressCmdExe.execute(accountAddAddressCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void offline(Long accountId) {
         accountOfflineCmdExe.execute(accountId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Page<AccountFindAllDTO> findAll(AccountFindAllCmd accountFindAllCmd) {
         return accountFindAllCmdExe.execute(accountFindAllCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Slice<AccountFindAllSliceDTO> findAllSlice(AccountFindAllSliceCmd accountFindAllSliceCmd) {
         return accountFindAllSliceCmdExe.execute(accountFindAllSliceCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
     @Transactional(rollbackFor = Exception.class)
@@ -280,18 +347,27 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<AccountNearbyDTO> nearby(double radiusInMeters) {
         return accountNearbyCmdExe.execute(radiusInMeters);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void setDefaultAddress(String addressId) {
         accountSetDefaultAddressCmdExe.execute(addressId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void modifyAddressByAddressId(
@@ -299,18 +375,27 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountModifyAddressByAddressIdCmdExe.execute(accountModifyAddressByAddressIdCmd);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteAddress(String addressId) {
         accountDeleteAddressByIdCmdExe.execute(addressId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void setDefaultSystemSettings(String systemSettingsId) {
         accountSetDefaultSystemSettingsCmdExe.execute(systemSettingsId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteSystemSettings(String systemSettingsId) {
