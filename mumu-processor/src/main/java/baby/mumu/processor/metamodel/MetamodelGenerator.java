@@ -169,65 +169,65 @@ public class MetamodelGenerator extends AbstractProcessor {
                                 String entityName,
                                 Builder builder) {
         Metamodel annotation = annotatedElement.getAnnotation(Metamodel.class);
-        generateBasicProjectInformation(packageName, entityName, builder, annotation);
-        List<VariableElement> fields = ObjectUtils.getFields(annotatedElement);
-        Set<String> collect = fields.stream()
-            .map(variableElement -> variableElement.getSimpleName().toString()).collect(
-                Collectors.toSet());
-        List<VariableElement> superClassFields = ObjectUtils.getAllSuperclasses(annotatedElement,
-                typeUtils)
-            .stream()
-            .flatMap(typeElement -> ObjectUtils.getFields(typeElement).stream())
-            .collect(
-                Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
-                    (existing, _) -> existing)).values()
-            .stream()
-            .toList();
-        superClassFields.forEach(superClassField -> {
-            if (!collect.contains(superClassField.getSimpleName().toString())) {
-                fields.add(superClassField);
-            }
-        });
-        if (CollectionUtils.isNotEmpty(fields)) {
-            fields.forEach(field -> {
-                FieldSpec fieldSpec = FieldSpec.builder(String.class,
-                        camelToUpperUnderscore(field.getSimpleName().toString()))
-                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                    .initializer("$S", field.getSimpleName().toString())
-                    .addJavadoc(String.format(
-                        "@see %s#%s",
-                        ObjectUtils.getEntityQualifiedName(field), field.getSimpleName()))
-                    .build();
-                builder.addField(fieldSpec);
-                ObjectUtils.getFieldClassName(field, elementUtils, typeUtils).ifPresent(fieldClassName -> {
-                    FieldSpec fieldSingularSpec = FieldSpec.builder(
-                            ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
-                                    SingularAttribute.class.getSimpleName()),
-                                TypeName.get(ObjectUtils.getEntityType(field).asType()),
-                                fieldClassName),
-                            camelToUpperUnderscore(field.getSimpleName().toString())
-                                .concat(MetamodelGenerator.SINGULAR_FIELD_SUFFIX))
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
+        if (annotation != null) {
+            generateBasicProjectInformation(packageName, entityName, builder, annotation);
+            List<VariableElement> fields = ObjectUtils.getFields(annotatedElement);
+            Set<String> collect = fields.stream()
+                .map(variableElement -> variableElement.getSimpleName().toString()).collect(
+                    Collectors.toSet());
+            List<VariableElement> superClassFields = ObjectUtils.getAllSuperclasses(annotatedElement,
+                    typeUtils)
+                .stream()
+                .flatMap(typeElement -> ObjectUtils.getFields(typeElement).stream())
+                .collect(
+                    Collectors.toMap(VariableElement::getSimpleName, variableElement -> variableElement,
+                        (existing, _) -> existing)).values()
+                .stream()
+                .toList();
+            superClassFields.forEach(superClassField -> {
+                if (!collect.contains(superClassField.getSimpleName().toString())) {
+                    fields.add(superClassField);
+                }
+            });
+            if (CollectionUtils.isNotEmpty(fields)) {
+                fields.forEach(field -> {
+                    FieldSpec fieldSpec = FieldSpec.builder(String.class,
+                            camelToUpperUnderscore(field.getSimpleName().toString()))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("$S", field.getSimpleName().toString())
                         .addJavadoc(String.format(
                             "@see %s#%s",
                             ObjectUtils.getEntityQualifiedName(field), field.getSimpleName()))
                         .build();
-                    builder.addField(fieldSingularSpec);
+                    builder.addField(fieldSpec);
+                    ObjectUtils.getFieldClassName(field, elementUtils, typeUtils).ifPresent(fieldClassName -> {
+                        FieldSpec fieldSingularSpec = FieldSpec.builder(
+                                ParameterizedTypeName.get(ClassName.get(SingularAttribute.class.getPackageName(),
+                                        SingularAttribute.class.getSimpleName()),
+                                    TypeName.get(ObjectUtils.getEntityType(field).asType()),
+                                    fieldClassName),
+                                camelToUpperUnderscore(field.getSimpleName().toString())
+                                    .concat(MetamodelGenerator.SINGULAR_FIELD_SUFFIX))
+                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.VOLATILE)
+                            .addJavadoc(String.format(
+                                "@see %s#%s",
+                                ObjectUtils.getEntityQualifiedName(field), field.getSimpleName()))
+                            .build();
+                        builder.addField(fieldSingularSpec);
+                    });
                 });
-            });
-        }
-        Metamodel metamodel = annotatedElement.getAnnotation(
-            Metamodel.class);
-        Meta[] customs = metamodel.customs();
-        for (Meta custom : customs) {
-            FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                .initializer("$S", custom.value())
-                .addJavadoc(String.format(
-                    MetamodelGenerator.SEE_S_S_LINK_S,
-                    packageName, entityName, Metamodel.class.getName()))
-                .build();
-            builder.addField(fieldSpec);
+            }
+            Meta[] customs = annotation.customs();
+            for (Meta custom : customs) {
+                FieldSpec fieldSpec = FieldSpec.builder(String.class, custom.name())
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                    .initializer("$S", custom.value())
+                    .addJavadoc(String.format(
+                        MetamodelGenerator.SEE_S_S_LINK_S,
+                        packageName, entityName, Metamodel.class.getName()))
+                    .build();
+                builder.addField(fieldSpec);
+            }
         }
     }
 
