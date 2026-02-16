@@ -39,7 +39,7 @@ commonsValidatorVersion = '1.10.1'
 jmhVersion = '1.37'
 tikaVersion = '3.2.3'
 cosidVersion = '3.0.2'
-otelLog4j2AppenderVersion = '2.24.0-alpha'
+otelLog4j2AppenderVersion = '2.25.0-alpha'
 # bom version
 grpcBomVersion = '1.79.0'
 guavaBomVersion = '33.5.0-jre'
