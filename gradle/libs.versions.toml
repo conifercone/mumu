@@ -44,7 +44,7 @@ otelLog4j2AppenderVersion = '2.24.0-alpha'
 grpcBomVersion = '1.79.0'
 guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.33.5'
-awssdkBomVersion = '2.41.24'
+awssdkBomVersion = '2.41.29'
 # plugin version
 protobufPluginVersion = '0.9.6'
 lombokPluginVersion = '9.2.0'
