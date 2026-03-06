@@ -1,0 +1,19 @@
+info:
+  name: 获取当前服务器时间
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{genix-service-url}}/time/serverTime?zoneId=UTC"
+  params:
+    - name: zoneId
+      value: UTC
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

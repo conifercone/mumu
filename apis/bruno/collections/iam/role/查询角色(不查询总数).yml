@@ -1,0 +1,22 @@
+info:
+  name: 查询角色(不查询总数)
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{iam-service-url}}/role/findAllSlice?current=1&pageSize=10"
+  params:
+    - name: current
+      value: "1"
+      type: query
+    - name: pageSize
+      value: "10"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

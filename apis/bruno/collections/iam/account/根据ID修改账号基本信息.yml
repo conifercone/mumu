@@ -1,0 +1,25 @@
+info:
+  name: 根据ID修改账号基本信息
+  type: http
+  seq: 15
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/updateById"
+  body:
+    type: json
+    data: |-
+      {
+        "id": 2,
+        "bio": "测试用户",
+        "nickName": "测试用户"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

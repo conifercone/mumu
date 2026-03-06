@@ -1,0 +1,24 @@
+info:
+  name: 修改账号密码
+  type: http
+  seq: 2
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/changePassword"
+  body:
+    type: json
+    data: |-
+      {
+        "originalPassword": "Test@5211314",
+        "newPassword": "Test@5211314"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

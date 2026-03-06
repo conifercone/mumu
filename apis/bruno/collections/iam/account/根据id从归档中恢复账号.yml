@@ -1,0 +1,17 @@
+info:
+  name: 根据id从归档中恢复账号
+  type: http
+  seq: 14
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/recoverFromArchiveById/3"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

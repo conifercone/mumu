@@ -1,0 +1,26 @@
+info:
+  name: 更新账号角色
+  type: http
+  seq: 10
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/updateRoleById"
+  body:
+    type: json
+    data: |-
+      {
+        "id": 1,
+        "roleCodes": [
+          "admin"
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

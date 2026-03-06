@@ -1,0 +1,24 @@
+info:
+  name: 根据ID修改账号地址
+  type: http
+  seq: 16
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/modifyAddressByAddressId"
+  body:
+    type: json
+    data: |-
+      {
+        "id": "677b7392c78b097ac069201a",
+        "street": "历城区港沟街道"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

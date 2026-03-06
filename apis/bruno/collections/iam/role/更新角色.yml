@@ -1,0 +1,25 @@
+info:
+  name: 更新角色
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/role/updateById"
+  body:
+    type: json
+    data: |-
+      {
+        "id": "",
+        "name": "updated",
+        "permissionIds": [
+          1
+        ]
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

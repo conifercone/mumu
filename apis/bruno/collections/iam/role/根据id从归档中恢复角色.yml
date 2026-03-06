@@ -1,0 +1,15 @@
+info:
+  name: 根据id从归档中恢复角色
+  type: http
+  seq: 10
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/role/recoverFromArchiveById/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

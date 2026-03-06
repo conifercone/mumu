@@ -1,0 +1,15 @@
+info:
+  name: 根据省或州ID获取省或州(包含下级城市)
+  type: http
+  seq: 13
+
+http:
+  method: GET
+  url: "{{genix-service-url}}/country/getStateCitiesById/2252"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

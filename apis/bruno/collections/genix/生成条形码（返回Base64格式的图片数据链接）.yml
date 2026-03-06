@@ -1,0 +1,25 @@
+info:
+  name: 生成条形码（返回Base64格式的图片数据链接）
+  type: http
+  seq: 7
+
+http:
+  method: GET
+  url: "{{genix-service-url}}/barCode/dataUrl?content=test&width=500&footContent=4564871632455648978946516464498498794964"
+  params:
+    - name: content
+      value: test
+      type: query
+    - name: width
+      value: "500"
+      type: query
+    - name: footContent
+      value: "4564871632455648978946516464498498794964"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

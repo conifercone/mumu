@@ -1,0 +1,31 @@
+info:
+  name: 账号添加地址
+  type: http
+  seq: 19
+  tags:
+    - account
+
+http:
+  method: POST
+  url: "{{iam-service-url}}/account/addAddress"
+  body:
+    type: json
+    data: |-
+      {
+        "country": "中国",
+        "state": "山东省",
+        "city": "济南市",
+        "street": "历城区",
+        "postalCode": "250000",
+        "location": {
+          "x": 117.18689,
+          "y": 36.65065
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

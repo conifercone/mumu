@@ -1,0 +1,17 @@
+info:
+  name: 删除指定账号系统设置
+  type: http
+  seq: 4
+  tags:
+    - account
+
+http:
+  method: DELETE
+  url: "{{iam-service-url}}/account/systemSettings/677c866780f0b5754fd51eac"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

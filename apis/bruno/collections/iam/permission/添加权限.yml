@@ -1,0 +1,21 @@
+info:
+  name: 添加权限
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{iam-service-url}}/permission/add"
+  body:
+    type: json
+    data: |-
+      {
+        "code": "test2"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

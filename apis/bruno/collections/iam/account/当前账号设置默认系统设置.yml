@@ -1,0 +1,17 @@
+info:
+  name: 当前账号设置默认系统设置
+  type: http
+  seq: 8
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/setDefaultSystemSettings/677c866780f0b5754fd51eac"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

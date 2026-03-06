@@ -1,0 +1,17 @@
+info:
+  name: 账号设置默认地址
+  type: http
+  seq: 22
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/setDefaultAddress/68280fed3faa46323a76b8aa"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

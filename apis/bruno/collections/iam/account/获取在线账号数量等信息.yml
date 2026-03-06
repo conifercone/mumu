@@ -1,0 +1,17 @@
+info:
+  name: 获取在线账号数量等信息
+  type: http
+  seq: 25
+  tags:
+    - account
+
+http:
+  method: GET
+  url: "{{iam-service-url}}/account/onlineAccounts"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

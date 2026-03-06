@@ -1,0 +1,17 @@
+info:
+  name: 重置密码
+  type: http
+  seq: 26
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/resetPassword/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

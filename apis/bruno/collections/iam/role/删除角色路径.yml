@@ -1,0 +1,22 @@
+info:
+  name: 删除角色路径
+  type: http
+  seq: 14
+
+http:
+  method: DELETE
+  url: "{{iam-service-url}}/role/deletePath?descendantId=2&ancestorId=1"
+  params:
+    - name: descendantId
+      value: "2"
+      type: query
+    - name: ancestorId
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

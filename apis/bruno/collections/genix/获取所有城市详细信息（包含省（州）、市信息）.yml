@@ -1,0 +1,15 @@
+info:
+  name: 获取所有城市详细信息（包含省（州）、市信息）
+  type: http
+  seq: 8
+
+http:
+  method: GET
+  url: "{{genix-service-url}}/country/getCountryStateCity"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

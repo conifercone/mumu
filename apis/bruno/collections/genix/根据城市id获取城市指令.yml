@@ -1,0 +1,15 @@
+info:
+  name: 根据城市id获取城市指令
+  type: http
+  seq: 14
+
+http:
+  method: GET
+  url: "{{genix-service-url}}/country/getCityById/19286"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

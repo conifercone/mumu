@@ -1,0 +1,15 @@
+info:
+  name: 下载所有权限数据（不包含权限关系数据）
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: "{{iam-service-url}}/permission/downloadAll"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

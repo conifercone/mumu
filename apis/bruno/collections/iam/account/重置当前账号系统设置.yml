@@ -1,0 +1,17 @@
+info:
+  name: 重置当前账号系统设置
+  type: http
+  seq: 27
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/resetSystemSettingsBySettingsId/601146283917317"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

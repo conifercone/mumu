@@ -1,0 +1,24 @@
+info:
+  name: 删除当前账号
+  type: http
+  seq: 3
+  tags:
+    - account
+
+http:
+  method: DELETE
+  url: "{{iam-service-url}}/account/deleteCurrent"
+  body:
+    type: json
+    data: |-
+      {
+        "captchaCodeId": 2977796456448,
+        "captchaCode": "ZGYW"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

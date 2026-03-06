@@ -1,0 +1,22 @@
+info:
+  name: 校验简单验证码正确性
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{genix-service-url}}/captchaCode/verify"
+  body:
+    type: json
+    data: |-
+      {
+        "id": 47328526336,
+        "source": "19av"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

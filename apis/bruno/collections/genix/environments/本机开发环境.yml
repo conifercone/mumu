@@ -1,0 +1,14 @@
+name: 本机开发环境
+variables:
+  - name: apisix-base-url
+    value: http://localhost:9080/api/mumu
+  - name: storage-service-url
+    value: "{{apisix-base-url}}/storage"
+  - name: log-service-url
+    value: "{{apisix-base-url}}/log"
+  - name: genix-service-url
+    value: "{{apisix-base-url}}/genix"
+  - name: iam-service-url
+    value: "{{apisix-base-url}}/iam"
+  - secret: true
+    name: secret

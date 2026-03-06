@@ -1,0 +1,17 @@
+info:
+  name: 禁用账号
+  type: http
+  seq: 20
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/disable/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,15 @@
+info:
+  name: 根据ID归档角色
+  type: http
+  seq: 9
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/role/archiveById/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,14 @@
+opencollection: 1.0.0
+info:
+  name: "MUMU"
+  type: workspace
+
+collections:
+  - name: "iam"
+    path: "collections/iam"
+  - name: "genix"
+    path: "collections/genix"
+
+specs:
+
+docs: ''

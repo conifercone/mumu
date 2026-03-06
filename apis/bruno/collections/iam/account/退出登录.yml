@@ -1,0 +1,17 @@
+info:
+  name: 退出登录
+  type: http
+  seq: 23
+  tags:
+    - account
+
+http:
+  method: POST
+  url: "{{iam-service-url}}/account/logout"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

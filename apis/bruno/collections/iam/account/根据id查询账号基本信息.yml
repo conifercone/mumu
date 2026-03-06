@@ -1,0 +1,17 @@
+info:
+  name: 根据id查询账号基本信息
+  type: http
+  seq: 18
+  tags:
+    - account
+
+http:
+  method: GET
+  url: "{{iam-service-url}}/account/getAccountBasicInfoById/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

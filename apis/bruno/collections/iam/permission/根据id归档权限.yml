@@ -1,0 +1,15 @@
+info:
+  name: 根据id归档权限
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/permission/archiveById/1"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

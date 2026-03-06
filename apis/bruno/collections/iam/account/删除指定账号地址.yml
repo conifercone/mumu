@@ -1,0 +1,17 @@
+info:
+  name: 删除指定账号地址
+  type: http
+  seq: 6
+  tags:
+    - account
+
+http:
+  method: DELETE
+  url: "{{iam-service-url}}/account/address/677b4c5dd14df91de0e7d721"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

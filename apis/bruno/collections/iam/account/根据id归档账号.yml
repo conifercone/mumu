@@ -1,0 +1,17 @@
+info:
+  name: 根据id归档账号
+  type: http
+  seq: 12
+  tags:
+    - account
+
+http:
+  method: PUT
+  url: "{{iam-service-url}}/account/archiveById/3"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
