@@ -1,0 +1,728 @@
+### 注册账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+POST {{iam-service-url}}/account/register
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+
+{
+  "username": "test_2",
+  "password": "test_2",
+  "roleCodes": [
+    "test",
+    "admin"
+  ],
+  "avatar": {
+    "source": "URL",
+    "url": "https://s.gravatar.com/avatar/0d8f419ee8a9a62d9517544e647e0c99a7222cbcc3e299daff146a0fc0468b5d"
+  },
+  "phone": "{{$random.phoneNumber.phoneNumber}}",
+  "gender": "MALE",
+  "email": "{{$random.email}}",
+  "timezone": "Asia/Shanghai",
+  "language": "EN",
+  "birthday": "1995-08-02",
+  "addresses": [
+    {
+      "street": "历城区",
+      "city": "济南市",
+      "state": "山东省",
+      "postalCode": "250000",
+      "country": "中国"
+    },
+    {
+      "street": "历下区",
+      "city": "济南市",
+      "state": "山东省",
+      "postalCode": "250000",
+      "country": "中国"
+    }
+  ],
+  "captchaCodeId": 127267766272,
+  "captchaCode": "U4BC"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据ID修改账号基本信息
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/updateById
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("test")}}
+
+{
+  "id": 2,
+  "bio": "测试用户",
+  "nickName": "测试用户"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据ID修改账号地址
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/modifyAddressByAddressId
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("test")}}
+
+{
+  "id": "677b7392c78b097ac069201a",
+  "street": "历城区港沟街道"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 分页获取账号（不查询总数）
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/findAllSlice?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 账号添加地址
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+POST {{iam-service-url}}/account/addAddress
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "country": "中国",
+  "state": "山东省",
+  "city": "济南市",
+  "street": "历城区",
+  "postalCode": "250000",
+  "location": {
+    "x": 117.18689,
+    "y": 36.65065
+  }
+}
+
+### 账号设置默认地址
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/setDefaultAddress/68280fed3faa46323a76b8aa
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 删除指定账号地址
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{iam-service-url}}/account/address/677b4c5dd14df91de0e7d721
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 查询当前账号指定范围内的附近的账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/nearby/1000
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+### 更新账号角色
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/updateRoleById
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "id": 1,
+  "roleCodes": [
+    "admin"
+  ]
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 重置当前账号系统设置
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/resetSystemSettingsBySettingsId/601146283917317
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 当前账号添加系统设置
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+POST {{iam-service-url}}/account/addSystemSettings
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "profile": "default",
+  "name": "默认系统设置"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 通过设置id修改系统设置
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/modifySystemSettingsBySettingsId
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "id": "677c866780f0b5754fd51eac",
+  "name": "默认系统设置"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 禁用账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/disable/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 删除当前账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{iam-service-url}}/account/deleteCurrent
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+{
+  "captchaCodeId": 2977796456448,
+  "captchaCode": "ZGYW"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 重置密码
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/resetPassword/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 获取当前登录账号信息
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/currentLoginAccount
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 分页查询账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/findAll?current=1&pageSize=10
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据id查询账号基本信息
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/getAccountBasicInfoById/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据id下线账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+POST {{iam-service-url}}/account/offline/1
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 校验账号密码
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/verifyPassword?password=admin
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 修改账号密码
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/changePassword
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("test")}}
+
+{
+  "originalPassword": "Test@5211314",
+  "newPassword": "Test@5211314"
+}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 获取在线账号数量等信息
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+GET {{iam-service-url}}/account/onlineAccounts
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据id归档账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/archiveById/3
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 根据id从归档中恢复账号
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/recoverFromArchiveById/3
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 退出登录
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+POST {{iam-service-url}}/account/logout
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 当前账号设置默认系统设置
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+PUT {{iam-service-url}}/account/setDefaultSystemSettings/677c866780f0b5754fd51eac
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### 删除指定账号系统设置
+< {%
+    import {generateHeaders} from "./utils"
+
+    const headers = generateHeaders(request.environment.get("iam-service-url"))
+    request.variables.set("signature", headers.signature)
+    request.variables.set("timestamp", headers.timestamp)
+    request.variables.set("requestId", headers.requestId)
+%}
+DELETE {{iam-service-url}}/account/systemSettings/677c866780f0b5754fd51eac
+Content-Type: application/json
+X-Request-ID: {{requestId}}
+X-Signature: {{signature}}
+X-Timestamp: {{timestamp}}
+Connection: keep-alive
+Accept: */*
+Authorization: Bearer {{$auth.token("admin")}}
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
