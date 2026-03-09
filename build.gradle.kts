@@ -20,7 +20,7 @@ plugins {
 
 description = "The Delightfully Clean & Ready-to-Go Management System!"
 
-val rootDirectory: File? = project.rootDir
+val rootDirectory: File = project.rootDir
 
 // 安装git hook
 tasks.register<Copy>("installGitHooks") {
