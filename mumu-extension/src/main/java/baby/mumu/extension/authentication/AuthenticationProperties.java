@@ -49,6 +49,7 @@ public class AuthenticationProperties {
          * 密钥地址
          */
         private String jksKeyPath;
+        
         /**
          * 密钥密码
          */
