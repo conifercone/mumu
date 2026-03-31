@@ -74,6 +74,11 @@ public class MetamodelGenerator extends AbstractProcessor {
     private String projectVersion;
     private String projectName;
 
+    /**
+     * 初始化注解处理器上下文和构建环境信息
+     *
+     * @param processingEnv 注解处理环境
+     */
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -90,6 +95,13 @@ public class MetamodelGenerator extends AbstractProcessor {
         messager.printMessage(Diagnostic.Kind.NOTE, "🥐 MuMu Entity Metamodel Generator");
     }
 
+    /**
+     * 处理 {@link Metamodel} 注解并生成对应的元模型类
+     *
+     * @param annotations 当前轮次检测到的注解类型
+     * @param roundEnv 当前轮次处理环境
+     * @return 当前处理器是否已消费该注解
+     */
     @Override
     public boolean process(@NonNull Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
@@ -111,6 +123,12 @@ public class MetamodelGenerator extends AbstractProcessor {
         return true;
     }
 
+    /**
+     * 为目标实体生成元模型描述类
+     *
+     * @param annotatedElement 标注了 {@link Metamodel} 的元素
+     * @throws IOException 写入生成源码时抛出
+     */
     void generateMetaModelClass(final @NonNull Element annotatedElement)
         throws IOException {
         String qualifiedName = annotatedElement.asType().toString();
@@ -165,6 +183,14 @@ public class MetamodelGenerator extends AbstractProcessor {
         javaFile.writeTo(processingEnv.getFiler());
     }
 
+    /**
+     * 为元模型类生成字段常量和单值属性定义
+     *
+     * @param annotatedElement 标注了 {@link Metamodel} 的元素
+     * @param packageName 实体所在包名
+     * @param entityName 实体类名
+     * @param builder 元模型类型构建器
+     */
     private void generateFields(@NonNull Element annotatedElement, String packageName,
                                 String entityName,
                                 Builder builder) {
@@ -252,6 +278,14 @@ public class MetamodelGenerator extends AbstractProcessor {
         return result.toString();
     }
 
+    /**
+     * 为元模型类生成项目基础信息字段
+     *
+     * @param packageName 实体所在包名
+     * @param entityName 实体类名
+     * @param builder 元模型类型构建器
+     * @param annotation 元模型注解配置
+     */
     private void generateBasicProjectInformation(String packageName, String entityName,
                                                  Builder builder,
                                                  @NonNull Metamodel annotation) {
@@ -335,6 +369,11 @@ public class MetamodelGenerator extends AbstractProcessor {
         }
     }
 
+    /**
+     * 检查当前环境是否可用 git 命令
+     *
+     * @return 不可用时返回 {@code true}
+     */
     private boolean gitNotAvailable() {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder("git", "--version");
