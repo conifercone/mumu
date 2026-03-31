@@ -1,5 +1,3 @@
-#file: noinspection UndefinedAction,UndefinedParamsPresent
-
 name: Dependency Submission
 
 on:

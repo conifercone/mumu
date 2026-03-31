@@ -1,5 +1,3 @@
-#file: noinspection UndefinedAction,UndefinedParamsPresent
-
 name: Greetings
 
 on: [ pull_request_target, issues ]
