@@ -46,7 +46,7 @@ guavaBomVersion = '33.5.0-jre'
 protobufBomVersion = '4.34.1'
 awssdkBomVersion = '2.42.33'
 # plugin version
-protobufPluginVersion = '0.9.6'
+protobufPluginVersion = '0.10.0'
 lombokPluginVersion = '9.2.0'
 kotlinPluginVersion = '2.3.20'
 
