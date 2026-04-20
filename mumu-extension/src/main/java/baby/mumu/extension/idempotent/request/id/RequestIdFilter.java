@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * request id 过滤器
+ * 请求 id 过滤器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
