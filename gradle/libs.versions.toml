@@ -42,7 +42,7 @@ cosidVersion = '3.0.5'
 otelLog4j2AppenderVersion = '2.26.1-alpha'
 # bom version
 grpcBomVersion = '1.80.0'
-guavaBomVersion = '33.5.0-jre'
+guavaBomVersion = '33.6.0-jre'
 protobufBomVersion = '4.34.1'
 awssdkBomVersion = '2.42.36'
 # plugin version
