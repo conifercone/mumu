@@ -16,7 +16,6 @@
 
 package baby.mumu.log.infra.operation.gatewayimpl;
 
-import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.genix.client.api.PrimaryKeyGrpcService;
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
@@ -67,7 +66,8 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
     @Autowired
     public OperationLogGatewayImpl(OperationLogKafkaRepository operationLogKafkaRepository,
                                    OperationLogEsRepository operationLogEsRepository, JsonMapper jsonMapper,
-                                   PrimaryKeyGrpcService primaryKeyGrpcService, ElasticsearchTemplate elasticsearchTemplate,
+                                   PrimaryKeyGrpcService primaryKeyGrpcService,
+                                   ElasticsearchTemplate elasticsearchTemplate,
                                    OperationLogConvertor operationLogConvertor) {
         this.operationLogKafkaRepository = operationLogKafkaRepository;
         this.operationLogEsRepository = operationLogEsRepository;
@@ -167,19 +167,19 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
                 .ifPresent(
                     operatingTime -> criteria.and(new Criteria(
                         OperationLogEsPOMetamodel.OPERATING_TIME).matches(
-                        TimeUtils.convertAccountZoneToUTC(operatingTime))));
+                        operatingTime)));
             Optional.ofNullable(optLog.getOperatingStartTime())
                 .ifPresent(
                     operatingStartTime -> criteria.and(
                         new Criteria(
                             OperationLogEsPOMetamodel.OPERATING_TIME).greaterThan(
-                            TimeUtils.convertAccountZoneToUTC(operatingStartTime))));
+                            operatingStartTime)));
             Optional.ofNullable(optLog.getOperatingEndTime())
                 .ifPresent(
                     operatingEndTime -> criteria.and(
                         new Criteria(
                             OperationLogEsPOMetamodel.OPERATING_TIME).lessThan(
-                            TimeUtils.convertAccountZoneToUTC(operatingEndTime))));
+                            operatingEndTime)));
         });
         Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
             .addSort(
@@ -191,7 +191,7 @@ public class OperationLogGatewayImpl implements OperationLogGateway {
             .filter(Optional::isPresent).map(Optional::get)
             .peek(operationLogDomain ->
                 operationLogDomain.setOperatingTime(
-                    TimeUtils.convertUTCToAccountZone(operationLogDomain.getOperatingTime())))
+                    operationLogDomain.getOperatingTime()))
             .toList();
         return new PageImpl<>(operationLogs, pageRequest, searchHits.getTotalHits());
     }

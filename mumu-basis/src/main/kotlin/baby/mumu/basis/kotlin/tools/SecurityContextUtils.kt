@@ -42,11 +42,6 @@ object SecurityContextUtils {
     private const val ID = "id"
 
     /**
-     * 账号时区属性名
-     */
-    private const val TIMEZONE = "timezone"
-
-    /**
      * 账号语言个人偏好属性名
      */
     private const val LANGUAGE = "language"
@@ -97,33 +92,6 @@ object SecurityContextUtils {
                         val claims: Map<String, Any> = principal.claims
                         if (claims.containsKey(TokenClaimsEnum.ACCOUNT_NAME.claimName)) {
                             return@map claims[TokenClaimsEnum.ACCOUNT_NAME.claimName].toString()
-                        }
-                    }
-                }
-                null
-            }
-
-    @get:API(status = API.Status.INTERNAL, since = "1.0.0")
-    @JvmStatic
-    val loginAccountTimezone: Optional<String>
-        /**
-         * 获取当前登录账号ID
-         *
-         * @return 登录账号ID
-         */
-        get() = Optional.ofNullable(SecurityContextHolder.getContext().authentication)
-            .map { authentication: Authentication ->
-                if (authentication.isAuthenticated) {
-                    val principal = authentication.principal
-                    if (principal is UserDetails) {
-                        val beanMap = BeanMap.create(principal)
-                        if (beanMap.containsKey(TIMEZONE)) {
-                            return@map beanMap[TIMEZONE].toString()
-                        }
-                    } else if (principal is ClaimAccessor) {
-                        val claims: Map<String, Any> = principal.claims
-                        if (claims.containsKey(TokenClaimsEnum.TIMEZONE.claimName)) {
-                            return@map claims[TokenClaimsEnum.TIMEZONE.claimName].toString()
                         }
                     }
                 }

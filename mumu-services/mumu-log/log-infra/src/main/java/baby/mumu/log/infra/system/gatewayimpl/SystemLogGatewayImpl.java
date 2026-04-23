@@ -16,7 +16,6 @@
 
 package baby.mumu.log.infra.system.gatewayimpl;
 
-import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import baby.mumu.log.infra.config.LogProperties;
@@ -123,19 +122,19 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
                 .ifPresent(
                     recordTime -> criteria.and(new Criteria(
                         SystemLogEsPOMetamodel.RECORD_TIME).matches(
-                        TimeUtils.convertAccountZoneToUTC(recordTime))));
+                        recordTime)));
             Optional.ofNullable(sysLog.getRecordStartTime())
                 .ifPresent(
                     recordStartTime -> criteria.and(
                         new Criteria(
                             SystemLogEsPOMetamodel.RECORD_TIME).greaterThan(
-                            TimeUtils.convertAccountZoneToUTC(recordStartTime))));
+                            recordStartTime)));
             Optional.ofNullable(sysLog.getRecordEndTime())
                 .ifPresent(
                     recordEndTime -> criteria.and(
                         new Criteria(
                             SystemLogEsPOMetamodel.RECORD_TIME).lessThan(
-                            TimeUtils.convertAccountZoneToUTC(recordEndTime))));
+                            recordEndTime)));
         });
         Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
             .addSort(
@@ -146,7 +145,7 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
             .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
             .filter(Optional::isPresent).map(Optional::get)
             .peek(systemLogDomain -> systemLogDomain.setRecordTime(
-                TimeUtils.convertUTCToAccountZone(systemLogDomain.getRecordTime())))
+                systemLogDomain.getRecordTime()))
             .toList();
         return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
 

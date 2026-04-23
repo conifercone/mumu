@@ -16,7 +16,6 @@
 
 package baby.mumu.basis.response;
 
-import baby.mumu.basis.kotlin.tools.TimeUtils;
 import baby.mumu.basis.kotlin.tools.TraceIdUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,8 +62,7 @@ public class ResponseWrapper<T> implements Serializable {
      * 响应时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
-    private OffsetDateTime timestamp = TimeUtils.convertToAccountZone(
-        OffsetDateTime.now(ZoneOffset.UTC));
+    private OffsetDateTime timestamp = OffsetDateTime.now(ZoneOffset.UTC);
 
     /**
      * 响应结果
