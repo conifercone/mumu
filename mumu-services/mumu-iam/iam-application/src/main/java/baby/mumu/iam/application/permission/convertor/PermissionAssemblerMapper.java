@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.iam.infra.permission.convertor;
+package baby.mumu.iam.application.permission.convertor;
 
 import baby.mumu.basis.mappers.DataTransferObjectMapper;
 import baby.mumu.basis.mappers.GrpcMapper;
@@ -25,10 +25,7 @@ import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
 import baby.mumu.iam.client.dto.PermissionIncludePathDownloadAllDTO.PermissionPathDTO;
 import baby.mumu.iam.domain.permission.Permission;
-import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO;
-import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionArchivedPO;
-import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
-import baby.mumu.iam.infra.relations.database.PermissionPathPOId;
+import baby.mumu.iam.domain.permission.PermissionRelation;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.*;
@@ -37,21 +34,15 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 /**
- * Permission mapstruct转换器
+ * Permission application assembler mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
+public interface PermissionAssemblerMapper extends GrpcMapper, DataTransferObjectMapper {
 
-    PermissionMapper INSTANCE = Mappers.getMapper(PermissionMapper.class);
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    Permission toEntity(PermissionPO permissionPO);
-
-    @API(status = Status.STABLE, since = "2.14.0")
-    List<Permission> toEntities(List<PermissionPO> permissionPOList);
+    PermissionAssemblerMapper INSTANCE = Mappers.getMapper(PermissionAssemblerMapper.class);
 
     @API(status = Status.STABLE, since = "1.0.1")
     Permission toEntity(PermissionAddCmd permissionAddCmd);
@@ -61,18 +52,6 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
 
     @API(status = Status.STABLE, since = "2.2.0")
     Permission toEntity(PermissionFindAllSliceCmd permissionFindAllSliceCmd);
-
-    @API(status = Status.STABLE, since = "2.0.0")
-    Permission toEntity(PermissionArchivedPO permissionArchivedPO);
-
-    @API(status = Status.STABLE, since = "2.14.0")
-    List<Permission> toEntitiesFromArchivedPO(List<PermissionArchivedPO> permissionArchivedPOList);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    Permission toEntity(PermissionCacheablePO permissionCacheablePO);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    PermissionCacheablePO toPermissionCacheablePO(Permission permission);
 
     @API(status = Status.STABLE, since = "2.0.0")
     Permission toEntity(PermissionArchivedFindAllCmd permissionArchivedFindAllCmd);
@@ -104,18 +83,6 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
     @API(status = Status.STABLE, since = "2.2.0")
     PermissionArchivedFindAllSliceDTO toPermissionArchivedFindAllSliceDTO(Permission permission);
 
-    @API(status = Status.STABLE, since = "1.0.1")
-    PermissionPO toPermissionPO(Permission permission);
-
-    @API(status = Status.STABLE, since = "1.0.4")
-    PermissionArchivedPO toPermissionArchivedPO(PermissionPO permissionPO);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    PermissionArchivedPO toPermissionArchivedPO(Permission permission);
-
-    @API(status = Status.STABLE, since = "1.0.4")
-    PermissionPO toPermissionPO(PermissionArchivedPO permissionArchivedPO);
-
     @API(status = Status.STABLE, since = "2.2.0")
     PermissionFindAllCmd toPermissionFindAllCmd(PermissionFindAllGrpcCmd authorityFindAllGrpcCmd);
 
@@ -141,7 +108,7 @@ public interface PermissionMapper extends GrpcMapper, DataTransferObjectMapper {
     PermissionIncludePathDownloadAllDTO toPermissionIncludePathDownloadAllDTO(Permission permission);
 
     @API(status = Status.STABLE, since = "2.6.0")
-    PermissionPathDTO toPermissionPathDTO(PermissionPathPOId permissionPathPOId);
+    PermissionPathDTO toPermissionPathDTO(PermissionRelation permissionRelation);
 
     @API(status = Status.STABLE, since = "2.13.0")
     PermissionUpdatedDataDTO toPermissionUpdatedDataDTO(Permission permission);

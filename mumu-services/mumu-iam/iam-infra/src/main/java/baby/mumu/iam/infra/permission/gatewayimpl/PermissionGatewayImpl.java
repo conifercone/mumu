@@ -22,6 +22,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.extension.ExtensionProperties;
 import baby.mumu.extension.GlobalProperties;
 import baby.mumu.iam.domain.permission.Permission;
+import baby.mumu.iam.domain.permission.PermissionRelation;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
@@ -48,10 +49,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -68,32 +66,32 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
     private final PermissionRepository permissionRepository;
     private final RoleGateway roleGateway;
-    private final PermissionConvertor permissionConvertor;
     private final PermissionArchivedRepository permissionArchivedRepository;
     private final JobScheduler jobScheduler;
     private final ExtensionProperties extensionProperties;
     private final PermissionCacheRepository permissionCacheRepository;
     private final PermissionPathRepository permissionPathRepository;
     private final RolePermissionCacheRepository rolePermissionCacheRepository;
+    private final PermissionConvertor permissionConvertor;
 
     @Autowired
     public PermissionGatewayImpl(PermissionRepository permissionRepository,
                                  RoleGateway roleGateway,
-                                 PermissionConvertor permissionConvertor,
                                  PermissionArchivedRepository permissionArchivedRepository, JobScheduler jobScheduler,
                                  ExtensionProperties extensionProperties,
                                  PermissionCacheRepository permissionCacheRepository,
                                  PermissionPathRepository permissionPathRepository,
-                                 RolePermissionCacheRepository rolePermissionCacheRepository) {
+                                 RolePermissionCacheRepository rolePermissionCacheRepository,
+                                 PermissionConvertor permissionConvertor) {
         this.permissionRepository = permissionRepository;
         this.roleGateway = roleGateway;
-        this.permissionConvertor = permissionConvertor;
         this.permissionArchivedRepository = permissionArchivedRepository;
         this.jobScheduler = jobScheduler;
         this.extensionProperties = extensionProperties;
         this.permissionCacheRepository = permissionCacheRepository;
         this.permissionPathRepository = permissionPathRepository;
         this.rolePermissionCacheRepository = rolePermissionCacheRepository;
+        this.permissionConvertor = permissionConvertor;
     }
 
     /**
@@ -414,8 +412,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Transactional(readOnly = true)
     public Stream<Permission> findAll() {
         return permissionRepository.findAll()
-            .flatMap(
-                permissionPO -> permissionConvertor.toEntityDoNotJudgeHasDescendant(permissionPO).stream());
+            .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream());
     }
 
     /**
@@ -450,5 +447,16 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     public List<String> findAllAncestorPathStrings(Long descendantId) {
         return Optional.ofNullable(descendantId).map(permissionPathRepository::findAllAncestorPathStrings).orElse(new ArrayList<>());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<PermissionRelation> findDescendantsByAncestorId(Long ancestorId) {
+        return Optional.ofNullable(ancestorId)
+            .map(id -> permissionPathRepository.findByAncestorIdIn(Collections.singleton(id)))
+            .map(permissionConvertor::toRelations)
+            .orElse(new ArrayList<>());
     }
 }

@@ -370,7 +370,8 @@ public class AuthorizationConfiguration {
      */
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-                                                                        RoleConvertor roleConvertor, PermissionRepository permissionRepository,
+                                                                        RoleConvertor roleConvertor,
+                                                                        PermissionRepository permissionRepository,
                                                                         PermissionConvertor permissionConvertor,
                                                                         Oauth2AuthenticationRepository oauth2AuthenticationRepository) {
         return context -> {
@@ -419,8 +420,7 @@ public class AuthorizationConfiguration {
                     )
                     .map(RegisteredClient::getScopes)
                     .map(scopes -> AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
-                        permissionRepository,
-                        permissionConvertor, scopes))
+                        permissionRepository, permissionConvertor, scopes))
                     .orElse(Collections.emptySet());
                 claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), authoritySet);
             }
@@ -445,7 +445,8 @@ public class AuthorizationConfiguration {
 
     private static @NonNull Set<String> getFullScopes(@NonNull RoleRepository roleRepository,
                                                       RoleConvertor roleConvertor, @NonNull PermissionRepository permissionRepository,
-                                                      PermissionConvertor permissionConvertor, @NonNull Set<String> scopes) {
+                                                      PermissionConvertor permissionConvertor,
+                                                      @NonNull Set<String> scopes) {
         Set<String> roles = scopes.stream()
             .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
             .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
@@ -466,7 +467,7 @@ public class AuthorizationConfiguration {
             .collect(Collectors.toList());
         List<Permission> permissions = permissionRepository.findAllByCodeIn(permissionCodes)
             .stream()
-            .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
+            .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream())
             .toList();
         List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
             .map(Permission::getId)

@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.PermissionFindByIdDTO;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

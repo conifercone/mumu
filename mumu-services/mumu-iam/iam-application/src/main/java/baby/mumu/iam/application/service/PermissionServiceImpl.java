@@ -30,7 +30,7 @@ import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;

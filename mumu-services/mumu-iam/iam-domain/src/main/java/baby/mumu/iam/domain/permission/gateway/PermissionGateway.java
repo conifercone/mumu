@@ -17,6 +17,7 @@
 package baby.mumu.iam.domain.permission.gateway;
 
 import baby.mumu.iam.domain.permission.Permission;
+import baby.mumu.iam.domain.permission.PermissionRelation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
@@ -198,4 +199,12 @@ public interface PermissionGateway {
      * @return 所有祖先路径
      */
     List<String> findAllAncestorPathStrings(Long descendantId);
+
+    /**
+     * 获取指定祖先权限的所有后代关系
+     *
+     * @param ancestorId 祖先权限ID
+     * @return 后代关系列表
+     */
+    List<PermissionRelation> findDescendantsByAncestorId(Long ancestorId);
 }

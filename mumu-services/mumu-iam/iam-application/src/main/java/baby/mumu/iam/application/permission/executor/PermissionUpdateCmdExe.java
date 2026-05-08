@@ -18,11 +18,11 @@ package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
 import baby.mumu.iam.client.cmds.PermissionUpdateCmd;
 import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -48,12 +48,22 @@ public class PermissionUpdateCmdExe {
     }
 
     public PermissionUpdatedDataDTO execute(PermissionUpdateCmd permissionUpdateCmd) {
-        Permission permission = permissionConvertor.toEntity(permissionUpdateCmd)
-            .orElseThrow(() -> new ApplicationException(
-                ResponseCode.INVALID_PERMISSION_FORMAT));
+        if (permissionUpdateCmd == null || permissionUpdateCmd.getId() == null) {
+            throw new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+        }
+        Permission permission = permissionGateway.findById(permissionUpdateCmd.getId())
+            .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
+        String codeBeforeUpdated = permission.getCode();
+        permissionConvertor.toEntity(permissionUpdateCmd, permission);
+
+        String newCode = permission.getCode();
+        if (newCode != null && !newCode.equals(codeBeforeUpdated)) {
+            permissionGateway.findByCode(newCode).ifPresent(_ -> {
+                throw new ApplicationException(ResponseCode.PERMISSION_CODE_ALREADY_EXISTS);
+            });
+        }
         return permissionGateway.updateById(permission)
             .flatMap(permissionConvertor::toPermissionUpdatedDataDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
-
     }
 }

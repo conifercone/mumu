@@ -16,10 +16,11 @@
 
 package baby.mumu.iam.mapstruct;
 
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerMapper;
 import baby.mumu.iam.client.cmds.PermissionUpdateCmd;
 import baby.mumu.iam.domain.permission.Permission;
-import baby.mumu.iam.infra.permission.convertor.PermissionMapper;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
+import baby.mumu.iam.infra.permission.mapper.PermissionPersistenceMapper;
 import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 /**
- * AuthorityMapper单元测试
+ * Permission mappers unit tests
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
@@ -35,8 +36,8 @@ import java.time.format.DateTimeFormatter;
 public class PermissionMapperTest {
 
     @Test
-    public void toEntity() {
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+    public void toEntityFromPO() {
+        PermissionPersistenceMapper instance = PermissionPersistenceMapper.INSTANCE;
         PermissionPO permissionPO = new PermissionPO();
         permissionPO.setId(1L);
         permissionPO.setCode("test");
@@ -47,8 +48,8 @@ public class PermissionMapperTest {
     }
 
     @Test
-    public void toEntityForExistObject() {
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+    public void toEntityFromUpdateCmd() {
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         PermissionUpdateCmd permissionUpdateCmd = new PermissionUpdateCmd();
         permissionUpdateCmd.setId(1L);
         permissionUpdateCmd.setCode("test");
@@ -62,7 +63,7 @@ public class PermissionMapperTest {
     @Test
     public void offsetDateTime2Timestamp() {
         OffsetDateTime offsetDateTime = OffsetDateTime.now(ZoneId.of("UTC"));
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         Timestamp timestamp = instance.map(offsetDateTime);
         // 从 Timestamp 获取秒和纳秒
         long seconds = timestamp.getSeconds();
@@ -85,7 +86,7 @@ public class PermissionMapperTest {
     @Test
     public void localDate2Timestamp() {
         LocalDate now = LocalDate.now(ZoneId.of("UTC"));
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         Timestamp timestamp = instance.map(now);
         // 从 Timestamp 获取秒和纳秒
         long seconds = timestamp.getSeconds();
@@ -108,7 +109,7 @@ public class PermissionMapperTest {
     @Test
     public void localDateTime2Timestamp() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         Timestamp timestamp = instance.map(now);
         // 从 Timestamp 获取秒和纳秒
         long seconds = timestamp.getSeconds();
@@ -134,7 +135,7 @@ public class PermissionMapperTest {
             .setSeconds(1698643200)
             .setNanos(0)
             .build();
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         OffsetDateTime offsetDateTime = instance.toOffsetDateTime(timestamp);
         String format = offsetDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX"));
         System.out.println(format);
@@ -146,7 +147,7 @@ public class PermissionMapperTest {
             .setSeconds(1698643200)
             .setNanos(0)
             .build();
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         LocalDateTime localDateTime = instance.toLocalDateTime(timestamp);
         String format = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
         System.out.println(format);
@@ -158,7 +159,7 @@ public class PermissionMapperTest {
             .setSeconds(1698643200)
             .setNanos(0)
             .build();
-        PermissionMapper instance = PermissionMapper.INSTANCE;
+        PermissionAssemblerMapper instance = PermissionAssemblerMapper.INSTANCE;
         LocalDate localDate = instance.toLocalDate(timestamp);
         String format = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         System.out.println(format);

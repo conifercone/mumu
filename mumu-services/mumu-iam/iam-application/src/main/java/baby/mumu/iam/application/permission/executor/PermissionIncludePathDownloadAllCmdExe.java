@@ -17,12 +17,14 @@
 package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
+import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 /**
  * 下载所有权限（包含权限路径）指令执行器
@@ -49,6 +51,16 @@ public class PermissionIncludePathDownloadAllCmdExe {
             permissionGateway.findAllIncludePath()
                 .flatMap(
                     permission -> permissionConvertor.toPermissionIncludePathDownloadAllDTO(permission)
+                        .map(dto -> {
+                            if (dto.isHasDescendant()) {
+                                dto.setDescendants(permissionGateway.findDescendantsByAncestorId(dto.getId())
+                                    .stream()
+                                    .flatMap(relation -> permissionConvertor.toPermissionPathDTO(relation).stream())
+                                    .collect(Collectors.toList()));
+                            }
+                            return dto;
+                        })
                         .stream()));
     }
 }
+
