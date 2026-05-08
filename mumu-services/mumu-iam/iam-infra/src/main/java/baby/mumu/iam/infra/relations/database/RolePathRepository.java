@@ -95,6 +95,21 @@ public interface RolePathRepository extends
 
 
     /**
+     * 查询哪些角色存在后代角色
+     *
+     * @param ancestorIds 祖先ID集合
+     * @return 存在后代角色的ID集合
+     */
+    @Query("""
+        SELECT DISTINCT r.ancestor.id
+        FROM RolePathPO r
+        WHERE r.ancestor.id IN :ancestorIds
+          AND r.id.depth = 1
+        """)
+    List<Long> findAncestorIdsWithDescendants(@Param("ancestorIds") List<Long> ancestorIds);
+
+
+    /**
      * 删除所有不可达节点
      */
     @Modifying

@@ -18,12 +18,6 @@ package baby.mumu.iam.infra.role.convertor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.extension.translation.SimpleTextTranslation;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
-import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
-import baby.mumu.iam.client.cmds.*;
-import baby.mumu.iam.client.dto.*;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
@@ -38,22 +32,24 @@ import baby.mumu.iam.infra.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.iam.infra.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RolePO;
+import baby.mumu.iam.infra.role.mapper.RolePersistenceMapper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 角色信息转换器
+ * 角色信息转换器 (Infrastructure Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -64,7 +60,6 @@ public class RoleConvertor {
     private final PermissionConvertor permissionConvertor;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
-    private final SimpleTextTranslation simpleTextTranslation;
     private final RoleArchivedRepository roleArchivedRepository;
     private final RolePermissionRepository rolePermissionRepository;
     private final PermissionCacheRepository permissionCacheRepository;
@@ -75,7 +70,6 @@ public class RoleConvertor {
     @Autowired
     public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
                          PermissionRepository permissionRepository,
-                         ObjectProvider<SimpleTextTranslation> simpleTextTranslation,
                          RoleArchivedRepository roleArchivedRepository,
                          RolePermissionRepository rolePermissionRepository,
                          PermissionCacheRepository permissionCacheRepository,
@@ -84,7 +78,6 @@ public class RoleConvertor {
         this.permissionConvertor = permissionConvertor;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
-        this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
         this.roleArchivedRepository = roleArchivedRepository;
         this.rolePermissionRepository = rolePermissionRepository;
         this.permissionCacheRepository = permissionCacheRepository;
@@ -97,10 +90,17 @@ public class RoleConvertor {
     public Optional<Role> toEntity(RolePO rolePO) {
         // noinspection DuplicatedCode
         return Optional.ofNullable(rolePO).map(roleDataObject -> {
-            Role role = RoleMapper.INSTANCE.toEntity(roleDataObject);
+            Role role = RolePersistenceMapper.INSTANCE.toEntity(roleDataObject);
             setAuthorities(role, getPermissionIds(role));
             return role;
         }).flatMap(this::hasDescendant);
+    }
+
+    @API(status = Status.STABLE, since = "2.14.0")
+    public List<Role> toEntities(List<RolePO> rolePOList) {
+        List<Role> roles = Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntities(rolePOList)).orElse(new ArrayList<>());
+        roles.forEach(role -> setAuthorities(role, getPermissionIds(role)));
+        return this.hasDescendant(roles);
     }
 
     private Optional<Role> hasDescendant(Role role) {
@@ -109,6 +109,23 @@ public class RoleConvertor {
                 rolePathRepository.existsDescendantRoles(role.getId()));
             return roleNotNull;
         });
+    }
+
+    private List<Role> hasDescendant(List<Role> roles) {
+        List<Long> roleIds = Optional.ofNullable(roles).orElse(new ArrayList<>()).stream()
+            .map(Role::getId).toList();
+        if (roleIds.isEmpty()) {
+            return roles;
+        }
+        Set<Long> ancestorIdsWithDescendants = new HashSet<>(
+            rolePathRepository.findAncestorIdsWithDescendants(
+                roleIds));
+        roles.forEach(p -> {
+            if (ancestorIdsWithDescendants.contains(p.getId())) {
+                p.setHasDescendant(true);
+            }
+        });
+        return roles;
     }
 
     private @NonNull List<Long> getPermissionIds(@NonNull Role role) {
@@ -183,171 +200,51 @@ public class RoleConvertor {
     public Optional<Role> toEntity(RoleArchivedPO roleArchivedPO) {
         // noinspection DuplicatedCode
         return Optional.ofNullable(roleArchivedPO).map(roleArchivedDataObject -> {
-            Role role = RoleMapper.INSTANCE.toEntity(roleArchivedDataObject);
+            Role role = RolePersistenceMapper.INSTANCE.toEntity(roleArchivedDataObject);
             setAuthorities(role, getPermissionIds(role));
             return role;
         });
     }
 
+    @API(status = Status.STABLE, since = "2.14.0")
+    public List<Role> toEntitiesFromArchivedPO(List<RoleArchivedPO> roleArchivedPOList) {
+        List<Role> roles = Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntitiesFromArchivedPO(roleArchivedPOList)).orElse(new ArrayList<>());
+        roles.forEach(role -> setAuthorities(role, getPermissionIds(role)));
+        return roles;
+    }
+
     @API(status = Status.STABLE, since = "1.0.0")
     public Optional<RolePO> toRolePO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRolePO);
-    }
-
-
-    @API(status = Status.STABLE, since = "1.0.0")
-    public Optional<Role> toEntity(RoleAddCmd roleAddCmd) {
-        return Optional.ofNullable(roleAddCmd).map(roleAddCmdNotNull -> {
-            Role role = RoleMapper.INSTANCE.toEntity(roleAddCmdNotNull);
-            Optional.ofNullable(roleAddCmdNotNull.getPermissionIds())
-                .filter(CollectionUtils::isNotEmpty)
-                .ifPresent(permissionIds -> setAuthorities(role, permissionIds));
-            return role;
-        });
-    }
-
-    @API(status = Status.STABLE, since = "1.0.0")
-    public Optional<Role> toEntity(RoleUpdateCmd roleUpdateCmd) {
-        return Optional.ofNullable(roleUpdateCmd).flatMap(roleUpdateCmdNotNull -> {
-            Optional.ofNullable(roleUpdateCmdNotNull.getId())
-                .orElseThrow(() -> new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY));
-            Optional<RolePO> roleDoOptional = roleRepository.findById(roleUpdateCmdNotNull.getId());
-            return roleDoOptional.flatMap(roleDo -> toEntity(roleDo).map(roleDomain -> {
-                String codeBeforeUpdated = roleDomain.getCode();
-                RoleMapper.INSTANCE.toEntity(roleUpdateCmdNotNull, roleDomain);
-                String codeAfterUpdated = roleDomain.getCode();
-                if (StringUtils.isNotBlank(codeAfterUpdated) && !codeAfterUpdated.equals(codeBeforeUpdated)
-                    && (roleRepository.existsByCode(codeAfterUpdated)
-                    || roleArchivedRepository.existsByCode(codeAfterUpdated))) {
-                    throw new ApplicationException(ResponseCode.ROLE_CODE_ALREADY_EXISTS);
-                }
-                Optional.ofNullable(roleUpdateCmdNotNull.getPermissionIds())
-                    .ifPresent(authorities -> setAuthorities(roleDomain, authorities));
-                return roleDomain;
-            }));
-        });
-    }
-
-    @API(status = Status.STABLE, since = "1.0.0")
-    public Optional<Role> toEntity(RoleFindAllCmd roleFindAllCmd) {
-        return Optional.ofNullable(roleFindAllCmd).map(RoleMapper.INSTANCE::toEntity).map(role -> {
-            if (CollectionUtils.isNotEmpty(roleFindAllCmd.getPermissionIds())) {
-                setAuthorities(role, roleFindAllCmd.getPermissionIds());
-            }
-            return role;
-        });
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<Role> toEntity(RoleFindAllSliceCmd roleFindAllSliceCmd) {
-        return Optional.ofNullable(roleFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
-            .map(role -> {
-                if (CollectionUtils.isNotEmpty(roleFindAllSliceCmd.getPermissionIds())) {
-                    setAuthorities(role, roleFindAllSliceCmd.getPermissionIds());
-                }
-                return role;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "1.0.0")
-    public Optional<RoleFindAllDTO> toRoleFindAllDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindAllDTO)
-            .map(roleFindAllCo -> {
-                Optional.ofNullable(simpleTextTranslation).flatMap(
-                        simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                            roleFindAllCo.getName()))
-                    .ifPresent(roleFindAllCo::setName);
-                return roleFindAllCo;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<RoleFindAllSliceDTO> toRoleFindAllSliceDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindAllSliceDTO)
-            .map(roleFindAllSliceCo -> {
-                Optional.ofNullable(simpleTextTranslation).flatMap(
-                        simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                            roleFindAllSliceCo.getName()))
-                    .ifPresent(roleFindAllSliceCo::setName);
-                return roleFindAllSliceCo;
-            });
-    }
-
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<Role> toEntity(RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
-        return Optional.ofNullable(roleArchivedFindAllCmd).map(RoleMapper.INSTANCE::toEntity)
-            .map(role -> {
-                if (CollectionUtils.isNotEmpty(roleArchivedFindAllCmd.getPermissionIds())) {
-                    setAuthorities(role, roleArchivedFindAllCmd.getPermissionIds());
-                }
-                return role;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<Role> toEntity(RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
-        return Optional.ofNullable(roleArchivedFindAllSliceCmd).map(RoleMapper.INSTANCE::toEntity)
-            .map(role -> {
-                if (CollectionUtils.isNotEmpty(roleArchivedFindAllSliceCmd.getPermissionIds())) {
-                    setAuthorities(role, roleArchivedFindAllSliceCmd.getPermissionIds());
-                }
-                return role;
-            });
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toRolePO(role));
     }
 
     @API(status = Status.STABLE, since = "2.2.0")
     public Optional<Role> toEntity(RoleCacheablePO roleCacheablePO) {
-        return Optional.ofNullable(roleCacheablePO).map(RoleMapper.INSTANCE::toEntity)
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntity(roleCacheablePO))
             .map(role -> {
                 setAuthorities(role, getPermissionIds(role));
                 return role;
             });
     }
 
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<RoleArchivedFindAllDTO> toRoleArchivedFindAllDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedFindAllDTO)
-            .map(roleArchivedFindAllCo -> {
-                Optional.ofNullable(simpleTextTranslation).flatMap(
-                        simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                            roleArchivedFindAllCo.getName()))
-                    .ifPresent(roleArchivedFindAllCo::setName);
-                return roleArchivedFindAllCo;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<RoleArchivedFindAllSliceDTO> toRoleArchivedFindAllSliceDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedFindAllSliceDTO)
-            .map(roleArchivedFindAllSliceCo -> {
-                Optional.ofNullable(simpleTextTranslation).flatMap(
-                        simpleTextTranslationBean -> simpleTextTranslationBean.translateToAccountLanguageIfPossible(
-                            roleArchivedFindAllSliceCo.getName()))
-                    .ifPresent(roleArchivedFindAllSliceCo::setName);
-                return roleArchivedFindAllSliceCo;
-            });
-    }
-
-
     @API(status = Status.STABLE, since = "1.0.4")
     public Optional<RoleArchivedPO> toRoleArchivedPO(RolePO rolePO) {
-        return Optional.ofNullable(rolePO).map(RoleMapper.INSTANCE::toRoleArchivedPO);
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toRoleArchivedPO(rolePO));
     }
 
     @API(status = Status.STABLE, since = "2.2.0")
     public Optional<RoleCacheablePO> toRoleCacheablePO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleCacheablePO);
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toRoleCacheablePO(role));
     }
 
     @API(status = Status.STABLE, since = "2.2.0")
     public Optional<RoleArchivedPO> toRoleArchivedPO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleArchivedPO);
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toRoleArchivedPO(role));
     }
 
     @API(status = Status.STABLE, since = "1.0.4")
     public Optional<RolePO> toRolePO(RoleArchivedPO roleArchivedPO) {
-        return Optional.ofNullable(roleArchivedPO).map(RoleMapper.INSTANCE::toRolePO);
+        return Optional.ofNullable(RolePersistenceMapper.INSTANCE.toRolePO(roleArchivedPO));
     }
 
     @API(status = Status.STABLE, since = "2.1.0")
@@ -361,61 +258,5 @@ public class RoleConvertor {
             permissionRepository.findById(permission.getId()).ifPresent(rolePermissionPO::setPermission);
             return rolePermissionPO;
         }).toList()).orElse(new ArrayList<>());
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<RoleFindAllCmd> toRoleFindAllCmd(RoleFindAllGrpcCmd roleFindAllGrpcCmd) {
-        return Optional.ofNullable(roleFindAllGrpcCmd).map(RoleMapper.INSTANCE::toRoleFindAllCmd)
-            .map(roleFindAllCmd -> {
-                if (roleFindAllCmd.getCurrent() == null) {
-                    roleFindAllCmd.setCurrent(1);
-                }
-                if (roleFindAllCmd.getPageSize() == null) {
-                    roleFindAllCmd.setPageSize(10);
-                }
-                return roleFindAllCmd;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    public Optional<RoleGrpcDTO> toRoleGrpcDTO(RoleFindAllDTO roleFindAllDTO) {
-        return Optional.ofNullable(roleFindAllDTO).map(RoleMapper.INSTANCE::toRoleGrpcDTO)
-            .map(roleFindAllGrpcCo ->
-                roleFindAllGrpcCo.toBuilder().addAllPermissions(
-                    Optional.ofNullable(roleFindAllDTO.getPermissions()).map(
-                        permissions -> permissions.stream()
-                            .map(RoleMapper.INSTANCE::toRolePermissionGrpcDTO)
-                            .collect(Collectors.toList())).orElse(new ArrayList<>())).build()
-            );
-    }
-
-    @API(status = Status.STABLE, since = "2.4.0")
-    public Optional<RoleFindByIdDTO> toRoleFindByIdDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByIdDTO);
-    }
-
-    @API(status = Status.STABLE, since = "2.5.0")
-    public Optional<RoleFindByCodeDTO> toRoleFindByCodeDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindByCodeDTO);
-    }
-
-    @API(status = Status.STABLE, since = "2.4.0")
-    public Optional<RoleFindRootDTO> toRoleFindRootDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindRootDTO);
-    }
-
-    @API(status = Status.STABLE, since = "2.4.0")
-    public Optional<RoleFindDirectDTO> toRoleFindDirectDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleFindDirectDTO);
-    }
-
-    @API(status = Status.STABLE, since = "2.4.0")
-    public Optional<RoleFindByIdGrpcDTO> toRoleFindByIdGrpcDTO(RoleFindByIdDTO roleFindByIdDTO) {
-        return Optional.ofNullable(roleFindByIdDTO).map(RoleMapper.INSTANCE::toRoleFindByIdGrpcDTO);
-    }
-
-    @API(status = Status.STABLE, since = "1.0.0")
-    public Optional<RoleUpdatedDataDTO> toRoleUpdatedDataDTO(Role role) {
-        return Optional.ofNullable(role).map(RoleMapper.INSTANCE::toRoleUpdatedDataDTO);
     }
 }

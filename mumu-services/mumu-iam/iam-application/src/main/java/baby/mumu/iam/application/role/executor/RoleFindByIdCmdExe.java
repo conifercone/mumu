@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.RoleFindByIdDTO;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

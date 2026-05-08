@@ -22,7 +22,7 @@ import baby.mumu.iam.client.cmds.RoleUpdateCmd;
 import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,8 +47,12 @@ public class RoleUpdateCmdExe {
     }
 
     public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
-        Role role = roleConvertor.toEntity(roleUpdateCmd)
-            .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
+        if (roleUpdateCmd == null || roleUpdateCmd.getId() == null) {
+            throw new ApplicationException(ResponseCode.PRIMARY_KEY_CANNOT_BE_EMPTY);
+        }
+        Role role = roleGateway.findById(roleUpdateCmd.getId())
+            .orElseThrow(() -> new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST));
+        roleConvertor.toEntity(roleUpdateCmd, role);
         return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     }

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;

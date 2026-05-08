@@ -30,7 +30,7 @@ import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;

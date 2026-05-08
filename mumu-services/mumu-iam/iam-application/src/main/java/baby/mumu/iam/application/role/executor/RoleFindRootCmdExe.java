@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindRootCmd;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
