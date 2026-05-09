@@ -48,3 +48,5 @@ public class PermissionAddDescendantCmdExe {
                 permissionAddDescendantCmd.getAncestorId(), permissionAddDescendantCmd.getDescendantId()));
     }
 }
+
+

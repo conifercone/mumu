@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.AccountFindAllSliceCmd;
 import baby.mumu.iam.client.dto.AccountFindAllSliceDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,24 +42,26 @@ import java.util.Optional;
 public class AccountFindAllSliceCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountFindAllSliceCmdExe(AccountGateway accountGateway,
-                                     AccountConvertor accountConvertor) {
+                                     AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public Slice<AccountFindAllSliceDTO> execute(
         @NonNull AccountFindAllSliceCmd accountFindAllSliceCmd) {
-        Account account = accountConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
+        Account account = accountAssemblerConvertor.toEntity(accountFindAllSliceCmd).orElseGet(Account::new);
         Slice<Account> accounts = accountGateway.findAllSlice(account,
             accountFindAllSliceCmd.getCurrent(), accountFindAllSliceCmd.getPageSize());
         List<AccountFindAllSliceDTO> accountFindAllSliceDTOS = accounts.getContent().stream()
-            .map(accountConvertor::toAccountFindAllSliceDTO)
+            .map(accountAssemblerConvertor::toAccountFindAllSliceDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new SliceImpl<>(accountFindAllSliceDTOS, accounts.getPageable(),
             accounts.hasNext());
     }
 }
+
+

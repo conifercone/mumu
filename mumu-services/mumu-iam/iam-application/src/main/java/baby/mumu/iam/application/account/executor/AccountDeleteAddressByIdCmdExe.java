@@ -25,8 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 删除指定账号地址指令执行器
- *
+ * 删除指定账号地址指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.6.0
  */
@@ -46,3 +45,5 @@ public class AccountDeleteAddressByIdCmdExe {
             .ifPresent(accountGateway::deleteAddress);
     }
 }
+
+

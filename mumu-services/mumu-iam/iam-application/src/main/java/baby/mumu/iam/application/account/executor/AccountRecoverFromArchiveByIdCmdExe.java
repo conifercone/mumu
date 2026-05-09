@@ -48,3 +48,5 @@ public class AccountRecoverFromArchiveByIdCmdExe {
             .ifPresent(accountGateway::recoverFromArchiveById);
     }
 }
+
+

@@ -21,13 +21,13 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.RoleAddCmd;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色添加指令执行器
+ * 角色添加指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -37,17 +37,19 @@ import org.springframework.stereotype.Component;
 public class RoleAddCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleAddCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleAddCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Long execute(RoleAddCmd roleAddCmd) {
-        Role role = roleConvertor.toEntity(roleAddCmd)
+        Role role = roleAssemblerConvertor.toEntity(roleAddCmd)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
         return roleGateway.add(role);
     }
 }
+
+

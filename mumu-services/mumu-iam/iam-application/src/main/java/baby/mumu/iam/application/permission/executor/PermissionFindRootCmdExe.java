@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionFindRootCmd;
 import baby.mumu.iam.client.dto.PermissionFindRootDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 获取所有根权限指令执行器
+ * 获取所有根权限指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
@@ -42,13 +42,13 @@ import java.util.Optional;
 public class PermissionFindRootCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionFindRootCmdExe(PermissionGateway permissionGateway,
-                                    PermissionConvertor permissionConvertor) {
+                                    PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Page<PermissionFindRootDTO> execute(PermissionFindRootCmd permissionFindRootCmd) {
@@ -56,10 +56,12 @@ public class PermissionFindRootCmdExe {
             Page<Permission> permissions = permissionGateway.findRootPermissions(
                 permissionFindRootCmdNotNull.getCurrent(), permissionFindRootCmdNotNull.getPageSize());
             List<PermissionFindRootDTO> permissionFindRootDTOS = permissions.getContent().stream()
-                .map(permissionConvertor::toPermissionFindRootDTO)
+                .map(permissionAssemblerConvertor::toPermissionFindRootDTO)
                 .filter(Optional::isPresent).map(Optional::get).toList();
             return new PageImpl<>(permissionFindRootDTOS, permissions.getPageable(),
                 permissions.getTotalElements());
         }).orElse(new PageImpl<>(new ArrayList<>()));
     }
 }
+
+

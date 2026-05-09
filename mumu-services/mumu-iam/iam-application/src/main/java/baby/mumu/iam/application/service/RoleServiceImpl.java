@@ -30,7 +30,7 @@ import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
 import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
@@ -64,7 +64,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     private final RoleFindAllSliceCmdExe roleFindAllSliceCmdExe;
     private final RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe;
     private final RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
     private final RoleFindByIdCmdExe roleFindByIdCmdExe;
     private final RoleAddDescendantCmdExe roleAddDescendantCmdExe;
     private final RoleFindRootCmdExe roleFindRootCmdExe;
@@ -80,7 +80,8 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
                            RoleRecoverFromArchiveByIdCmdExe roleRecoverFromArchiveByIdCmdExe,
                            RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
                            RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
-                           RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe, RoleConvertor roleConvertor,
+                           RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe,
+                           RoleAssemblerConvertor roleAssemblerConvertor,
                            RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddDescendantCmdExe roleAddDescendantCmdExe,
                            RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
                            RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe,
@@ -94,7 +95,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         this.roleFindAllSliceCmdExe = roleFindAllSliceCmdExe;
         this.roleArchivedFindAllCmdExe = roleArchivedFindAllCmdExe;
         this.roleArchivedFindAllSliceCmdExe = roleArchivedFindAllSliceCmdExe;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
         this.roleFindByIdCmdExe = roleFindByIdCmdExe;
         this.roleAddDescendantCmdExe = roleAddDescendantCmdExe;
         this.roleFindRootCmdExe = roleFindRootCmdExe;
@@ -183,12 +184,12 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
     public void findAll(RoleFindAllGrpcCmd request,
                         StreamObserver<PageOfRoleFindAllGrpcDTO> responseObserver) {
-        roleConvertor.toRoleFindAllCmd(request).ifPresentOrElse(roleFindAllCmdNotNull -> {
+        roleAssemblerConvertor.toRoleFindAllCmd(request).ifPresentOrElse(roleFindAllCmdNotNull -> {
             Builder builder = PageOfRoleFindAllGrpcDTO.newBuilder();
             Page<RoleFindAllDTO> roleFindAllCos = roleFindAllCmdExe.execute(
                 roleFindAllCmdNotNull);
             List<RoleGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
-                .flatMap(roleFindAllCo -> roleConvertor.toRoleGrpcDTO(roleFindAllCo).stream())
+                .flatMap(roleFindAllCo -> roleAssemblerConvertor.toRoleGrpcDTO(roleFindAllCo).stream())
                 .toList();
             builder.addAllContent(findAllGrpcCos);
             builder.setTotalPages(roleFindAllCos.getTotalPages());
@@ -207,7 +208,7 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcDTO> responseObserver) {
         Optional.ofNullable(request).filter(Int64Value::isInitialized).map(Int64Value::getValue)
             .map(
-                roleFindByIdCmdExe::execute).flatMap(roleConvertor::toRoleFindByIdGrpcDTO)
+                roleFindByIdCmdExe::execute).flatMap(roleAssemblerConvertor::toRoleFindByIdGrpcDTO)
             .ifPresentOrElse((roleFindByIdGrpcDTO) -> {
                 responseObserver.onNext(roleFindByIdGrpcDTO);
                 responseObserver.onCompleted();
@@ -284,3 +285,5 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         return roleFindByCodeCmdExe.execute(code);
     }
 }
+
+

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.AccountFindAllCmd;
 import baby.mumu.iam.client.dto.AccountFindAllDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,24 +42,26 @@ import java.util.Optional;
 public class AccountFindAllCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountFindAllCmdExe(AccountGateway accountGateway,
-                                AccountConvertor accountConvertor) {
+                                AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public Page<AccountFindAllDTO> execute(@NonNull AccountFindAllCmd accountFindAllCmd) {
-        Account account = accountConvertor.toEntity(accountFindAllCmd)
+        Account account = accountAssemblerConvertor.toEntity(accountFindAllCmd)
             .orElseGet(Account::new);
         Page<Account> accounts = accountGateway.findAll(account,
             accountFindAllCmd.getCurrent(), accountFindAllCmd.getPageSize());
         List<AccountFindAllDTO> accountFindAllDTOS = accounts.getContent().stream()
-            .map(accountConvertor::toAccountFindAllDTO)
+            .map(accountAssemblerConvertor::toAccountFindAllDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new PageImpl<>(accountFindAllDTOS, accounts.getPageable(),
             accounts.getTotalElements());
     }
 }
+
+

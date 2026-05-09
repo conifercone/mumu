@@ -48,3 +48,5 @@ public class RoleAddDescendantCmdExe {
                 roleAddDescendantCmd.getAncestorId(), roleAddDescendantCmd.getDescendantId()));
     }
 }
+
+

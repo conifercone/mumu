@@ -18,7 +18,7 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.cmds.AccountAddSystemSettingsCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 添加账号系统设置指令执行器
+ * 添加账号系统设置指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
@@ -36,19 +36,21 @@ import java.util.Optional;
 public class AccountAddSystemSettingsCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountAddSystemSettingsCmdExe(AccountGateway accountGateway,
-                                          AccountConvertor accountConvertor) {
+                                          AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public void execute(
         AccountAddSystemSettingsCmd accountAddSystemSettingsCmd) {
         Optional.ofNullable(accountAddSystemSettingsCmd)
-            .flatMap(accountConvertor::toAccountSystemSettings)
+            .flatMap(accountAssemblerConvertor::toAccountSystemSettings)
             .ifPresent(accountGateway::addSystemSettings);
     }
 }
+
+

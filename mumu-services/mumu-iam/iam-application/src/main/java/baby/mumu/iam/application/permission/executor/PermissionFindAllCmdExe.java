@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionFindAllCmd;
 import baby.mumu.iam.client.dto.PermissionFindAllDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +31,7 @@ import org.springframework.util.Assert;
 import java.util.List;
 
 /**
- * 查询权限指令执行器
+ * 查询权限指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -41,24 +41,26 @@ import java.util.List;
 public class PermissionFindAllCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionFindAllCmdExe(PermissionGateway permissionGateway,
-                                   PermissionConvertor permissionConvertor) {
+                                   PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Page<PermissionFindAllDTO> execute(PermissionFindAllCmd permissionFindAllCmd) {
         Assert.notNull(permissionFindAllCmd, "PermissionFindAllCmd cannot be null");
-        Permission permission = permissionConvertor.toEntity(permissionFindAllCmd)
+        Permission permission = permissionAssemblerConvertor.toEntity(permissionFindAllCmd)
             .orElseGet(Permission::new);
         Page<Permission> permissions = permissionGateway.findAll(permission,
             permissionFindAllCmd.getCurrent(), permissionFindAllCmd.getPageSize());
-        List<PermissionFindAllDTO> permissionFindAllDTOList = permissionConvertor.toPermissionFindAllDTOS(
+        List<PermissionFindAllDTO> permissionFindAllDTOList = permissionAssemblerConvertor.toPermissionFindAllDTOS(
             permissions.getContent());
         return new PageImpl<>(permissionFindAllDTOList, permissions.getPageable(),
             permissions.getTotalElements());
     }
 }
+
+

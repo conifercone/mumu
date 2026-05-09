@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindDirectCmd;
 import baby.mumu.iam.client.dto.RoleFindDirectDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,13 +42,13 @@ import java.util.Optional;
 public class RoleFindDirectCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
     public RoleFindDirectCmdExe(RoleGateway roleGateway,
-                                RoleConvertor roleConvertor) {
+                                RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Page<RoleFindDirectDTO> execute(RoleFindDirectCmd roleFindDirectCmd) {
@@ -57,10 +57,12 @@ public class RoleFindDirectCmdExe {
                 roleFindDirectCmd.getAncestorId(),
                 roleFindDirectCmdNotNull.getCurrent(), roleFindDirectCmdNotNull.getPageSize());
             List<RoleFindDirectDTO> roleFindDirectDTOS = roles.getContent().stream()
-                .map(roleConvertor::toRoleFindDirectDTO)
+                .map(roleAssemblerConvertor::toRoleFindDirectDTO)
                 .filter(Optional::isPresent).map(Optional::get).toList();
             return new PageImpl<>(roleFindDirectDTOS, roles.getPageable(),
                 roles.getTotalElements());
         }).orElse(new PageImpl<>(new ArrayList<>()));
     }
 }
+
+

@@ -23,13 +23,13 @@ import baby.mumu.genix.client.api.CaptchaCodeVerify;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账号注册指令执行器
+ * 账号注册指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -39,20 +39,23 @@ import org.springframework.stereotype.Component;
 public class AccountRegisterCmdExe extends CaptchaCodeVerify {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountRegisterCmdExe(AccountGateway accountGateway,
-                                 CaptchaCodeGrpcService captchaCodeGrpcService, AccountConvertor accountConvertor) {
+                                 CaptchaCodeGrpcService captchaCodeGrpcService,
+                                 AccountAssemblerConvertor accountAssemblerConvertor) {
         super(captchaCodeGrpcService);
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public Long execute(AccountRegisterCmd accountRegisterCmd) {
-        Account account = accountConvertor.toEntity(accountRegisterCmd)
+        Account account = accountAssemblerConvertor.toEntity(accountRegisterCmd)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
         return verify(accountRegisterCmd.getCaptchaCodeId(), accountRegisterCmd.getCaptchaCode(),
             () -> accountGateway.register(account));
     }
 }
+
+

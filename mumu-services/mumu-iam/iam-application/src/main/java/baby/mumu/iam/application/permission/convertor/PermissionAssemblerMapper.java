@@ -113,3 +113,5 @@ public interface PermissionAssemblerMapper extends GrpcMapper, DataTransferObjec
     @API(status = Status.STABLE, since = "2.13.0")
     PermissionUpdatedDataDTO toPermissionUpdatedDataDTO(Permission permission);
 }
+
+

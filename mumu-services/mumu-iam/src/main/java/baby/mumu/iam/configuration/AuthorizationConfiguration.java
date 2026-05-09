@@ -31,10 +31,10 @@ import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.client.convertor.ClientConvertor;
 import baby.mumu.iam.infra.client.gatewayimpl.database.ClientRepository;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionPersistenceConvertor;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.po.PermissionPO;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RolePersistenceConvertor;
 import baby.mumu.iam.infra.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.AuthorizeCodeTokenCacheRepository;
 import baby.mumu.iam.infra.token.gatewayimpl.cache.ClientTokenCacheRepository;
@@ -370,9 +370,9 @@ public class AuthorizationConfiguration {
      */
     @Bean
     public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(RoleRepository roleRepository,
-                                                                        RoleConvertor roleConvertor,
+                                                                        RolePersistenceConvertor rolePersistenceConvertor,
                                                                         PermissionRepository permissionRepository,
-                                                                        PermissionConvertor permissionConvertor,
+                                                                        PermissionPersistenceConvertor permissionPersistenceConvertor,
                                                                         Oauth2AuthenticationRepository oauth2AuthenticationRepository) {
         return context -> {
             // 检查登录账号信息是不是UserDetails，排除掉没有账号参与的流程
@@ -394,8 +394,8 @@ public class AuthorizationConfiguration {
                     .equals(originAuthorizationGrantTypeValue);
                 JwtClaimsSet.Builder claims = context.getClaims();
                 claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), isPasswordType ? authoritySet
-                    : AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
-                    permissionRepository, permissionConvertor,
+                    : AuthorizationConfiguration.getFullScopes(roleRepository, rolePersistenceConvertor,
+                    permissionRepository, permissionPersistenceConvertor,
                     scopes));
                 claims.claim(TokenClaimsEnum.ACCOUNT_NAME.getClaimName(), account.getUsername());
                 claims.claim(TokenClaimsEnum.ACCOUNT_ID.getClaimName(), account.getId());
@@ -419,8 +419,8 @@ public class AuthorizationConfiguration {
                                 .getPrincipal())).getRegisteredClient()
                     )
                     .map(RegisteredClient::getScopes)
-                    .map(scopes -> AuthorizationConfiguration.getFullScopes(roleRepository, roleConvertor,
-                        permissionRepository, permissionConvertor, scopes))
+                    .map(scopes -> AuthorizationConfiguration.getFullScopes(roleRepository, rolePersistenceConvertor,
+                        permissionRepository, permissionPersistenceConvertor, scopes))
                     .orElse(Collections.emptySet());
                 claims.claim(TokenClaimsEnum.AUTHORITIES.getClaimName(), authoritySet);
             }
@@ -444,14 +444,14 @@ public class AuthorizationConfiguration {
     }
 
     private static @NonNull Set<String> getFullScopes(@NonNull RoleRepository roleRepository,
-                                                      RoleConvertor roleConvertor, @NonNull PermissionRepository permissionRepository,
-                                                      PermissionConvertor permissionConvertor,
+                                                      RolePersistenceConvertor rolePersistenceConvertor, @NonNull PermissionRepository permissionRepository,
+                                                      PermissionPersistenceConvertor permissionPersistenceConvertor,
                                                       @NonNull Set<String> scopes) {
         Set<String> roles = scopes.stream()
             .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
             .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
             .collect(Collectors.toSet());
-        Set<String> authorityCodesFromRoles = roleConvertor.toEntities(roleRepository.findByCodeIn(roles))
+        Set<String> authorityCodesFromRoles = rolePersistenceConvertor.toEntities(roleRepository.findByCodeIn(roles))
             .stream()
             .flatMap(role -> Stream.concat(
                 role.getPermissions() != null
@@ -465,7 +465,7 @@ public class AuthorizationConfiguration {
             .filter(scope -> !scope.startsWith(CommonConstants.ROLE_PREFIX))
             .distinct()
             .collect(Collectors.toList());
-        List<Permission> permissions = permissionConvertor.toEntities(permissionRepository.findAllByCodeIn(permissionCodes));
+        List<Permission> permissions = permissionPersistenceConvertor.toEntities(permissionRepository.findAllByCodeIn(permissionCodes));
         List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
             .map(Permission::getId)
             .collect(Collectors.toList());

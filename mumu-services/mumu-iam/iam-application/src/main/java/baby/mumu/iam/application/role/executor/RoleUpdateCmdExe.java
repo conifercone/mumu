@@ -22,13 +22,13 @@ import baby.mumu.iam.client.cmds.RoleUpdateCmd;
 import baby.mumu.iam.client.dto.RoleUpdatedDataDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 角色更新指令执行器
+ * 角色更新指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -38,12 +38,12 @@ import org.springframework.stereotype.Component;
 public class RoleUpdateCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleUpdateCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleUpdateCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public RoleUpdatedDataDTO execute(RoleUpdateCmd roleUpdateCmd) {
@@ -52,8 +52,10 @@ public class RoleUpdateCmdExe {
         }
         Role role = roleGateway.findById(roleUpdateCmd.getId())
             .orElseThrow(() -> new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST));
-        roleConvertor.toEntity(roleUpdateCmd, role);
-        return roleGateway.updateById(role).flatMap(roleConvertor::toRoleUpdatedDataDTO)
+        roleAssemblerConvertor.toEntity(roleUpdateCmd, role);
+        return roleGateway.updateById(role).flatMap(roleAssemblerConvertor::toRoleUpdatedDataDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ROLE_FORMAT));
     }
 }
+
+

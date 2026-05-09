@@ -37,18 +37,18 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 权限信息转换器 (Application Layer)
+ * 权限信息组装器 (Application Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class PermissionConvertor {
+public class PermissionAssemblerConvertor {
 
     private final SimpleTextTranslation simpleTextTranslation;
 
     @Autowired
-    public PermissionConvertor(ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
+    public PermissionAssemblerConvertor(ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
         this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     }
 
@@ -83,7 +83,8 @@ public class PermissionConvertor {
 
     @API(status = Status.STABLE, since = "1.0.1")
     public void toEntity(PermissionUpdateCmd permissionUpdateCmd, @MappingTarget Permission permission) {
-        Optional.ofNullable(permissionUpdateCmd).ifPresent(cmd -> PermissionAssemblerMapper.INSTANCE.toEntity(cmd, permission));
+        Optional.ofNullable(permissionUpdateCmd).ifPresent(cmd -> PermissionAssemblerMapper.INSTANCE.toEntity(cmd,
+            permission));
     }
 
     @API(status = Status.STABLE, since = "1.0.0")
@@ -227,3 +228,5 @@ public class PermissionConvertor {
             .map(PermissionAssemblerMapper.INSTANCE::toPermissionUpdatedDataDTO);
     }
 }
+
+

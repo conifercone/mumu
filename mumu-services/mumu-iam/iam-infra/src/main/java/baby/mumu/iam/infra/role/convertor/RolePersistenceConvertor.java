@@ -18,7 +18,7 @@ package baby.mumu.iam.infra.role.convertor;
 
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.role.Role;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionPersistenceConvertor;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.PermissionCacheRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.po.PermissionCacheablePO;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionRepository;
@@ -41,15 +41,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 角色信息转换器 (Infrastructure Layer)
+ * 角色信息持久化转换器 (Infrastructure Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class RoleConvertor {
+public class RolePersistenceConvertor {
 
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionPersistenceConvertor permissionPersistenceConvertor;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
     private final RolePermissionRepository rolePermissionRepository;
@@ -59,13 +59,13 @@ public class RoleConvertor {
     private final RolePathRepository rolePathRepository;
 
     @Autowired
-    public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
+    public RolePersistenceConvertor(PermissionPersistenceConvertor permissionPersistenceConvertor, RoleRepository roleRepository,
                          PermissionRepository permissionRepository,
                          RolePermissionRepository rolePermissionRepository,
                          PermissionCacheRepository permissionCacheRepository,
                          RolePermissionCacheRepository rolePermissionCacheRepository,
                          PermissionPathRepository permissionPathRepository, RolePathRepository rolePathRepository) {
-        this.permissionConvertor = permissionConvertor;
+        this.permissionPersistenceConvertor = permissionPersistenceConvertor;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
         this.rolePermissionRepository = rolePermissionRepository;
@@ -162,7 +162,7 @@ public class RoleConvertor {
         // 已缓存的权限
         List<Permission> cachedCollectionOfPermission = permissionCacheablePOS.stream()
             .flatMap(
-                permissionCacheablePO -> permissionConvertor.toEntity(permissionCacheablePO).stream())
+                permissionCacheablePO -> permissionPersistenceConvertor.toEntity(permissionCacheablePO).stream())
             .collect(
                 Collectors.toList());
         // 未缓存的权限
@@ -172,13 +172,13 @@ public class RoleConvertor {
                 uncachedCollectionOfPermissionId -> permissionRepository.findAllById(
                         uncachedCollectionOfPermissionId)
                     .stream()
-                    .flatMap(permissionDo -> permissionConvertor.toEntity(permissionDo).stream())
+                    .flatMap(permissionDo -> permissionPersistenceConvertor.toEntity(permissionDo).stream())
                     .collect(
                         Collectors.toList())).orElse(new ArrayList<>());
         // 未缓存的权限放入缓存
         if (CollectionUtils.isNotEmpty(uncachedCollectionOfPermission)) {
             permissionCacheRepository.saveAll(uncachedCollectionOfPermission.stream()
-                .flatMap(permission -> permissionConvertor.toPermissionCacheablePO(permission).stream())
+                .flatMap(permission -> permissionPersistenceConvertor.toPermissionCacheablePO(permission).stream())
                 .collect(
                     Collectors.toList()));
         }

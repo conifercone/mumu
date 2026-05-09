@@ -22,8 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 删除角色路径指令执行器
- *
+ * 删除角色路径指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
@@ -42,3 +41,5 @@ public class RoleDeletePathCmdExe {
         roleGateway.deletePath(ancestorId, descendantId);
     }
 }
+
+

@@ -30,7 +30,7 @@ import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
 import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import com.google.protobuf.Int64Value;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
@@ -66,7 +66,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     private final PermissionArchivedFindAllCmdExe permissionArchivedFindAllCmdExe;
     private final PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe;
     private final PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
     private final PermissionAddDescendantCmdExe permissionAddDescendantCmdExe;
     private final PermissionFindRootCmdExe permissionFindRootCmdExe;
     private final PermissionFindDirectCmdExe permissionFindDirectCmdExe;
@@ -89,7 +89,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
                                  PermissionArchivedFindAllCmdExe permissionArchivedFindAllCmdExe,
                                  PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe,
                                  PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe,
-                                 PermissionConvertor permissionConvertor,
+                                 PermissionAssemblerConvertor permissionAssemblerConvertor,
                                  PermissionAddDescendantCmdExe permissionAddDescendantCmdExe,
                                  PermissionFindRootCmdExe permissionFindRootCmdExe,
                                  PermissionFindDirectCmdExe permissionFindDirectCmdExe,
@@ -109,7 +109,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         this.permissionArchivedFindAllCmdExe = permissionArchivedFindAllCmdExe;
         this.permissionFindAllSliceCmdExe = permissionFindAllSliceCmdExe;
         this.permissionArchivedFindAllSliceCmdExe = permissionArchivedFindAllSliceCmdExe;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
         this.permissionAddDescendantCmdExe = permissionAddDescendantCmdExe;
         this.permissionFindRootCmdExe = permissionFindRootCmdExe;
         this.permissionFindDirectCmdExe = permissionFindDirectCmdExe;
@@ -220,7 +220,7 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
             throw new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
         };
         Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
-            (id) -> permissionConvertor.toPermissionFindByIdGrpcDTO(
+            (id) -> permissionAssemblerConvertor.toPermissionFindByIdGrpcDTO(
                     permissionFindByIdCmdExe.execute(id.getValue()))
                 .ifPresentOrElse((permissionFindByIdGrpcDTO) -> {
                     responseObserver.onNext(permissionFindByIdGrpcDTO);
@@ -235,14 +235,14 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
     public void findAll(PermissionFindAllGrpcCmd request,
                         StreamObserver<PageOfPermissionFindAllGrpcDTO> responseObserver) {
-        permissionConvertor.toPermissionFindAllCmd(request)
+        permissionAssemblerConvertor.toPermissionFindAllCmd(request)
             .ifPresentOrElse((permissionFindAllCmdNotNull) -> {
                 Builder builder = PageOfPermissionFindAllGrpcDTO.newBuilder();
                 Page<PermissionFindAllDTO> permissionFindAllCos = permissionFindAllCmdExe.execute(
                     permissionFindAllCmdNotNull);
                 List<PermissionGrpcDTO> findAllGrpcCos = permissionFindAllCos.getContent().stream()
                     .flatMap(
-                        permissionFindAllCo -> permissionConvertor.toPermissionGrpcDTO(
+                        permissionFindAllCo -> permissionAssemblerConvertor.toPermissionGrpcDTO(
                                 permissionFindAllCo)
                             .stream()).toList();
                 builder.addAllContent(findAllGrpcCos);
@@ -346,3 +346,5 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         return permissionFindAllAncestorPathStringsCmdExe.execute(descendantId);
     }
 }
+
+

@@ -33,18 +33,18 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 角色信息转换器 (Application Layer)
+ * 角色信息组装器 (Application Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class RoleConvertor {
+public class RoleAssemblerConvertor {
 
     private final SimpleTextTranslation simpleTextTranslation;
 
     @Autowired
-    public RoleConvertor(ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
+    public RoleAssemblerConvertor(ObjectProvider<SimpleTextTranslation> simpleTextTranslation) {
         this.simpleTextTranslation = simpleTextTranslation.getIfAvailable();
     }
 
@@ -186,3 +186,5 @@ public class RoleConvertor {
         return Optional.ofNullable(role).map(RoleAssemblerMapper.INSTANCE::toRoleUpdatedDataDTO);
     }
 }
+
+

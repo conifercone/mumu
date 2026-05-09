@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 根据id下线账号指令执行器
- *
+ * 根据id下线账号指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
@@ -45,3 +44,5 @@ public class AccountOfflineCmdExe {
             .ifPresent(accountGateway::offline);
     }
 }
+
+

@@ -18,7 +18,7 @@ package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +35,21 @@ import org.springframework.stereotype.Component;
 public class PermissionDownloadAllCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionDownloadAllCmdExe(PermissionGateway permissionGateway,
-                                       PermissionConvertor permissionConvertor) {
+                                       PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public void execute(HttpServletResponse response) {
         FileDownloadUtils.downloadCSV(response, "permissions",
             permissionGateway.findAll()
                 .flatMap(
-                    permission -> permissionConvertor.toPermissionDownloadAllDTO(permission).stream()));
+                    permission -> permissionAssemblerConvertor.toPermissionDownloadAllDTO(permission).stream()));
     }
 }
+
+

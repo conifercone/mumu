@@ -33,18 +33,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 权限信息转换器 (Infrastructure Layer)
+ * 权限信息持久化转换器 (Infrastructure Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class PermissionConvertor {
+public class PermissionPersistenceConvertor {
 
     private final PermissionPathRepository permissionPathRepository;
 
     @Autowired
-    public PermissionConvertor(PermissionPathRepository permissionPathRepository) {
+    public PermissionPersistenceConvertor(PermissionPathRepository permissionPathRepository) {
         this.permissionPathRepository = permissionPathRepository;
     }
 

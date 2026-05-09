@@ -25,8 +25,7 @@ import org.springframework.util.Assert;
 import java.util.Optional;
 
 /**
- * 账号重置密码指令执行器
- *
+ * 账号重置密码指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -47,3 +46,5 @@ public class AccountResetPasswordCmdExe {
             .ifPresent(accountGateway::resetPassword);
     }
 }
+
+

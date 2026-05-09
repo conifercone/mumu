@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionArchivedFindAllCmd;
 import baby.mumu.iam.client.dto.PermissionArchivedFindAllDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,27 +42,29 @@ import java.util.Optional;
 public class PermissionArchivedFindAllCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionArchivedFindAllCmdExe(PermissionGateway permissionGateway,
-                                           PermissionConvertor permissionConvertor) {
+                                           PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Page<PermissionArchivedFindAllDTO> execute(
         PermissionArchivedFindAllCmd permissionArchivedFindAllCmd) {
         Assert.notNull(permissionArchivedFindAllCmd, "PermissionArchivedFindAllCmd cannot be null");
-        Permission permission = permissionConvertor.toEntity(permissionArchivedFindAllCmd)
+        Permission permission = permissionAssemblerConvertor.toEntity(permissionArchivedFindAllCmd)
             .orElseGet(Permission::new);
         Page<Permission> permissions = permissionGateway.findArchivedAll(permission,
             permissionArchivedFindAllCmd.getCurrent(), permissionArchivedFindAllCmd.getPageSize());
         List<PermissionArchivedFindAllDTO> permissionArchivedFindAllDTOList = permissions.getContent()
             .stream()
-            .map(permissionConvertor::toPermissionArchivedFindAllDTO)
+            .map(permissionAssemblerConvertor::toPermissionArchivedFindAllDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new PageImpl<>(permissionArchivedFindAllDTOList, permissions.getPageable(),
             permissions.getTotalElements());
     }
 }
+
+

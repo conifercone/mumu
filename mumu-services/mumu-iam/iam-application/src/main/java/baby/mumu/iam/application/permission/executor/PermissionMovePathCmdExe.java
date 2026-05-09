@@ -22,8 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 移动权限路径指令执行器
- *
+ * 移动权限路径指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.16.0
  */
@@ -42,3 +41,5 @@ public class PermissionMovePathCmdExe {
         permissionGateway.move(originalAncestorId, targetAncestorId, descendantId);
     }
 }
+
+

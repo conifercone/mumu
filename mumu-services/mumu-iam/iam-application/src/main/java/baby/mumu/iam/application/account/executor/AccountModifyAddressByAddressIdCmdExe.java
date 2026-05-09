@@ -18,7 +18,7 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.cmds.AccountModifyAddressByAddressIdCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 更新账号地址指令执行器
+ * 更新账号地址指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.6.0
@@ -36,19 +36,21 @@ import java.util.Optional;
 public class AccountModifyAddressByAddressIdCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountModifyAddressByAddressIdCmdExe(AccountGateway accountGateway,
-                                                 AccountConvertor accountConvertor) {
+                                                 AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public void execute(
         AccountModifyAddressByAddressIdCmd accountModifyAddressByAddressIdCmd) {
         Optional.ofNullable(accountModifyAddressByAddressIdCmd)
-            .flatMap(accountConvertor::toAccountAddress)
+            .flatMap(accountAssemblerConvertor::toAccountAddress)
             .ifPresent(accountGateway::modifyAddress);
     }
 }
+
+

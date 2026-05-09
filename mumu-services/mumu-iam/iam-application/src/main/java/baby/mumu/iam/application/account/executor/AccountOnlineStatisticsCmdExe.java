@@ -23,8 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账号在线统计指令执行器
- *
+ * 账号在线统计指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -46,3 +45,5 @@ public class AccountOnlineStatisticsCmdExe {
         return accountOnlineStatisticsDTO;
     }
 }
+
+

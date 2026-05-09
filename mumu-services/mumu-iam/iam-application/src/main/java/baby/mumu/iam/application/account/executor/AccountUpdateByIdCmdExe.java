@@ -22,13 +22,13 @@ import baby.mumu.iam.client.cmds.AccountUpdateByIdCmd;
 import baby.mumu.iam.client.dto.AccountUpdatedDataDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账号根据id更新指令执行器
+ * 账号根据id更新指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -38,19 +38,21 @@ import org.springframework.stereotype.Component;
 public class AccountUpdateByIdCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
-    public AccountUpdateByIdCmdExe(AccountGateway accountGateway, AccountConvertor accountConvertor) {
+    public AccountUpdateByIdCmdExe(AccountGateway accountGateway, AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public AccountUpdatedDataDTO execute(AccountUpdateByIdCmd accountUpdateByIdCmd) {
-        Account account = accountConvertor.toEntity(accountUpdateByIdCmd)
+        Account account = accountAssemblerConvertor.toEntity(accountUpdateByIdCmd)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
         return accountGateway.updateById(account)
-            .flatMap(accountConvertor::toAccountUpdatedDataDTO)
+            .flatMap(accountAssemblerConvertor::toAccountUpdatedDataDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
     }
 }
+
+

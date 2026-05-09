@@ -26,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 账号删除指定执行器
- *
+ * 账号删除指定执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -49,3 +48,5 @@ public class AccountDeleteCurrentCmdExe extends CaptchaCodeVerify {
             accountGateway::deleteCurrentAccount);
     }
 }
+
+

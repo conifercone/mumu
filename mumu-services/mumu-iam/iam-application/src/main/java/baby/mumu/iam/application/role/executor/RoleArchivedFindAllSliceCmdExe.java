@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleArchivedFindAllSliceCmd;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllSliceDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 已归档角色查询指令执行器（不查询总数）
+ * 已归档角色查询指令执行器（不查询总数） *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
@@ -42,25 +42,27 @@ import java.util.Optional;
 public class RoleArchivedFindAllSliceCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleArchivedFindAllSliceCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleArchivedFindAllSliceCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Slice<RoleArchivedFindAllSliceDTO> execute(
         @NonNull RoleArchivedFindAllSliceCmd roleArchivedFindAllSliceCmd) {
-        Role role = roleConvertor.toEntity(
+        Role role = roleAssemblerConvertor.toEntity(
                 roleArchivedFindAllSliceCmd)
             .orElseGet(Role::new);
         Slice<Role> roles = roleGateway.findArchivedAllSlice(role,
             roleArchivedFindAllSliceCmd.getCurrent(), roleArchivedFindAllSliceCmd.getPageSize());
         List<RoleArchivedFindAllSliceDTO> roleArchivedFindAllSliceDTOS = roles.getContent().stream()
-            .map(roleConvertor::toRoleArchivedFindAllSliceDTO)
+            .map(roleAssemblerConvertor::toRoleArchivedFindAllSliceDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new SliceImpl<>(roleArchivedFindAllSliceDTOS, roles.getPageable(),
             roles.hasNext());
     }
 }
+
+

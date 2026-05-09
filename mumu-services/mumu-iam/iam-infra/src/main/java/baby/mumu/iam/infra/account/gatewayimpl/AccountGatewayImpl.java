@@ -31,7 +31,7 @@ import baby.mumu.iam.domain.account.AccountAddress;
 import baby.mumu.iam.domain.account.AccountSystemSettings;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
 import baby.mumu.iam.domain.role.Role;
-import baby.mumu.iam.infra.account.convertor.AccountConvertor;
+import baby.mumu.iam.infra.account.convertor.AccountPersistenceConvertor;
 import baby.mumu.iam.infra.account.gatewayimpl.cache.AccountCacheRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.database.AccountArchivedRepository;
 import baby.mumu.iam.infra.account.gatewayimpl.database.AccountRepository;
@@ -90,7 +90,7 @@ public class AccountGatewayImpl implements AccountGateway {
     private final PasswordEncoder passwordEncoder;
     private final OperationLogGrpcService operationLogGrpcService;
     private final ExtensionProperties extensionProperties;
-    private final AccountConvertor accountConvertor;
+    private final AccountPersistenceConvertor accountPersistenceConvertor;
     private final AccountArchivedRepository accountArchivedRepository;
     private final AccountAddressDocumentRepository accountAddressDocumentRepository;
     private final JobScheduler jobScheduler;
@@ -108,7 +108,7 @@ public class AccountGatewayImpl implements AccountGateway {
                               PasswordTokenCacheRepository passwordTokenCacheRepository,
                               PasswordEncoder passwordEncoder,
                               OperationLogGrpcService operationLogGrpcService,
-                              ExtensionProperties extensionProperties, AccountConvertor accountConvertor,
+                              ExtensionProperties extensionProperties, AccountPersistenceConvertor accountPersistenceConvertor,
                               AccountArchivedRepository accountArchivedRepository,
                               AccountAddressDocumentRepository accountAddressDocumentRepository,
                               JobScheduler jobScheduler,
@@ -125,7 +125,7 @@ public class AccountGatewayImpl implements AccountGateway {
         this.passwordEncoder = passwordEncoder;
         this.operationLogGrpcService = operationLogGrpcService;
         this.extensionProperties = extensionProperties;
-        this.accountConvertor = accountConvertor;
+        this.accountPersistenceConvertor = accountPersistenceConvertor;
         this.accountArchivedRepository = accountArchivedRepository;
         this.accountAddressDocumentRepository = accountAddressDocumentRepository;
         this.jobScheduler = jobScheduler;
@@ -146,7 +146,7 @@ public class AccountGatewayImpl implements AccountGateway {
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
     public Long register(Account account) {
-        AccountPO accountPO = accountConvertor.toAccountPO(account)
+        AccountPO accountPO = accountPersistenceConvertor.toAccountPO(account)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
         if (accountRepository.existsByIdOrUsernameOrEmail(account.getId(),
             account.getUsername(), account.getEmail())
@@ -169,15 +169,15 @@ public class AccountGatewayImpl implements AccountGateway {
         account.setId(persisted.getId());
         Optional.ofNullable(account.getAddresses()).filter(CollectionUtils::isNotEmpty).map(
                 accountAddresses -> accountAddresses.stream()
-                    .flatMap(accountAddress -> accountConvertor.toAccountAddressDocumentPO(accountAddress)
+                    .flatMap(accountAddress -> accountPersistenceConvertor.toAccountAddressDocumentPO(accountAddress)
                         .stream())
                     .collect(
                         Collectors.toList())).filter(CollectionUtils::isNotEmpty)
             .ifPresent(accountAddressDocumentRepository::saveAll);
         Optional.ofNullable(account.getAvatar())
-            .flatMap(accountConvertor::toAccountAvatarDocumentPO)
+            .flatMap(accountPersistenceConvertor::toAccountAvatarDocumentPO)
             .ifPresent(accountAvatarDocumentRepository::save);
-        accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+        accountRoleRepository.persistAll(accountPersistenceConvertor.toAccountRolePOS(account));
         accountCacheRepository.deleteById(persisted.getId());
         accountRoleCacheRepository.deleteById(persisted.getId());
         operationLogGrpcService.syncSubmit(OperationLogSubmitGrpcCmd.newBuilder()
@@ -196,13 +196,13 @@ public class AccountGatewayImpl implements AccountGateway {
     @Transactional(rollbackFor = Exception.class)
     public Optional<Account> findAccountByUsername(String username) {
         Optional<Account> cachedAccount = accountCacheRepository.findByUsername(username)
-            .flatMap(accountConvertor::toEntity);
+            .flatMap(accountPersistenceConvertor::toEntity);
         if (cachedAccount.isPresent()) {
             return cachedAccount;
         }
         Optional<Account> dbAccount = accountRepository.findByUsername(username)
-            .flatMap(accountConvertor::toEntity);
-        dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+            .flatMap(accountPersistenceConvertor::toEntity);
+        dbAccount.flatMap(accountPersistenceConvertor::toAccountCacheablePO)
             .ifPresent(accountCacheRepository::save);
         return dbAccount;
 
@@ -216,13 +216,13 @@ public class AccountGatewayImpl implements AccountGateway {
     @Transactional(rollbackFor = Exception.class)
     public Optional<Account> findAccountByEmail(String email) {
         Optional<Account> cached = accountCacheRepository.findByEmail(email)
-            .flatMap(accountConvertor::toEntity);
+            .flatMap(accountPersistenceConvertor::toEntity);
         if (cached.isPresent()) {
             return cached;
         }
         Optional<Account> dbAccount = accountRepository.findByEmail(email)
-            .flatMap(accountConvertor::toEntity);
-        dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+            .flatMap(accountPersistenceConvertor::toEntity);
+        dbAccount.flatMap(accountPersistenceConvertor::toAccountCacheablePO)
             .ifPresent(accountCacheRepository::save);
         return dbAccount;
     }
@@ -240,12 +240,12 @@ public class AccountGatewayImpl implements AccountGateway {
         Long loginAccountId = SecurityContextUtils.getLoginAccountId()
             .filter(id -> Objects.equals(id, account.getId()))
             .orElseThrow(() -> new ApplicationException(ResponseCode.UNAUTHORIZED));
-        AccountPO accountPO = accountConvertor.toAccountPO(account)
+        AccountPO accountPO = accountPersistenceConvertor.toAccountPO(account)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_ACCOUNT_FORMAT));
         AccountPO merged = accountRepository.merge(accountPO);
         accountCacheRepository.deleteById(loginAccountId);
         accountRoleCacheRepository.deleteById(loginAccountId);
-        return accountConvertor.toEntity(merged);
+        return accountPersistenceConvertor.toEntity(merged);
     }
 
     /**
@@ -262,10 +262,10 @@ public class AccountGatewayImpl implements AccountGateway {
         if (!accountRepository.existsById(accountId)) {
             return;
         }
-        Optional<AccountPO> accountPO = accountConvertor.toAccountPO(account);
+        Optional<AccountPO> accountPO = accountPersistenceConvertor.toAccountPO(account);
         if (accountPO.isPresent()) {
             accountRoleRepository.deleteByAccountId(accountId);
-            accountRoleRepository.persistAll(accountConvertor.toAccountRolePOS(account));
+            accountRoleRepository.persistAll(accountPersistenceConvertor.toAccountRolePOS(account));
             accountRoleCacheRepository.deleteById(accountId);
         }
     }
@@ -300,15 +300,15 @@ public class AccountGatewayImpl implements AccountGateway {
         Long accountId = optionalAccountId.get();
         // 优先查缓存
         Optional<Account> cachedAccount = accountCacheRepository.findById(accountId)
-            .flatMap(accountConvertor::toEntity);
+            .flatMap(accountPersistenceConvertor::toEntity);
         if (cachedAccount.isPresent()) {
             return cachedAccount;
         }
         // 缓存未命中，查数据库
         Optional<Account> dbAccount = accountRepository.findById(accountId)
-            .flatMap(accountConvertor::toEntity);
+            .flatMap(accountPersistenceConvertor::toEntity);
         // 写入缓存
-        dbAccount.flatMap(accountConvertor::toAccountCacheablePO)
+        dbAccount.flatMap(accountPersistenceConvertor::toAccountCacheablePO)
             .ifPresent(accountCacheRepository::save);
         return dbAccount;
     }
@@ -412,7 +412,7 @@ public class AccountGatewayImpl implements AccountGateway {
         return Optional.ofNullable(roleId)
             .map(roleIdNonNull -> accountRoleRepository.findByRoleId(roleIdNonNull).stream()
                 .flatMap(
-                    accountRolePO -> accountConvertor.toEntity(accountRolePO.getAccount()).stream())
+                    accountRolePO -> accountPersistenceConvertor.toEntity(accountRolePO.getAccount()).stream())
                 .collect(Collectors.toList())).orElse(new ArrayList<>());
     }
 
@@ -462,7 +462,7 @@ public class AccountGatewayImpl implements AccountGateway {
         }
         AccountPO accountPO = accountRepository.findById(accountId)
             .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
-        AccountArchivedPO archivedPO = accountConvertor.toAccountArchivedPO(accountPO)
+        AccountArchivedPO archivedPO = accountPersistenceConvertor.toAccountArchivedPO(accountPO)
             .orElseThrow(
                 () -> new ApplicationException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
         // 禁止归档有余额的账号
@@ -503,7 +503,7 @@ public class AccountGatewayImpl implements AccountGateway {
         }
         AccountArchivedPO archivedPO = accountArchivedRepository.findById(accountId)
             .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_ARCHIVE_NOT_FOUND));
-        AccountPO accountPO = accountConvertor.toAccountPO(archivedPO)
+        AccountPO accountPO = accountPersistenceConvertor.toAccountPO(archivedPO)
             .orElseThrow(
                 () -> new ApplicationException(ResponseCode.ACCOUNT_CONVERSION_TO_ARCHIVED_FAILED));
         accountPO.setArchived(false);
@@ -519,7 +519,7 @@ public class AccountGatewayImpl implements AccountGateway {
     public void addAddress(AccountAddress accountAddress) {
         SecurityContextUtils.getLoginAccountId().ifPresent(
             accountId -> Optional.ofNullable(accountAddress)
-                .flatMap(accountConvertor::toAccountAddressDocumentPO)
+                .flatMap(accountPersistenceConvertor::toAccountAddressDocumentPO)
                 .ifPresent(
                     accountAddressPO -> accountRepository.findById(accountId).ifPresent(_ -> {
                         accountAddressPO.setAccountId(accountId);
@@ -537,10 +537,10 @@ public class AccountGatewayImpl implements AccountGateway {
     public Optional<Account> getAccountBasicInfoById(Long accountId) {
         // noinspection DuplicatedCode
         return Optional.ofNullable(accountId).flatMap(accountCacheRepository::findById)
-            .flatMap(accountConvertor::toEntity).or(() -> {
+            .flatMap(accountPersistenceConvertor::toEntity).or(() -> {
                 Optional<Account> account = accountRepository.findById(accountId)
-                    .flatMap(accountConvertor::toBasicInfoEntity);
-                account.flatMap(accountConvertor::toAccountCacheablePO)
+                    .flatMap(accountPersistenceConvertor::toBasicInfoEntity);
+                account.flatMap(accountPersistenceConvertor::toAccountCacheablePO)
                     .ifPresent(accountCacheRepository::save);
                 return account;
             });
@@ -553,10 +553,10 @@ public class AccountGatewayImpl implements AccountGateway {
     public Optional<Account> findById(Long accountId) {
         // noinspection DuplicatedCode
         return Optional.ofNullable(accountId).flatMap(accountCacheRepository::findById)
-            .flatMap(accountConvertor::toEntity).or(() -> {
+            .flatMap(accountPersistenceConvertor::toEntity).or(() -> {
                 Optional<Account> account = accountRepository.findById(accountId)
-                    .flatMap(accountConvertor::toEntity);
-                account.flatMap(accountConvertor::toAccountCacheablePO)
+                    .flatMap(accountPersistenceConvertor::toEntity);
+                account.flatMap(accountPersistenceConvertor::toAccountCacheablePO)
                     .ifPresent(accountCacheRepository::save);
                 return account;
             });
@@ -585,7 +585,7 @@ public class AccountGatewayImpl implements AccountGateway {
     @Override
     public Optional<AccountSystemSettings> findSystemSettingsById(String systemSettingsId) {
         return accountSystemSettingsDocumentRepository.findById(systemSettingsId)
-            .map(accountConvertor::toAccountSystemSettings).flatMap(opt -> opt);
+            .map(accountPersistenceConvertor::toAccountSystemSettings).flatMap(opt -> opt);
     }
 
     /**
@@ -594,7 +594,7 @@ public class AccountGatewayImpl implements AccountGateway {
     @Override
     public Optional<AccountAddress> findAddressById(String addressId) {
         return accountAddressDocumentRepository.findById(addressId)
-            .map(accountConvertor::toAccountAddress).flatMap(opt -> opt);
+            .map(accountPersistenceConvertor::toAccountAddress).flatMap(opt -> opt);
     }
 
     /**
@@ -602,7 +602,7 @@ public class AccountGatewayImpl implements AccountGateway {
      */
     @Override
     public void setRolesWithIds(Account account, List<Long> roleIds) {
-        accountConvertor.setRolesWithIds(account, roleIds);
+        accountPersistenceConvertor.setRolesWithIds(account, roleIds);
     }
 
     /**
@@ -610,7 +610,7 @@ public class AccountGatewayImpl implements AccountGateway {
      */
     @Override
     public void setRolesWithCodes(Account account, List<String> roleCodes) {
-        accountConvertor.setRolesWithCodes(account, roleCodes);
+        accountPersistenceConvertor.setRolesWithCodes(account, roleCodes);
     }
 
     /**
@@ -624,7 +624,7 @@ public class AccountGatewayImpl implements AccountGateway {
             .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
                 .equals(accountSystemSettingsMongodbPO.getAccountId()))
             .flatMap(
-                accountConvertor::resetAccountSystemSettingsDocumentPO)
+                accountPersistenceConvertor::resetAccountSystemSettingsDocumentPO)
             .ifPresent(accountSystemSettingsMongodbPO -> {
                 accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
                 accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
@@ -642,7 +642,7 @@ public class AccountGatewayImpl implements AccountGateway {
                 accountSystemSettings.getId()))
             .filter(accountSystemSettingsMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
                 .equals(accountSystemSettingsMongodbPO.getAccountId()))
-            .flatMap(_ -> accountConvertor.toAccountSystemSettingsDocumentPO(
+            .flatMap(_ -> accountPersistenceConvertor.toAccountSystemSettingsDocumentPO(
                 accountSystemSettings)).ifPresent(accountSystemSettingsMongodbPO -> {
                 accountSystemSettingsDocumentRepository.save(accountSystemSettingsMongodbPO);
                 accountCacheRepository.deleteById(accountSystemSettingsMongodbPO.getAccountId());
@@ -660,7 +660,7 @@ public class AccountGatewayImpl implements AccountGateway {
                 accountAddress.getId()))
             .filter(accountAddressMongodbPO -> SecurityContextUtils.getLoginAccountId().get()
                 .equals(accountAddressMongodbPO.getAccountId()))
-            .flatMap(_ -> accountConvertor.toAccountAddressDocumentPO(
+            .flatMap(_ -> accountPersistenceConvertor.toAccountAddressDocumentPO(
                 accountAddress)).ifPresent(accountAddressMongodbPO -> {
                 accountAddressDocumentRepository.save(accountAddressMongodbPO);
                 accountCacheRepository.deleteById(accountAddressMongodbPO.getAccountId());
@@ -675,7 +675,7 @@ public class AccountGatewayImpl implements AccountGateway {
     public void addSystemSettings(AccountSystemSettings accountSystemSettings) {
         SecurityContextUtils.getLoginAccountId().ifPresent(
             accountId -> Optional.ofNullable(accountSystemSettings)
-                .flatMap(accountConvertor::toAccountSystemSettingsDocumentPO)
+                .flatMap(accountPersistenceConvertor::toAccountSystemSettingsDocumentPO)
                 .filter(
                     accountSystemSettingsMongodbPO -> !accountSystemSettingsDocumentRepository.existsByAccountIdAndProfile(
                         accountId, accountSystemSettingsMongodbPO.getProfile()))
@@ -753,13 +753,13 @@ public class AccountGatewayImpl implements AccountGateway {
     public Page<Account> findAll(Account account, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Page<AccountPO> accountPOS = accountRepository.findAllPage(
-            accountConvertor.toAccountPO(account).orElseGet(AccountPO::new),
+            accountPersistenceConvertor.toAccountPO(account).orElseGet(AccountPO::new),
             Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
                     accountEntity.getRoles()))
                 .map(roles -> roles.stream().map(Role::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
         return new PageImpl<>(accountPOS.getContent().stream()
-            .flatMap(accountPO -> accountConvertor.toEntity(accountPO).stream())
+            .flatMap(accountPO -> accountPersistenceConvertor.toEntity(accountPO).stream())
             .toList(), pageRequest, accountPOS.getTotalElements());
     }
 
@@ -771,13 +771,13 @@ public class AccountGatewayImpl implements AccountGateway {
     public Slice<Account> findAllSlice(Account account, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Slice<AccountPO> accountPOS = accountRepository.findAllSlice(
-            accountConvertor.toAccountPO(account).orElseGet(AccountPO::new),
+            accountPersistenceConvertor.toAccountPO(account).orElseGet(AccountPO::new),
             Optional.ofNullable(account).flatMap(accountEntity -> Optional.ofNullable(
                     accountEntity.getRoles()))
                 .map(roles -> roles.stream().map(Role::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
         return new SliceImpl<>(accountPOS.getContent().stream()
-            .flatMap(accountPO -> accountConvertor.toEntity(accountPO).stream())
+            .flatMap(accountPO -> accountPersistenceConvertor.toEntity(accountPO).stream())
             .toList(), pageRequest, accountPOS.hasNext());
     }
 
@@ -802,7 +802,7 @@ public class AccountGatewayImpl implements AccountGateway {
                         Collectors.toMap(AccountAddressDocumentPO::getAccountId,
                             AccountAddressDocumentPO::getAccountId,
                             (existing, _) -> existing)).values()).stream()
-                    .flatMap(accountPO -> accountConvertor.toBasicInfoEntity(accountPO).stream())
+                    .flatMap(accountPO -> accountPersistenceConvertor.toBasicInfoEntity(accountPO).stream())
                     .collect(Collectors.toList());
             }).orElse(new ArrayList<>());
     }

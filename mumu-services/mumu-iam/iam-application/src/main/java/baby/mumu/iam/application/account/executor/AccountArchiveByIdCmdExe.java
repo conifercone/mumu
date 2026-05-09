@@ -25,8 +25,7 @@ import org.springframework.util.Assert;
 import java.util.Optional;
 
 /**
- * 根据id归档账号指令执行器
- *
+ * 根据id归档账号指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
@@ -47,3 +46,5 @@ public class AccountArchiveByIdCmdExe {
             .ifPresent(accountGateway::archiveById);
     }
 }
+
+

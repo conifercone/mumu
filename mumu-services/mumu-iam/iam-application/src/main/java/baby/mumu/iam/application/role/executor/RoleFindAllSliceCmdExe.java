@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindAllSliceCmd;
 import baby.mumu.iam.client.dto.RoleFindAllSliceDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 角色查询指令执行器（不查询总数）
+ * 角色查询指令执行器（不查询总数） *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
@@ -42,22 +42,24 @@ import java.util.Optional;
 public class RoleFindAllSliceCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleFindAllSliceCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleFindAllSliceCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Slice<RoleFindAllSliceDTO> execute(@NonNull RoleFindAllSliceCmd roleFindAllSliceCmd) {
-        Role role = roleConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
+        Role role = roleAssemblerConvertor.toEntity(roleFindAllSliceCmd).orElseGet(Role::new);
         Slice<Role> roles = roleGateway.findAllSlice(role,
             roleFindAllSliceCmd.getCurrent(), roleFindAllSliceCmd.getPageSize());
         List<RoleFindAllSliceDTO> roleFindAllSliceDTOS = roles.getContent().stream()
-            .map(roleConvertor::toRoleFindAllSliceDTO)
+            .map(roleAssemblerConvertor::toRoleFindAllSliceDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new SliceImpl<>(roleFindAllSliceDTOS, roles.getPageable(),
             roles.hasNext());
     }
 }
+
+

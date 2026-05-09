@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.AccountBasicInfoDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 根据ID查询账号基本信息指令执行器
+ * 根据ID查询账号基本信息指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
@@ -38,19 +38,21 @@ import java.util.Optional;
 public class AccountBasicInfoQueryByIdCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountBasicInfoQueryByIdCmdExe(AccountGateway accountGateway,
-                                           AccountConvertor accountConvertor) {
+                                           AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public AccountBasicInfoDTO execute(Long id) {
         return Optional.ofNullable(id)
             .flatMap(accountGateway::getAccountBasicInfoById)
-            .flatMap(accountConvertor::toAccountBasicInfoDTO)
+            .flatMap(accountAssemblerConvertor::toAccountBasicInfoDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     }
 }
+
+

@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.PermissionFindByCodeDTO;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 根据code查询权限指令执行器
+ * 根据code查询权限指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
@@ -38,19 +38,21 @@ import java.util.Optional;
 public class PermissionFindByCodeCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionFindByCodeCmdExe(PermissionGateway permissionGateway,
-                                      PermissionConvertor permissionConvertor) {
+                                      PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public PermissionFindByCodeDTO execute(String code) {
         return Optional.ofNullable(code)
             .flatMap(permissionGateway::findByCode).flatMap(
-                permissionConvertor::toPermissionFindByCodeDTO)
+                permissionAssemblerConvertor::toPermissionFindByCodeDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
     }
 }
+
+

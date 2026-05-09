@@ -18,7 +18,7 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.dto.AccountNearbyDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 附近的账号
+ * 附近的账号 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.6.0
@@ -37,18 +37,20 @@ import java.util.stream.Collectors;
 public class AccountNearbyCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountNearbyCmdExe(AccountGateway accountGateway,
-                               AccountConvertor accountConvertor) {
+                               AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public List<AccountNearbyDTO> execute(double radiusInMeters) {
         return accountGateway.nearby(radiusInMeters).stream()
-            .flatMap(account -> accountConvertor.toAccountNearbyDTO(account).stream()).collect(
+            .flatMap(account -> accountAssemblerConvertor.toAccountNearbyDTO(account).stream()).collect(
                 Collectors.toList());
     }
 }
+
+

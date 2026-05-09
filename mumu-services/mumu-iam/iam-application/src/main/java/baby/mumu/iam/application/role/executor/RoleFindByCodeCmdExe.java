@@ -20,7 +20,7 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.RoleFindByCodeDTO;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 根据code查询角色指令执行器
+ * 根据code查询角色指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.5.0
@@ -38,17 +38,19 @@ import java.util.Optional;
 public class RoleFindByCodeCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleFindByCodeCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleFindByCodeCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public RoleFindByCodeDTO execute(String code) {
         return Optional.ofNullable(code).flatMap(roleGateway::findByCode)
-            .flatMap(roleConvertor::toRoleFindByCodeDTO).orElseThrow(() -> new ApplicationException(
+            .flatMap(roleAssemblerConvertor::toRoleFindByCodeDTO).orElseThrow(() -> new ApplicationException(
                 ResponseCode.ROLE_DOES_NOT_EXIST));
     }
 }
+
+

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindRootCmd;
 import baby.mumu.iam.client.dto.RoleFindRootDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 获取所有根角色指令执行器
+ * 获取所有根角色指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
@@ -42,13 +42,13 @@ import java.util.Optional;
 public class RoleFindRootCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
     public RoleFindRootCmdExe(RoleGateway roleGateway,
-                              RoleConvertor roleConvertor) {
+                              RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Page<RoleFindRootDTO> execute(RoleFindRootCmd roleFindRootCmd) {
@@ -56,10 +56,12 @@ public class RoleFindRootCmdExe {
             Page<Role> roles = roleGateway.findRootRoles(
                 roleFindRootCmdNotNull.getCurrent(), roleFindRootCmdNotNull.getPageSize());
             List<RoleFindRootDTO> roleFindRootDTOS = roles.getContent().stream()
-                .map(roleConvertor::toRoleFindRootDTO)
+                .map(roleAssemblerConvertor::toRoleFindRootDTO)
                 .filter(Optional::isPresent).map(Optional::get).toList();
             return new PageImpl<>(roleFindRootDTOS, roles.getPageable(),
                 roles.getTotalElements());
         }).orElse(new PageImpl<>(new ArrayList<>()));
     }
 }
+
+

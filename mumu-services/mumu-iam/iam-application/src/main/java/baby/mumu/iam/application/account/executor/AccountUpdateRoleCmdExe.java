@@ -18,7 +18,7 @@ package baby.mumu.iam.application.account.executor;
 
 import baby.mumu.iam.client.cmds.AccountUpdateRoleCmd;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 账号更新角色指令执行器
+ * 账号更新角色指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -36,16 +36,18 @@ import java.util.Optional;
 public class AccountUpdateRoleCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
-    public AccountUpdateRoleCmdExe(AccountGateway accountGateway, AccountConvertor accountConvertor) {
+    public AccountUpdateRoleCmdExe(AccountGateway accountGateway, AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public void execute(AccountUpdateRoleCmd accountUpdateRoleCmd) {
-        Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountConvertor::toEntity)
+        Optional.ofNullable(accountUpdateRoleCmd).flatMap(accountAssemblerConvertor::toEntity)
             .ifPresent(accountGateway::updateRoleById);
     }
 }
+
+

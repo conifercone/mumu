@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionFindDirectCmd;
 import baby.mumu.iam.client.dto.PermissionFindDirectDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,13 +42,13 @@ import java.util.Optional;
 public class PermissionFindDirectCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionFindDirectCmdExe(PermissionGateway permissionGateway,
-                                      PermissionConvertor permissionConvertor) {
+                                      PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Page<PermissionFindDirectDTO> execute(PermissionFindDirectCmd permissionFindDirectCmd) {
@@ -57,10 +57,12 @@ public class PermissionFindDirectCmdExe {
                 permissionFindDirectCmd.getAncestorId(),
                 permissionFindDirectCmdNotNull.getCurrent(), permissionFindDirectCmdNotNull.getPageSize());
             List<PermissionFindDirectDTO> permissionFindDirectDTOS = permissions.getContent().stream()
-                .map(permissionConvertor::toPermissionFindDirectDTO)
+                .map(permissionAssemblerConvertor::toPermissionFindDirectDTO)
                 .filter(Optional::isPresent).map(Optional::get).toList();
             return new PageImpl<>(permissionFindDirectDTOS, permissions.getPageable(),
                 permissions.getTotalElements());
         }).orElse(new PageImpl<>(new ArrayList<>()));
     }
 }
+
+

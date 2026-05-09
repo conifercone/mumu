@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.PermissionFindAllSliceCmd;
 import baby.mumu.iam.client.dto.PermissionFindAllSliceDTO;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Slice;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 查询权限指令执行器（不查询总数）
+ * 查询权限指令执行器（不查询总数） *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
@@ -42,27 +42,29 @@ import java.util.Optional;
 public class PermissionFindAllSliceCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionFindAllSliceCmdExe(PermissionGateway permissionGateway,
-                                        PermissionConvertor permissionConvertor) {
+                                        PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Slice<PermissionFindAllSliceDTO> execute(
         PermissionFindAllSliceCmd permissionFindAllSliceCmd) {
         Assert.notNull(permissionFindAllSliceCmd, "PermissionFindAllSliceCmd cannot be null");
-        Permission permission = permissionConvertor.toEntity(permissionFindAllSliceCmd)
+        Permission permission = permissionAssemblerConvertor.toEntity(permissionFindAllSliceCmd)
             .orElseGet(Permission::new);
         Slice<Permission> permissions = permissionGateway.findAllSlice(permission,
             permissionFindAllSliceCmd.getCurrent(), permissionFindAllSliceCmd.getPageSize());
         List<PermissionFindAllSliceDTO> permissionFindAllSliceDTOList = permissions.getContent()
             .stream()
-            .map(permissionConvertor::toPermissionFindAllSliceDTO)
+            .map(permissionAssemblerConvertor::toPermissionFindAllSliceDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new SliceImpl<>(permissionFindAllSliceDTOList, permissions.getPageable(),
             permissions.hasNext());
     }
 }
+
+

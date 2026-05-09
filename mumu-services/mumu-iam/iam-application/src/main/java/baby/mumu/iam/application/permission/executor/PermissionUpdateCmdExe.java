@@ -18,7 +18,7 @@ package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import baby.mumu.iam.client.cmds.PermissionUpdateCmd;
 import baby.mumu.iam.client.dto.PermissionUpdatedDataDTO;
 import baby.mumu.iam.domain.permission.Permission;
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 更新权限指令执行器
+ * 更新权限指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -38,13 +38,13 @@ import org.springframework.stereotype.Component;
 public class PermissionUpdateCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionUpdateCmdExe(PermissionGateway permissionGateway,
-                                  PermissionConvertor permissionConvertor) {
+                                  PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public PermissionUpdatedDataDTO execute(PermissionUpdateCmd permissionUpdateCmd) {
@@ -54,7 +54,7 @@ public class PermissionUpdateCmdExe {
         Permission permission = permissionGateway.findById(permissionUpdateCmd.getId())
             .orElseThrow(() -> new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST));
         String codeBeforeUpdated = permission.getCode();
-        permissionConvertor.toEntity(permissionUpdateCmd, permission);
+        permissionAssemblerConvertor.toEntity(permissionUpdateCmd, permission);
 
         String newCode = permission.getCode();
         if (newCode != null && !newCode.equals(codeBeforeUpdated)) {
@@ -63,7 +63,9 @@ public class PermissionUpdateCmdExe {
             });
         }
         return permissionGateway.updateById(permission)
-            .flatMap(permissionConvertor::toPermissionUpdatedDataDTO)
+            .flatMap(permissionAssemblerConvertor::toPermissionUpdatedDataDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
     }
 }
+
+

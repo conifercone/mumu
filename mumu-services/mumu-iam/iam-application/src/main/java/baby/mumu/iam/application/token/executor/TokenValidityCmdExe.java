@@ -25,8 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * token验证指令执行器
- *
+ * token验证指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -47,3 +46,5 @@ public class TokenValidityCmdExe {
             .orElse(false);
     }
 }
+
+

@@ -22,8 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 删除权限路径指令执行器
- *
+ * 删除权限路径指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.3.0
  */
@@ -42,3 +41,5 @@ public class PermissionDeletePathCmdExe {
         permissionGateway.deletePath(ancestorId, descendantId);
     }
 }
+
+

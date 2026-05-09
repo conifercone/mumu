@@ -25,8 +25,7 @@ import org.springframework.util.Assert;
 import java.util.Optional;
 
 /**
- * 账号禁用指令执行器
- *
+ * 账号禁用指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -47,3 +46,5 @@ public class AccountDisableCmdExe {
             .ifPresent(accountGateway::disable);
     }
 }
+
+

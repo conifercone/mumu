@@ -123,3 +123,5 @@ public interface AccountAssemblerMapper extends GrpcMapper, DataTransferObjectMa
     @API(status = Status.STABLE, since = "2.13.0")
     AccountUpdatedDataDTO toAccountUpdatedDataDTO(Account account);
 }
+
+

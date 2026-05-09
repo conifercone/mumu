@@ -36,7 +36,7 @@ import baby.mumu.iam.infra.account.mapper.AccountPersistenceMapper;
 import baby.mumu.iam.infra.relations.cache.AccountRoleCacheRepository;
 import baby.mumu.iam.infra.relations.cache.AccountRoleCacheablePO;
 import baby.mumu.iam.infra.relations.database.*;
-import baby.mumu.iam.infra.role.convertor.RoleConvertor;
+import baby.mumu.iam.infra.role.convertor.RolePersistenceConvertor;
 import baby.mumu.iam.infra.role.gatewayimpl.cache.RoleCacheRepository;
 import baby.mumu.iam.infra.role.gatewayimpl.cache.po.RoleCacheablePO;
 import baby.mumu.iam.infra.role.gatewayimpl.database.RoleRepository;
@@ -53,15 +53,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 账号信息转换器 (Infrastructure Layer)
+ * 账号信息持久化转换器 (Infrastructure Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class AccountConvertor {
+public class AccountPersistenceConvertor {
 
-    private final RoleConvertor roleConvertor;
+    private final RolePersistenceConvertor rolePersistenceConvertor;
     private final AccountRepository accountRepository;
     private final RoleRepository roleRepository;
     private final AccountAddressDocumentRepository accountAddressDocumentRepository;
@@ -73,7 +73,7 @@ public class AccountConvertor {
     private final AccountAvatarDocumentRepository accountAvatarDocumentRepository;
 
     @Autowired
-    public AccountConvertor(RoleConvertor roleConvertor, AccountRepository accountRepository,
+    public AccountPersistenceConvertor(RolePersistenceConvertor rolePersistenceConvertor, AccountRepository accountRepository,
                             RoleRepository roleRepository,
                             AccountAddressDocumentRepository accountAddressDocumentRepository,
                             AccountRoleRepository accountRoleRepository,
@@ -82,7 +82,7 @@ public class AccountConvertor {
                             AccountRoleCacheRepository accountRoleCacheRepository,
                             RolePathRepository rolePathRepository,
                             AccountAvatarDocumentRepository accountAvatarDocumentRepository) {
-        this.roleConvertor = roleConvertor;
+        this.rolePersistenceConvertor = rolePersistenceConvertor;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
         this.accountAddressDocumentRepository = accountAddressDocumentRepository;
@@ -136,17 +136,17 @@ public class AccountConvertor {
             .map(RoleCacheablePO::getId)
             .collect(Collectors.toList());
         // 已缓存的角色
-        List<Role> cachedCollectionOfRole = roleConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
+        List<Role> cachedCollectionOfRole = rolePersistenceConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
         // 未缓存的角色
         List<Role> uncachedCollectionOfRole = Optional.of(
                 CollectionUtils.subtract(roleIds, cachedCollectionOfRoleIDs))
             .filter(CollectionUtils::isNotEmpty).map(
-                uncachedCollectionOfRoleId -> roleConvertor.toEntities(roleRepository.findAllById(
+                uncachedCollectionOfRoleId -> rolePersistenceConvertor.toEntities(roleRepository.findAllById(
                     uncachedCollectionOfRoleId))).orElse(new ArrayList<>());
         // 未缓存的角色放入缓存
         if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
             roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()
-                .flatMap(authority -> roleConvertor.toRoleCacheablePO(authority).stream())
+                .flatMap(authority -> rolePersistenceConvertor.toRoleCacheablePO(authority).stream())
                 .collect(
                     Collectors.toList()));
         }
@@ -188,17 +188,17 @@ public class AccountConvertor {
             .map(RoleCacheablePO::getCode)
             .collect(Collectors.toList());
         // 已缓存的角色
-        List<Role> cachedCollectionOfRole = roleConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
+        List<Role> cachedCollectionOfRole = rolePersistenceConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
         // 未缓存的角色
         List<Role> uncachedCollectionOfRole = Optional.of(
                 CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
             .filter(CollectionUtils::isNotEmpty).map(
-                uncachedCollectionOfRoleId -> roleConvertor.toEntities(roleRepository.findByCodeIn(
+                uncachedCollectionOfRoleId -> rolePersistenceConvertor.toEntities(roleRepository.findByCodeIn(
                     uncachedCollectionOfRoleId))).orElse(new ArrayList<>());
         // 未缓存的角色放入缓存
         if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
             roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()
-                .flatMap(authority -> roleConvertor.toRoleCacheablePO(authority).stream())
+                .flatMap(authority -> rolePersistenceConvertor.toRoleCacheablePO(authority).stream())
                 .collect(
                     Collectors.toList()));
         }

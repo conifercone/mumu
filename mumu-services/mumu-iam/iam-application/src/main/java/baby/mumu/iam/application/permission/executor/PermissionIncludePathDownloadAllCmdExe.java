@@ -17,7 +17,7 @@
 package baby.mumu.iam.application.permission.executor;
 
 import baby.mumu.basis.kotlin.tools.FileDownloadUtils;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,25 +37,25 @@ import java.util.stream.Collectors;
 public class PermissionIncludePathDownloadAllCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionIncludePathDownloadAllCmdExe(PermissionGateway permissionGateway,
-                                                  PermissionConvertor permissionConvertor) {
+                                                  PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public void execute(HttpServletResponse response) {
         FileDownloadUtils.downloadJson(response, "permissions",
             permissionGateway.findAllIncludePath()
                 .flatMap(
-                    permission -> permissionConvertor.toPermissionIncludePathDownloadAllDTO(permission)
+                    permission -> permissionAssemblerConvertor.toPermissionIncludePathDownloadAllDTO(permission)
                         .map(dto -> {
                             if (dto.isHasDescendant()) {
                                 dto.setDescendants(permissionGateway.findDescendantsByAncestorId(dto.getId())
                                     .stream()
-                                    .flatMap(relation -> permissionConvertor.toPermissionPathDTO(relation).stream())
+                                    .flatMap(relation -> permissionAssemblerConvertor.toPermissionPathDTO(relation).stream())
                                     .collect(Collectors.toList()));
                             }
                             return dto;
@@ -63,4 +63,6 @@ public class PermissionIncludePathDownloadAllCmdExe {
                         .stream()));
     }
 }
+
+
 

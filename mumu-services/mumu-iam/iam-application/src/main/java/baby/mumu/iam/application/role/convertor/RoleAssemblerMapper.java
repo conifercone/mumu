@@ -104,3 +104,5 @@ public interface RoleAssemblerMapper extends GrpcMapper, DataTransferObjectMappe
     @API(status = Status.STABLE, since = "2.13.0")
     RoleUpdatedDataDTO toRoleUpdatedDataDTO(Role role);
 }
+
+

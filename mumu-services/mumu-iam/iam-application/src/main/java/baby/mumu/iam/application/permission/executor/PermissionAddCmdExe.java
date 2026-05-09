@@ -21,13 +21,13 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.cmds.PermissionAddCmd;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
-import baby.mumu.iam.application.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 添加权限指令执行器
+ * 添加权限指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -37,18 +37,20 @@ import org.springframework.stereotype.Component;
 public class PermissionAddCmdExe {
 
     private final PermissionGateway permissionGateway;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
 
     @Autowired
     public PermissionAddCmdExe(PermissionGateway permissionGateway,
-                               PermissionConvertor permissionConvertor) {
+                               PermissionAssemblerConvertor permissionAssemblerConvertor) {
         this.permissionGateway = permissionGateway;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
     }
 
     public Long execute(PermissionAddCmd permissionAddCmd) {
-        Permission permission = permissionConvertor.toEntity(permissionAddCmd)
+        Permission permission = permissionAssemblerConvertor.toEntity(permissionAddCmd)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
         return permissionGateway.add(permission);
     }
 }
+
+

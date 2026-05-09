@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 重置账号系统设置指令执行器
- *
+ * 重置账号系统设置指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.2.0
  */
@@ -46,3 +45,5 @@ public class AccountResetSystemSettingsBySettingsIdCmdExe {
             .ifPresent(accountGateway::resetSystemSettingsById);
     }
 }
+
+

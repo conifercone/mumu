@@ -32,8 +32,7 @@ import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
- * token service实现类
- *
+ * token service实现类 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
@@ -67,3 +66,5 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
         responseObserver.onCompleted();
     }
 }
+
+

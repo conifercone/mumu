@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 根据id从归档中恢复权限指令执行器
- *
+ * 根据id从归档中恢复权限指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
@@ -45,3 +44,5 @@ public class PermissionRecoverFromArchiveByIdCmdExe {
             .ifPresent(permissionGateway::recoverFromArchiveById);
     }
 }
+
+

@@ -36,23 +36,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 账号信息转换器 (Application Layer)
+ * 账号信息组装器 (Application Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Component
-public class AccountConvertor {
+public class AccountAssemblerConvertor {
 
     private final AccountGateway accountGateway;
 
     @Autowired
-    public AccountConvertor(AccountGateway accountGateway) {
+    public AccountAssemblerConvertor(AccountGateway accountGateway) {
         this.accountGateway = accountGateway;
     }
 
@@ -220,8 +219,9 @@ public class AccountConvertor {
             .map(accountCurrentLoginGrpcDTO -> accountCurrentLoginGrpcDTO.toBuilder()
                 .addAllRoles(Optional.ofNullable(accountCurrentLoginDTO.getRoles())
                     .map(roles -> roles.stream().map(role -> {
-                        AccountRoleGrpcDTO accountRoleCurrentLoginQueryGrpcDTO = AccountAssemblerMapper.INSTANCE.toAccountRoleGrpcDTO(
-                            role);
+                        AccountRoleGrpcDTO accountRoleCurrentLoginQueryGrpcDTO =
+                            AccountAssemblerMapper.INSTANCE.toAccountRoleGrpcDTO(
+                                role);
                         return accountRoleCurrentLoginQueryGrpcDTO.toBuilder().addAllPermissions(
                             Optional.ofNullable(role.getPermissions()).map(
                                 accountRolePermissionCurrentLoginQueryDTOS -> accountRolePermissionCurrentLoginQueryDTOS.stream()
@@ -274,6 +274,9 @@ public class AccountConvertor {
 
     @API(status = Status.STABLE, since = "1.0.1")
     public void toEntity(AccountUpdateByIdCmd accountUpdateByIdCmd, @MappingTarget Account account) {
-        Optional.ofNullable(accountUpdateByIdCmd).ifPresent(cmd -> AccountAssemblerMapper.INSTANCE.toEntity(cmd, account));
+        Optional.ofNullable(accountUpdateByIdCmd).ifPresent(cmd -> AccountAssemblerMapper.INSTANCE.toEntity(cmd,
+            account));
     }
 }
+
+

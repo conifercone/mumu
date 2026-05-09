@@ -20,13 +20,13 @@ import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.client.dto.AccountCurrentLoginDTO;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.application.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * 查询当前登录账号信息指令执行器
+ * 查询当前登录账号信息指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -36,18 +36,20 @@ import org.springframework.stereotype.Component;
 public class AccountCurrentLoginQueryCmdExe {
 
     private final AccountGateway accountGateway;
-    private final AccountConvertor accountConvertor;
+    private final AccountAssemblerConvertor accountAssemblerConvertor;
 
     @Autowired
     public AccountCurrentLoginQueryCmdExe(AccountGateway accountGateway,
-                                          AccountConvertor accountConvertor) {
+                                          AccountAssemblerConvertor accountAssemblerConvertor) {
         this.accountGateway = accountGateway;
-        this.accountConvertor = accountConvertor;
+        this.accountAssemblerConvertor = accountAssemblerConvertor;
     }
 
     public AccountCurrentLoginDTO execute() {
         return accountGateway.queryCurrentLoginAccount()
-            .flatMap(accountConvertor::toAccountCurrentLoginDTO)
+            .flatMap(accountAssemblerConvertor::toAccountCurrentLoginDTO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.ACCOUNT_DOES_NOT_EXIST));
     }
 }
+
+

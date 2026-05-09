@@ -26,7 +26,7 @@ import baby.mumu.iam.domain.permission.PermissionRelation;
 import baby.mumu.iam.domain.permission.gateway.PermissionGateway;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
+import baby.mumu.iam.infra.permission.convertor.PermissionPersistenceConvertor;
 import baby.mumu.iam.infra.permission.gatewayimpl.cache.PermissionCacheRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionArchivedRepository;
 import baby.mumu.iam.infra.permission.gatewayimpl.database.PermissionRepository;
@@ -72,7 +72,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     private final PermissionCacheRepository permissionCacheRepository;
     private final PermissionPathRepository permissionPathRepository;
     private final RolePermissionCacheRepository rolePermissionCacheRepository;
-    private final PermissionConvertor permissionConvertor;
+    private final PermissionPersistenceConvertor permissionPersistenceConvertor;
 
     @Autowired
     public PermissionGatewayImpl(PermissionRepository permissionRepository,
@@ -82,7 +82,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
                                  PermissionCacheRepository permissionCacheRepository,
                                  PermissionPathRepository permissionPathRepository,
                                  RolePermissionCacheRepository rolePermissionCacheRepository,
-                                 PermissionConvertor permissionConvertor) {
+                                 PermissionPersistenceConvertor permissionPersistenceConvertor) {
         this.permissionRepository = permissionRepository;
         this.roleGateway = roleGateway;
         this.permissionArchivedRepository = permissionArchivedRepository;
@@ -91,7 +91,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
         this.permissionCacheRepository = permissionCacheRepository;
         this.permissionPathRepository = permissionPathRepository;
         this.rolePermissionCacheRepository = rolePermissionCacheRepository;
-        this.permissionConvertor = permissionConvertor;
+        this.permissionPersistenceConvertor = permissionPersistenceConvertor;
     }
 
     /**
@@ -101,7 +101,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
     public Long add(Permission permission) {
-        PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
+        PermissionPO permissionPO = permissionPersistenceConvertor.toPermissionPO(permission)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
         if (permissionRepository.existsByCode(
             permissionPO.getCode()) || permissionArchivedRepository.existsByCode(
@@ -150,7 +150,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Transactional(rollbackFor = Exception.class)
     @API(status = Status.STABLE, since = "1.0.0")
     public Optional<Permission> updateById(Permission permission) {
-        PermissionPO permissionPO = permissionConvertor.toPermissionPO(permission)
+        PermissionPO permissionPO = permissionPersistenceConvertor.toPermissionPO(permission)
             .orElseThrow(() -> new ApplicationException(ResponseCode.INVALID_PERMISSION_FORMAT));
         if (permission.getId() == null) {
             return Optional.empty();
@@ -162,7 +162,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
 
         PermissionPO merged = permissionRepository.merge(permissionPO);
         permissionCacheRepository.deleteById(permissionPO.getId());
-        return permissionConvertor.toEntity(merged);
+        return permissionPersistenceConvertor.toEntity(merged);
     }
 
     /**
@@ -173,9 +173,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public Page<Permission> findAll(Permission permission, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Page<PermissionPO> repositoryAll = permissionRepository.findAllPage(
-            permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new),
+            permissionPersistenceConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new),
             pageRequest);
-        List<Permission> permissions = permissionConvertor.toEntities(repositoryAll.getContent());
+        List<Permission> permissions = permissionPersistenceConvertor.toEntities(repositoryAll.getContent());
         return new PageImpl<>(permissions, pageRequest, repositoryAll.getTotalElements());
     }
 
@@ -187,8 +187,8 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public Slice<Permission> findAllSlice(Permission permission, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Slice<PermissionPO> permissionPOSlice = permissionRepository.findAllSlice(
-            permissionConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new), pageRequest);
-        List<Permission> permissions = permissionConvertor.toEntities(permissionPOSlice.getContent());
+            permissionPersistenceConvertor.toPermissionPO(permission).orElseGet(PermissionPO::new), pageRequest);
+        List<Permission> permissions = permissionPersistenceConvertor.toEntities(permissionPOSlice.getContent());
         return new SliceImpl<>(permissions, pageRequest, permissionPOSlice.hasNext());
     }
 
@@ -200,9 +200,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public Slice<Permission> findArchivedAllSlice(Permission permission, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Slice<PermissionArchivedPO> permissionArchivedPOS = permissionArchivedRepository.findAllSlice(
-            permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
+            permissionPersistenceConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
             pageRequest);
-        List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+        List<Permission> entitiesFromArchivedPO = permissionPersistenceConvertor.toEntitiesFromArchivedPO(
             permissionArchivedPOS.getContent());
         return new SliceImpl<>(entitiesFromArchivedPO, pageRequest, permissionArchivedPOS.hasNext());
     }
@@ -215,9 +215,9 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public Page<Permission> findArchivedAll(Permission permission, int current, int pageSize) {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Page<PermissionArchivedPO> repositoryAll = permissionArchivedRepository.findAllPage(
-            permissionConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
+            permissionPersistenceConvertor.toPermissionArchivedPO(permission).orElseGet(PermissionArchivedPO::new),
             pageRequest);
-        List<Permission> entitiesFromArchivedPO = permissionConvertor.toEntitiesFromArchivedPO(
+        List<Permission> entitiesFromArchivedPO = permissionPersistenceConvertor.toEntitiesFromArchivedPO(
             repositoryAll.getContent());
         return new PageImpl<>(entitiesFromArchivedPO, pageRequest, repositoryAll.getTotalElements());
     }
@@ -228,11 +228,11 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     public Optional<Permission> findById(Long id) {
         return Optional.ofNullable(id).flatMap(permissionCacheRepository::findById).flatMap(
-            permissionConvertor::toEntity).or(() ->
+            permissionPersistenceConvertor::toEntity).or(() ->
             permissionRepository.findById(id)
-                .flatMap(permissionConvertor::toEntity)
+                .flatMap(permissionPersistenceConvertor::toEntity)
                 .map(permission -> {
-                    permissionConvertor.toPermissionCacheablePO(permission)
+                    permissionPersistenceConvertor.toPermissionCacheablePO(permission)
                         .ifPresent(permissionCacheRepository::save);
                     return permission;
                 })
@@ -253,7 +253,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
         }
         // noinspection DuplicatedCode
         Optional.ofNullable(id).flatMap(permissionRepository::findById)
-            .flatMap(permissionConvertor::toPermissionArchivedPO).ifPresent(permissionArchivedPO -> {
+            .flatMap(permissionPersistenceConvertor::toPermissionArchivedPO).ifPresent(permissionArchivedPO -> {
                 permissionArchivedPO.setArchived(true);
                 permissionArchivedRepository.persist(permissionArchivedPO);
                 permissionRepository.deleteById(permissionArchivedPO.getId());
@@ -285,7 +285,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Transactional(rollbackFor = Exception.class)
     public void recoverFromArchiveById(Long id) {
         Optional.ofNullable(id).flatMap(permissionArchivedRepository::findById)
-            .flatMap(permissionConvertor::toPermissionPO).ifPresent(permissionPO -> {
+            .flatMap(permissionPersistenceConvertor::toPermissionPO).ifPresent(permissionPO -> {
                 permissionPO.setArchived(false);
                 permissionArchivedRepository.deleteById(permissionPO.getId());
                 permissionRepository.persist(permissionPO);
@@ -411,7 +411,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAll() {
-        return permissionConvertor.toEntities(permissionRepository.findAll().toList()).stream();
+        return permissionPersistenceConvertor.toEntities(permissionRepository.findAll().toList()).stream();
     }
 
     /**
@@ -420,7 +420,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAllIncludePath() {
-        return permissionConvertor.toEntities(permissionRepository.findAll().toList()).stream();
+        return permissionPersistenceConvertor.toEntities(permissionRepository.findAll().toList()).stream();
     }
 
     /**
@@ -429,10 +429,10 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     public Optional<Permission> findByCode(String code) {
         return Optional.ofNullable(code).flatMap(permissionCacheRepository::findByCode).flatMap(
-            permissionConvertor::toEntity).or(() -> permissionRepository.findByCode(code)
-            .flatMap(permissionConvertor::toEntity)
+            permissionPersistenceConvertor::toEntity).or(() -> permissionRepository.findByCode(code)
+            .flatMap(permissionPersistenceConvertor::toEntity)
             .map(entity -> {
-                permissionConvertor.toPermissionCacheablePO(entity)
+                permissionPersistenceConvertor.toPermissionCacheablePO(entity)
                     .ifPresent(permissionCacheRepository::save);
                 return entity;
             }));
@@ -453,7 +453,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     public List<PermissionRelation> findDescendantsByAncestorId(Long ancestorId) {
         return Optional.ofNullable(ancestorId)
             .map(id -> permissionPathRepository.findByAncestorIdIn(Collections.singleton(id)))
-            .map(permissionConvertor::toRelations)
+            .map(permissionPersistenceConvertor::toRelations)
             .orElse(new ArrayList<>());
     }
 }

@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleFindAllCmd;
 import baby.mumu.iam.client.dto.RoleFindAllDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 角色查询指令执行器
+ * 角色查询指令执行器 *
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -42,23 +42,25 @@ import java.util.Optional;
 public class RoleFindAllCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleFindAllCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Page<RoleFindAllDTO> execute(@NonNull RoleFindAllCmd roleFindAllCmd) {
-        Role role = roleConvertor.toEntity(roleFindAllCmd)
+        Role role = roleAssemblerConvertor.toEntity(roleFindAllCmd)
             .orElseGet(Role::new);
         Page<Role> roles = roleGateway.findAll(role,
             roleFindAllCmd.getCurrent(), roleFindAllCmd.getPageSize());
         List<RoleFindAllDTO> roleFindAllDTOList = roles.getContent().stream()
-            .map(roleConvertor::toRoleFindAllDTO)
+            .map(roleAssemblerConvertor::toRoleFindAllDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new PageImpl<>(roleFindAllDTOList, roles.getPageable(),
             roles.getTotalElements());
     }
 }
+
+

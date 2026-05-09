@@ -24,8 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 角色删除指令执行器
- *
+ * 角色删除指令执行器 *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.4.0
  */
@@ -44,3 +43,5 @@ public class RoleDeleteByCodeCmdExe {
         Optional.ofNullable(code).ifPresent(roleGateway::deleteByCode);
     }
 }
+
+

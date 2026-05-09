@@ -20,7 +20,7 @@ import baby.mumu.iam.client.cmds.RoleArchivedFindAllCmd;
 import baby.mumu.iam.client.dto.RoleArchivedFindAllDTO;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.domain.role.gateway.RoleGateway;
-import baby.mumu.iam.application.role.convertor.RoleConvertor;
+import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,24 +42,26 @@ import java.util.Optional;
 public class RoleArchivedFindAllCmdExe {
 
     private final RoleGateway roleGateway;
-    private final RoleConvertor roleConvertor;
+    private final RoleAssemblerConvertor roleAssemblerConvertor;
 
     @Autowired
-    public RoleArchivedFindAllCmdExe(RoleGateway roleGateway, RoleConvertor roleConvertor) {
+    public RoleArchivedFindAllCmdExe(RoleGateway roleGateway, RoleAssemblerConvertor roleAssemblerConvertor) {
         this.roleGateway = roleGateway;
-        this.roleConvertor = roleConvertor;
+        this.roleAssemblerConvertor = roleAssemblerConvertor;
     }
 
     public Page<RoleArchivedFindAllDTO> execute(
         @NonNull RoleArchivedFindAllCmd roleArchivedFindAllCmd) {
-        Role role = roleConvertor.toEntity(roleArchivedFindAllCmd)
+        Role role = roleAssemblerConvertor.toEntity(roleArchivedFindAllCmd)
             .orElseGet(Role::new);
         Page<Role> roles = roleGateway.findArchivedAll(role,
             roleArchivedFindAllCmd.getCurrent(), roleArchivedFindAllCmd.getPageSize());
         List<RoleArchivedFindAllDTO> roleArchivedFindAllDTOS = roles.getContent().stream()
-            .map(roleConvertor::toRoleArchivedFindAllDTO)
+            .map(roleAssemblerConvertor::toRoleArchivedFindAllDTO)
             .filter(Optional::isPresent).map(Optional::get).toList();
         return new PageImpl<>(roleArchivedFindAllDTOS, roles.getPageable(),
             roles.getTotalElements());
     }
 }
+
+
