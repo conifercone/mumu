@@ -167,6 +167,62 @@ public interface AccountGateway {
     Optional<Account> getAccountBasicInfoById(Long accountId);
 
     /**
+     * 根据账号id查找账号
+     *
+     * @param accountId 账号id
+     * @return 账号信息
+     */
+    Optional<Account> findById(Long accountId);
+
+    /**
+     * 根据邮箱判断账号是否存在
+     *
+     * @param email 邮箱
+     * @return 是否存在
+     */
+    boolean existsByEmail(String email);
+
+    /**
+     * 根据用户名判断账号是否存在
+     *
+     * @param username 用户名
+     * @return 是否存在
+     */
+    boolean existsByUsername(String username);
+
+    /**
+     * 根据系统设置ID查找系统设置
+     *
+     * @param systemSettingsId 系统设置ID
+     * @return 系统设置
+     */
+    Optional<AccountSystemSettings> findSystemSettingsById(String systemSettingsId);
+
+    /**
+     * 根据地址ID查找地址
+     *
+     * @param addressId 地址ID
+     * @return 地址
+     */
+    Optional<AccountAddress> findAddressById(String addressId);
+
+    /**
+     * 根据角色ID设置账号角色
+     *
+     * @param account 账号
+     * @param roleIds 角色ID集合
+     */
+    void setRolesWithIds(Account account, List<Long> roleIds);
+
+    /**
+     * 根据角色code设置账号角色
+     *
+     * @param account   账号
+     * @param roleCodes 角色code集合
+     */
+    void setRolesWithCodes(Account account, List<String> roleCodes);
+
+    /**
      * 根据系统设置ID重置系统设置
      */
     void resetSystemSettingsById(String systemSettingsId);

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package baby.mumu.iam.infra.account.convertor;
+package baby.mumu.iam.application.account.convertor;
 
-import baby.mumu.basis.mappers.*;
+import baby.mumu.basis.mappers.DataTransferObjectMapper;
+import baby.mumu.basis.mappers.GeoGrpcMapper;
+import baby.mumu.basis.mappers.GeoMapper;
+import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.iam.client.api.grpc.*;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd.AccountAddressRegisterCmd;
@@ -27,79 +30,35 @@ import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountRoleDTO;
 import baby.mumu.iam.client.dto.AccountCurrentLoginDTO.AccountSystemSettingDTO;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.AccountAddress;
-import baby.mumu.iam.domain.account.AccountAvatar;
 import baby.mumu.iam.domain.account.AccountSystemSettings;
-import baby.mumu.iam.infra.account.gatewayimpl.cache.po.AccountCacheablePO;
-import baby.mumu.iam.infra.account.gatewayimpl.database.po.AccountArchivedPO;
-import baby.mumu.iam.infra.account.gatewayimpl.database.po.AccountPO;
-import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAddressDocumentPO;
-import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountAvatarDocumentPO;
-import baby.mumu.iam.infra.account.gatewayimpl.document.po.AccountSystemSettingsDocumentPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 /**
- * Account mapstruct转换器
+ * Account application assembler mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper, GeoMapper,
+public interface AccountAssemblerMapper extends GrpcMapper, DataTransferObjectMapper, GeoMapper,
     GeoGrpcMapper {
 
-    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    Account toEntity(AccountPO accountPO);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    Account toEntity(AccountCacheablePO accountCacheablePO);
-
-    @API(status = Status.STABLE, since = "2.0.0")
-    AccountAddress toAccountAddress(AccountAddressDocumentPO accountAddressDocumentPO);
-
-    @API(status = Status.STABLE, since = "2.10.0")
-    AccountAvatar toAccountAvatar(AccountAvatarDocumentPO accountAvatarDocumentPO);
-
-    @API(status = Status.STABLE, since = "2.0.0")
-    AccountAddressDocumentPO toAccountAddressDocumentPO(AccountAddress accountAddress);
-
-    @API(status = Status.STABLE, since = "2.11.0")
-    AccountAvatarDocumentPO toAccountAvatarDocumentPO(AccountAvatar accountAvatar);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    AccountSystemSettingsDocumentPO toAccountSystemSettingsDocumentPO(
-        AccountSystemSettings accountSystemSettings);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    AccountSystemSettings toAccountSystemSettings(
-        AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPO);
+    AccountAssemblerMapper INSTANCE = Mappers.getMapper(AccountAssemblerMapper.class);
 
     @API(status = Status.STABLE, since = "2.2.0")
     AccountSystemSettings toAccountSystemSettings(
         AccountAddSystemSettingsCmd accountAddSystemSettingsCmd);
 
     @API(status = Status.STABLE, since = "2.2.0")
-    void toAccountSystemSettingsDocumentPO(
-        AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPOSource,
-        @MappingTarget AccountSystemSettingsDocumentPO accountSystemSettingsDocumentPOTarget);
-
-    @API(status = Status.STABLE, since = "2.2.0")
     void toAccountSystemSettings(
         AccountModifySystemSettingsBySettingsIdCmd accountModifySystemSettingsBySettingsIdCmd,
         @MappingTarget AccountSystemSettings accountSystemSettings);
 
-    @API(status = Status.STABLE, since = "2.2.0")
-    AccountCacheablePO toAccountCacheablePO(Account account);
-
     @API(status = Status.STABLE, since = "2.0.0")
     AccountAddress toAccountAddress(AccountAddAddressCmd accountAddAddressCmd);
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    AccountPO toAccountPO(Account account);
 
     @API(status = Status.STABLE, since = "1.0.1")
     Account toEntity(AccountRegisterCmd accountRegisterCmd);
@@ -120,12 +79,6 @@ public interface AccountMapper extends GrpcMapper, DataTransferObjectMapper, Bas
 
     @API(status = Status.STABLE, since = "2.2.0")
     AccountBasicInfoDTO toAccountBasicInfoDTO(Account account);
-
-    @API(status = Status.STABLE, since = "1.0.4")
-    AccountArchivedPO toAccountArchivedPO(AccountPO accountPO);
-
-    @API(status = Status.STABLE, since = "1.0.4")
-    AccountPO toAccountPO(AccountArchivedPO accountArchivedPO);
 
     @API(status = Status.STABLE, since = "2.2.0")
     AccountFindAllDTO toAccountFindAllDTO(Account account);

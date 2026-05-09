@@ -535,6 +535,7 @@ public class AccountGatewayImpl implements AccountGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Optional<Account> getAccountBasicInfoById(Long accountId) {
+        // noinspection DuplicatedCode
         return Optional.ofNullable(accountId).flatMap(accountCacheRepository::findById)
             .flatMap(accountConvertor::toEntity).or(() -> {
                 Optional<Account> account = accountRepository.findById(accountId)
@@ -543,6 +544,73 @@ public class AccountGatewayImpl implements AccountGateway {
                     .ifPresent(accountCacheRepository::save);
                 return account;
             });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<Account> findById(Long accountId) {
+        // noinspection DuplicatedCode
+        return Optional.ofNullable(accountId).flatMap(accountCacheRepository::findById)
+            .flatMap(accountConvertor::toEntity).or(() -> {
+                Optional<Account> account = accountRepository.findById(accountId)
+                    .flatMap(accountConvertor::toEntity);
+                account.flatMap(accountConvertor::toAccountCacheablePO)
+                    .ifPresent(accountCacheRepository::save);
+                return account;
+            });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsByEmail(String email) {
+        return accountRepository.existsByEmail(email) || accountArchivedRepository.existsByEmail(email);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existsByUsername(String username) {
+        return accountRepository.existsByUsername(username) || accountArchivedRepository.existsByUsername(
+            username);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<AccountSystemSettings> findSystemSettingsById(String systemSettingsId) {
+        return accountSystemSettingsDocumentRepository.findById(systemSettingsId)
+            .map(accountConvertor::toAccountSystemSettings).flatMap(opt -> opt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<AccountAddress> findAddressById(String addressId) {
+        return accountAddressDocumentRepository.findById(addressId)
+            .map(accountConvertor::toAccountAddress).flatMap(opt -> opt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setRolesWithIds(Account account, List<Long> roleIds) {
+        accountConvertor.setRolesWithIds(account, roleIds);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setRolesWithCodes(Account account, List<String> roleCodes) {
+        accountConvertor.setRolesWithCodes(account, roleCodes);
     }
 
     /**

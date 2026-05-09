@@ -23,7 +23,7 @@ import baby.mumu.genix.client.api.CaptchaCodeVerify;
 import baby.mumu.iam.client.cmds.AccountRegisterCmd;
 import baby.mumu.iam.domain.account.Account;
 import baby.mumu.iam.domain.account.gateway.AccountGateway;
-import baby.mumu.iam.infra.account.convertor.AccountConvertor;
+import baby.mumu.iam.application.account.convertor.AccountConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
