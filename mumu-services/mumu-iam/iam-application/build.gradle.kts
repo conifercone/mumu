@@ -1,7 +1,6 @@
 dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-client"))
     implementation(project(":mumu-services:mumu-genix:genix-client"))
-    implementation(project(":mumu-services:mumu-iam:iam-infra"))
     implementation(project(":mumu-services:mumu-iam:iam-domain"))
     implementation(project(":mumu-extension"))
     implementation(libs.spring.security.core)
