@@ -411,8 +411,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAll() {
-        return permissionRepository.findAll()
-            .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream());
+        return permissionConvertor.toEntities(permissionRepository.findAll().toList()).stream();
     }
 
     /**
@@ -421,9 +420,7 @@ public class PermissionGatewayImpl implements PermissionGateway {
     @Override
     @Transactional(readOnly = true)
     public Stream<Permission> findAllIncludePath() {
-        return permissionRepository.findAll()
-            .flatMap(
-                permissionPO -> permissionConvertor.toEntity(permissionPO).stream());
+        return permissionConvertor.toEntities(permissionRepository.findAll().toList()).stream();
     }
 
     /**

@@ -55,7 +55,8 @@ public class PermissionConvertor {
 
     @API(status = Status.STABLE, since = "2.14.0")
     public List<Permission> toEntities(List<PermissionPO> permissionPOList) {
-        List<Permission> permissions = Optional.ofNullable(PermissionPersistenceMapper.INSTANCE.toEntities(permissionPOList)).orElse(new ArrayList<>());
+        List<Permission> permissions =
+            Optional.ofNullable(PermissionPersistenceMapper.INSTANCE.toEntities(permissionPOList)).orElse(new ArrayList<>());
         return this.hasDescendant(permissions);
     }
 
@@ -66,7 +67,8 @@ public class PermissionConvertor {
 
     @API(status = Status.STABLE, since = "2.14.0")
     public List<Permission> toEntitiesFromArchivedPO(List<PermissionArchivedPO> permissionArchivedPOList) {
-        List<Permission> permissions = Optional.ofNullable(PermissionPersistenceMapper.INSTANCE.toEntitiesFromArchivedPO(permissionArchivedPOList)).orElse(new ArrayList<>());
+        List<Permission> permissions =
+            Optional.ofNullable(PermissionPersistenceMapper.INSTANCE.toEntitiesFromArchivedPO(permissionArchivedPOList)).orElse(new ArrayList<>());
         return this.hasDescendant(permissions);
     }
 
@@ -117,6 +119,7 @@ public class PermissionConvertor {
     }
 
     private List<Permission> hasDescendant(List<Permission> permissions) {
+        // noinspection DuplicatedCode
         List<Long> permissionIds = Optional.ofNullable(permissions).orElse(new ArrayList<>()).stream()
             .map(Permission::getId).toList();
         if (permissionIds.isEmpty()) {

@@ -451,8 +451,8 @@ public class AuthorizationConfiguration {
             .filter(scope -> scope.startsWith(CommonConstants.ROLE_PREFIX))
             .map(scope -> scope.substring(CommonConstants.ROLE_PREFIX.length()))
             .collect(Collectors.toSet());
-        Set<String> authorityCodesFromRoles = roleRepository.findByCodeIn(roles)
-            .stream().flatMap(roleDo -> roleConvertor.toEntity(roleDo).stream())
+        Set<String> authorityCodesFromRoles = roleConvertor.toEntities(roleRepository.findByCodeIn(roles))
+            .stream()
             .flatMap(role -> Stream.concat(
                 role.getPermissions() != null
                     ? role.getPermissions().stream()
@@ -465,10 +465,7 @@ public class AuthorizationConfiguration {
             .filter(scope -> !scope.startsWith(CommonConstants.ROLE_PREFIX))
             .distinct()
             .collect(Collectors.toList());
-        List<Permission> permissions = permissionRepository.findAllByCodeIn(permissionCodes)
-            .stream()
-            .flatMap(permissionPO -> permissionConvertor.toEntity(permissionPO).stream())
-            .toList();
+        List<Permission> permissions = permissionConvertor.toEntities(permissionRepository.findAllByCodeIn(permissionCodes));
         List<Long> descendantIds = permissions.stream().filter(Permission::isHasDescendant)
             .map(Permission::getId)
             .collect(Collectors.toList());

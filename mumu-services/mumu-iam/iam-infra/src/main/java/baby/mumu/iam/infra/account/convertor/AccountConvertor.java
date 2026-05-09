@@ -147,20 +147,13 @@ public class AccountConvertor {
             .map(RoleCacheablePO::getId)
             .collect(Collectors.toList());
         // 已缓存的角色
-        List<Role> cachedCollectionOfRole = roleCacheablePOS.stream()
-            .flatMap(roleCacheablePO -> roleConvertor.toEntity(roleCacheablePO).stream())
-            .collect(
-                Collectors.toList());
+        List<Role> cachedCollectionOfRole = roleConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
         // 未缓存的角色
         List<Role> uncachedCollectionOfRole = Optional.of(
                 CollectionUtils.subtract(roleIds, cachedCollectionOfRoleIDs))
             .filter(CollectionUtils::isNotEmpty).map(
-                uncachedCollectionOfRoleId -> roleRepository.findAllById(
-                        uncachedCollectionOfRoleId)
-                    .stream()
-                    .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
-                    .collect(
-                        Collectors.toList())).orElse(new ArrayList<>());
+                uncachedCollectionOfRoleId -> roleConvertor.toEntities(roleRepository.findAllById(
+                    uncachedCollectionOfRoleId))).orElse(new ArrayList<>());
         // 未缓存的角色放入缓存
         if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
             roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()
@@ -206,19 +199,13 @@ public class AccountConvertor {
             .map(RoleCacheablePO::getCode)
             .collect(Collectors.toList());
         // 已缓存的角色
-        List<Role> cachedCollectionOfRole = roleCacheablePOS.stream()
-            .flatMap(roleCacheablePO -> roleConvertor.toEntity(roleCacheablePO).stream())
-            .collect(
-                Collectors.toList());
+        List<Role> cachedCollectionOfRole = roleConvertor.toEntitiesFromCacheablePO(roleCacheablePOS);
         // 未缓存的角色
         List<Role> uncachedCollectionOfRole = Optional.of(
                 CollectionUtils.subtract(codes, cachedCollectionOfRoleCodes))
             .filter(CollectionUtils::isNotEmpty).map(
-                uncachedCollectionOfRoleId -> roleRepository.findByCodeIn(uncachedCollectionOfRoleId)
-                    .stream()
-                    .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
-                    .collect(
-                        Collectors.toList())).orElse(new ArrayList<>());
+                uncachedCollectionOfRoleId -> roleConvertor.toEntities(roleRepository.findByCodeIn(
+                    uncachedCollectionOfRoleId))).orElse(new ArrayList<>());
         // 未缓存的角色放入缓存
         if (CollectionUtils.isNotEmpty(uncachedCollectionOfRole)) {
             roleCacheRepository.saveAll(uncachedCollectionOfRole.stream()

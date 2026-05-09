@@ -16,8 +16,6 @@
 
 package baby.mumu.iam.infra.role.convertor;
 
-import baby.mumu.basis.exception.ApplicationException;
-import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.iam.domain.permission.Permission;
 import baby.mumu.iam.domain.role.Role;
 import baby.mumu.iam.infra.permission.convertor.PermissionConvertor;
@@ -28,24 +26,18 @@ import baby.mumu.iam.infra.relations.cache.RolePermissionCacheRepository;
 import baby.mumu.iam.infra.relations.cache.RolePermissionCacheablePO;
 import baby.mumu.iam.infra.relations.database.*;
 import baby.mumu.iam.infra.role.gatewayimpl.cache.po.RoleCacheablePO;
-import baby.mumu.iam.infra.role.gatewayimpl.database.RoleArchivedRepository;
 import baby.mumu.iam.infra.role.gatewayimpl.database.RoleRepository;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RoleArchivedPO;
 import baby.mumu.iam.infra.role.gatewayimpl.database.po.RolePO;
 import baby.mumu.iam.infra.role.mapper.RolePersistenceMapper;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +52,6 @@ public class RoleConvertor {
     private final PermissionConvertor permissionConvertor;
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
-    private final RoleArchivedRepository roleArchivedRepository;
     private final RolePermissionRepository rolePermissionRepository;
     private final PermissionCacheRepository permissionCacheRepository;
     private final RolePermissionCacheRepository rolePermissionCacheRepository;
@@ -70,7 +61,6 @@ public class RoleConvertor {
     @Autowired
     public RoleConvertor(PermissionConvertor permissionConvertor, RoleRepository roleRepository,
                          PermissionRepository permissionRepository,
-                         RoleArchivedRepository roleArchivedRepository,
                          RolePermissionRepository rolePermissionRepository,
                          PermissionCacheRepository permissionCacheRepository,
                          RolePermissionCacheRepository rolePermissionCacheRepository,
@@ -78,7 +68,6 @@ public class RoleConvertor {
         this.permissionConvertor = permissionConvertor;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
-        this.roleArchivedRepository = roleArchivedRepository;
         this.rolePermissionRepository = rolePermissionRepository;
         this.permissionCacheRepository = permissionCacheRepository;
         this.rolePermissionCacheRepository = rolePermissionCacheRepository;
@@ -98,7 +87,8 @@ public class RoleConvertor {
 
     @API(status = Status.STABLE, since = "2.14.0")
     public List<Role> toEntities(List<RolePO> rolePOList) {
-        List<Role> roles = Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntities(rolePOList)).orElse(new ArrayList<>());
+        List<Role> roles =
+            Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntities(rolePOList)).orElse(new ArrayList<>());
         roles.forEach(role -> setAuthorities(role, getPermissionIds(role)));
         return this.hasDescendant(roles);
     }
@@ -112,6 +102,7 @@ public class RoleConvertor {
     }
 
     private List<Role> hasDescendant(List<Role> roles) {
+        // noinspection DuplicatedCode
         List<Long> roleIds = Optional.ofNullable(roles).orElse(new ArrayList<>()).stream()
             .map(Role::getId).toList();
         if (roleIds.isEmpty()) {
@@ -208,7 +199,8 @@ public class RoleConvertor {
 
     @API(status = Status.STABLE, since = "2.14.0")
     public List<Role> toEntitiesFromArchivedPO(List<RoleArchivedPO> roleArchivedPOList) {
-        List<Role> roles = Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntitiesFromArchivedPO(roleArchivedPOList)).orElse(new ArrayList<>());
+        List<Role> roles =
+            Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntitiesFromArchivedPO(roleArchivedPOList)).orElse(new ArrayList<>());
         roles.forEach(role -> setAuthorities(role, getPermissionIds(role)));
         return roles;
     }
@@ -225,6 +217,16 @@ public class RoleConvertor {
                 setAuthorities(role, getPermissionIds(role));
                 return role;
             });
+    }
+
+    @API(status = Status.STABLE, since = "2.14.0")
+    public List<Role> toEntitiesFromCacheablePO(List<RoleCacheablePO> roleCacheablePOList) {
+        List<Role> roles = Optional.ofNullable(roleCacheablePOList).orElse(new ArrayList<>()).stream()
+            .flatMap(roleCacheablePO -> Optional.ofNullable(RolePersistenceMapper.INSTANCE.toEntity(roleCacheablePO))
+                .stream())
+            .peek(role -> setAuthorities(role, getPermissionIds(role)))
+            .toList();
+        return this.hasDescendant(roles);
     }
 
     @API(status = Status.STABLE, since = "1.0.4")

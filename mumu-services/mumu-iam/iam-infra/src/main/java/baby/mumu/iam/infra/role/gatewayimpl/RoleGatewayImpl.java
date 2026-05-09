@@ -194,9 +194,8 @@ public class RoleGatewayImpl implements RoleGateway {
                     roleEntity.getPermissions()))
                 .map(authorities -> authorities.stream().map(Permission::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
-        return new PageImpl<>(rolePOPage.getContent().stream()
-            .flatMap(rolePO -> roleConvertor.toEntity(rolePO).stream())
-            .toList(), pageRequest, rolePOPage.getTotalElements());
+        List<Role> roles = roleConvertor.toEntities(rolePOPage.getContent());
+        return new PageImpl<>(roles, pageRequest, rolePOPage.getTotalElements());
     }
 
     /**
@@ -213,9 +212,8 @@ public class RoleGatewayImpl implements RoleGateway {
                     roleEntity.getPermissions()))
                 .map(authorities -> authorities.stream().map(Permission::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
-        return new SliceImpl<>(rolePOSlice.getContent().stream()
-            .flatMap(roleDataObject -> roleConvertor.toEntity(roleDataObject).stream())
-            .toList(), pageRequest, rolePOSlice.hasNext());
+        List<Role> roles = roleConvertor.toEntities(rolePOSlice.getContent());
+        return new SliceImpl<>(roles, pageRequest, rolePOSlice.hasNext());
     }
 
     /**
@@ -232,9 +230,8 @@ public class RoleGatewayImpl implements RoleGateway {
                     roleEntity.getPermissions()))
                 .map(authorities -> authorities.stream().map(Permission::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
-        return new SliceImpl<>(roleArchivedPOS.getContent().stream()
-            .flatMap(roleArchivedPO -> roleConvertor.toEntity(roleArchivedPO).stream())
-            .toList(), pageRequest, roleArchivedPOS.hasNext());
+        List<Role> roles = roleConvertor.toEntitiesFromArchivedPO(roleArchivedPOS.getContent());
+        return new SliceImpl<>(roles, pageRequest, roleArchivedPOS.hasNext());
     }
 
     /**
@@ -251,9 +248,8 @@ public class RoleGatewayImpl implements RoleGateway {
                     roleEntity.getPermissions()))
                 .map(authorities -> authorities.stream().map(Permission::getId).collect(
                     Collectors.toList())).orElse(null), pageRequest);
-        return new PageImpl<>(roleArchivedPOPage.getContent().stream()
-            .flatMap(roleArchivedPO -> roleConvertor.toEntity(roleArchivedPO).stream())
-            .toList(), pageRequest, roleArchivedPOPage.getTotalElements());
+        List<Role> roles = roleConvertor.toEntitiesFromArchivedPO(roleArchivedPOPage.getContent());
+        return new PageImpl<>(roles, pageRequest, roleArchivedPOPage.getTotalElements());
     }
 
     /**
@@ -263,9 +259,8 @@ public class RoleGatewayImpl implements RoleGateway {
     @API(status = Status.STABLE, since = "1.0.0")
     @Transactional(rollbackFor = Exception.class)
     public List<Role> findAllContainPermission(Long permissionId) {
-        return rolePermissionRepository.findByPermissionId(permissionId).stream()
-            .flatMap(rolePermissionPO -> roleConvertor.toEntity(rolePermissionPO.getRole()).stream())
-            .toList();
+        return roleConvertor.toEntities(rolePermissionRepository.findByPermissionId(permissionId).stream()
+            .map(RolePermissionPO::getRole).toList());
     }
 
     /**
