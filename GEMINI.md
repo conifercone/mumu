@@ -72,6 +72,7 @@ Internal module structure (Clean Architecture):
 - **No Automatic Commits:** NEVER stage or commit changes unless specifically and explicitly requested by the user. Providing a code fix or implementation does not imply permission to commit.
 - **Language Preference:** Always communicate and respond in **Chinese** (中文).
 - **Code Comments:** Use **Chinese** (中文) for all code comments and documentation within the source code.
+- **Commit Messages:** Use **Chinese** (中文) for the `subject` and `body`, and use **English** (英文) for the `scope` of commit messages.
 - **Terminal Encoding:** Always ensure the terminal/shell uses **UTF-8** encoding to prevent Chinese character corruption (e.g., execute `$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8` in PowerShell).
 
 ## Key Files & Directories
