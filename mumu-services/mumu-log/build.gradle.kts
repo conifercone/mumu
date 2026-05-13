@@ -4,6 +4,7 @@ plugins {
     id("mumu.quality-conventions")
     id("mumu.publish-conventions")
     id("mumu.processor-conventions")
+    id("mumu.springboot-conventions")
 }
 
 description = "Log Management Service"

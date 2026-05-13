@@ -40,6 +40,7 @@ jmhVersion = '1.37'
 tikaVersion = '3.3.0'
 cosidVersion = '3.0.5'
 otelLog4j2AppenderVersion = '2.27.0-alpha'
+dependencyManagementPluginVersion = '1.2.0'
 # bom version
 grpcBomVersion = '1.81.0'
 guavaBomVersion = '33.6.0-jre'
@@ -52,6 +53,7 @@ kotlinPluginVersion = '2.3.21'
 
 [libraries]
 springboot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springbootVersion" }
+dependency-management-plugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "dependencyManagementPluginVersion" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPluginVersion" }
 lombok-gradle-plugin = { module = "io.freefair.gradle:lombok-plugin", version.ref = "lombokPluginVersion" }
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
