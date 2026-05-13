@@ -3,6 +3,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 plugins {
+    java
     signing
     `project-report`
     idea
@@ -47,7 +48,7 @@ tasks.withType<Jar>().configureEach {
     finalizedBy("signJar", "signSourceJar")
 }
 
-tasks.named("jar") {
+tasks.named<Jar>("jar") {
     dependsOn(tasks.named("sourceJar"))
     
     into("META-INF/") {
