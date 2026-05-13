@@ -53,7 +53,6 @@ kotlinPluginVersion = '2.3.21'
 
 [libraries]
 springboot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springbootVersion" }
-dependency-management-plugin = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "dependencyManagementPluginVersion" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPluginVersion" }
 lombok-gradle-plugin = { module = "io.freefair.gradle:lombok-plugin", version.ref = "lombokPluginVersion" }
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
