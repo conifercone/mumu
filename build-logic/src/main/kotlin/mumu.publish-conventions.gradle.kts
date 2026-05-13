@@ -50,11 +50,11 @@ tasks.withType<Jar>().configureEach {
 
 tasks.named<Jar>("jar") {
     dependsOn(tasks.named("sourceJar"))
-    
+
     into("META-INF/") {
         from(rootProject.file("LICENSE"))
     }
-    
+
     manifest {
         attributes(
             "Implementation-Title" to archiveBaseName.get(),

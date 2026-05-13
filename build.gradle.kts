@@ -1,22 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
-import java.nio.charset.StandardCharsets
-import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-
-plugins {
-    alias(libs.plugins.springboot) apply false
-    alias(libs.plugins.protobuf) apply false
-    alias(libs.plugins.lombok)
-    alias(libs.plugins.kotlinJvm)
-    alias(libs.plugins.kotlinPluginSpring)
-    alias(libs.plugins.kotlinPluginJpa)
-    alias(libs.plugins.signing)
-    alias(libs.plugins.projectReport)
-    alias(libs.plugins.checkstyle)
-    alias(libs.plugins.pmd)
-}
 
 description = "The Delightfully Clean & Ready-to-Go Management System!"
 

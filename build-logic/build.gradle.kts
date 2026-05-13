@@ -11,7 +11,6 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 
     implementation(libs.springboot.gradle.plugin)
-    implementation(libs.dependency.management.plugin)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.lombok.gradle.plugin)
     implementation("org.jetbrains.kotlin:kotlin-allopen:${libs.versions.kotlinPluginVersion.get()}")
