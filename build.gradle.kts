@@ -135,6 +135,7 @@ subprojects {
     }
 
     tasks.register<Jar>("sourceJar") {
+        description = "源代码任务"
         archiveClassifier.set("sources")
         from(sourceSets.main.get().allSource)
     }
