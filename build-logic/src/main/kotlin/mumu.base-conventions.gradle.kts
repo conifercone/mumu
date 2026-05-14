@@ -35,6 +35,7 @@ dependencies {
     implementation(libs.jakarta.annotation.api)
     implementation(libs.commons.lang3)
     implementation(libs.commons.collections4)
+    implementation(libs.guava)
 
     testImplementation(libs.junit.jupiter)
     testRuntimeOnly(libs.junit.platform.launcher)

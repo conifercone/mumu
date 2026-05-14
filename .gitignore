@@ -85,3 +85,4 @@ rebel.xml
 
 ### kotlin ###
 .kotlin/
+.claude/
