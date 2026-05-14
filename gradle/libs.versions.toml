@@ -55,6 +55,7 @@ springboot-gradle-plugin = { module = "org.springframework.boot:spring-boot-grad
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinPluginVersion" }
 kotlin-allopen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlinPluginVersion" }
 kotlin-noarg = { module = "org.jetbrains.kotlin:kotlin-noarg", version.ref = "kotlinPluginVersion" }
+protobuf-gradle-plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobufPluginVersion" }
 lombok-gradle-plugin = { module = "io.freefair.gradle:lombok-plugin", version.ref = "lombokPluginVersion" }
 # https://central.sonatype.com/artifact/org.junit.jupiter/junit-jupiter
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
@@ -284,4 +285,3 @@ jackson = ["spring-boot-starter-jackson"]
 web = ["spring-boot-starter-opentelemetry", "opentelemetry-log4j-appender", "spring-boot-starter-aspectj", "spring-boot-starter-actuator", "spring-boot-starter-webmvc"]
 
 [plugins]
-protobuf = { id = "com.google.protobuf", version.ref = "protobufPluginVersion" }

@@ -1,8 +1,6 @@
-import com.google.protobuf.gradle.id
-
 plugins {
     id("mumu.service-conventions")
-    alias(libs.plugins.protobuf)
+    id("mumu.protobuf-conventions")
 }
 
 
@@ -22,22 +20,4 @@ dependencies {
     implementation(libs.spring.grpc.server.spring.boot.starter)
     implementation(libs.spring.grpc.client.spring.boot.starter)
     api(libs.protobuf.java)
-}
-
-protobuf {
-    protoc {
-        artifact = libs.protobuf.protoc.get().toString()
-    }
-    plugins {
-        id("grpc") {
-            artifact = libs.protoc.gen.grpc.java.get().toString()
-        }
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.plugins {
-                id("grpc")
-            }
-        }
-    }
 }

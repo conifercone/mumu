@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.lombok.gradle.plugin)
     implementation(libs.kotlin.allopen)
     implementation(libs.kotlin.noarg)
+    implementation(libs.protobuf.gradle.plugin)
 }
