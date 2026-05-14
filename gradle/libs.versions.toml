@@ -212,6 +212,8 @@ zxing-javase = { module = "com.google.zxing:javase", version.ref = "zxingVersion
 javapoet = { module = "com.palantir.javapoet:javapoet", version.ref = "javapoetVersion" }
 # https://central.sonatype.com/artifact/com.google.auto.service/auto-service
 auto-service = { module = "com.google.auto.service:auto-service", version.ref = "autoServiceVersion" }
+# https://central.sonatype.com/artifact/jakarta.annotation/jakarta.annotation-api
+jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api" }
 # https://central.sonatype.com/artifact/jakarta.persistence/jakarta.persistence-api
 jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api" }
 # https://central.sonatype.com/artifact/net.sourceforge.tess4j/tess4j
