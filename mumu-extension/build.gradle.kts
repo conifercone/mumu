@@ -24,6 +24,5 @@ dependencies {
     implementation(libs.bucket4j.lettuce)
     implementation(libs.lettuce.core)
     implementation(libs.spring.data.redis)
-    testImplementation(libs.tess4j)
     testImplementation(libs.spring.test)
 }
