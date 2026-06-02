@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Skill(superpowers:brainstorming)",
-      "Bash(./gradlew build *)",
-      "Bash(export JAVA_HOME='C:\\\\Users\\\\kaiyu\\\\scoop\\\\apps\\\\temurin25-jdk\\\\current')"
-    ]
-  }
-}
