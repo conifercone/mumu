@@ -2,9 +2,9 @@
 
 ## Project Structure & Module Organization
 
-- Multi-module Gradle build; primary modules live at repo root (`mumu-services/`, `mumu-basis/`, `mumu-extension/`, `mumu-processor/`, `mumu-benchmark/`).
+- Multi-module Gradle build; primary modules live at repo root (`build-logic/`, `mumu-services/`, `mumu-basis/`, `mumu-extension/`, `mumu-processor/`, `mumu-benchmark/`).
 - Standard layout per module: `src/main/java` (and `src/main/kotlin`), `src/test/java` for tests, `src/main/resources` for config and migrations.
-- Build rules in `build.gradle.kts`; version catalog in `gradle/libs.versions.toml`; static analysis config in `config/`.
+- Build conventions live in `build-logic/` (Java, Kotlin, Processor, Protobuf, quality check, and publishing convention plugins); version catalog in `gradle/libs.versions.toml`; static analysis config in `config/`.
 - Dependencies are managed via Gradle Version Catalogs in `gradle/libs.versions.toml` (see `https://docs.gradle.org/current/userguide/version_catalogs.html`); add or update dependencies there first.
 
 ## Architecture Overview
@@ -45,7 +45,7 @@
 - Requests: `@RequestBody` + `@Validated` for commands, `@ModelAttribute` for query commands, `@PathVariable` for IDs.
 - Responses: use `ResponseWrapper<T>` where established; `Page` for count-based pagination, `Slice` for no-count.
 - Application layer: implement `*ServiceImpl` that delegates to `*CmdExe` executors; annotate with `@Transactional` and `@Observed` as needed; gRPC services extend `*ImplBase` and use `@GrpcService`.
-- Domain/infra boundary: define `*Gateway` interfaces in domain; implement in infra using repositories, cache adapters, and convertors/mappers.
+- Domain/infra boundary: define `*Gateway` interfaces in domain; implement in infra using repositories and cache adapters. Object mapping between layers uses MapStruct mappers (e.g., `*Convertor`) defined in infra.
 - Destructive operations: use `@DangerousOperation` and invalidate related caches.
 - Schema changes: add a migration in `db/migration/postgresql` named like `Vx.y.z__short_description.sql`.
 - New feature flow: add `*Cmd`/`*DTO` in `iam-client` → implement `*CmdExe` in `iam-application` → add/extend `*Gateway` in `iam-domain` and implement in `iam-infra` → expose REST/gRPC in `iam-adapter`/`*ServiceImpl` → add tests under `mumu-services/mumu-iam/src/test/java` mirroring package names.
