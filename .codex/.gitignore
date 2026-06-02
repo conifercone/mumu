@@ -1,0 +1,8 @@
+# Personal local overrides
+settings.local.json
+
+# Personal / user-specific data
+memories/
+
+# Installed plugins (reinstallable from marketplace)
+plugins/

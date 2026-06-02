@@ -16,6 +16,58 @@ The format is based on link:https://keepachangelog.com/en/1.1.0/[Keep a Changelo
 
 === ⚠️ Removed
 
+== [2.17.0] - 2026-06-02
+
+=== ⭐ Added
+
+- `build-logic` convention plugin system with `mumu.java-conventions`, Kotlin, and Processor convention plugins
+- Protobuf Gradle plugin
+- Composite Gradle plugins for service aggregation modules
+- Quality check and publishing convention plugins
+- Architecture review report
+- `CLAUDE.md` and `GEMINI.md` project documentation
+- Git configuration files
+
+=== 🕸️ Changed
+
+- `Gradle` upgraded to 9.5.1
+- `Spring Boot` upgraded to 4.0.6
+- `Kotlin` upgraded to 2.3.21
+- `gRPC` upgraded to 1.81.0
+- `Protobuf` upgraded to 4.35.0
+- `com.palantir.javapoet:javapoet` upgraded to 0.15.0
+- `software.amazon.awssdk:bom` upgraded to 2.44.13
+- `com.googlecode.libphonenumber:libphonenumber` upgraded to 9.0.31
+- `io.swagger.core.v3:swagger-annotations-jakarta` upgraded to 2.2.50
+- `io.freefair.lombok` upgraded to 9.5.0
+- `com.deepl.api:deepl-java` upgraded to 1.16.0
+- `io.minio:minio` upgraded to 9.0.1
+- `com.bucket4j:bucket4j_jdk17-lettuce` upgraded to 8.19.0
+- `org.jobrunr:jobrunr-spring-boot-4-starter` upgraded to 8.6.0
+- `commons-io:commons-io` upgraded to 2.22.0
+- `cosid` upgraded to 3.0.5
+- `com.redis.om:redis-om-spring` upgraded to 2.0.4
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui` upgraded to 3.0.3
+- `io.hypersistence:hypersistence-utils-hibernate-71` upgraded to 3.15.2
+- `com.gradle.develocity` upgraded to 4.4.1
+- `com.google.protobuf` upgraded to 0.10.0
+- `org.apache.tika:tika-core` upgraded to 3.3.0
+- `org.springframework.grpc:spring-grpc-dependencies` upgraded to 1.0.3
+- `io.opentelemetry.instrumentation:opentelemetry-log4j-appender-2.17` upgraded to 2.28.1-alpha
+- IAM layer refactored: application layer no longer depends on infrastructure
+- IAM `AccountConvertor` and `RoleConvertor` refactored to use MapStruct mappers
+- Enforce internal MapStruct mapper usage
+- Gradle convention plugins refactored for type-safe `libs` accessors
+- Timezone handling principle: frontend-localized, backend-unified
+- Build scripts optimized and README updated
+
+=== 🐞 Fixed
+
+- Fixed `compileJava` task compatibility with configuration cache
+- Fixed unresolved `libs` reference in convention plugins
+- Restored missing `SpringBoot` configuration in service modules
+- Fixed compatibility with new MinIO dependency
+
 == [2.16.0] - 2026-02-11
 
 === ⭐ Added
