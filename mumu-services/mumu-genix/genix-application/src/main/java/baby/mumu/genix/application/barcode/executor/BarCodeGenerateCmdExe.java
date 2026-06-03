@@ -18,7 +18,7 @@ package baby.mumu.genix.application.barcode.executor;
 
 import baby.mumu.genix.client.cmds.BarCodeGenerateCmd;
 import baby.mumu.genix.domain.barcode.gateway.BarCodeGateway;
-import baby.mumu.genix.infra.barcode.convertor.BarCodeConvertor;
+import baby.mumu.genix.application.barcode.convertor.BarCodeAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -33,10 +33,10 @@ import org.springframework.util.Assert;
 public class BarCodeGenerateCmdExe {
 
     private final BarCodeGateway barCodeGateway;
-    private final BarCodeConvertor barCodeConvertor;
+    private final BarCodeAssemblerConvertor barCodeConvertor;
 
     @Autowired
-    public BarCodeGenerateCmdExe(BarCodeGateway barCodeGateway, BarCodeConvertor barCodeConvertor) {
+    public BarCodeGenerateCmdExe(BarCodeGateway barCodeGateway, BarCodeAssemblerConvertor barCodeConvertor) {
         this.barCodeGateway = barCodeGateway;
         this.barCodeConvertor = barCodeConvertor;
     }

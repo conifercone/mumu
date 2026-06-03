@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.captcha.convertor;
+package baby.mumu.genix.application.captcha.convertor;
 
 import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
@@ -22,7 +22,6 @@ import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.CaptchaCode;
-import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.springframework.stereotype.Component;
@@ -30,51 +29,46 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 /**
- * 验证码对象转换类
+ * 验证码信息转换器 (Application Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Component
-public class CaptchaCodeConvertor {
-
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    public Optional<CaptchaCodeCacheablePO> toCaptchaCodeCacheablePO(CaptchaCode captchaCode) {
-        return Optional.ofNullable(captchaCode)
-            .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeCacheablePO);
-    }
+public class CaptchaCodeAssemblerConvertor {
 
     @API(status = Status.STABLE, since = "1.0.1")
     public Optional<CaptchaCode> toEntity(
         CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd) {
-        return Optional.ofNullable(captchaCodeGeneratedCmd).map(CaptchaCodeMapper.INSTANCE::toEntity);
+        return Optional.ofNullable(captchaCodeGeneratedCmd)
+            .map(CaptchaCodeAssemblerMapper.INSTANCE::toEntity);
     }
 
     @API(status = Status.STABLE, since = "1.0.1")
     public Optional<CaptchaCode> toEntity(
         CaptchaCodeVerifyCmd captchaCodeVerifyCmd) {
-        return Optional.ofNullable(captchaCodeVerifyCmd).map(CaptchaCodeMapper.INSTANCE::toEntity);
+        return Optional.ofNullable(captchaCodeVerifyCmd)
+            .map(CaptchaCodeAssemblerMapper.INSTANCE::toEntity);
     }
 
     @API(status = Status.STABLE, since = "2.2.0")
     public Optional<CaptchaCodeVerifyCmd> toCaptchaCodeVerifyCmd(
         CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd) {
         return Optional.ofNullable(captchaCodeVerifyGrpcCmd)
-            .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeVerifyCmd);
+            .map(CaptchaCodeAssemblerMapper.INSTANCE::toCaptchaCodeVerifyCmd);
     }
 
     @API(status = Status.STABLE, since = "2.15.0")
     public Optional<CaptchaCodeGeneratedDTO> toCaptchaCodeGeneratedDTO(
         CaptchaCode captchaCode) {
         return Optional.ofNullable(captchaCode)
-            .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeGeneratedDTO);
+            .map(CaptchaCodeAssemblerMapper.INSTANCE::toCaptchaCodeGeneratedDTO);
     }
 
     @API(status = Status.STABLE, since = "2.15.0")
     public Optional<CaptchaCodeGeneratedGrpcDTO> toCaptchaCodeGeneratedGrpcDTO(
         CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO) {
         return Optional.ofNullable(captchaCodeGeneratedDTO)
-            .map(CaptchaCodeMapper.INSTANCE::toCaptchaCodeGeneratedGrpcDTO);
+            .map(CaptchaCodeAssemblerMapper.INSTANCE::toCaptchaCodeGeneratedGrpcDTO);
     }
 }

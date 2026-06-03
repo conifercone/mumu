@@ -18,7 +18,7 @@ package baby.mumu.genix.application.qrcode.executor;
 
 import baby.mumu.genix.client.cmds.QRCodeGenerateCmd;
 import baby.mumu.genix.domain.qrcode.gateway.QRCodeGateway;
-import baby.mumu.genix.infra.qrcode.convertor.QRCodeConvertor;
+import baby.mumu.genix.application.qrcode.convertor.QRCodeAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -33,10 +33,10 @@ import org.springframework.util.Assert;
 public class QRCodeGenerateCmdExe {
 
     private final QRCodeGateway qrCodeGateway;
-    private final QRCodeConvertor qrCodeConvertor;
+    private final QRCodeAssemblerConvertor qrCodeConvertor;
 
     @Autowired
-    public QRCodeGenerateCmdExe(QRCodeGateway qrCodeGateway, QRCodeConvertor qrCodeConvertor) {
+    public QRCodeGenerateCmdExe(QRCodeGateway qrCodeGateway, QRCodeAssemblerConvertor qrCodeConvertor) {
         this.qrCodeGateway = qrCodeGateway;
         this.qrCodeConvertor = qrCodeConvertor;
     }

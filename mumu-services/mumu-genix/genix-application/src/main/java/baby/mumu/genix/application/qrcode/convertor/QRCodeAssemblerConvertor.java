@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.qrcode.convertor;
+package baby.mumu.genix.application.qrcode.convertor;
 
 import baby.mumu.genix.client.cmds.QRCodeGenerateCmd;
 import baby.mumu.genix.domain.qrcode.QRCode;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
- * QRCode mapstruct转换器
+ * 二维码对象转换类
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.4
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface QRCodeMapper {
-
-    QRCodeMapper INSTANCE = Mappers.getMapper(QRCodeMapper.class);
+@Component
+public class QRCodeAssemblerConvertor {
 
     @API(status = Status.STABLE, since = "1.0.4")
-    QRCode toEntity(QRCodeGenerateCmd qrCodeGenerateCmd);
+    public Optional<QRCode> toEntity(
+        QRCodeGenerateCmd qrCodeGenerateCmd) {
+        return Optional.ofNullable(qrCodeGenerateCmd).map(QRCodeAssemblerMapper.INSTANCE::toEntity);
+    }
 }

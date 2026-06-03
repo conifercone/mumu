@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter
 
 plugins {
     id("org.springframework.boot")
-    id("signing")
 }
 
 tasks.withType<BootJar>().configureEach {
@@ -27,10 +26,6 @@ tasks.withType<BootJar>().configureEach {
         )
     }
     finalizedBy("signBootJar")
-}
-
-signing {
-    sign(tasks.getByName("bootJar"))
 }
 
 tasks.withType<BootBuildImage>().configureEach {

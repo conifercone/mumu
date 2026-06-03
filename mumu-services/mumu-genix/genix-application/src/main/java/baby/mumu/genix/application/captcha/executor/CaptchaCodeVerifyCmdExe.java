@@ -18,7 +18,7 @@ package baby.mumu.genix.application.captcha.executor;
 
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
-import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
+import baby.mumu.genix.application.captcha.convertor.CaptchaCodeAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,12 +34,12 @@ import java.util.Optional;
 public class CaptchaCodeVerifyCmdExe {
 
     private final CaptchaCodeGateway captchaCodeGateway;
-    private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeAssemblerConvertor captchaCodeConvertor;
 
     @Autowired
     public CaptchaCodeVerifyCmdExe(
         CaptchaCodeGateway captchaCodeGateway,
-        CaptchaCodeConvertor captchaCodeConvertor) {
+        CaptchaCodeAssemblerConvertor captchaCodeConvertor) {
         this.captchaCodeGateway = captchaCodeGateway;
         this.captchaCodeConvertor = captchaCodeConvertor;
     }

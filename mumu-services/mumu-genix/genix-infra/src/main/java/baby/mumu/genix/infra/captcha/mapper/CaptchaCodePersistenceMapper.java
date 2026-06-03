@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.captcha.convertor;
+package baby.mumu.genix.infra.captcha.mapper;
 
-import baby.mumu.basis.mappers.GrpcMapper;
-import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
-import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
-import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
-import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
-import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.CaptchaCode;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import org.apiguardian.api.API;
@@ -32,35 +26,16 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * CaptchaCode mapstruct转换器
+ * CaptchaCode 持久化 MapStruct 转换器
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CaptchaCodeMapper extends GrpcMapper {
+public interface CaptchaCodePersistenceMapper {
 
-    CaptchaCodeMapper INSTANCE = Mappers.getMapper(CaptchaCodeMapper.class);
+    CaptchaCodePersistenceMapper INSTANCE = Mappers.getMapper(CaptchaCodePersistenceMapper.class);
 
     @API(status = Status.STABLE, since = "1.0.1")
     CaptchaCodeCacheablePO toCaptchaCodeCacheablePO(CaptchaCode captchaCode);
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    CaptchaCode toEntity(CaptchaCodeGeneratedCmd captchaCodeGeneratedCmd);
-
-    @API(status = Status.STABLE, since = "1.0.1")
-    CaptchaCode toEntity(CaptchaCodeVerifyCmd captchaCodeVerifyCmd);
-
-    @API(status = Status.STABLE, since = "2.2.0")
-    CaptchaCodeVerifyCmd toCaptchaCodeVerifyCmd(
-        CaptchaCodeVerifyGrpcCmd captchaCodeVerifyGrpcCmd);
-
-    @API(status = Status.STABLE, since = "2.15.0")
-    CaptchaCodeGeneratedDTO toCaptchaCodeGeneratedDTO(
-        CaptchaCode captchaCode);
-
-    @API(status = Status.STABLE, since = "2.15.0")
-    CaptchaCodeGeneratedGrpcDTO toCaptchaCodeGeneratedGrpcDTO(
-        CaptchaCodeGeneratedDTO captchaCodeGeneratedDTO);
-
 }

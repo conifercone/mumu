@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.country.convertor;
+package baby.mumu.genix.application.country.convertor;
 
 import baby.mumu.genix.client.dto.*;
 import baby.mumu.genix.domain.country.City;
@@ -34,9 +34,9 @@ import org.mapstruct.factory.Mappers;
  * @since 2.0.0
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface CountryMapper {
+public interface CountryAssemblerMapper {
 
-    CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
+    CountryAssemblerMapper INSTANCE = Mappers.getMapper(CountryAssemblerMapper.class);
 
     @API(status = Status.STABLE, since = "2.0.0")
     CountryStateCityGetAllDTO toCountryStateCityGetAllDTO(Country country);

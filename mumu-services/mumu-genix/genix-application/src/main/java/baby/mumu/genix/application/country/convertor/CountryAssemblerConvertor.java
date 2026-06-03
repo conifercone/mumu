@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.country.convertor;
+package baby.mumu.genix.application.country.convertor;
 
 import baby.mumu.genix.client.dto.*;
 import baby.mumu.genix.domain.country.City;
@@ -33,49 +33,49 @@ import java.util.Optional;
  * @since 2.0.0
  */
 @Component
-public class CountryConvertor {
+public class CountryAssemblerConvertor {
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryStateCityGetAllDTO> toCountryStateCityGetAllDTO(
         Country country) {
-        return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryStateCityGetAllDTO);
+        return Optional.ofNullable(country).map(CountryAssemblerMapper.INSTANCE::toCountryStateCityGetAllDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetStatesByCountryIdDTO> toCountryGetStatesByCountryIdDTO(
         State state) {
-        return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStatesByCountryIdDTO);
+        return Optional.ofNullable(state).map(CountryAssemblerMapper.INSTANCE::toCountryGetStatesByCountryIdDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetCitiesByStateIdDTO> toCountryGetCitiesByStateIdDTO(
         City city) {
-        return Optional.ofNullable(city).map(CountryMapper.INSTANCE::toCountryGetCitiesByStateIdDTO);
+        return Optional.ofNullable(city).map(CountryAssemblerMapper.INSTANCE::toCountryGetCitiesByStateIdDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetStateByIdDTO> toCountryGetStateByIdDTO(
         State state) {
-        return Optional.ofNullable(state).map(CountryMapper.INSTANCE::toCountryGetStateByIdDTO);
+        return Optional.ofNullable(state).map(CountryAssemblerMapper.INSTANCE::toCountryGetStateByIdDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetStateCitiesByIdDTO> toCountryGetStateCitiesByIdDTO(
         State state) {
         return Optional.ofNullable(state)
-            .map(CountryMapper.INSTANCE::toCountryGetStateCitiesByIdDTO);
+            .map(CountryAssemblerMapper.INSTANCE::toCountryGetStateCitiesByIdDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetCityByIdDTO> toCountryGetCityByIdDTO(
         City city) {
         return Optional.ofNullable(city)
-            .map(CountryMapper.INSTANCE::toCountryGetCityByIdDTO);
+            .map(CountryAssemblerMapper.INSTANCE::toCountryGetCityByIdDTO);
     }
 
     @API(status = Status.STABLE, since = "2.0.0")
     public Optional<CountryGetAllDTO> toCountryGetAllDTO(
         Country country) {
-        return Optional.ofNullable(country).map(CountryMapper.INSTANCE::toCountryGetAllDTO);
+        return Optional.ofNullable(country).map(CountryAssemblerMapper.INSTANCE::toCountryGetAllDTO);
     }
 }

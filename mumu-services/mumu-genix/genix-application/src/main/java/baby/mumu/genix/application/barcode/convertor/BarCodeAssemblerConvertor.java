@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.barcode.convertor;
+package baby.mumu.genix.application.barcode.convertor;
 
 import baby.mumu.genix.client.cmds.BarCodeGenerateCmd;
 import baby.mumu.genix.domain.barcode.BarCode;
@@ -31,11 +31,11 @@ import java.util.Optional;
  * @since 1.0.4
  */
 @Component
-public class BarCodeConvertor {
+public class BarCodeAssemblerConvertor {
 
     @API(status = Status.STABLE, since = "1.0.4")
     public Optional<BarCode> toEntity(
         BarCodeGenerateCmd barCodeGenerateCmd) {
-        return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeMapper.INSTANCE::toEntity);
+        return Optional.ofNullable(barCodeGenerateCmd).map(BarCodeAssemblerMapper.INSTANCE::toEntity);
     }
 }

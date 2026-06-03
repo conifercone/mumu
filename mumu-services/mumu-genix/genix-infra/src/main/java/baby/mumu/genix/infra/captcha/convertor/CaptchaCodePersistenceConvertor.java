@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package baby.mumu.genix.infra.barcode.convertor;
+package baby.mumu.genix.infra.captcha.convertor;
 
-import baby.mumu.genix.client.cmds.BarCodeGenerateCmd;
-import baby.mumu.genix.domain.barcode.BarCode;
+import baby.mumu.genix.domain.captcha.CaptchaCode;
+import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
+import baby.mumu.genix.infra.captcha.mapper.CaptchaCodePersistenceMapper;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
- * BarCode mapstruct转换器
+ * 验证码持久化转换器 (Infrastructure Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 1.0.4
+ * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BarCodeMapper {
+@Component
+public class CaptchaCodePersistenceConvertor {
 
-    BarCodeMapper INSTANCE = Mappers.getMapper(BarCodeMapper.class);
-
-    @API(status = Status.STABLE, since = "1.0.4")
-    BarCode toEntity(BarCodeGenerateCmd barCodeGenerateCmd);
+    @API(status = Status.STABLE, since = "1.0.1")
+    public Optional<CaptchaCodeCacheablePO> toCaptchaCodeCacheablePO(CaptchaCode captchaCode) {
+        return Optional.ofNullable(captchaCode)
+            .map(CaptchaCodePersistenceMapper.INSTANCE::toCaptchaCodeCacheablePO);
+    }
 }

@@ -21,7 +21,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
-import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
+import baby.mumu.genix.application.captcha.convertor.CaptchaCodeAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -36,12 +36,12 @@ import org.springframework.util.Assert;
 public class CaptchaCodeGeneratedCmdExe {
 
     private final CaptchaCodeGateway captchaCodeGateway;
-    private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeAssemblerConvertor captchaCodeConvertor;
 
     @Autowired
     public CaptchaCodeGeneratedCmdExe(
         CaptchaCodeGateway captchaCodeGateway,
-        CaptchaCodeConvertor captchaCodeConvertor) {
+        CaptchaCodeAssemblerConvertor captchaCodeConvertor) {
         this.captchaCodeGateway = captchaCodeGateway;
         this.captchaCodeConvertor = captchaCodeConvertor;
     }

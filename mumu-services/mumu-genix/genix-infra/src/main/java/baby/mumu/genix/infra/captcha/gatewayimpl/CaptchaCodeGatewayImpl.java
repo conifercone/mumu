@@ -21,7 +21,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.genix.domain.captcha.CaptchaCode;
 import baby.mumu.genix.domain.captcha.gateway.CaptchaCodeGateway;
 import baby.mumu.genix.domain.pk.gateway.PrimaryKeyGateway;
-import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
+import baby.mumu.genix.infra.captcha.convertor.CaptchaCodePersistenceConvertor;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.CaptchaCodeCacheRepository;
 import baby.mumu.genix.infra.captcha.gatewayimpl.cache.po.CaptchaCodeCacheablePO;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,15 +42,15 @@ public class CaptchaCodeGatewayImpl implements
 
     private final PrimaryKeyGateway primaryKeyGateway;
     private final CaptchaCodeCacheRepository captchaCodeCacheRepository;
-    private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodePersistenceConvertor captchaCodePersistenceConvertor;
 
     @Autowired
     public CaptchaCodeGatewayImpl(PrimaryKeyGateway primaryKeyGateway,
                                   CaptchaCodeCacheRepository captchaCodeCacheRepository,
-                                  CaptchaCodeConvertor captchaCodeConvertor) {
+                                  CaptchaCodePersistenceConvertor captchaCodePersistenceConvertor) {
         this.primaryKeyGateway = primaryKeyGateway;
         this.captchaCodeCacheRepository = captchaCodeCacheRepository;
-        this.captchaCodeConvertor = captchaCodeConvertor;
+        this.captchaCodePersistenceConvertor = captchaCodePersistenceConvertor;
     }
 
     /**
@@ -68,7 +68,7 @@ public class CaptchaCodeGatewayImpl implements
                     RandomStringUtils.secure().nextAlphanumeric(captchaCodeNotNull.getLength()));
                 Optional.ofNullable(captchaCodeNotNull.getTtl()).orElseThrow(() -> new ApplicationException(
                     ResponseCode.CAPTCHA_CODE_VALIDITY_PERIOD_CANNOT_BE_EMPTY));
-                return captchaCodeConvertor.toCaptchaCodeCacheablePO(captchaCodeNotNull);
+                return captchaCodePersistenceConvertor.toCaptchaCodeCacheablePO(captchaCodeNotNull);
             }).orElseThrow(() -> new ApplicationException(ResponseCode.DATA_CONVERSION_FAILED));
         captchaCodeCacheRepository.save(captchaCodeCacheablePO);
         return captchaCode;

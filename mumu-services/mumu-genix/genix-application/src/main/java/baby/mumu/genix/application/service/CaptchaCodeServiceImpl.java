@@ -29,7 +29,7 @@ import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
-import baby.mumu.genix.infra.captcha.convertor.CaptchaCodeConvertor;
+import baby.mumu.genix.application.captcha.convertor.CaptchaCodeAssemblerConvertor;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
@@ -56,12 +56,12 @@ public class CaptchaCodeServiceImpl extends CaptchaCodeServiceImplBase implement
 
     private final CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe;
     private final CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe;
-    private final CaptchaCodeConvertor captchaCodeConvertor;
+    private final CaptchaCodeAssemblerConvertor captchaCodeConvertor;
     private final CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe;
 
     @Autowired
     public CaptchaCodeServiceImpl(CaptchaCodeGeneratedCmdExe captchaCodeGeneratedCmdExe,
-                                  CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeConvertor captchaCodeConvertor,
+                                  CaptchaCodeVerifyCmdExe captchaCodeVerifyCmdExe, CaptchaCodeAssemblerConvertor captchaCodeConvertor,
                                   CaptchaCodeDeleteCmdExe captchaCodeDeleteCmdExe) {
         this.captchaCodeGeneratedCmdExe = captchaCodeGeneratedCmdExe;
         this.captchaCodeVerifyCmdExe = captchaCodeVerifyCmdExe;

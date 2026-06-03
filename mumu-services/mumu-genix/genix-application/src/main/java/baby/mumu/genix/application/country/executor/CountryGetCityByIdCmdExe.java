@@ -18,7 +18,7 @@ package baby.mumu.genix.application.country.executor;
 
 import baby.mumu.genix.client.dto.CountryGetCityByIdDTO;
 import baby.mumu.genix.domain.country.gateway.CountryGateway;
-import baby.mumu.genix.infra.country.convertor.CountryConvertor;
+import baby.mumu.genix.application.country.convertor.CountryAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -35,11 +35,11 @@ import java.util.Optional;
 public class CountryGetCityByIdCmdExe {
 
     private final CountryGateway countryGateway;
-    private final CountryConvertor countryConvertor;
+    private final CountryAssemblerConvertor countryConvertor;
 
     @Autowired
     public CountryGetCityByIdCmdExe(CountryGateway countryGateway,
-                                    CountryConvertor countryConvertor) {
+                                    CountryAssemblerConvertor countryConvertor) {
         this.countryGateway = countryGateway;
         this.countryConvertor = countryConvertor;
     }
