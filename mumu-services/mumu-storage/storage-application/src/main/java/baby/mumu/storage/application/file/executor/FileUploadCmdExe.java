@@ -16,8 +16,8 @@
 
 package baby.mumu.storage.application.file.executor;
 
+import baby.mumu.storage.application.file.convertor.FileAssemblerConvertor;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,12 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadCmdExe {
 
     private final FileGateway fileGateway;
-    private final FileConvertor fileConvertor;
+    private final FileAssemblerConvertor fileAssemblerConvertor;
 
     @Autowired
-    public FileUploadCmdExe(FileGateway fileGateway, FileConvertor fileConvertor) {
+    public FileUploadCmdExe(FileGateway fileGateway, FileAssemblerConvertor fileAssemblerConvertor) {
         this.fileGateway = fileGateway;
-        this.fileConvertor = fileConvertor;
+        this.fileAssemblerConvertor = fileAssemblerConvertor;
     }
 
     /**
@@ -50,7 +50,7 @@ public class FileUploadCmdExe {
      * @return 文件元数据Id
      */
     public Long execute(Long storageZoneId, MultipartFile multipartFile) {
-        return fileConvertor.toEntity(storageZoneId, multipartFile).map(fileGateway::upload)
+        return fileAssemblerConvertor.toEntity(storageZoneId, multipartFile).map(fileGateway::upload)
             .orElse(null);
     }
 }

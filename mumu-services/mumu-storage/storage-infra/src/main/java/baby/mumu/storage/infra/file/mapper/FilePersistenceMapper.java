@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infra.zone.convertor;
+package baby.mumu.storage.infra.file.mapper;
 
-import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
-import baby.mumu.storage.domain.zone.StorageZone;
-import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
+import baby.mumu.storage.domain.file.FileMetadata;
+import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -27,25 +26,19 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * 存储区域转换类
+ * File persistence mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.13.0
+ * @since 2.12.0
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface StorageZoneMapper {
+public interface FilePersistenceMapper {
 
-    StorageZoneMapper INSTANCE = Mappers.getMapper(StorageZoneMapper.class);
+    FilePersistenceMapper INSTANCE = Mappers.getMapper(FilePersistenceMapper.class);
 
-    @API(status = Status.STABLE, since = "2.13.0")
-    StorageZone toEntity(
-        StorageZonePO storageZonePO);
+    @API(status = Status.STABLE, since = "2.12.0")
+    FileMetadataPO toFileMetadataPO(FileMetadata fileMetadata);
 
-    @API(status = Status.STABLE, since = "2.13.0")
-    StorageZonePO toStorageZonePO(
-        StorageZone storageZone);
-
-    @API(status = Status.STABLE, since = "2.13.0")
-    StorageZone toEntity(
-        StorageZoneAddCmd storageZoneAddCmd);
+    @API(status = Status.STABLE, since = "2.12.0")
+    FileMetadata toEntity(FileMetadataPO fileMetadataPO);
 }

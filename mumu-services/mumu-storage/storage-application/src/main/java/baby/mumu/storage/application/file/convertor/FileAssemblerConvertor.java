@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infra.file.convertor;
+package baby.mumu.storage.application.file.convertor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
@@ -23,10 +23,7 @@ import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
-import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
-import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
-import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
-import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
+import baby.mumu.storage.domain.zone.gateway.StorageZoneGateway;
 import org.apache.tika.Tika;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
@@ -38,54 +35,22 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * 文件信息转换器
+ * 文件信息转换器 (Application Layer)
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.12.0
  */
 @Component
-public class FileConvertor {
+public class FileAssemblerConvertor {
 
     private final Tika tika = new Tika();
     private final PrimaryKeyGrpcService primaryKeyGrpcService;
-    private final StorageZoneRepository storageZoneRepository;
-    private final StorageZoneConvertor storageZoneConvertor;
+    private final StorageZoneGateway storageZoneGateway;
 
-    public FileConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
-                         StorageZoneRepository storageZoneRepository,
-                         StorageZoneConvertor storageZoneConvertor) {
+    public FileAssemblerConvertor(PrimaryKeyGrpcService primaryKeyGrpcService,
+                                  StorageZoneGateway storageZoneGateway) {
         this.primaryKeyGrpcService = primaryKeyGrpcService;
-        this.storageZoneRepository = storageZoneRepository;
-        this.storageZoneConvertor = storageZoneConvertor;
-    }
-
-
-    @API(status = Status.STABLE, since = "2.12.0")
-    public Optional<FileMetadataPO> toFileMetadataPO(FileMetadata fileMetadata) {
-        return Optional.ofNullable(fileMetadata)
-            .map(FileMapper.INSTANCE::toFileMetadataPO).map(fileMetadataPO -> {
-                Long storageZoneId = Optional.ofNullable(fileMetadata.getStorageZone())
-                    .map(StorageZone::getId)
-                    .orElseThrow(
-                        () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
-                fileMetadataPO.setStorageZoneId(storageZoneId);
-                return fileMetadataPO;
-            });
-    }
-
-    @API(status = Status.STABLE, since = "2.12.0")
-    public Optional<FileMetadata> toEntity(FileMetadataPO fileMetadataPO) {
-        return Optional.ofNullable(fileMetadataPO)
-            .map(FileMapper.INSTANCE::toEntity).map(fileMetadata -> {
-                StorageZonePO storageZonePO = storageZoneRepository.findById(
-                        fileMetadataPO.getStorageZoneId())
-                    .orElseThrow(
-                        () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
-                StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
-                    .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
-                fileMetadata.setStorageZone(storageZone);
-                return fileMetadata;
-            });
+        this.storageZoneGateway = storageZoneGateway;
     }
 
     @API(status = Status.STABLE, since = "2.12.0")
@@ -97,11 +62,9 @@ public class FileConvertor {
                 file.setContent(new ByteArrayInputStream(fileBytes));
                 FileMetadata fileMetadata = new FileMetadata();
                 fileMetadata.setId(primaryKeyGrpcService.snowflake());
-                StorageZonePO storageZonePO = storageZoneRepository.findById(storageZoneId)
+                StorageZone storageZone = storageZoneGateway.findById(storageZoneId)
                     .orElseThrow(
                         () -> new ApplicationException(ResponseCode.THE_STORAGE_ZONE_DOES_NOT_EXIST));
-                StorageZone storageZone = storageZoneConvertor.toEntity(storageZonePO)
-                    .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
                 fileMetadata.setStorageZone(storageZone);
                 fileMetadata.setSize(multipartFile.getSize());
                 fileMetadata.setContentType(
@@ -118,9 +81,8 @@ public class FileConvertor {
     }
 
     @API(status = Status.STABLE, since = "2.13.0")
-    public Optional<FileFindMetaByMetaIdDTO> toFileFindMetaByMetaIdDTO(
-        FileMetadata fileMetadata) {
+    public Optional<FileFindMetaByMetaIdDTO> toFileFindMetaByMetaIdDTO(FileMetadata fileMetadata) {
         return Optional.ofNullable(fileMetadata)
-            .map(FileMapper.INSTANCE::toFileFindMetaByMetaIdDTO);
+            .map(FileAssemblerMapper.INSTANCE::toFileFindMetaByMetaIdDTO);
     }
 }

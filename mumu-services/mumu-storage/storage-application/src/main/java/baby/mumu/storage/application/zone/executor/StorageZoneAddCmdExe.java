@@ -18,10 +18,10 @@ package baby.mumu.storage.application.zone.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.storage.application.zone.convertor.StorageZoneAssemblerConvertor;
 import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.domain.zone.gateway.StorageZoneGateway;
-import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.stereotype.Component;
 
@@ -36,17 +36,17 @@ import org.springframework.stereotype.Component;
 public class StorageZoneAddCmdExe {
 
 
-    private final StorageZoneConvertor storageZoneConvertor;
+    private final StorageZoneAssemblerConvertor storageZoneAssemblerConvertor;
     private final StorageZoneGateway storageZoneGateway;
 
-    public StorageZoneAddCmdExe(StorageZoneConvertor storageZoneConvertor,
+    public StorageZoneAddCmdExe(StorageZoneAssemblerConvertor storageZoneAssemblerConvertor,
                                 StorageZoneGateway storageZoneGateway) {
-        this.storageZoneConvertor = storageZoneConvertor;
+        this.storageZoneAssemblerConvertor = storageZoneAssemblerConvertor;
         this.storageZoneGateway = storageZoneGateway;
     }
 
     public Long execute(StorageZoneAddCmd storageZoneAddCmd) {
-        StorageZone storageZone = storageZoneConvertor.toEntity(storageZoneAddCmd)
+        StorageZone storageZone = storageZoneAssemblerConvertor.toEntity(storageZoneAddCmd)
             .orElseThrow(() -> new ApplicationException(ResponseCode.STORAGE_ZONE_INVALID));
         return storageZoneGateway.add(storageZone);
     }

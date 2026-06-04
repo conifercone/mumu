@@ -23,10 +23,11 @@ import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.zone.StorageZone;
 import baby.mumu.storage.domain.zone.gateway.StorageZoneGateway;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
-import baby.mumu.storage.infra.zone.convertor.StorageZoneConvertor;
+import baby.mumu.storage.infra.zone.convertor.StorageZonePersistenceConvertor;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.StorageZoneRepository;
 import baby.mumu.storage.infra.zone.gatewayimpl.database.po.StorageZonePO;
 import io.micrometer.observation.annotation.Observed;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +41,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Observed(name = "StorageZoneGatewayImpl")
 public class StorageZoneGatewayImpl implements StorageZoneGateway {
 
-    private final StorageZoneConvertor storageZoneConvertor;
+    private final StorageZonePersistenceConvertor storageZonePersistenceConvertor;
     private final StorageZoneRepository storageZoneRepository;
     private final FileStorageRepository fileStorageRepository;
 
-    public StorageZoneGatewayImpl(StorageZoneConvertor storageZoneConvertor,
+    public StorageZoneGatewayImpl(StorageZonePersistenceConvertor storageZonePersistenceConvertor,
                                   StorageZoneRepository storageZoneRepository, FileStorageRepository fileStorageRepository) {
-        this.storageZoneConvertor = storageZoneConvertor;
+        this.storageZonePersistenceConvertor = storageZonePersistenceConvertor;
         this.storageZoneRepository = storageZoneRepository;
         this.fileStorageRepository = fileStorageRepository;
     }
@@ -54,7 +55,7 @@ public class StorageZoneGatewayImpl implements StorageZoneGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long add(StorageZone storageZone) {
-        StorageZonePO storageZonePO = storageZoneConvertor.toStorageZonePO(storageZone)
+        StorageZonePO storageZonePO = storageZonePersistenceConvertor.toStorageZonePO(storageZone)
             .orElseThrow(() -> new ApplicationException(
                 ResponseCode.STORAGE_ZONE_INVALID));
         StorageZonePO persisted = storageZoneRepository.persist(storageZonePO);
@@ -68,5 +69,11 @@ public class StorageZoneGatewayImpl implements StorageZoneGateway {
             throw new ApplicationException(ResponseCode.STORAGE_ZONE_CREATION_FAILED);
         }
         return persisted.getId();
+    }
+
+    @Override
+    public Optional<StorageZone> findById(Long id) {
+        return storageZoneRepository.findById(id)
+            .flatMap(storageZonePersistenceConvertor::toEntity);
     }
 }

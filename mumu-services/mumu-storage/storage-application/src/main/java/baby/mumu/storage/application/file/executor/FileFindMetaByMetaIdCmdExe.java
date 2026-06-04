@@ -18,10 +18,10 @@ package baby.mumu.storage.application.file.executor;
 
 import baby.mumu.basis.exception.ApplicationException;
 import baby.mumu.basis.response.ResponseCode;
+import baby.mumu.storage.application.file.convertor.FileAssemblerConvertor;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infra.file.convertor.FileConvertor;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,19 +37,19 @@ import org.springframework.stereotype.Component;
 public class FileFindMetaByMetaIdCmdExe {
 
     private final FileGateway fileGateway;
-    private final FileConvertor fileConvertor;
+    private final FileAssemblerConvertor fileAssemblerConvertor;
 
     @Autowired
     public FileFindMetaByMetaIdCmdExe(FileGateway fileGateway,
-                                      FileConvertor fileConvertor) {
+                                      FileAssemblerConvertor fileAssemblerConvertor) {
         this.fileGateway = fileGateway;
-        this.fileConvertor = fileConvertor;
+        this.fileAssemblerConvertor = fileAssemblerConvertor;
     }
 
     public FileFindMetaByMetaIdDTO execute(Long metadataId) {
         FileMetadata fileMetadata = fileGateway.findMetaByMetaId(metadataId)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-        return fileConvertor.toFileFindMetaByMetaIdDTO(fileMetadata)
+        return fileAssemblerConvertor.toFileFindMetaByMetaIdDTO(fileMetadata)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
     }
 }

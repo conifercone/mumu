@@ -21,7 +21,7 @@ import baby.mumu.basis.response.ResponseCode;
 import baby.mumu.storage.domain.file.File;
 import baby.mumu.storage.domain.file.FileMetadata;
 import baby.mumu.storage.domain.file.gateway.FileGateway;
-import baby.mumu.storage.infra.file.convertor.FileConvertor;
+import baby.mumu.storage.infra.file.convertor.FilePersistenceConvertor;
 import baby.mumu.storage.infra.file.gatewayimpl.database.FileMetadataRepository;
 import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import baby.mumu.storage.infra.file.gatewayimpl.storage.FileStorageRepository;
@@ -45,14 +45,14 @@ import java.util.Optional;
 public class FileGatewayImpl implements FileGateway {
 
     private final FileMetadataRepository fileMetadataRepository;
-    private final FileConvertor fileConvertor;
+    private final FilePersistenceConvertor filePersistenceConvertor;
     private final FileStorageRepository fileStorageRepository;
 
     @Autowired
     public FileGatewayImpl(FileMetadataRepository fileMetadataRepository,
-                           FileConvertor fileConvertor, FileStorageRepository fileStorageRepository) {
+                           FilePersistenceConvertor filePersistenceConvertor, FileStorageRepository fileStorageRepository) {
         this.fileMetadataRepository = fileMetadataRepository;
-        this.fileConvertor = fileConvertor;
+        this.filePersistenceConvertor = filePersistenceConvertor;
         this.fileStorageRepository = fileStorageRepository;
     }
 
@@ -69,7 +69,7 @@ public class FileGatewayImpl implements FileGateway {
             return null;
         }
 
-        FileMetadataPO fileMetadataPO = fileConvertor.toFileMetadataPO(file.getMetadata())
+        FileMetadataPO fileMetadataPO = filePersistenceConvertor.toFileMetadataPO(file.getMetadata())
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
         try {
@@ -106,7 +106,7 @@ public class FileGatewayImpl implements FileGateway {
         }
         FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-        FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+        FileMetadata fileMetadata = filePersistenceConvertor.toEntity(fileMetadataPO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
 
         try {
@@ -137,7 +137,7 @@ public class FileGatewayImpl implements FileGateway {
         }
         FileMetadataPO fileMetadataPO = fileMetadataRepository.findById(fileMetadataId)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_DOES_NOT_EXIST));
-        FileMetadata fileMetadata = fileConvertor.toEntity(fileMetadataPO)
+        FileMetadata fileMetadata = filePersistenceConvertor.toEntity(fileMetadataPO)
             .orElseThrow(() -> new ApplicationException(ResponseCode.FILE_METADATA_INVALID));
         File file = new File();
         file.setMetadata(fileMetadata);
@@ -157,6 +157,6 @@ public class FileGatewayImpl implements FileGateway {
         if (fileMetadataId == null) {
             return Optional.empty();
         }
-        return fileMetadataRepository.findById(fileMetadataId).flatMap(fileConvertor::toEntity);
+        return fileMetadataRepository.findById(fileMetadataId).flatMap(filePersistenceConvertor::toEntity);
     }
 }

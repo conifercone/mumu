@@ -14,32 +14,28 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.domain.zone.gateway;
+package baby.mumu.storage.application.zone.convertor;
 
+import baby.mumu.storage.client.cmds.StorageZoneAddCmd;
 import baby.mumu.storage.domain.zone.StorageZone;
-import java.util.Optional;
+import org.apiguardian.api.API;
+import org.apiguardian.api.API.Status;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 /**
- * 存储区域网关
+ * StorageZone application assembler mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 2.13.0
  */
-public interface StorageZoneGateway {
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface StorageZoneAssemblerMapper {
 
-    /**
-     * 新增存储区域
-     *
-     * @param storageZone 存储区域
-     * @return 存储区域ID
-     */
-    Long add(StorageZone storageZone);
+    StorageZoneAssemblerMapper INSTANCE = Mappers.getMapper(StorageZoneAssemblerMapper.class);
 
-    /**
-     * 根据ID查询存储区域
-     *
-     * @param id 存储区域ID
-     * @return 存储区域
-     */
-    Optional<StorageZone> findById(Long id);
+    @API(status = Status.STABLE, since = "2.13.0")
+    StorageZone toEntity(StorageZoneAddCmd storageZoneAddCmd);
 }

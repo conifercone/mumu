@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package baby.mumu.storage.infra.file.convertor;
+package baby.mumu.storage.application.file.convertor;
 
-import baby.mumu.basis.mappers.BaseMapper;
-import baby.mumu.basis.mappers.DataTransferObjectMapper;
-import baby.mumu.basis.mappers.GrpcMapper;
 import baby.mumu.storage.client.dto.FileFindMetaByMetaIdDTO;
 import baby.mumu.storage.domain.file.FileMetadata;
-import baby.mumu.storage.infra.file.gatewayimpl.database.po.FileMetadataPO;
 import org.apiguardian.api.API;
 import org.apiguardian.api.API.Status;
 import org.mapstruct.Mapper;
@@ -30,23 +26,16 @@ import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
 /**
- * File mapstruct转换器
+ * File application assembler mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
- * @since 2.12.0
+ * @since 2.13.0
  */
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface FileMapper extends GrpcMapper, DataTransferObjectMapper, BaseMapper {
+public interface FileAssemblerMapper {
 
-    FileMapper INSTANCE = Mappers.getMapper(FileMapper.class);
-
-    @API(status = Status.STABLE, since = "2.12.0")
-    FileMetadataPO toFileMetadataPO(FileMetadata fileMetadata);
-
-    @API(status = Status.STABLE, since = "2.12.0")
-    FileMetadata toEntity(FileMetadataPO fileMetadataPO);
+    FileAssemblerMapper INSTANCE = Mappers.getMapper(FileAssemblerMapper.class);
 
     @API(status = Status.STABLE, since = "2.13.0")
-    FileFindMetaByMetaIdDTO toFileFindMetaByMetaIdDTO(
-        FileMetadata fileMetadata);
+    FileFindMetaByMetaIdDTO toFileFindMetaByMetaIdDTO(FileMetadata fileMetadata);
 }
