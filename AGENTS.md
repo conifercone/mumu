@@ -10,7 +10,30 @@
 ## Architecture Overview
 
 - Service-first design: each service module owns its API, application logic, domain model, and infrastructure adapters.
+- Modules under `mumu-services/` follow the Hexagonal Architecture pattern. Dependency direction flows inward: adapter → application → domain; infra implements gateway interfaces defined in domain. **The application layer MUST NOT depend on the infra layer**.
 - Database changes are tracked via migrations under `src/main/resources/db/migration`.
+
+## Hexagonal Architecture Conventions
+
+- Submodule breakdown:
+  - `*-adapter`: Web adapters (REST controllers). Depends on application.
+  - `*-client`: API interfaces, `*Cmd` command objects, `*DTO` transfer objects, gRPC stubs and `*.proto` definitions. Both adapter and application may depend on it.
+  - `*-application`: Service implementations and `*CmdExe` executors. **MUST only depend on client, domain, and external client APIs (e.g. genix-client). MUST NOT depend on infra**.
+  - `*-domain`: Domain entities and `*Gateway` interfaces. MUST NOT depend on any other submodule.
+  - `*-infra`: Gateway implementations, repositories, PO, convertors/mappers. Depends on domain and client; implements domain gateway interfaces.
+- Gradle dependency rules:
+  - `*-application/build.gradle.kts` **MUST NOT contain** `implementation(project(":mumu-services:mumu-*:*-infra"))`.
+  - At runtime the root boot module assembles all submodules; infra implementation classes are injected into the application layer by Spring.
+- Convertor/Mapper naming and responsibility:
+  - Application layer: `*AssemblerMapper` (MapStruct interface) + `*AssemblerConvertor` (hand-written wrapper). Responsible for Cmd→Entity, Entity→DTO, and gRPC conversions. **MUST NOT reference PO types**.
+  - Infra layer: `*PersistenceMapper` (MapStruct interface) + `*PersistenceConvertor` (hand-written wrapper). **Solely responsible for Entity↔PO conversions**. Different persistence channels (Kafka, ES, etc.) each have their own PersistenceMapper/Convertor.
+  - Legacy hybrid Convertor/Mapper classes (handling both Cmd/DTO/gRPC and PO mappings in the same file) should be split and migrated.
+- Kafka Consumer rules:
+  - Consumers live in the application layer but **MUST NOT directly import Kafka PO types** (e.g. `*KafkaPO`).
+  - Consumers receive messages through domain gateway interfaces; PO deserialization is encapsulated in the infra layer via a `saveFromKafkaMessage(String)` method.
+  - Kafka topic name constants are defined in the `*-client` module. Consumers reference them through the client layer; they MUST NOT reference them through infra-layer `*Properties` classes.
+- `@ConfigurationProperties` classes live in `*-infra` (binding infrastructure config is the infra layer's responsibility), but static constants for topic/index names should be moved to `*-client`.
+- When creating a new service module, use genix (refactored), storage (refactored), and log (refactored) as reference templates.
 
 ## IAM Service Architecture (Example: mumu-services/mumu-iam)
 
@@ -45,7 +68,7 @@
 - Requests: `@RequestBody` + `@Validated` for commands, `@ModelAttribute` for query commands, `@PathVariable` for IDs.
 - Responses: use `ResponseWrapper<T>` where established; `Page` for count-based pagination, `Slice` for no-count.
 - Application layer: implement `*ServiceImpl` that delegates to `*CmdExe` executors; annotate with `@Transactional` and `@Observed` as needed; gRPC services extend `*ImplBase` and use `@GrpcService`.
-- Domain/infra boundary: define `*Gateway` interfaces in domain; implement in infra using repositories and cache adapters. Object mapping between layers uses MapStruct mappers (e.g., `*Convertor`) defined in infra.
+- Domain/infra boundary: define `*Gateway` interfaces in domain; implement in infra using repositories and cache adapters. Object mapping uses `*AssemblerMapper`/`*AssemblerConvertor` in the application layer (Cmd→Entity, Entity→DTO, gRPC) and `*PersistenceMapper`/`*PersistenceConvertor` in the infra layer (Entity↔PO). See Hexagonal Architecture Conventions above.
 - Destructive operations: use `@DangerousOperation` and invalidate related caches.
 - Schema changes: add a migration in `db/migration/postgresql` named like `Vx.y.z__short_description.sql`.
 - New feature flow: add `*Cmd`/`*DTO` in `iam-client` → implement `*CmdExe` in `iam-application` → add/extend `*Gateway` in `iam-domain` and implement in `iam-infra` → expose REST/gRPC in `iam-adapter`/`*ServiceImpl` → add tests under `mumu-services/mumu-iam/src/test/java` mirroring package names.
