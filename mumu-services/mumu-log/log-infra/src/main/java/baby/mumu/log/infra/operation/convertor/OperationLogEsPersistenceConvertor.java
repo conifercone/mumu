@@ -16,10 +16,12 @@
  */
 
 package baby.mumu.log.infra.operation.convertor;
+
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import baby.mumu.log.infra.operation.mapper.OperationLogEsPersistenceMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 
 /**
@@ -33,6 +35,7 @@ public class OperationLogEsPersistenceConvertor {
     public Optional<OperationLogEsPO> toEsPO(OperationLog operationLog) {
         return Optional.ofNullable(operationLog).map(OperationLogEsPersistenceMapper.INSTANCE::toEsPO);
     }
+
     public Optional<OperationLog> toEntity(OperationLogEsPO esPO) {
         return Optional.ofNullable(esPO).map(OperationLogEsPersistenceMapper.INSTANCE::toEntity);
     }

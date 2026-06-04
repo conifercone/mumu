@@ -16,11 +16,14 @@
  */
 
 package baby.mumu.log.infra.system.convertor;
+
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.mapper.SystemLogEsPersistenceMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.Optional;
+
 /**
  * 系统日志ES持久化转换器 (Infrastructure Layer)
  *
@@ -29,6 +32,11 @@ import java.util.Optional;
  */
 @Component
 public class SystemLogEsPersistenceConvertor {
-    public Optional<SystemLogEsPO> toEsPO(SystemLog systemLog) { return Optional.ofNullable(systemLog).map(SystemLogEsPersistenceMapper.INSTANCE::toEsPO); }
-    public Optional<SystemLog> toEntity(SystemLogEsPO esPO) { return Optional.ofNullable(esPO).map(SystemLogEsPersistenceMapper.INSTANCE::toEntity); }
+    public Optional<SystemLogEsPO> toEsPO(SystemLog systemLog) {
+        return Optional.ofNullable(systemLog).map(SystemLogEsPersistenceMapper.INSTANCE::toEsPO);
+    }
+
+    public Optional<SystemLog> toEntity(SystemLogEsPO esPO) {
+        return Optional.ofNullable(esPO).map(SystemLogEsPersistenceMapper.INSTANCE::toEntity);
+    }
 }

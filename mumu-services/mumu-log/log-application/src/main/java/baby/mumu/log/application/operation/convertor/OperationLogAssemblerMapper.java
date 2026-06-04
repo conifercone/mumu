@@ -54,7 +54,8 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy =
+    ReportingPolicy.IGNORE)
 public interface OperationLogAssemblerMapper extends GrpcMapper {
 
     OperationLogAssemblerMapper INSTANCE = Mappers.getMapper(OperationLogAssemblerMapper.class);

@@ -25,18 +25,21 @@ import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 @Component
 public class SystemLogAssemblerConvertor {
     private final PrimaryKeyGrpcService primaryKeyGrpcService;
+
     public SystemLogAssemblerConvertor(PrimaryKeyGrpcService primaryKeyGrpcService) {
         this.primaryKeyGrpcService = primaryKeyGrpcService;
     }
+
     public Optional<SystemLog> toEntity(SystemLogSubmitCmd cmd) {
         return Optional.ofNullable(cmd).map(res -> {
             SystemLog log = SystemLogAssemblerMapper.INSTANCE.toEntity(res);
@@ -46,9 +49,11 @@ public class SystemLogAssemblerConvertor {
             return log;
         });
     }
+
     public Optional<SystemLog> toEntity(SystemLogSaveCmd cmd) {
         return Optional.ofNullable(cmd).map(SystemLogAssemblerMapper.INSTANCE::toEntity);
     }
+
     public Optional<SystemLog> toEntity(SystemLogFindAllCmd cmd) {
         return Optional.ofNullable(cmd).map(SystemLogAssemblerMapper.INSTANCE::toEntity).map(log -> {
             Optional.ofNullable(cmd.getRecordStartTime()).ifPresent(log::setRecordStartTime);
@@ -56,9 +61,11 @@ public class SystemLogAssemblerConvertor {
             return log;
         });
     }
+
     public Optional<SystemLogFindAllDTO> toSystemLogFindAllDTO(SystemLog log) {
         return Optional.ofNullable(log).map(SystemLogAssemblerMapper.INSTANCE::toSystemLogFindAllDTO);
     }
+
     public Optional<SystemLogSubmitCmd> toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd cmd) {
         return Optional.ofNullable(cmd).map(SystemLogAssemblerMapper.INSTANCE::toSystemLogSubmitCmd);
     }

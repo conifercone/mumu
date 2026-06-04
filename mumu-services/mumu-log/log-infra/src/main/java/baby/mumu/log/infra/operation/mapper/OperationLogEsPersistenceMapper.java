@@ -16,6 +16,7 @@
  */
 
 package baby.mumu.log.infra.operation.mapper;
+
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infra.operation.gatewayimpl.elasticsearch.po.OperationLogEsPO;
 import org.mapstruct.Mapper;
@@ -29,9 +30,12 @@ import org.mapstruct.factory.Mappers;
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy =
+    ReportingPolicy.IGNORE)
 public interface OperationLogEsPersistenceMapper {
     OperationLogEsPersistenceMapper INSTANCE = Mappers.getMapper(OperationLogEsPersistenceMapper.class);
+
     OperationLogEsPO toEsPO(OperationLog operationLog);
+
     OperationLog toEntity(OperationLogEsPO operationLogEsPO);
 }

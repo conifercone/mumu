@@ -24,7 +24,9 @@ package baby.mumu.log.client.config;
  * @since 1.0.0
  */
 public final class LogConstants {
-    private LogConstants() {}
+    private LogConstants() {
+    }
+
     public static final String OPERATION_LOG_KAFKA_TOPIC_NAME = "mumu-operation-log";
     public static final String SYSTEM_LOG_KAFKA_TOPIC_NAME = "mumu-system-log";
     public static final String OPERATION_LOG_ES_INDEX_NAME = "mumu-operation-log";

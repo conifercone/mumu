@@ -26,8 +26,6 @@ import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPOMetamodel;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.SystemLogKafkaRepository;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -41,6 +39,9 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.json.JsonMapper;
+
+import java.util.List;
+import java.util.Optional;
 
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
@@ -99,17 +100,28 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         Criteria criteria = new Criteria();
         Optional.ofNullable(systemLog).ifPresent(sysLog -> {
             Optional.ofNullable(sysLog.getId()).ifPresent(id -> criteria.and(new Criteria(SystemLogEsPOMetamodel.ID).matches(id)));
-            Optional.ofNullable(sysLog.getContent()).ifPresent(content -> { String p = SystemLogEsPOMetamodel.CONTENT; criteria.and(new Criteria(p).matches(content).or(p.concat(ES_QUERY_EN)).matches(content).or(p.concat(ES_QUERY_SP)).matches(content)); });
+            Optional.ofNullable(sysLog.getContent()).ifPresent(content -> {
+                String p = SystemLogEsPOMetamodel.CONTENT;
+                criteria.and(new Criteria(p).matches(content).or(p.concat(ES_QUERY_EN)).matches(content).or(p.concat(ES_QUERY_SP)).matches(content));
+            });
             Optional.ofNullable(sysLog.getCategory()).ifPresent(category -> criteria.and(new Criteria(SystemLogEsPOMetamodel.CATEGORY).matches(category)));
-            Optional.ofNullable(sysLog.getSuccess()).ifPresent(success -> { String p = SystemLogEsPOMetamodel.SUCCESS; criteria.and(new Criteria(p).matches(success).or(p.concat(ES_QUERY_EN)).matches(success).or(p.concat(ES_QUERY_SP)).matches(success)); });
-            Optional.ofNullable(sysLog.getFail()).ifPresent(fail -> { String p = SystemLogEsPOMetamodel.FAIL; criteria.and(new Criteria(p).matches(fail).or(p.concat(ES_QUERY_SP)).matches(fail)); });
+            Optional.ofNullable(sysLog.getSuccess()).ifPresent(success -> {
+                String p = SystemLogEsPOMetamodel.SUCCESS;
+                criteria.and(new Criteria(p).matches(success).or(p.concat(ES_QUERY_EN)).matches(success).or(p.concat(ES_QUERY_SP)).matches(success));
+            });
+            Optional.ofNullable(sysLog.getFail()).ifPresent(fail -> {
+                String p = SystemLogEsPOMetamodel.FAIL;
+                criteria.and(new Criteria(p).matches(fail).or(p.concat(ES_QUERY_SP)).matches(fail));
+            });
             Optional.ofNullable(sysLog.getRecordTime()).ifPresent(recordTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).matches(recordTime)));
             Optional.ofNullable(sysLog.getRecordStartTime()).ifPresent(recordStartTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).greaterThan(recordStartTime)));
             Optional.ofNullable(sysLog.getRecordEndTime()).ifPresent(recordEndTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).lessThan(recordEndTime)));
         });
-        Query query = new CriteriaQuery(criteria).setPageable(pageRequest).addSort(Sort.by(SystemLogEsPOMetamodel.RECORD_TIME).descending());
+        Query query =
+            new CriteriaQuery(criteria).setPageable(pageRequest).addSort(Sort.by(SystemLogEsPOMetamodel.RECORD_TIME).descending());
         SearchHits<SystemLogEsPO> searchHits = elasticsearchTemplate.search(query, SystemLogEsPO.class);
-        List<SystemLog> systemLogs = searchHits.getSearchHits().stream().map(SearchHit::getContent).map(esConvertor::toEntity).filter(Optional::isPresent).map(Optional::get).peek(sd -> sd.setRecordTime(sd.getRecordTime())).toList();
+        List<SystemLog> systemLogs =
+            searchHits.getSearchHits().stream().map(SearchHit::getContent).map(esConvertor::toEntity).filter(Optional::isPresent).map(Optional::get).peek(sd -> sd.setRecordTime(sd.getRecordTime())).toList();
         return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
     }
 }

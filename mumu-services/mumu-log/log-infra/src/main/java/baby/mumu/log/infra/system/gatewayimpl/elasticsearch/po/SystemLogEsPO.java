@@ -48,8 +48,10 @@ public class SystemLogEsPO {
     @MultiField(
         mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
         otherFields = {
-            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english",
+                searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple",
+                searchAnalyzer = "simple")
         }
     )
     private String content;
@@ -66,8 +68,10 @@ public class SystemLogEsPO {
     @MultiField(
         mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
         otherFields = {
-            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english",
+                searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple",
+                searchAnalyzer = "simple")
         }
     )
     private String success;
@@ -78,8 +82,10 @@ public class SystemLogEsPO {
     @MultiField(
         mainField = @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart"),
         otherFields = {
-            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english", searchAnalyzer = "english"),
-            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple", searchAnalyzer = "simple")
+            @InnerField(suffix = CommonConstants.ES_MAPPING_EN_SUFFIX, type = FieldType.Text, analyzer = "english",
+                searchAnalyzer = "english"),
+            @InnerField(suffix = CommonConstants.ES_MAPPING_SP_SUFFIX, type = FieldType.Text, analyzer = "simple",
+                searchAnalyzer = "simple")
         }
     )
     private String fail;

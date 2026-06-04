@@ -18,6 +18,7 @@ package baby.mumu.log.application.service;
 
 import baby.mumu.basis.annotations.RateLimiter;
 import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
+import baby.mumu.log.application.operation.convertor.OperationLogAssemblerConvertor;
 import baby.mumu.log.application.operation.executor.OperationLogFindAllCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogQryCmdExe;
 import baby.mumu.log.application.operation.executor.OperationLogSaveCmdExe;
@@ -31,7 +32,6 @@ import baby.mumu.log.client.cmds.OperationLogSaveCmd;
 import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
-import baby.mumu.log.application.operation.convertor.OperationLogAssemblerConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
@@ -64,7 +64,8 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
 
     @Autowired
     public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
-                                   OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
+                                   OperationLogSaveCmdExe operationLogSaveCmdExe,
+                                   OperationLogQryCmdExe operationLogQryCmdExe,
                                    OperationLogFindAllCmdExe operationLogFindAllCmdExe,
                                    OperationLogAssemblerConvertor operationLogConvertor) {
         this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;

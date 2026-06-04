@@ -28,12 +28,18 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy =
+    ReportingPolicy.IGNORE)
 public interface SystemLogAssemblerMapper {
     SystemLogAssemblerMapper INSTANCE = Mappers.getMapper(SystemLogAssemblerMapper.class);
+
     SystemLog toEntity(SystemLogSubmitCmd cmd);
+
     SystemLog toEntity(SystemLogSaveCmd cmd);
+
     SystemLog toEntity(SystemLogFindAllCmd cmd);
+
     SystemLogFindAllDTO toSystemLogFindAllDTO(SystemLog systemLog);
+
     SystemLogSubmitCmd toSystemLogSubmitCmd(SystemLogSubmitGrpcCmd cmd);
 }

@@ -16,21 +16,26 @@
  */
 
 package baby.mumu.log.infra.system.mapper;
+
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
+
 /**
  * MapStruct persistence mapper
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.1
  */
-@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, unmappedTargetPolicy =
+    ReportingPolicy.IGNORE)
 public interface SystemLogEsPersistenceMapper {
     SystemLogEsPersistenceMapper INSTANCE = Mappers.getMapper(SystemLogEsPersistenceMapper.class);
+
     SystemLogEsPO toEsPO(SystemLog systemLog);
+
     SystemLog toEntity(SystemLogEsPO systemLogEsPO);
 }

@@ -16,11 +16,14 @@
  */
 
 package baby.mumu.log.infra.system.convertor;
+
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
 import baby.mumu.log.infra.system.mapper.SystemLogKafkaPersistenceMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.Optional;
+
 /**
  * 系统日志Kafka持久化转换器 (Infrastructure Layer)
  *
@@ -29,6 +32,11 @@ import java.util.Optional;
  */
 @Component
 public class SystemLogKafkaPersistenceConvertor {
-    public Optional<SystemLogKafkaPO> toKafkaPO(SystemLog systemLog) { return Optional.ofNullable(systemLog).map(SystemLogKafkaPersistenceMapper.INSTANCE::toKafkaPO); }
-    public Optional<SystemLog> toEntity(SystemLogKafkaPO kafkaPO) { return Optional.ofNullable(kafkaPO).map(SystemLogKafkaPersistenceMapper.INSTANCE::toEntity); }
+    public Optional<SystemLogKafkaPO> toKafkaPO(SystemLog systemLog) {
+        return Optional.ofNullable(systemLog).map(SystemLogKafkaPersistenceMapper.INSTANCE::toKafkaPO);
+    }
+
+    public Optional<SystemLog> toEntity(SystemLogKafkaPO kafkaPO) {
+        return Optional.ofNullable(kafkaPO).map(SystemLogKafkaPersistenceMapper.INSTANCE::toEntity);
+    }
 }

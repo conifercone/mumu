@@ -16,10 +16,12 @@
  */
 
 package baby.mumu.log.infra.operation.convertor;
+
 import baby.mumu.log.domain.operation.OperationLog;
 import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
 import baby.mumu.log.infra.operation.mapper.OperationLogKafkaPersistenceMapper;
 import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 
 /**
@@ -33,6 +35,7 @@ public class OperationLogKafkaPersistenceConvertor {
     public Optional<OperationLogKafkaPO> toKafkaPO(OperationLog operationLog) {
         return Optional.ofNullable(operationLog).map(OperationLogKafkaPersistenceMapper.INSTANCE::toKafkaPO);
     }
+
     public Optional<OperationLog> toEntity(OperationLogKafkaPO kafkaPO) {
         return Optional.ofNullable(kafkaPO).map(OperationLogKafkaPersistenceMapper.INSTANCE::toEntity);
     }

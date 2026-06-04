@@ -39,7 +39,8 @@ public class LogClientConfiguration {
     @ConditionalOnMissingBean
     public DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider(
         DiscoveryClient discoveryClient) {
-        DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider = new DiscoveryClientNameResolverProvider(
+        DiscoveryClientNameResolverProvider discoveryClientNameResolverProvider =
+            new DiscoveryClientNameResolverProvider(
             discoveryClient);
         NameResolverRegistry.getDefaultRegistry().register(discoveryClientNameResolverProvider);
         return discoveryClientNameResolverProvider;
