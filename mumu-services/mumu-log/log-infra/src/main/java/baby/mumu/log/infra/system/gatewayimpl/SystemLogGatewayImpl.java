@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2024-2026, the original author or authors.
  *
@@ -18,12 +19,15 @@ package baby.mumu.log.infra.system.gatewayimpl;
 
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
-import baby.mumu.log.infra.config.LogProperties;
-import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
+import baby.mumu.log.infra.system.convertor.SystemLogEsPersistenceConvertor;
+import baby.mumu.log.infra.system.convertor.SystemLogKafkaPersistenceConvertor;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.SystemLogEsRepository;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPO;
 import baby.mumu.log.infra.system.gatewayimpl.elasticsearch.po.SystemLogEsPOMetamodel;
 import baby.mumu.log.infra.system.gatewayimpl.kafka.SystemLogKafkaRepository;
+import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,11 +42,9 @@ import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.util.List;
-import java.util.Optional;
-
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_EN;
 import static baby.mumu.basis.constants.CommonConstants.ES_QUERY_SP;
+import static baby.mumu.log.client.config.LogConstants.SYSTEM_LOG_KAFKA_TOPIC_NAME;
 
 /**
  * 系统日志领域网关实现
@@ -57,29 +59,37 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
     private final SystemLogEsRepository systemLogEsRepository;
     private final JsonMapper jsonMapper;
     private final ElasticsearchTemplate elasticsearchTemplate;
-    private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogKafkaPersistenceConvertor kafkaConvertor;
+    private final SystemLogEsPersistenceConvertor esConvertor;
 
     @Autowired
     public SystemLogGatewayImpl(SystemLogKafkaRepository systemLogKafkaRepository,
                                 SystemLogEsRepository systemLogEsRepository, JsonMapper jsonMapper,
-                                ElasticsearchTemplate elasticsearchTemplate, SystemLogConvertor systemLogConvertor) {
+                                ElasticsearchTemplate elasticsearchTemplate,
+                                SystemLogKafkaPersistenceConvertor kafkaConvertor,
+                                SystemLogEsPersistenceConvertor esConvertor) {
         this.systemLogKafkaRepository = systemLogKafkaRepository;
         this.systemLogEsRepository = systemLogEsRepository;
         this.jsonMapper = jsonMapper;
         this.elasticsearchTemplate = elasticsearchTemplate;
-        this.systemLogConvertor = systemLogConvertor;
+        this.kafkaConvertor = kafkaConvertor;
+        this.esConvertor = esConvertor;
     }
 
     @Override
     public void submit(SystemLog systemLog) {
-        systemLogConvertor.toSystemLogKafkaPO(systemLog)
-            .ifPresent(res -> systemLogKafkaRepository.send(LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME,
-                jsonMapper.writeValueAsString(res)));
+        kafkaConvertor.toKafkaPO(systemLog).ifPresent(res -> systemLogKafkaRepository.send(SYSTEM_LOG_KAFKA_TOPIC_NAME, jsonMapper.writeValueAsString(res)));
     }
 
     @Override
     public void save(SystemLog systemLog) {
-        systemLogConvertor.toSystemLogEsPO(systemLog).ifPresent(systemLogEsRepository::save);
+        esConvertor.toEsPO(systemLog).ifPresent(systemLogEsRepository::save);
+    }
+
+    @Override
+    public void saveFromKafkaMessage(String message) {
+        SystemLogKafkaPO kafkaPO = jsonMapper.readValue(message, SystemLogKafkaPO.class);
+        kafkaConvertor.toEntity(kafkaPO).ifPresent(this::save);
     }
 
     @Override
@@ -88,66 +98,18 @@ public class SystemLogGatewayImpl implements SystemLogGateway {
         PageRequest pageRequest = PageRequest.of(current - 1, pageSize);
         Criteria criteria = new Criteria();
         Optional.ofNullable(systemLog).ifPresent(sysLog -> {
-            Optional.ofNullable(sysLog.getId())
-                .ifPresent(id -> criteria.and(
-                    new Criteria(SystemLogEsPOMetamodel.ID).matches(id)));
-            Optional.ofNullable(sysLog.getContent())
-                .ifPresent(content -> {
-                    String propertyName = SystemLogEsPOMetamodel.CONTENT;
-                    criteria.and(
-                        new Criteria(propertyName).matches(content).or(propertyName.concat(ES_QUERY_EN))
-                            .matches(content).or(propertyName.concat(ES_QUERY_SP))
-                            .matches(content));
-                });
-            Optional.ofNullable(sysLog.getCategory())
-                .ifPresent(category -> criteria.and(
-                    new Criteria(SystemLogEsPOMetamodel.CATEGORY).matches(
-                        category)));
-            Optional.ofNullable(sysLog.getSuccess())
-                .ifPresent(success -> {
-                    String propertyName = SystemLogEsPOMetamodel.SUCCESS;
-                    criteria.and(
-                        new Criteria(propertyName).matches(success).or(propertyName.concat(ES_QUERY_EN))
-                            .matches(success).or(propertyName.concat(ES_QUERY_SP))
-                            .matches(success));
-                });
-            Optional.ofNullable(sysLog.getFail())
-                .ifPresent(fail -> {
-                    String propertyName = SystemLogEsPOMetamodel.FAIL;
-                    criteria.and(
-                        new Criteria(propertyName).matches(fail).or(propertyName.concat(ES_QUERY_SP))
-                            .matches(fail));
-                });
-            Optional.ofNullable(sysLog.getRecordTime())
-                .ifPresent(
-                    recordTime -> criteria.and(new Criteria(
-                        SystemLogEsPOMetamodel.RECORD_TIME).matches(
-                        recordTime)));
-            Optional.ofNullable(sysLog.getRecordStartTime())
-                .ifPresent(
-                    recordStartTime -> criteria.and(
-                        new Criteria(
-                            SystemLogEsPOMetamodel.RECORD_TIME).greaterThan(
-                            recordStartTime)));
-            Optional.ofNullable(sysLog.getRecordEndTime())
-                .ifPresent(
-                    recordEndTime -> criteria.and(
-                        new Criteria(
-                            SystemLogEsPOMetamodel.RECORD_TIME).lessThan(
-                            recordEndTime)));
+            Optional.ofNullable(sysLog.getId()).ifPresent(id -> criteria.and(new Criteria(SystemLogEsPOMetamodel.ID).matches(id)));
+            Optional.ofNullable(sysLog.getContent()).ifPresent(content -> { String p = SystemLogEsPOMetamodel.CONTENT; criteria.and(new Criteria(p).matches(content).or(p.concat(ES_QUERY_EN)).matches(content).or(p.concat(ES_QUERY_SP)).matches(content)); });
+            Optional.ofNullable(sysLog.getCategory()).ifPresent(category -> criteria.and(new Criteria(SystemLogEsPOMetamodel.CATEGORY).matches(category)));
+            Optional.ofNullable(sysLog.getSuccess()).ifPresent(success -> { String p = SystemLogEsPOMetamodel.SUCCESS; criteria.and(new Criteria(p).matches(success).or(p.concat(ES_QUERY_EN)).matches(success).or(p.concat(ES_QUERY_SP)).matches(success)); });
+            Optional.ofNullable(sysLog.getFail()).ifPresent(fail -> { String p = SystemLogEsPOMetamodel.FAIL; criteria.and(new Criteria(p).matches(fail).or(p.concat(ES_QUERY_SP)).matches(fail)); });
+            Optional.ofNullable(sysLog.getRecordTime()).ifPresent(recordTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).matches(recordTime)));
+            Optional.ofNullable(sysLog.getRecordStartTime()).ifPresent(recordStartTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).greaterThan(recordStartTime)));
+            Optional.ofNullable(sysLog.getRecordEndTime()).ifPresent(recordEndTime -> criteria.and(new Criteria(SystemLogEsPOMetamodel.RECORD_TIME).lessThan(recordEndTime)));
         });
-        Query query = new CriteriaQuery(criteria).setPageable(pageRequest)
-            .addSort(
-                Sort.by(SystemLogEsPOMetamodel.RECORD_TIME).descending());
-        SearchHits<SystemLogEsPO> searchHits = elasticsearchTemplate.search(query,
-            SystemLogEsPO.class);
-        List<SystemLog> systemLogs = searchHits.getSearchHits().stream()
-            .map(SearchHit::getContent).map(systemLogConvertor::toEntity)
-            .filter(Optional::isPresent).map(Optional::get)
-            .peek(systemLogDomain -> systemLogDomain.setRecordTime(
-                systemLogDomain.getRecordTime()))
-            .toList();
+        Query query = new CriteriaQuery(criteria).setPageable(pageRequest).addSort(Sort.by(SystemLogEsPOMetamodel.RECORD_TIME).descending());
+        SearchHits<SystemLogEsPO> searchHits = elasticsearchTemplate.search(query, SystemLogEsPO.class);
+        List<SystemLog> systemLogs = searchHits.getSearchHits().stream().map(SearchHit::getContent).map(esConvertor::toEntity).filter(Optional::isPresent).map(Optional::get).peek(sd -> sd.setRecordTime(sd.getRecordTime())).toList();
         return new PageImpl<>(systemLogs, pageRequest, searchHits.getTotalHits());
-
     }
 }

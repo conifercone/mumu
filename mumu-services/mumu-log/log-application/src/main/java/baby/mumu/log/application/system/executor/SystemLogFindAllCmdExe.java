@@ -20,7 +20,7 @@ import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
 import baby.mumu.log.domain.system.SystemLog;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
-import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
+import baby.mumu.log.application.system.convertor.SystemLogAssemblerConvertor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,11 +41,11 @@ import java.util.Optional;
 public class SystemLogFindAllCmdExe {
 
     private final SystemLogGateway systemLogGateway;
-    private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogAssemblerConvertor systemLogConvertor;
 
     @Autowired
     public SystemLogFindAllCmdExe(SystemLogGateway systemLogGateway,
-                                  SystemLogConvertor systemLogConvertor) {
+                                  SystemLogAssemblerConvertor systemLogConvertor) {
         this.systemLogGateway = systemLogGateway;
         this.systemLogConvertor = systemLogConvertor;
     }

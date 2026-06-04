@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2024-2026, the original author or authors.
  *
@@ -16,19 +17,15 @@
 
 package baby.mumu.log.application.consumer.operation;
 
-import baby.mumu.log.client.api.OperationLogService;
-import baby.mumu.log.infra.config.LogProperties;
-import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
-import baby.mumu.log.infra.operation.gatewayimpl.kafka.po.OperationLogKafkaPO;
+import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.json.JsonMapper;
 
 /**
- * 操作日志消费者
+ * Kafka消费者
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -38,24 +35,15 @@ import tools.jackson.databind.json.JsonMapper;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class OperationLogKafkaConsumer {
 
-    private final JsonMapper jsonMapper;
-    private final OperationLogService operationLogService;
-    private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogGateway operationLogGateway;
 
     @Autowired
-    public OperationLogKafkaConsumer(JsonMapper jsonMapper,
-                                     OperationLogService operationLogService,
-                                     OperationLogConvertor operationLogConvertor) {
-        this.jsonMapper = jsonMapper;
-        this.operationLogService = operationLogService;
-        this.operationLogConvertor = operationLogConvertor;
+    public OperationLogKafkaConsumer(OperationLogGateway operationLogGateway) {
+        this.operationLogGateway = operationLogGateway;
     }
 
-    @KafkaListener(topics = {LogProperties.OPERATION_LOG_KAFKA_TOPIC_NAME})
+    @KafkaListener(topics = {baby.mumu.log.client.config.LogConstants.OPERATION_LOG_KAFKA_TOPIC_NAME})
     public void handle(String operationLog) {
-        OperationLogKafkaPO operationLogKafkaPO = jsonMapper.readValue(operationLog,
-            OperationLogKafkaPO.class);
-        operationLogConvertor.toOperationLogSaveCmd(operationLogKafkaPO)
-            .ifPresent(operationLogService::save);
+        operationLogGateway.saveFromKafkaMessage(operationLog);
     }
 }

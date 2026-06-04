@@ -31,7 +31,7 @@ import baby.mumu.log.client.cmds.OperationLogSaveCmd;
 import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.client.dto.OperationLogFindAllDTO;
 import baby.mumu.log.client.dto.OperationLogQryDTO;
-import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.application.operation.convertor.OperationLogAssemblerConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
@@ -60,13 +60,13 @@ public class OperationLogServiceImpl extends OperationLogServiceImplBase impleme
     private final OperationLogQryCmdExe operationLogQryCmdExe;
 
     private final OperationLogFindAllCmdExe operationLogFindAllCmdExe;
-    private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogAssemblerConvertor operationLogConvertor;
 
     @Autowired
     public OperationLogServiceImpl(OperationLogSubmitCmdExe operationLogSubmitCmdExe,
                                    OperationLogSaveCmdExe operationLogSaveCmdExe, OperationLogQryCmdExe operationLogQryCmdExe,
                                    OperationLogFindAllCmdExe operationLogFindAllCmdExe,
-                                   OperationLogConvertor operationLogConvertor) {
+                                   OperationLogAssemblerConvertor operationLogConvertor) {
         this.operationLogSubmitCmdExe = operationLogSubmitCmdExe;
         this.operationLogSaveCmdExe = operationLogSaveCmdExe;
         this.operationLogQryCmdExe = operationLogQryCmdExe;

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2024-2026, the original author or authors.
  *
@@ -16,19 +17,15 @@
 
 package baby.mumu.log.application.consumer.system;
 
-import baby.mumu.log.client.api.SystemLogService;
-import baby.mumu.log.infra.config.LogProperties;
-import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
-import baby.mumu.log.infra.system.gatewayimpl.kafka.po.SystemLogKafkaPO;
+import baby.mumu.log.domain.system.gateway.SystemLogGateway;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.json.JsonMapper;
 
 /**
- * 系统日志消费者
+ * Kafka消费者
  *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
@@ -38,22 +35,15 @@ import tools.jackson.databind.json.JsonMapper;
 @ConditionalOnProperty(prefix = "mumu.log.kafka", name = "enabled", havingValue = "true")
 public class SystemLogKafkaConsumer {
 
-    private final JsonMapper jsonMapper;
-    private final SystemLogService systemLogService;
-    private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogGateway systemLogGateway;
 
     @Autowired
-    public SystemLogKafkaConsumer(JsonMapper jsonMapper, SystemLogService systemLogService,
-                                  SystemLogConvertor systemLogConvertor) {
-        this.jsonMapper = jsonMapper;
-        this.systemLogService = systemLogService;
-        this.systemLogConvertor = systemLogConvertor;
+    public SystemLogKafkaConsumer(SystemLogGateway systemLogGateway) {
+        this.systemLogGateway = systemLogGateway;
     }
 
-    @KafkaListener(topics = {LogProperties.SYSTEM_LOG_KAFKA_TOPIC_NAME})
+    @KafkaListener(topics = {baby.mumu.log.client.config.LogConstants.SYSTEM_LOG_KAFKA_TOPIC_NAME})
     public void handle(String systemLog) {
-        SystemLogKafkaPO systemLogKafkaPO = jsonMapper.readValue(systemLog,
-            SystemLogKafkaPO.class);
-        systemLogConvertor.toSystemLogSaveCmd(systemLogKafkaPO).ifPresent(systemLogService::save);
+        systemLogGateway.saveFromKafkaMessage(systemLog);
     }
 }

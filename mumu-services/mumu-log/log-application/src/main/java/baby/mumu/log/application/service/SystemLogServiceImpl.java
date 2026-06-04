@@ -28,7 +28,7 @@ import baby.mumu.log.client.cmds.SystemLogFindAllCmd;
 import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.client.cmds.SystemLogSubmitCmd;
 import baby.mumu.log.client.dto.SystemLogFindAllDTO;
-import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
+import baby.mumu.log.application.system.convertor.SystemLogAssemblerConvertor;
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +50,12 @@ public class SystemLogServiceImpl extends SystemLogServiceImplBase implements Sy
 
     private final SystemLogSaveCmdExe systemLogSaveCmdExe;
     private final SystemLogFindAllCmdExe systemLogFindAllCmdExe;
-    private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogAssemblerConvertor systemLogConvertor;
 
     @Autowired
     public SystemLogServiceImpl(SystemLogSubmitCmdExe systemLogSubmitCmdExe,
                                 SystemLogSaveCmdExe systemLogSaveCmdExe, SystemLogFindAllCmdExe systemLogFindAllCmdExe,
-                                SystemLogConvertor systemLogConvertor) {
+                                SystemLogAssemblerConvertor systemLogConvertor) {
         this.systemLogSubmitCmdExe = systemLogSubmitCmdExe;
         this.systemLogSaveCmdExe = systemLogSaveCmdExe;
         this.systemLogFindAllCmdExe = systemLogFindAllCmdExe;

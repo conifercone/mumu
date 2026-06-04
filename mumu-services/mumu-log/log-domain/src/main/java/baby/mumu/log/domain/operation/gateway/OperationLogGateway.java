@@ -17,9 +17,8 @@
 package baby.mumu.log.domain.operation.gateway;
 
 import baby.mumu.log.domain.operation.OperationLog;
-import org.springframework.data.domain.Page;
-
 import java.util.Optional;
+import org.springframework.data.domain.Page;
 
 /**
  * 操作日志领域网关
@@ -60,4 +59,11 @@ public interface OperationLogGateway {
      * @return 查询结果
      */
     Page<OperationLog> findAll(OperationLog operationLog, int current, int pageSize);
+
+    /**
+     * 从Kafka消息保存操作日志
+     *
+     * @param message Kafka消息字符串
+     */
+    void saveFromKafkaMessage(String message);
 }

@@ -18,7 +18,7 @@ package baby.mumu.log.application.system.executor;
 
 import baby.mumu.log.client.cmds.SystemLogSaveCmd;
 import baby.mumu.log.domain.system.gateway.SystemLogGateway;
-import baby.mumu.log.infra.system.convertor.SystemLogConvertor;
+import baby.mumu.log.application.system.convertor.SystemLogAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,11 +34,11 @@ import java.util.Optional;
 public class SystemLogSaveCmdExe {
 
     private final SystemLogGateway systemLogGateway;
-    private final SystemLogConvertor systemLogConvertor;
+    private final SystemLogAssemblerConvertor systemLogConvertor;
 
     @Autowired
     public SystemLogSaveCmdExe(SystemLogGateway systemLogGateway,
-                               SystemLogConvertor systemLogConvertor) {
+                               SystemLogAssemblerConvertor systemLogConvertor) {
         this.systemLogGateway = systemLogGateway;
         this.systemLogConvertor = systemLogConvertor;
     }

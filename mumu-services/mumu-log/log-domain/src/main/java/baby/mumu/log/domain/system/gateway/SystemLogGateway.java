@@ -50,4 +50,11 @@ public interface SystemLogGateway {
      * @return 查询结果
      */
     Page<SystemLog> findAll(SystemLog systemLog, int current, int pageSize);
+
+    /**
+     * 从Kafka消息保存系统日志
+     *
+     * @param message Kafka消息字符串
+     */
+    void saveFromKafkaMessage(String message);
 }

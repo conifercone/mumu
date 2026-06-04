@@ -18,7 +18,7 @@ package baby.mumu.log.application.operation.executor;
 
 import baby.mumu.log.client.cmds.OperationLogSubmitCmd;
 import baby.mumu.log.domain.operation.gateway.OperationLogGateway;
-import baby.mumu.log.infra.operation.convertor.OperationLogConvertor;
+import baby.mumu.log.application.operation.convertor.OperationLogAssemblerConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,11 +34,11 @@ import java.util.Optional;
 public class OperationLogSubmitCmdExe {
 
     private final OperationLogGateway operationLogGateway;
-    private final OperationLogConvertor operationLogConvertor;
+    private final OperationLogAssemblerConvertor operationLogConvertor;
 
     @Autowired
     public OperationLogSubmitCmdExe(OperationLogGateway operationLogGateway,
-                                    OperationLogConvertor operationLogConvertor) {
+                                    OperationLogAssemblerConvertor operationLogConvertor) {
         this.operationLogGateway = operationLogGateway;
         this.operationLogConvertor = operationLogConvertor;
     }
