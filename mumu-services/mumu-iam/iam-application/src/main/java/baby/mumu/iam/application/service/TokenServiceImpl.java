@@ -16,30 +16,22 @@
 
 package baby.mumu.iam.application.service;
 
-import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.token.executor.TokenValidityCmdExe;
 import baby.mumu.iam.client.api.TokenService;
-import baby.mumu.iam.client.api.grpc.TokenServiceGrpc.TokenServiceImplBase;
-import baby.mumu.iam.client.api.grpc.TokenValidityGrpcCmd;
-import baby.mumu.iam.client.api.grpc.TokenValidityGrpcDTO;
 import baby.mumu.iam.client.cmds.TokenValidityCmd;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
  * token service实现类 *
+ *
  * @author <a href="mailto:kaiyu.shan@outlook.com">Kaiyu Shan</a>
  * @since 1.0.0
  */
 @Service
-@GrpcService
 @Observed(name = "TokenServiceImpl")
-public class TokenServiceImpl extends TokenServiceImplBase implements TokenService {
+public class TokenServiceImpl implements TokenService {
 
 
     private final TokenValidityCmdExe tokenValidityCmdExe;
@@ -53,18 +45,4 @@ public class TokenServiceImpl extends TokenServiceImplBase implements TokenServi
     public boolean validity(TokenValidityCmd tokenValidityCmd) {
         return tokenValidityCmdExe.execute(tokenValidityCmd);
     }
-
-    @Override
-    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-    public void validity(@NonNull TokenValidityGrpcCmd request,
-                         @NonNull StreamObserver<TokenValidityGrpcDTO> responseObserver) {
-        TokenValidityCmd tokenValidityCmd = new TokenValidityCmd();
-        tokenValidityCmd.setToken(request.getToken());
-        responseObserver.onNext(
-            TokenValidityGrpcDTO.newBuilder().setValidity(tokenValidityCmdExe.execute(tokenValidityCmd))
-                .build());
-        responseObserver.onCompleted();
-    }
 }
-
-

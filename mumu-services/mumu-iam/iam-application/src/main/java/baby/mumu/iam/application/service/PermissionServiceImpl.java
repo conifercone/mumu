@@ -16,34 +16,19 @@
 
 package baby.mumu.iam.application.service;
 
-import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.exception.ApplicationException;
-import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.permission.executor.*;
 import baby.mumu.iam.client.api.PermissionService;
-import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO;
-import baby.mumu.iam.client.api.grpc.PageOfPermissionFindAllGrpcDTO.Builder;
-import baby.mumu.iam.client.api.grpc.PermissionFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.PermissionFindByIdGrpcDTO;
-import baby.mumu.iam.client.api.grpc.PermissionGrpcDTO;
-import baby.mumu.iam.client.api.grpc.PermissionServiceGrpc.PermissionServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.application.permission.convertor.PermissionAssemblerConvertor;
-import com.google.protobuf.Int64Value;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 权限管理
@@ -52,9 +37,8 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Service
-@GrpcService
 @Observed(name = "PermissionServiceImpl")
-public class PermissionServiceImpl extends PermissionServiceImplBase implements PermissionService {
+public class PermissionServiceImpl implements PermissionService {
 
     private final PermissionAddCmdExe permissionAddCmdExe;
     private final PermissionDeleteByIdCmdExe permissionDeleteByIdCmdExe;
@@ -66,7 +50,6 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
     private final PermissionArchivedFindAllCmdExe permissionArchivedFindAllCmdExe;
     private final PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe;
     private final PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe;
-    private final PermissionAssemblerConvertor permissionAssemblerConvertor;
     private final PermissionAddDescendantCmdExe permissionAddDescendantCmdExe;
     private final PermissionFindRootCmdExe permissionFindRootCmdExe;
     private final PermissionFindDirectCmdExe permissionFindDirectCmdExe;
@@ -89,7 +72,6 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
                                  PermissionArchivedFindAllCmdExe permissionArchivedFindAllCmdExe,
                                  PermissionFindAllSliceCmdExe permissionFindAllSliceCmdExe,
                                  PermissionArchivedFindAllSliceCmdExe permissionArchivedFindAllSliceCmdExe,
-                                 PermissionAssemblerConvertor permissionAssemblerConvertor,
                                  PermissionAddDescendantCmdExe permissionAddDescendantCmdExe,
                                  PermissionFindRootCmdExe permissionFindRootCmdExe,
                                  PermissionFindDirectCmdExe permissionFindDirectCmdExe,
@@ -109,7 +91,6 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         this.permissionArchivedFindAllCmdExe = permissionArchivedFindAllCmdExe;
         this.permissionFindAllSliceCmdExe = permissionFindAllSliceCmdExe;
         this.permissionArchivedFindAllSliceCmdExe = permissionArchivedFindAllSliceCmdExe;
-        this.permissionAssemblerConvertor = permissionAssemblerConvertor;
         this.permissionAddDescendantCmdExe = permissionAddDescendantCmdExe;
         this.permissionFindRootCmdExe = permissionFindRootCmdExe;
         this.permissionFindDirectCmdExe = permissionFindDirectCmdExe;
@@ -214,52 +195,6 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
      * {@inheritDoc}
      */
     @Override
-    public void findById(Int64Value request,
-                         StreamObserver<PermissionFindByIdGrpcDTO> responseObserver) {
-        Runnable runnable = () -> {
-            throw new ApplicationException(ResponseCode.PERMISSION_DOES_NOT_EXIST);
-        };
-        Optional.ofNullable(request).filter(Int64Value::isInitialized).ifPresentOrElse(
-            (id) -> permissionAssemblerConvertor.toPermissionFindByIdGrpcDTO(
-                    permissionFindByIdCmdExe.execute(id.getValue()))
-                .ifPresentOrElse((permissionFindByIdGrpcDTO) -> {
-                    responseObserver.onNext(permissionFindByIdGrpcDTO);
-                    responseObserver.onCompleted();
-                }, runnable), runnable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-    public void findAll(PermissionFindAllGrpcCmd request,
-                        StreamObserver<PageOfPermissionFindAllGrpcDTO> responseObserver) {
-        permissionAssemblerConvertor.toPermissionFindAllCmd(request)
-            .ifPresentOrElse((permissionFindAllCmdNotNull) -> {
-                Builder builder = PageOfPermissionFindAllGrpcDTO.newBuilder();
-                Page<PermissionFindAllDTO> permissionFindAllCos = permissionFindAllCmdExe.execute(
-                    permissionFindAllCmdNotNull);
-                List<PermissionGrpcDTO> findAllGrpcCos = permissionFindAllCos.getContent().stream()
-                    .flatMap(
-                        permissionFindAllCo -> permissionAssemblerConvertor.toPermissionGrpcDTO(
-                                permissionFindAllCo)
-                            .stream()).toList();
-                builder.addAllContent(findAllGrpcCos);
-                builder.setTotalPages(permissionFindAllCos.getTotalPages());
-                responseObserver.onNext(builder.build());
-                responseObserver.onCompleted();
-            }, () -> {
-                responseObserver.onNext(PageOfPermissionFindAllGrpcDTO.getDefaultInstance());
-                responseObserver.onCompleted();
-            });
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void archiveById(Long id) {
         permissionArchiveByIdCmdExe.execute(id);
@@ -346,5 +281,3 @@ public class PermissionServiceImpl extends PermissionServiceImplBase implements 
         return permissionFindAllAncestorPathStringsCmdExe.execute(descendantId);
     }
 }
-
-

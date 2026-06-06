@@ -16,23 +16,14 @@
 
 package baby.mumu.iam.application.service;
 
-import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.account.executor.*;
 import baby.mumu.iam.client.api.AccountService;
-import baby.mumu.iam.client.api.grpc.AccountCurrentLoginGrpcDTO;
-import baby.mumu.iam.client.api.grpc.AccountServiceGrpc.AccountServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.application.account.convertor.AccountAssemblerConvertor;
-import com.google.protobuf.Empty;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,9 +36,8 @@ import java.util.List;
  * @since 1.0.0
  */
 @Service
-@GrpcService
 @Observed(name = "AccountServiceImpl")
-public class AccountServiceImpl extends AccountServiceImplBase implements AccountService {
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRegisterCmdExe accountRegisterCmdExe;
     private final AccountUpdateByIdCmdExe accountUpdateByIdCmdExe;
@@ -70,7 +60,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
     private final AccountOfflineCmdExe accountOfflineCmdExe;
     private final AccountFindAllCmdExe accountFindAllCmdExe;
     private final AccountFindAllSliceCmdExe accountFindAllSliceCmdExe;
-    private final AccountAssemblerConvertor accountAssemblerConvertor;
     private final AccountNearbyCmdExe accountNearbyCmdExe;
     private final AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe;
     private final AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe;
@@ -99,7 +88,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
                               AccountLogoutCmdExe accountLogoutCmdExe, AccountOfflineCmdExe accountOfflineCmdExe,
                               AccountFindAllCmdExe accountFindAllCmdExe,
                               AccountFindAllSliceCmdExe accountFindAllSliceCmdExe,
-                              AccountAssemblerConvertor accountAssemblerConvertor,
                               AccountNearbyCmdExe accountNearbyCmdExe,
                               AccountSetDefaultAddressCmdExe accountSetDefaultAddressCmdExe,
                               AccountModifyAddressByAddressIdCmdExe accountModifyAddressByAddressIdCmdExe,
@@ -127,7 +115,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         this.accountOfflineCmdExe = accountOfflineCmdExe;
         this.accountFindAllCmdExe = accountFindAllCmdExe;
         this.accountFindAllSliceCmdExe = accountFindAllSliceCmdExe;
-        this.accountAssemblerConvertor = accountAssemblerConvertor;
         this.accountNearbyCmdExe = accountNearbyCmdExe;
         this.accountSetDefaultAddressCmdExe = accountSetDefaultAddressCmdExe;
         this.accountModifyAddressByAddressIdCmdExe = accountModifyAddressByAddressIdCmdExe;
@@ -337,21 +324,6 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
      * {@inheritDoc}
      */
     @Override
-    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-    @Transactional(rollbackFor = Exception.class)
-    public void queryCurrentLoginAccount(Empty request,
-                                         @NonNull StreamObserver<AccountCurrentLoginGrpcDTO> responseObserver) {
-        AccountCurrentLoginDTO accountCurrentLoginDTO = accountCurrentLoginQueryCmdExe.execute();
-        responseObserver.onNext(accountAssemblerConvertor.toAccountCurrentLoginGrpcDTO(accountCurrentLoginDTO)
-            .orElse(AccountCurrentLoginGrpcDTO.getDefaultInstance()));
-        responseObserver.onCompleted();
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public List<AccountNearbyDTO> nearby(double radiusInMeters) {
         return accountNearbyCmdExe.execute(radiusInMeters);
@@ -403,5 +375,3 @@ public class AccountServiceImpl extends AccountServiceImplBase implements Accoun
         accountDeleteSystemSettingsByIdCmdExe.execute(systemSettingsId);
     }
 }
-
-

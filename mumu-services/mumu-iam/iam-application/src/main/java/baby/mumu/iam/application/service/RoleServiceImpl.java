@@ -16,33 +16,16 @@
 
 package baby.mumu.iam.application.service;
 
-import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.basis.exception.ApplicationException;
-import baby.mumu.basis.response.ResponseCode;
-import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.iam.application.role.executor.*;
 import baby.mumu.iam.client.api.RoleService;
-import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO;
-import baby.mumu.iam.client.api.grpc.PageOfRoleFindAllGrpcDTO.Builder;
-import baby.mumu.iam.client.api.grpc.RoleFindAllGrpcCmd;
-import baby.mumu.iam.client.api.grpc.RoleFindByIdGrpcDTO;
-import baby.mumu.iam.client.api.grpc.RoleGrpcDTO;
-import baby.mumu.iam.client.api.grpc.RoleServiceGrpc.RoleServiceImplBase;
 import baby.mumu.iam.client.cmds.*;
 import baby.mumu.iam.client.dto.*;
-import baby.mumu.iam.application.role.convertor.RoleAssemblerConvertor;
-import com.google.protobuf.Int64Value;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * 角色管理
@@ -51,9 +34,8 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Service
-@GrpcService
 @Observed(name = "RoleServiceImpl")
-public class RoleServiceImpl extends RoleServiceImplBase implements RoleService {
+public class RoleServiceImpl implements RoleService {
 
     private final RoleAddCmdExe roleAddCmdExe;
     private final RoleDeleteByIdCmdExe roleDeleteByIdCmdExe;
@@ -64,7 +46,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
     private final RoleFindAllSliceCmdExe roleFindAllSliceCmdExe;
     private final RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe;
     private final RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe;
-    private final RoleAssemblerConvertor roleAssemblerConvertor;
     private final RoleFindByIdCmdExe roleFindByIdCmdExe;
     private final RoleAddDescendantCmdExe roleAddDescendantCmdExe;
     private final RoleFindRootCmdExe roleFindRootCmdExe;
@@ -81,7 +62,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
                            RoleFindAllSliceCmdExe roleFindAllSliceCmdExe,
                            RoleArchivedFindAllCmdExe roleArchivedFindAllCmdExe,
                            RoleArchivedFindAllSliceCmdExe roleArchivedFindAllSliceCmdExe,
-                           RoleAssemblerConvertor roleAssemblerConvertor,
                            RoleFindByIdCmdExe roleFindByIdCmdExe, RoleAddDescendantCmdExe roleAddDescendantCmdExe,
                            RoleFindRootCmdExe roleFindRootCmdExe, RoleFindDirectCmdExe roleFindDirectCmdExe,
                            RoleDeletePathCmdExe roleDeletePathCmdExe, RoleDeleteByCodeCmdExe roleDeleteByCodeCmdExe,
@@ -95,7 +75,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         this.roleFindAllSliceCmdExe = roleFindAllSliceCmdExe;
         this.roleArchivedFindAllCmdExe = roleArchivedFindAllCmdExe;
         this.roleArchivedFindAllSliceCmdExe = roleArchivedFindAllSliceCmdExe;
-        this.roleAssemblerConvertor = roleAssemblerConvertor;
         this.roleFindByIdCmdExe = roleFindByIdCmdExe;
         this.roleAddDescendantCmdExe = roleAddDescendantCmdExe;
         this.roleFindRootCmdExe = roleFindRootCmdExe;
@@ -181,46 +160,6 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
      * {@inheritDoc}
      */
     @Override
-    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-    public void findAll(RoleFindAllGrpcCmd request,
-                        StreamObserver<PageOfRoleFindAllGrpcDTO> responseObserver) {
-        roleAssemblerConvertor.toRoleFindAllCmd(request).ifPresentOrElse(roleFindAllCmdNotNull -> {
-            Builder builder = PageOfRoleFindAllGrpcDTO.newBuilder();
-            Page<RoleFindAllDTO> roleFindAllCos = roleFindAllCmdExe.execute(
-                roleFindAllCmdNotNull);
-            List<RoleGrpcDTO> findAllGrpcCos = roleFindAllCos.getContent().stream()
-                .flatMap(roleFindAllCo -> roleAssemblerConvertor.toRoleGrpcDTO(roleFindAllCo).stream())
-                .toList();
-            builder.addAllContent(findAllGrpcCos);
-            builder.setTotalPages(roleFindAllCos.getTotalPages());
-            responseObserver.onNext(builder.build());
-            responseObserver.onCompleted();
-        }, () -> {
-            responseObserver.onNext(PageOfRoleFindAllGrpcDTO.getDefaultInstance());
-            responseObserver.onCompleted();
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void findById(Int64Value request, StreamObserver<RoleFindByIdGrpcDTO> responseObserver) {
-        Optional.ofNullable(request).filter(Int64Value::isInitialized).map(Int64Value::getValue)
-            .map(
-                roleFindByIdCmdExe::execute).flatMap(roleAssemblerConvertor::toRoleFindByIdGrpcDTO)
-            .ifPresentOrElse((roleFindByIdGrpcDTO) -> {
-                responseObserver.onNext(roleFindByIdGrpcDTO);
-                responseObserver.onCompleted();
-            }, () -> {
-                throw new ApplicationException(ResponseCode.ROLE_DOES_NOT_EXIST);
-            });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public void archiveById(Long id) {
         roleArchiveByIdCmdExe.execute(id);
@@ -285,5 +224,3 @@ public class RoleServiceImpl extends RoleServiceImplBase implements RoleService 
         return roleFindByCodeCmdExe.execute(code);
     }
 }
-
-
