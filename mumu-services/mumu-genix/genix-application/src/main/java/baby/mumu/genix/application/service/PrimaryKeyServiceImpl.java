@@ -16,19 +16,11 @@
 
 package baby.mumu.genix.application.service;
 
-import baby.mumu.basis.annotations.RateLimiter;
-import baby.mumu.extension.provider.RateLimitingGrpcIpKeyProviderImpl;
 import baby.mumu.genix.application.pk.executor.PrimaryKeySnowflakeGenerateExe;
 import baby.mumu.genix.client.api.PrimaryKeyService;
-import baby.mumu.genix.client.api.grpc.PrimaryKeyServiceGrpc.PrimaryKeyServiceImplBase;
-import baby.mumu.genix.client.api.grpc.SnowflakeResult;
 import baby.mumu.genix.client.dto.PrimaryKeySnowflakeDTO;
-import com.google.protobuf.Empty;
-import io.grpc.stub.StreamObserver;
 import io.micrometer.observation.annotation.Observed;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,9 +30,8 @@ import org.springframework.stereotype.Service;
  * @since 1.0.0
  */
 @Service
-@GrpcService
 @Observed(name = "PrimaryKeyServiceImpl")
-public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements PrimaryKeyService {
+public class PrimaryKeyServiceImpl implements PrimaryKeyService {
 
     private final PrimaryKeySnowflakeGenerateExe primaryKeySnowflakeGenerateExe;
 
@@ -54,15 +45,5 @@ public class PrimaryKeyServiceImpl extends PrimaryKeyServiceImplBase implements 
         PrimaryKeySnowflakeDTO primaryKeySnowflakeDTO = new PrimaryKeySnowflakeDTO();
         primaryKeySnowflakeDTO.setId(primaryKeySnowflakeGenerateExe.execute());
         return primaryKeySnowflakeDTO;
-    }
-
-    @Override
-    @RateLimiter(keyProvider = RateLimitingGrpcIpKeyProviderImpl.class)
-    public void snowflake(Empty request, @NonNull StreamObserver<SnowflakeResult> responseObserver) {
-        SnowflakeResult snowflakeResult = SnowflakeResult.newBuilder()
-            .setId(primaryKeySnowflakeGenerateExe.execute())
-            .build();
-        responseObserver.onNext(snowflakeResult);
-        responseObserver.onCompleted();
     }
 }
