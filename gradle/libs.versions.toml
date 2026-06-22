@@ -38,7 +38,7 @@ libphonenumberVersion = '9.0.32'
 commonsValidatorVersion = '1.10.1'
 jmhVersion = '1.37'
 tikaVersion = '3.3.1'
-cosidVersion = '3.0.5'
+cosidVersion = '3.1.0'
 otelLog4j2AppenderVersion = '2.28.1-alpha'
 # bom version
 grpcBomVersion = '1.82.0'
