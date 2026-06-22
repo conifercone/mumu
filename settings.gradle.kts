@@ -8,7 +8,7 @@ pluginManagement {
 includeBuild("build-logic")
 
 plugins {
-    id("com.gradle.develocity") version "4.4.2"
+    id("com.gradle.develocity") version "4.4.3"
 }
 
 develocity {
