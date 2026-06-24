@@ -13,5 +13,5 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.spring.data.commons)
     implementation(libs.grpc.stub)
-    implementation(libs.spring.grpc.server.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.server)
 }

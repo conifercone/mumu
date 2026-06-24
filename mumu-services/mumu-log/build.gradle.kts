@@ -16,7 +16,7 @@ dependencies {
     implementation(libs.swagger3Ui)
     implementation(libs.spring.boot.starter.data.elasticsearch)
     implementation(libs.spring.boot.starter.kafka)
-    implementation(libs.spring.grpc.server.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.server)
     implementation(libs.bundles.web)
     implementation(libs.caffeine)
     testImplementation(libs.spring.boot.starter.test)

@@ -9,7 +9,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.spring.boot.starter.gson)
-    implementation(libs.spring.grpc.server.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.server)
     implementation(libs.spring.data.commons)
     implementation(libs.spring.security.core)
     implementation(libs.p6spy)
