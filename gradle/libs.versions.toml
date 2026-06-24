@@ -1,5 +1,5 @@
 [versions]
-springbootVersion = "4.0.7"
+springbootVersion = "4.1.0"
 springCloudVersion = "2025.1.2"
 springGrpcVersion = "1.1.0"
 # dependence version
@@ -126,9 +126,9 @@ grpc-protobuf = { module = "io.grpc:grpc-protobuf" }
 # https://central.sonatype.com/artifact/javax.annotation/javax.annotation-api
 javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "annotationApiVersion" }
 # https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-server-spring-boot-starter
-spring-grpc-server-spring-boot-starter = { module = "org.springframework.grpc:spring-grpc-server-spring-boot-starter" }
+spring-boot-starter-grpc-server = { module = "org.springframework.boot:spring-boot-starter-grpc-server" }
 # https://central.sonatype.com/artifact/org.springframework.grpc/spring-grpc-client-spring-boot-starter
-spring-grpc-client-spring-boot-starter = { module = "org.springframework.grpc:spring-grpc-client-spring-boot-starter" }
+spring-boot-starter-grpc-client = { module = "org.springframework.boot:spring-boot-starter-grpc-client" }
 # https://central.sonatype.com/artifact/com.redis.om/redis-om-spring
 redis-om-spring = { module = "com.redis.om:redis-om-spring", version.ref = "redisOmSpringVersion" }
 # https://central.sonatype.com/artifact/org.apache.commons/commons-lang3

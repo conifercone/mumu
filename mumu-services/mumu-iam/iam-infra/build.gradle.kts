@@ -13,7 +13,7 @@ dependencies {
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.protobuf.java)
     implementation(libs.grpc.protobuf)
-    implementation(libs.spring.grpc.client.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.client)
     implementation(libs.spring.security.core)
     implementation(libs.spring.security.crypto)
     implementation(libs.jakarta.validation.api)

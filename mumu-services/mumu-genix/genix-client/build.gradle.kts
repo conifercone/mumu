@@ -7,7 +7,7 @@ dependencies {
     implementation(project(":mumu-basis"))
     annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.cloud.starter.consul.discovery)
-    implementation(libs.spring.grpc.client.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.client)
     api(libs.protobuf.java)
     implementation(libs.grpc.stub)
     implementation(libs.grpc.protobuf)

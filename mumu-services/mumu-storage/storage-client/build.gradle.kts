@@ -17,7 +17,7 @@ dependencies {
     implementation(libs.spring.data.commons)
     implementation(libs.resilience4j.retry)
     implementation(libs.jakarta.servlet.api)
-    implementation(libs.spring.grpc.server.spring.boot.starter)
-    implementation(libs.spring.grpc.client.spring.boot.starter)
+    implementation(libs.spring.boot.starter.grpc.server)
+    implementation(libs.spring.boot.starter.grpc.client)
     api(libs.protobuf.java)
 }
