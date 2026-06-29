@@ -96,3 +96,8 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`
 - **Never stage or commit** unless explicitly requested
 - `mumu-processor` generates code at compile time — if you see missing `*Metamodel` classes, run `./gradlew build` first
 - Dependencies are managed via Gradle Version Catalog (`gradle/libs.versions.toml`) — add/update dependencies there first
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->
