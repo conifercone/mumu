@@ -85,3 +85,6 @@ rebel.xml
 
 ### kotlin ###
 .kotlin/
+
+### codegraph ###
+.codegraph/
