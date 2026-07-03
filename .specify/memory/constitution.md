@@ -4,6 +4,7 @@
   Version change: 0.0.0 (template placeholder) → 1.0.1
     - 1.0.0: initial ratification — 7 principles + 3 sections + governance
     - 1.0.1: added Python 环境 subsection under 开发工作流
+    - 1.0.2: added Java 环境 subsection under 开发工作流
   Modified principles: N/A (initial version — all principles newly defined)
   Added sections:
     - Core Principles (7 principles)
@@ -168,6 +169,23 @@ MCP 工具或 `codegraph explore` 命令）进行代码定位和理解，而非 
 **理由**：统一 Python 版本和运行方式避免因环境差异导致的不可重现问题。uv
 提供可靠的 Python 版本管理，`.venv` 确保依赖隔离。
 
+### Java 环境
+
+项目 MUST 使用 Java 25，通过 Gradle Toolchain 统一管理 JDK 版本。
+
+配置位置：`build-logic/src/main/kotlin/mumu.base-conventions.gradle.kts`
+
+```kotlin
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
+```
+
+**理由**：Gradle Toolchain 确保所有模块使用一致的 JDK 版本，避免因 JDK
+差异导致的编译或运行时问题。
+
 ## Governance
 
 本宪法是 Mumu 项目所有开发活动的最高准则，任何实践和决策 MUST 遵循以上原则。
@@ -181,4 +199,4 @@ MCP 工具或 `codegraph explore` 命令）进行代码定位和理解，而非 
 - **运行时指引**：项目根目录下的 `CLAUDE.md` 和用户全局 `~/.claude/CLAUDE.md`
   提供运行时级别的开发指引，其内容 MUST 与本宪法保持一致。如有冲突，以本宪法为准。
 
-**Version**: 1.0.1 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-03
+**Version**: 1.0.2 | **Ratified**: 2026-07-03 | **Last Amended**: 2026-07-03
