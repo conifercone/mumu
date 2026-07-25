@@ -8,11 +8,17 @@ ignore_pattern="^Merge (tag|branch|pull request)"
 # 定义正则表达式，匹配 mumu 提交规范
 pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9\-_一-龥＠#\$%&*()+=~\`!?\^|;:'\",.<>/\\\[\]{}\x{4e00}-\x{9fa5}]+\))?: .{0,50}$"
 
-# macOS 自带 BSD grep 不支持 -P 参数，统一用 perl（macOS/Linux 均内置）
-# 正则作为参数传递，避免拼接到 perl 代码中导致 $、@ 等字符被错误插值
-match_regex() {
-    echo "$1" | perl -e 'my $p = shift; while (my $line = <>) { if ($line =~ /$p/) { print $line; exit 0; } } exit 1;' "$2"
-}
+# 跨平台正则匹配：Linux/Windows(Git Bash) 自带 GNU grep 支持 -P，macOS 需 fallback 到 perl
+# 正则作为参数传递（shift），避免拼接到 perl 代码中导致 $、@ 等字符被错误插值
+if echo 'test' | grep -P 'test' >/dev/null 2>&1; then
+    match_regex() {
+        echo "$1" | grep -P "$2"
+    }
+else
+    match_regex() {
+        echo "$1" | perl -e 'my $p = shift; while (my $line = <>) { if ($line =~ /$p/) { print $line; exit 0; } } exit 1;' "$2"
+    }
+fi
 
 if match_regex "$commit_message" "$ignore_pattern"; then
   echo "☀️ This submission does not require verification."
