@@ -58,7 +58,7 @@ allprojects {
         resolutionStrategy {
             cacheChangingModulesFor(0, TimeUnit.MINUTES)
             cacheDynamicVersionsFor(1, TimeUnit.HOURS)
-            resolutionStrategy.force("redis.clients:jedis:7.3.0")
+            resolutionStrategy.force("redis.clients:jedis:8.0.0")
         }
         listOf(
             "org.springframework.boot" to "spring-boot-starter-logging",
