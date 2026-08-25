@@ -53,9 +53,7 @@ adapter → application → domain ← infra
 ## Key Conventions
 
 ### Language & Communication
-- Always communicate in **Chinese** (中文)
 - Code comments in **Chinese**
-- Commit messages: **Chinese** for subject/body, **English** for scope
 - Ensure terminal uses UTF-8 encoding
 
 ### Coding Style
@@ -87,13 +85,12 @@ adapter → application → domain ← infra
 
 ## Commit Convention
 
-Format: `<type>(<scope>): <subject>` (max 50 chars subject)
+Format: `<type>(<scope>): <subject>` (max 50 chars subject); subject/body in **Chinese**, scope in **English**
 
 Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 
 ## Important Rules
 
-- **Never stage or commit** unless explicitly requested
 - `mumu-processor` generates code at compile time — if you see missing `*Metamodel` classes, run `./gradlew build` first
 - Dependencies are managed via Gradle Version Catalog (`gradle/libs.versions.toml`) — add/update dependencies there first
 
