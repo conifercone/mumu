@@ -24,7 +24,6 @@ dependencies {
     implementation(platform(libs.spring.boot.dependencies))
     annotationProcessor(platform(libs.spring.boot.dependencies))
     implementation(platform(libs.spring.cloud.dependencies))
-    implementation(platform(libs.spring.grpc.dependencies))
     implementation(platform(libs.grpc.bom))
     implementation(platform(libs.protobuf.bom))
     implementation(platform(libs.guava.bom))
