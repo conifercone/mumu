@@ -19,8 +19,8 @@
 <Configuration status="INFO" name="basis">
     <Properties>
         <!-- @formatter:off -->
-    <!-- 日志目录：${mumu.log.path}/logs/${spring.application.name} -->
-    <Property name="LOG_PATH">${spring:mumu.log.path}/logs/${spring:spring.application.name:-mumu}</Property>
+    <!-- 日志目录：${mumu.log.path}/logs/${spring.application.name}（mumu.log.path 未配置时默认取系统用户目录） -->
+    <Property name="LOG_PATH">${spring:mumu.log.path:-${sys:user.home}}/logs/${spring:spring.application.name:-mumu}</Property>
     <!-- 日志文件名前缀：应用名 -->
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-mumu}</Property>
     <!-- 异常输出（dev 使用完整栈信息） -->
