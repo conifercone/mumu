@@ -1,5 +1,5 @@
 plugins {
-    id("mumu.service-conventions")
+    id("mumu.adapter-conventions")
 }
 
 dependencies {
@@ -7,10 +7,7 @@ dependencies {
     implementation(project(":mumu-services:mumu-iam:iam-application"))
     implementation(project(":mumu-extension"))
     implementation(project(":mumu-services:mumu-iam:iam-domain"))
-    implementation(project(":mumu-basis"))
     implementation(libs.spring.security.core)
-    implementation(libs.spring.boot.starter.webmvc)
-    implementation(libs.swagger3Ui)
     implementation(libs.spring.data.commons)
     implementation(libs.grpc.stub)
     implementation(libs.spring.boot.starter.grpc.server)

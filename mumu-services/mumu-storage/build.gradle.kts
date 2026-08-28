@@ -1,5 +1,4 @@
 plugins {
-    id("mumu.service-conventions")
     id("mumu.springboot-conventions")
 }
 
@@ -14,20 +13,13 @@ dependencies {
     implementation(project(":mumu-services:mumu-storage:storage-application"))
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.postgresql)
-    implementation(libs.spring.cloud.starter.consul.discovery)
-    implementation(libs.spring.cloud.starter.consul.config)
-    implementation(libs.bundles.web)
     implementation(libs.spring.boot.starter.grpc.server)
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.spring.boot.starter.grpc.client)
     testImplementation(libs.spring.web)
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.flyway.database.postgresql)
     implementation(libs.hypersistence)
-    implementation(libs.swagger3Ui)
     implementation(libs.minio)
     implementation(libs.s3)
-    annotationProcessor(project(":mumu-processor"))
 }

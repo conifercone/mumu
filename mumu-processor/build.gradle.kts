@@ -1,5 +1,5 @@
 plugins {
-    id("mumu.foundation-conventions")
+    id("mumu.base-conventions")
 }
 
 description = "Annotation processor"

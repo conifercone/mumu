@@ -25,7 +25,6 @@ import baby.mumu.genix.client.api.grpc.CaptchaCodeGeneratedGrpcDTO;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeServiceGrpc.CaptchaCodeServiceImplBase;
 import baby.mumu.genix.client.api.grpc.CaptchaCodeVerifyGrpcCmd;
 import baby.mumu.genix.client.cmds.CaptchaCodeGeneratedCmd;
-import baby.mumu.genix.client.cmds.CaptchaCodeVerifyCmd;
 import baby.mumu.genix.client.dto.CaptchaCodeGeneratedDTO;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;

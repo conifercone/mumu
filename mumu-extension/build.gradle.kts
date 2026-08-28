@@ -1,5 +1,5 @@
 plugins {
-    id("mumu.service-conventions")
+    id("mumu.spring-conventions")
 }
 
 description = "Function expansion module"

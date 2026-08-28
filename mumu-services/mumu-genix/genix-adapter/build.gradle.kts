@@ -1,5 +1,5 @@
 plugins {
-    id("mumu.service-conventions")
+    id("mumu.adapter-conventions")
 }
 
 dependencies {
@@ -8,7 +8,4 @@ dependencies {
     implementation(libs.grpc.stub)
     implementation(libs.spring.boot.starter.grpc.server)
     implementation(project(":mumu-extension"))
-    implementation(project(":mumu-basis"))
-    implementation(libs.spring.boot.starter.webmvc)
-    implementation(libs.swagger3Ui)
 }

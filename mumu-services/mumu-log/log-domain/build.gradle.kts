@@ -1,9 +1,7 @@
 plugins {
-    id("mumu.service-conventions")
+    id("mumu.domain-conventions")
 }
 
 dependencies {
     implementation(libs.spring.data.commons)
-    implementation(project(":mumu-basis"))
-    annotationProcessor(project(":mumu-processor"))
 }

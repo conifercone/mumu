@@ -1,5 +1,5 @@
 plugins {
-    id("mumu.service-conventions")
+    id("mumu.infra-conventions")
 }
 
 dependencies {
@@ -8,8 +8,6 @@ dependencies {
     implementation(project(":mumu-services:mumu-log:log-client"))
     implementation(project(":mumu-services:mumu-genix:genix-client"))
     implementation(project(":mumu-services:mumu-storage:storage-client"))
-    implementation(project(":mumu-extension"))
-    annotationProcessor(project(":mumu-processor"))
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.protobuf.java)
     implementation(libs.grpc.protobuf)

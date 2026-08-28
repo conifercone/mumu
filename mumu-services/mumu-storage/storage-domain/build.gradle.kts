@@ -1,8 +1,3 @@
 plugins {
-    id("mumu.service-conventions")
-}
-
-dependencies {
-    implementation(project(":mumu-basis"))
-    annotationProcessor(project(":mumu-processor"))
+    id("mumu.domain-conventions")
 }

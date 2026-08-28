@@ -1,14 +1,25 @@
 plugins {
-    id("mumu.library-conventions")
-    id("mumu.kotlin-conventions")
-    id("mumu.quality-conventions")
-    id("mumu.publish-conventions")
-    id("mumu.processor-conventions")
+    id("mumu.base-conventions")
 }
 
 description = "Basic module"
 
 dependencies {
+    // 原 library-conventions 的公共库（basis 是唯一不适用 spring-conventions 的模块，故自行声明）
+    implementation(libs.commons.text)
+    implementation(libs.commons.io)
+
+    implementation(libs.bundles.jackson)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.jackson.datatype.moneta)
+
+    implementation(libs.moneta)
+    implementation(libs.progressbar)
+    implementation(libs.jakarta.validation.api)
+
+    implementation(libs.mapstruct)
+    annotationProcessor(libs.mapstruct.processor)
+
     implementation(libs.spring.security.core)
     implementation(libs.jakarta.servlet.api)
     implementation(libs.spring.security.oauth2.core)

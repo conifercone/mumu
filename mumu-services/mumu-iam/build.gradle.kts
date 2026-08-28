@@ -1,5 +1,4 @@
 plugins {
-    id("mumu.service-conventions")
     id("mumu.springboot-conventions")
 }
 
@@ -16,14 +15,8 @@ dependencies {
     implementation(libs.spring.boot.starter.security.oauth2.authorization.server)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.postgresql)
-    implementation(libs.spring.cloud.starter.consul.discovery)
-    implementation(libs.spring.cloud.starter.consul.config)
-    implementation(libs.swagger3Ui)
-    implementation(libs.bundles.web)
     implementation(libs.spring.boot.starter.grpc.server)
     implementation(libs.spring.boot.starter.data.mongodb)
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.spring.boot.starter.webmvc.test)
     testImplementation(libs.spring.security.test)
     testImplementation(libs.spring.boot.starter.grpc.client)
     testImplementation(project(":mumu-services:mumu-genix:genix-client"))
@@ -34,7 +27,6 @@ dependencies {
     implementation(libs.spring.boot.starter.data.redis)
     implementation(libs.jobrunr)
     annotationProcessor(libs.redis.om.spring)
-    annotationProcessor(project(":mumu-processor"))
     implementation(libs.caffeine)
     implementation(libs.spring.security.rsa)
 }
