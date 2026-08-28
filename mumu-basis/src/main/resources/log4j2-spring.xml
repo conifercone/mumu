@@ -23,14 +23,14 @@
     - prod：INFO/ERROR 分级文件，控制台仅输出 WARN 及以上
     通过 <SpringProfile> 标签按激活的 Spring profile 切换（见 Spring Boot 官方文档 Log4j2 Extensions）
 -->
-<Configuration status="INFO" name="basis">
+<Configuration status="WARN" name="basis">
     <Properties>
         <!-- @formatter:off -->
     <!-- 日志目录：${mumu.log.path}/logs/${spring.application.name}（mumu.log.path 未配置时默认取系统用户目录） -->
     <Property name="LOG_PATH">${spring:mumu.log.path:-${sys:user.home}}/logs/${spring:spring.application.name:-mumu}</Property>
     <!-- 日志文件名前缀：应用名 -->
     <Property name="LOGFILE_NAME">${spring:spring.application.name:-mumu}</Property>
-    <!-- 异常输出（dev 使用完整栈信息） -->
+    <!-- 异常输出：完整栈信息 -->
     <Property name="LOG_EXCEPTION_CONVERSION_WORD">-%xEx{full}</Property>
     <!-- 日志级别 + appName + traceId/spanId -->
     <Property name="LOG_LEVEL_PATTERN">%5p [${spring:spring.application.name:-mumu},%X{traceId},%X{spanId}]</Property>
@@ -52,7 +52,7 @@
     <!-- 非 prod：单文件输出（按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz） + OpenTelemetry -->
     <SpringProfile name="!prod">
       <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
-        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
         <!-- 滚动策略：每天轮转 + 单文件超过 250MB 轮转 -->
         <Policies>
           <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -77,7 +77,7 @@
     <SpringProfile name="prod">
       <!-- INFO日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
       <RollingFile name="RollingInfoFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-info.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-info-%d{yyyy-MM-dd}-%i.log.gz">
-        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
         <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
         <Policies>
           <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -94,7 +94,7 @@
       </RollingFile>
       <!-- ERROR日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
       <RollingFile name="RollingErrorFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-error.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz">
-        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
         <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
         <Policies>
           <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -115,7 +115,7 @@
 
     <Loggers>
         <!--Root level logger to control overall logging-->
-        <AsyncRoot level="INFO" includeLocation="true">
+        <AsyncRoot level="INFO">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="OpenTelemetryAppender"/>
             <SpringProfile name="!prod">
