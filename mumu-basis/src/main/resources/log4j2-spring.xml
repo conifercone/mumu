@@ -16,6 +16,13 @@
     limitations under the License.
 
 -->
+<!--
+    环境切换说明：
+    - 所有环境：控制台 + OpenTelemetry
+    - 非 prod：单一日志文件，控制台输出全级别
+    - prod：INFO/ERROR 分级文件，控制台仅输出 WARN 及以上
+    通过 <SpringProfile> 标签按激活的 Spring profile 切换（见 Spring Boot 官方文档 Log4j2 Extensions）
+-->
 <Configuration status="INFO" name="basis">
     <Properties>
         <!-- @formatter:off -->
@@ -36,28 +43,73 @@
         <!-- @formatter:off -->
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} ${sys:PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+      <!-- prod：控制台仅输出 WARN 及以上，减少噪音 -->
+      <SpringProfile name="prod">
+        <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+      </SpringProfile>
     </Console>
 
-    <!-- 文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
-    <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
-      <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
-      <!-- 滚动策略：每天轮转 + 单文件超过 250MB 轮转 -->
-      <Policies>
-        <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-        <SizeBasedTriggeringPolicy size="250MB"/>
-      </Policies>
+    <!-- 非 prod：单文件输出（按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz） + OpenTelemetry -->
+    <SpringProfile name="!prod">
+      <RollingFile name="RollingFile" fileName="${LOG_PATH}/${LOGFILE_NAME}.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <!-- 滚动策略：每天轮转 + 单文件超过 250MB 轮转 -->
+        <Policies>
+          <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+          <SizeBasedTriggeringPolicy size="250MB"/>
+        </Policies>
 
-      <!-- 归档清理策略：仅清理 archive 目录下 7 天前的 *.log.gz 归档文件 -->
-      <DefaultRolloverStrategy max="30">
-        <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
-          <!-- 只删除当前应用归档日志，不影响其他日志 -->
-          <IfFileName glob="${LOGFILE_NAME}-*.log.gz"/>
-          <IfLastModified age="7d"/>
-        </Delete>
-      </DefaultRolloverStrategy>
-    </RollingFile>
-    <!-- OpenTelemetry -->
+        <!-- 归档清理策略：仅清理 archive 目录下 7 天前的 *.log.gz 归档文件 -->
+        <DefaultRolloverStrategy max="30">
+          <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+            <!-- 只删除当前应用归档日志，不影响其他日志 -->
+            <IfFileName glob="${LOGFILE_NAME}-*.log.gz"/>
+            <IfLastModified age="7d"/>
+          </Delete>
+        </DefaultRolloverStrategy>
+      </RollingFile>
+    </SpringProfile>
+
+    <!-- OpenTelemetry（所有环境共享） -->
     <OpenTelemetry name="OpenTelemetryAppender"/>
+
+    <!-- prod：INFO/ERROR 分级文件输出 -->
+    <SpringProfile name="prod">
+      <!-- INFO日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
+      <RollingFile name="RollingInfoFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-info.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-info-%d{yyyy-MM-dd}-%i.log.gz">
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+        <Policies>
+          <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+          <SizeBasedTriggeringPolicy size="250MB" />
+        </Policies>
+        <DefaultRolloverStrategy max="100">
+          <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+            <!-- 只匹配归档文件 -->
+            <IfFileName glob="${LOGFILE_NAME}-info-*.log.gz"/>
+            <!-- 只删除 30 天前的 -->
+            <IfLastModified age="30d"/>
+          </Delete>
+        </DefaultRolloverStrategy>
+      </RollingFile>
+      <!-- ERROR日志文件输出：按天 + 按大小滚动，归档到 archive 目录，压缩为 .gz -->
+      <RollingFile name="RollingErrorFile" fileName="${LOG_PATH}/${LOGFILE_NAME}-error.log" filePattern="${LOG_PATH}/archive/${LOGFILE_NAME}-error-%d{yyyy-MM-dd}-%i.log.gz">
+        <PatternLayout charset="UTF-8" pattern="%d{${LOG_DATEFORMAT_PATTERN}} ${LOG_LEVEL_PATTERN:-%5p} %-5pid --- [%t] %-40.40c{1.} L%-4line : %m%n${LOG_EXCEPTION_CONVERSION_WORD}"/>
+        <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+        <Policies>
+          <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+          <SizeBasedTriggeringPolicy size="100MB" />
+        </Policies>
+        <DefaultRolloverStrategy max="100">
+          <Delete basePath="${LOG_PATH}/archive" maxDepth="1">
+            <!-- 只匹配 error 归档 -->
+            <IfFileName glob="${LOGFILE_NAME}-error-*.log.gz"/>
+            <!-- 只删除 60 天前的 -->
+            <IfLastModified age="60d"/>
+          </Delete>
+        </DefaultRolloverStrategy>
+      </RollingFile>
+    </SpringProfile>
     <!-- @formatter:on -->
     </Appenders>
 
@@ -65,8 +117,14 @@
         <!--Root level logger to control overall logging-->
         <AsyncRoot level="INFO" includeLocation="true">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="OpenTelemetryAppender"/>
+            <SpringProfile name="!prod">
+                <AppenderRef ref="RollingFile"/>
+            </SpringProfile>
+            <SpringProfile name="prod">
+                <AppenderRef ref="RollingInfoFile"/>
+                <AppenderRef ref="RollingErrorFile"/>
+            </SpringProfile>
         </AsyncRoot>
 
         <!-- 降低 Kafka 客户端日志噪音 -->
