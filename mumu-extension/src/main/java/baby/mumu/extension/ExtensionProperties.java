@@ -17,7 +17,6 @@
 package baby.mumu.extension;
 
 import baby.mumu.extension.authentication.AuthenticationProperties;
-import baby.mumu.extension.fd.FaceDetectionProperties;
 import baby.mumu.extension.idempotent.IdempotentProperties;
 import baby.mumu.extension.ocr.OcrProperties;
 import baby.mumu.extension.rl.RateLimiterProperties;
@@ -66,12 +65,6 @@ public class ExtensionProperties {
      */
     @NestedConfigurationProperty
     private OcrProperties ocr = new OcrProperties();
-
-    /**
-     * 人脸检测
-     */
-    @NestedConfigurationProperty
-    private FaceDetectionProperties fd = new FaceDetectionProperties();
 
     /**
      * 限流配置

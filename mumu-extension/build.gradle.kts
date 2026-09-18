@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.asciitable)
     implementation(libs.deepl)
     implementation(libs.tess4j)
-    implementation(libs.javacv)
     implementation(libs.bucket4j.lettuce)
     implementation(libs.lettuce.core)
     implementation(libs.spring.data.redis)

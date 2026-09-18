@@ -18,7 +18,6 @@ package baby.mumu.extension;
 
 import baby.mumu.basis.kotlin.tools.SecurityContextUtils;
 import baby.mumu.extension.aspects.AspectConfiguration;
-import baby.mumu.extension.fd.FaceDetectionConfiguration;
 import baby.mumu.extension.filters.FilterConfiguration;
 import baby.mumu.extension.grpc.interceptors.ClientIpInterceptor;
 import baby.mumu.extension.grpc.interceptors.SafeBearerTokenInterceptor;
@@ -56,7 +55,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
     ApplicationMvcConfiguration.class,
     DatasourceConfiguration.class,
     TranslationConfiguration.class, AspectConfiguration.class, OcrConfiguration.class,
-    FaceDetectionConfiguration.class, DocumentConfiguration.class, ListenerConfiguration.class,
+    DocumentConfiguration.class, ListenerConfiguration.class,
     FilterConfiguration.class, IdempotentConfiguration.class})
 @EnableConfigurationProperties(ExtensionProperties.class)
 public class ExtensionConfiguration {
