@@ -46,7 +46,7 @@ awssdkBomVersion = '2.55.6'
 # plugin version
 protobufPluginVersion = '0.10.0'
 lombokPluginVersion = '9.8.0'
-kotlinPluginVersion = '2.4.20'
+kotlinPluginVersion = '2.4.21'
 
 [libraries]
 springboot-gradle-plugin = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springbootVersion" }
