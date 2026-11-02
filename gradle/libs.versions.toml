@@ -35,7 +35,7 @@ monetaVersion = '1.4.5'
 libphonenumberVersion = '9.0.42'
 commonsValidatorVersion = '1.11.0'
 jmhVersion = '1.37'
-tikaVersion = '4.1.0'
+tikaVersion = '4.2.0'
 cosidVersion = '4.0.2'
 otelLog4j2AppenderVersion = '2.32.0-alpha'
 # bom version
