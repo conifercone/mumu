@@ -45,7 +45,7 @@ protobufBomVersion = '4.36.2'
 awssdkBomVersion = '2.57.7'
 # plugin version
 protobufPluginVersion = '0.10.0'
-lombokPluginVersion = '9.8.2'
+lombokPluginVersion = '9.8.3'
 kotlinPluginVersion = '2.4.21'
 
 [libraries]
